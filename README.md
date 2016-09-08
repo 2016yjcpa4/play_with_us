@@ -29,7 +29,7 @@
 ##### (2016-09-07) 차명도 (aw9223)
 - 귀신(Ghost)과 사용자(Player) 간의 상호작용을 정리 하였습니다.
 
-![alt 데모](https://github.com/aw9223/kr.ac.yeungjin.2cpa.java4/blob/v0.3/demo/v0.2.gif?raw=true)
+![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
 ### ver 0.3
 ##### (2016-09-08) 차명도 (aw9223)
