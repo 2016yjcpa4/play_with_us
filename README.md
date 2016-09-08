@@ -35,7 +35,7 @@
 ##### (2016-09-08) 차명도 (aw9223)
 
 #### 현재(2016-09-08) 까지 완성된 v0.3 버전 입니다.
-![alt 데모](https://github.com/aw9223/kr.ac.yeungjin.2cpa.java4/blob/v0.3/demo/v0.3.gif?raw=true)
+![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
 
 이 페이지는 마크다운 에디터 (MarkDown Editor) [dillinger.io](http://dillinger.io/) 로 제작 되었습니다.
 
