@@ -26,10 +26,10 @@
   1. 귀신(Ghost)과 사용자(Player)간의 상호작용을 정리하였습니다.
  - (2016-09-09) 신은재 (eunjaeshin)
   1. 효과음 출처
-   - http://www.hanac200x.jp/
-   - http://soundarbour.sakura.ne.jp/BGM.html
-   - http://www.vita-chi.net/sozai1.htm
-   - http://www.senses-circuit.com/material/se_life.html
+    - http://www.hanac200x.jp/
+    - http://soundarbour.sakura.ne.jp/BGM.html
+    - http://www.vita-chi.net/sozai1.htm
+    - http://www.senses-circuit.com/material/se_life.html
 
 ## Demo
 
