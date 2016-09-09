@@ -19,24 +19,25 @@
 ## As-Is
 
 ### ver 0.1
-##### (2016-09-06) 차명도 (aw9223)
-- 레이캐스트 (Raycast) 를 사용하여 손전등 구현이 완료되었습니다.
-- A 스타(A-Star) 알고리즘을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
-- 브레젠헴의 직선 (Bresenham's Line) 알고리즘을 사용하여 타일(Tile) 기반의 맵 제작을 하엿습니다.
-- 캔버스 2D (Canvas 2D) 의 그래픽을 사용하여 2D 그래픽을 구현합니다.
+ - (2016-09-06) 차명도 (aw9223)
+1. 레이캐스트 (Raycast) 를 사용하여 손전등 구현이 완료되었습니다.
+2. A 스타(A-Star) 알고리즘을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
 
-### ver 0.2
-##### (2016-09-07) 차명도 (aw9223)
-- 귀신(Ghost)과 사용자(Player) 간의 상호작용을 정리 하였습니다.
+ - (2016-09-06) 신은재 (eunjaeshin)
+ 
+ 1.효과음 출처
+  - http://www.hanac200x.jp/           
+  - http://soundarbour.sakura.ne.jp/BGM.html
+  - http://www.vita-chi.net/sozai1.htm
+  - http://www.senses-circuit.com/material/se_life.html
+
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
-### ver 0.3
-##### (2016-09-08) 차명도 (aw9223)
-
-#### 현재(2016-09-08) 까지 완성된 v0.3 버전 입니다.
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
 
-이 페이지는 마크다운 에디터 (MarkDown Editor) [dillinger.io](http://dillinger.io/) 로 제작 되었습니다.
+이 페이지는 마크다운 에디터 (MarkDown Editor) [hashify.me](http://hashify.me/) 로 제작 되었습니다.
 
 마크다운의 문법은 [여기](https://namu.wiki/w/%EB%A7%88%ED%81%AC%EB%8B%A4%EC%9A%B4#s-2)를 참조 하시기 바랍니다.
+
+
