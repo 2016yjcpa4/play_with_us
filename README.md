@@ -19,18 +19,27 @@
 ## As-Is
 
 ### ver 0.1
- - (2016-09-06) 차명도 (aw9223)
-1. 레이캐스트 (Raycast) 를 사용하여 손전등 구현이 완료되었습니다.
-2. A 스타(A-Star) 알고리즘을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
 
- - (2016-09-06) 신은재 (eunjaeshin)
- 
- 1.효과음 출처
-  - http://www.hanac200x.jp/           
-  - http://soundarbour.sakura.ne.jp/BGM.html
-  - http://www.vita-chi.net/sozai1.htm
-  - http://www.senses-circuit.com/material/se_life.html
+  - (2016-09-06) 차명도 (aw9223)
 
+ 1. 레이캐스트(Raycast)를 사용하여 손전등 구현이 완료되었습니다.
+
+ 1. A-스타(A-Star) 알고리즘을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
+
+ 1. 브레젠햄의 직선(Bresenham's Line) 알고리즘을 사용하여 타일(Tile) 기반의 맵 제작을 하였습니다.
+
+ 1. 캔버스 2D (Canvas 2D)의 그래픽을 사용하여 2D 그래픽을 구현합니다.
+
+ 1. 귀신(Ghost)과 사용자(Player)간의 상호작용을 정리하였습니다.
+
+  - (2016-09-09) 신은재 (eunjaeshin)
+
+ 1. 효과음 출처
+
+     - http://www.hanac200x.jp/
+     - http://soundarbour.sakura.ne.jp/BGM.html
+     - http://www.vita-chi.net/sozai1.htm
+     - http://www.senses-circuit.com/material/se_life.html
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
