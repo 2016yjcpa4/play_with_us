@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-public class Game extends CanvasView implements MouseMotionListener, KeyListener {
+public class Game extends CanvasView implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
               
@@ -30,6 +31,7 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
     public boolean w, s, a, d;
 
     public Game() { 
+        canvas.addMouseListener(this);
         canvas.addMouseMotionListener(this);
         canvas.addKeyListener(this);
         
@@ -135,5 +137,33 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
     public void mouseMoved(MouseEvent e) {
         player.getDirection().setX(e.getX());
         player.getDirection().setY(e.getY());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3)
+        {
+            player.setTurnOnFlash();
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3)
+        {
+            player.setTurnOffFlash();
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }  
