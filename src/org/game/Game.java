@@ -13,16 +13,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 public class Game extends CanvasView implements MouseMotionListener, KeyListener {
 
     public static final boolean DEBUG = true;
               
-    private boolean isGameOver = false;  
-
-    public Player player;  
-    public Map map;
+    private boolean isGameOver = false; 
+    
+    private Player player;  
+    private Map map;
+    
+    public boolean w, s, a, d;
 
     public Game() { 
         canvas.addMouseMotionListener(this);
@@ -66,7 +71,7 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
             map.draw(this, g2d);
             player.draw(this, g2d);
         }
-    }
+    } 
     
     public void setGameOver() {
         isGameOver = true;
@@ -81,16 +86,20 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
         switch (e.getKeyCode()) 
         {
             case KeyEvent.VK_W:
-                player.getVelocity().setY(-4);
+                //player.getVelocity().setY(-4);
+                w = true;
                 break;
             case KeyEvent.VK_S:
-                player.getVelocity().setY(4);
+                //player.getVelocity().setY(4);
+                s = true;
                 break;
             case KeyEvent.VK_A:
                 player.getVelocity().setX(-4);
+                a = true;
                 break;
             case KeyEvent.VK_D:
-                player.getVelocity().setX(4);
+                //player.getVelocity().setX(4);
+                d = true;
                 break;
             case KeyEvent.VK_F:
                 player.toggleFlash();
@@ -103,12 +112,16 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
         switch (e.getKeyCode()) 
         {
             case KeyEvent.VK_W:
+                w = false;
+                break;
             case KeyEvent.VK_S:
-                player.getVelocity().setY(0);
+                s = false;
                 break;
             case KeyEvent.VK_A:
+                a = false;
+                break;
             case KeyEvent.VK_D:
-                player.getVelocity().setX(0);
+                d = false;
                 break;
         }
     }

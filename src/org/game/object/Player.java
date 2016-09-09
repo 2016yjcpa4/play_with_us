@@ -104,14 +104,40 @@ public class Player implements DrawableObject {
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
+        Game g= (Game) c;
+        if (g.w) {
+            vel.setY(-4);
+        }
+        
+        if (g.s) {
+            vel.setY(4);
+        }
+        
+        if (g.a) {
+            vel.setX(-4);
+        }
+        
+        if (g.d) {
+            vel.setX(4);
+        }
+        
+        
         // 도형 충돌 처리
         for (Wall w : map.getWall()) {
             Polygon.PolygonCollisionResult r = w.PolygonCollision(a, w, vel);
-            
+
             if (r.willHit) {
                 vel = vel.sum(r.minTranslVec);
             }
-        } 
+        }
+        
+        if ( ! (g.w || g.s)) {
+            vel.setY(0);
+        }
+        
+        if ( ! (g.a || g.d)) {
+            vel.setX(0);
+        }
         
         a.transform(Matrix2D.translate(vel.getX(), vel.getY()));
         

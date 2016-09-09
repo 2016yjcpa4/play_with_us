@@ -111,9 +111,15 @@ public class Map implements DrawableObject {
         List<Line2D> l = new ArrayList<>();
         
         for(Wall w : wall) {
+            
+            Point2D p1 = w.getVertex().get(w.getVertex().size() - 1);
+            Point2D p2 = w.getVertex().get(0);
+
+            l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
+                
             for(int n = 1; n < w.getVertex().size(); ++n) {
-                Point2D p1 = w.getVertex().get(n - 1);
-                Point2D p2 = w.getVertex().get(n);
+                p1 = w.getVertex().get(n - 1);
+                p2 = w.getVertex().get(n);
                 
                 l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
             }
