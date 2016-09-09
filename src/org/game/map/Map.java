@@ -25,8 +25,8 @@ public class Map implements DrawableObject {
     public static final int MAP_WIDTH = 800;
     public static final int MAP_HEIGHT = 600;
     
-    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 5.0);
-    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 5.0);
+    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 15.0);
+    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 15.0);
     
     private List<Wall> wall = new ArrayList();
     private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
@@ -52,7 +52,7 @@ public class Map implements DrawableObject {
         wall.add(new Wall(300, 200, 10, 400));
         
         // 장애물 2
-        wall.add(new Wall(500, 0, 10, 500));
+        wall.add(new Wall(507, 0, 10, 500));
         
         Ghost m;
         
@@ -161,10 +161,7 @@ public class Map implements DrawableObject {
     public void draw(CanvasView c, Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
          
-        if (Game.DEBUG && Map.DEBUG) {
-            g2d.setColor(new Color(255, 0, 255, (int) (255 * 0.40)));
-            g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-            
+        if (Game.DEBUG && Map.DEBUG) { 
             g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.20)));
 
             for (int y = 0; y < tiles.getRows(); ++y) {
