@@ -13,14 +13,14 @@ import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.IntersectionUtil;
 
-public class GhostObject implements DrawableObject {
+public class Ghost implements DrawableObject {
 
     private Map map;
     
     private Point2D pos = new Point2D(50, 50); 
     private Vector2D vel = new Vector2D(0, 0);
     
-    public GhostObject(Map m) {
+    public Ghost(Map m) {
         this.map = m; 
     }
     

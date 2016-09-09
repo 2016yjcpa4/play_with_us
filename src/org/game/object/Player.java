@@ -10,23 +10,25 @@ import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
+import org.game.geom.Circle;
+import org.game.geom.Polygon;
+import org.game.math.Matrix2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.IntersectionUtil; 
 
-public class PlayerObject implements DrawableObject {
+public class Player implements DrawableObject {
     
     private static final boolean DEBUG = true;
     
     private Map map;
 
     private boolean isTurnOnFlash = false;
+     
+    private Vector2D dir = new Vector2D(0, 0);    
+    private Vector2D vel = new Vector2D();    
     
-    private Point2D pos = new Point2D(400, 300);
-    private Point2D dir = new Point2D(0, 0);    
-    private Point2D vel = new Point2D(0, 0);    
-    
-    public PlayerObject(Map m) {
+    public Player(Map m) {
         this.map = m;
     }
     
@@ -60,13 +62,10 @@ public class PlayerObject implements DrawableObject {
         }
         
         List<Point2D> l = new ArrayList<>();
-        l.add(pos);
+        l.add(getPosition());
         
-        double angle = getAngle();
-        
-        for (double n = (angle - rangeAngle); n <= (angle + rangeAngle); n += (Math.PI * 2 / 1000)) {
-            
-            l.add(IntersectionUtil.getIntersection(pos, n, map.getWall()));
+        for (double ang = (getAngle() - rangeAngle); ang <= (getAngle() + rangeAngle); ang += (Math.PI * 2 / 1000)) { 
+            l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
         }
         
         return l;
@@ -77,7 +76,7 @@ public class PlayerObject implements DrawableObject {
      * 
      * @return Vector2D 클래스로 반환됩니다. 
      */
-    public Point2D getDirection() {
+    public Vector2D getDirection() {
         return dir;
     }
     
@@ -86,27 +85,39 @@ public class PlayerObject implements DrawableObject {
      * 
      * @return 
      */
-    public Point2D getVelocity() {
+    public Vector2D getVelocity() {
         return vel;
     }
     
     public Point2D getPosition() {
-        return pos;
+        return a.getPosition();
     }
      
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return new Vector2D(dir).sub(pos).angle();
+        return dir.sub(a.getPosition()).angle();
     }
     
+    private Circle a = new Circle(250, 300, 20);
+    private Circle b = new Circle(150, 150, 30); 
+    
     @Override
-    public void draw(CanvasView c, Graphics2D g2d) {
-        int x = pos.getX() + vel.getX();
-        int y = pos.getY() + vel.getY();
+    public void draw(CanvasView c, Graphics2D g2d) { 
+        // 도형 충돌 처리
+        for (Wall w : map.getWall()) {
+            Polygon.PolygonCollisionResult r = w.PolygonCollision(a, w, vel);
+            
+            if (r.willHit) {
+                vel = vel.sum(r.minTranslVec);
+            }
+        } 
         
-        pos.setX(x);
-        pos.setY(y);
+        a.transform(Matrix2D.translate(vel.getX(), vel.getY()));
+        
+        Point2D p = a.getPosition();
+        int x = p.getX();
+        int y = p.getY();
         
         g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
@@ -114,17 +125,17 @@ public class PlayerObject implements DrawableObject {
             List<Point2D> l = projectLight();
             
             g2d.fillPolygon(Point2D.getXPoints(l), Point2D.getYPoints(l), l.size());
-        }
+        } 
         
-        g2d.setColor(Color.MAGENTA);
-        g2d.drawOval(x - 5, y - 5, 10, 10);
-        
-        if (Game.DEBUG && PlayerObject.DEBUG) {
-            int dx = (int) (x + 20 * Math.cos(getAngle()));
-            int dy = (int) (y + 20 * Math.sin(getAngle()));
+        g2d.setColor(Color.CYAN);
+        int dx = (int) (x + 20 * Math.cos(getAngle()));
+        int dy = (int) (y + 20 * Math.sin(getAngle()));
 
-            g2d.drawLine(x, y, dx, dy);
-        }
+        g2d.drawLine(x, y, dx, dy);
+        
+        
+        
+        g2d.drawPolygon(a.getXPoints(), a.getYPoints(), a.getXPoints().length);
     }
 
 }

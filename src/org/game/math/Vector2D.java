@@ -7,6 +7,10 @@ public class Vector2D {
 
     private double dx;
     private double dy;
+    
+    public Vector2D() {
+        this(0, 0);
+    }
 
     public Vector2D(Point2D p) {
         this(p.getX(), p.getY());
@@ -25,6 +29,14 @@ public class Vector2D {
         return dy;
     }
     
+    public void setX(double x) {
+        this.dx = x;
+    }
+    
+    public void setY(double y) {
+        this.dy = y;
+    }
+    
     public void set(double x, double y) {
         this.dx = x;
         this.dy = y;
@@ -38,9 +50,10 @@ public class Vector2D {
         return Math.sqrt(dx * dx + dy * dy);
     }
     
-    public Vector2D normalize() {
-        double n = 1.0 / length();
-        return mult(n, n);
+    public void normalize() {
+        double len = length();
+        dx = dx / len;
+        dy = dy / len;
     }
     
     public double dotProduct(double x, double y) { return dx * x + dy * y; }

@@ -3,7 +3,7 @@ package org.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import org.game.object.PlayerObject;
+import org.game.object.Player;
 import org.game.map.Map;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -21,7 +21,7 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
               
     private boolean isGameOver = false;  
 
-    public PlayerObject player;  
+    public Player player;  
     public Map map;
 
     public Game() { 
@@ -29,7 +29,7 @@ public class Game extends CanvasView implements MouseMotionListener, KeyListener
         canvas.addKeyListener(this);
         
         map = new Map();
-        player = new PlayerObject(map);
+        player = new Player(map);
         
         map.setPlayer(player);
     }
