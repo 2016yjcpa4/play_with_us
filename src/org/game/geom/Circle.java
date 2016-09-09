@@ -15,14 +15,14 @@ public class Circle extends Polygon {
         
         l.add(new Point2D(x + rad, y));
         
-        for (int n = 0; n < 32; ++n) {
+        for (int n = 0; n < 10; ++n) {
             
             double dx = rad * Math.cos(ang);
             double dy = rad * Math.sin(ang);
             
             l.add(new Point2D((int) (x + dx), (int) (y + dy)));
             
-            ang += 2.0 * Math.PI / 32.0;
+            ang += 2.0 * Math.PI / 10.0;
         }
         
         l.add(new Point2D(x + rad, y));

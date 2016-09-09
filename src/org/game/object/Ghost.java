@@ -19,6 +19,7 @@ public class Ghost implements DrawableObject {
     
     private Point2D pos = new Point2D(50, 50); 
     private Vector2D vel = new Vector2D(0, 0);
+    private int speed = 3;
     
     public Ghost(Map m) {
         this.map = m; 
@@ -48,12 +49,12 @@ public class Ghost implements DrawableObject {
         vel.set(0, 0);
         
         if (isNearPlayer) { // 플레이어가 근처에 있는경우
-            vel.set(2, 2);
+            vel.set(speed, speed);
         }
         
         if (isLightProjected  // 플레이어 손전등에 비춰진상태
             || (isNearPlayer && map.getPlayer().isTurnOnFlash())) {// 플레이어가 근처에있으면서 플래시가 켜진 경우
-            vel.set(4, 4);
+            vel.set(speed * 2, speed * 2);
         }
         
         if (vel.getX() != 0 && vel.getY() != 0) {

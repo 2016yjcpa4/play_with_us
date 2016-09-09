@@ -25,11 +25,11 @@ public class Map implements DrawableObject {
     public static final int MAP_WIDTH = 800;
     public static final int MAP_HEIGHT = 600;
     
-    public static final int TILE_COLUMNS = 50;
-    public static final int TILE_ROWS = TILE_COLUMNS;
+    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 5.0);
+    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 5.0);
     
     private List<Wall> wall = new ArrayList();
-    private TileMap tiles = new TileMap(TILE_COLUMNS + 1, TILE_ROWS + 1);
+    private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
     
     private Player player;
     private List<Ghost> mobs = new ArrayList<>();
@@ -37,19 +37,22 @@ public class Map implements DrawableObject {
     public Map() { 
         // 기본적으로 맵의 테두리를 만들고...
         // 북쪽
-        wall.add(new Wall(0, 0, MAP_WIDTH, 10));
+        wall.add(new Wall(0, 0, MAP_WIDTH - 10, 10));
         
         // 동쪽
-        wall.add(new Wall(MAP_WIDTH, 0, 10, MAP_HEIGHT));
+        wall.add(new Wall(MAP_WIDTH - 10, 0, 10, MAP_HEIGHT));
         
         // 남쪽
         wall.add(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));
         
         // 서쪽
-        wall.add(new Wall(0, 0, 10, MAP_HEIGHT));
+        wall.add(new Wall(0, 0, 10, MAP_HEIGHT - 10));
         
         // 장애물 1
-        wall.add(new Wall(300, 300, 10, 300));
+        wall.add(new Wall(300, 200, 10, 400));
+        
+        // 장애물 2
+        wall.add(new Wall(500, 0, 10, 500));
         
         Ghost m;
         
@@ -73,7 +76,9 @@ public class Map implements DrawableObject {
             Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
 
             for (Point2D p : IntersectionUtil.getBresenhamLines(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
-                tiles.getNode(p.getX(), p.getY()).setNotWalkable();
+                if (tiles.isWithin(p.getX(), p.getY())) {
+                    tiles.getNode(p.getX(), p.getY()).setNotWalkable();
+                }
             }
         }
     }
@@ -155,20 +160,15 @@ public class Map implements DrawableObject {
     @Override
     public void draw(CanvasView c, Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
-
-        for (Wall w : wall) {
-            w.draw(c, g2d);
-        } 
-        
-        for(Ghost g : mobs) {
-            g.draw(c, g2d);
-        }
          
         if (Game.DEBUG && Map.DEBUG) {
+            g2d.setColor(new Color(255, 0, 255, (int) (255 * 0.40)));
+            g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+            
             g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.20)));
 
-            for (int y = 0; y < TILE_ROWS; ++y) {
-                for (int x = 0; x < TILE_COLUMNS; ++x) {
+            for (int y = 0; y < tiles.getRows(); ++y) {
+                for (int x = 0; x < tiles.getColumns(); ++x) {
 
                     TileNode n = tiles.getNode(x, y);
 
@@ -180,6 +180,14 @@ public class Map implements DrawableObject {
                     }
                 }
             }
+        }
+
+        for (Wall w : wall) {
+            w.draw(c, g2d);
+        } 
+        
+        for(Ghost g : mobs) {
+            g.draw(c, g2d);
         }
     }
 

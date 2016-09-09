@@ -99,7 +99,7 @@ public class Player implements DrawableObject {
         return dir.sub(a.getPosition()).angle();
     }
     
-    private Circle a = new Circle(250, 300, 20);
+    private Circle a = new Circle(250, 300, 10);
     private Circle b = new Circle(150, 150, 30); 
     
     @Override
