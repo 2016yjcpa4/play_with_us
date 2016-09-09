@@ -17,7 +17,7 @@ import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.IntersectionUtil; 
 
-public class Player implements DrawableObject {
+public class Player extends Circle implements DrawableObject {
     
     private static final boolean DEBUG = true;
     
@@ -29,6 +29,7 @@ public class Player implements DrawableObject {
     private Vector2D vel = new Vector2D();    
     
     public Player(Map m) {
+        super(250, 300, 13);
         this.map = m;
     }
     
@@ -87,20 +88,12 @@ public class Player implements DrawableObject {
      */
     public Vector2D getVelocity() {
         return vel;
-    }
-    
-    public Point2D getPosition() {
-        return a.getPosition();
-    }
-     
+    }     
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(a.getPosition()).angle();
-    }
-    
-    private Circle a = new Circle(250, 300, 10);
-    private Circle b = new Circle(150, 150, 30); 
+        return dir.sub(getPosition()).angle();
+    } 
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
@@ -124,7 +117,7 @@ public class Player implements DrawableObject {
         
         // 도형 충돌 처리
         for (Wall w : map.getWall()) {
-            Polygon.PolygonCollisionResult r = w.PolygonCollision(a, w, vel);
+            Polygon.PolygonCollisionResult r = w.PolygonCollision(this, w, vel);
 
             if (r.willHit) {
                 vel = vel.sum(r.minTranslVec);
@@ -139,9 +132,9 @@ public class Player implements DrawableObject {
             vel.setX(0);
         }
         
-        a.transform(Matrix2D.translate(vel.getX(), vel.getY()));
+        transform(Matrix2D.translate(vel.getX(), vel.getY()));
         
-        Point2D p = a.getPosition();
+        Point2D p = getPosition();
         int x = p.getX();
         int y = p.getY();
         
@@ -161,7 +154,7 @@ public class Player implements DrawableObject {
         
         
         
-        g2d.drawPolygon(a.getXPoints(), a.getYPoints(), a.getXPoints().length);
+        g2d.drawPolygon(getXPoints(), getYPoints(), getXPoints().length);
     }
 
 }

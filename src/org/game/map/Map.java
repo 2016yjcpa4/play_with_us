@@ -25,8 +25,8 @@ public class Map implements DrawableObject {
     public static final int MAP_WIDTH = 800;
     public static final int MAP_HEIGHT = 600;
     
-    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 15.0);
-    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 15.0);
+    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 13.0);
+    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 13.0);
     
     private List<Wall> wall = new ArrayList();
     private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
