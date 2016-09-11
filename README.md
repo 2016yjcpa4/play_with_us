@@ -17,8 +17,7 @@
   - 차현민 (ckckck23) : 맵제작, 디자인
   - 차명도 (aw9223) : 프로그램 설계및 개발, 깃허브 관리, README.md 관리
 
-## Done
-### ver 0.1
+## Done (ver 0.1 ~ )
   - (2016-09-06) 차명도 (aw9223)
     1. 레이캐스트(Raycast) 알고리즘([설명](http://developug.blogspot.kr/2014/10/raycast.html))을 사용하여 손전등 구현이 완료되었습니다.
     2. 브레젠햄의 직선(Bresenham's Line) 알고리즘을 사용하여 타일(Tile) 기반의 맵 제작을 하였습니다.
