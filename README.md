@@ -13,7 +13,7 @@
   - 동영상 플레이어
   - 맵 에디터
   - PPT 제작
-  - 벽, 사물 충돌처리
+  - 벽, 사물 충돌처리 (Separating Axis Theorem 알고리즘 기반)
 
 ## Done
 ### ver 0.1
