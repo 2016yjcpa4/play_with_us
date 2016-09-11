@@ -16,6 +16,7 @@ import org.game.math.Line2D;
 import org.game.math.Point2D;
 import org.game.map.TileMap;
 import org.game.map.TileNode;
+import org.game.math.Matrix2D;
 import org.game.object.Wall;
 import org.game.util.IntersectionUtil;
 
@@ -25,8 +26,8 @@ public class Map implements DrawableObject {
     public static final int MAP_WIDTH = 800;
     public static final int MAP_HEIGHT = 600;
     
-    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 13.0);
-    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 13.0);
+    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 11.0);
+    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 11.0);
     
     private List<Wall> wall = new ArrayList();
     private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
@@ -51,8 +52,12 @@ public class Map implements DrawableObject {
         // 장애물 1
         wall.add(new Wall(300, 200, 10, 400));
         
+        Wall w = new Wall(507, 0, 10, 500);
+        
+        w.transform(Matrix2D.rotate(Math.toRadians(30)));
+        
         // 장애물 2
-        wall.add(new Wall(507, 0, 10, 500));
+        wall.add(w);
         
         Ghost m;
         

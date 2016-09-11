@@ -93,7 +93,7 @@ public class Player extends Circle implements DrawableObject {
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
         return dir.sub(getPosition()).angle();
-    } 
+    }
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
@@ -114,16 +114,6 @@ public class Player extends Circle implements DrawableObject {
             vel.setX(4);
         }
         
-        
-        // 도형 충돌 처리
-        for (Wall w : map.getWall()) {
-            Polygon.PolygonCollisionResult r = w.PolygonCollision(this, w, vel);
-
-            if (r.willHit) {
-                vel = vel.sum(r.minTranslVec);
-            }
-        }
-        
         if ( ! (g.w || g.s)) {
             vel.setY(0);
         }
@@ -132,11 +122,12 @@ public class Player extends Circle implements DrawableObject {
             vel.setX(0);
         }
         
-        transform(Matrix2D.translate(vel.getX(), vel.getY()));
-        
         Point2D p = getPosition();
-        int x = p.getX();
-        int y = p.getY();
+        int x = (int) (p.getX() + vel.getX());
+        int y = (int) (p.getY() + vel.getY());
+        int rad = getRadius();
+        
+        p.set(x, y);
         
         g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
@@ -150,11 +141,20 @@ public class Player extends Circle implements DrawableObject {
         int dx = (int) (x + 20 * Math.cos(getAngle()));
         int dy = (int) (y + 20 * Math.sin(getAngle()));
 
+        
+        
+        
+        for(Wall w : map.getWall()) {
+            if (w.isIntesects(this)) {
+                g2d.setColor(Color.RED);
+            }
+        }
+        
+        
         g2d.drawLine(x, y, dx, dy);
         
         
-        
-        g2d.drawPolygon(getXPoints(), getYPoints(), getXPoints().length);
+        g2d.drawOval(x - rad, y - rad, rad * 2, rad * 2);
     }
 
 }
