@@ -10,10 +10,9 @@
   - 차명도 (aw9223) : 프로그램 설계및 개발, Github README.md 관리
 
 ## To-Do
-  - 동영상 플레이어
+  - 동영상 플레이
   - 맵 에디터
-  - PPT 제작
-  - 벽, 사물 충돌처리 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
+  - 플레이어의 벽, 사물 인식 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
 
 ## Done
 ### ver 0.1
