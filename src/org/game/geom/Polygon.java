@@ -13,11 +13,7 @@ public class Polygon {
     public Polygon() {
     }
 
-    public Polygon(List<Point2D> vtx) {
-        addAll(vtx);
-    }
-
-    public void addAll(List<Point2D> l) {
+    public Polygon(List<Point2D> l) {
         vtx.addAll(l);
     }
 
