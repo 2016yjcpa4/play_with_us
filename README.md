@@ -40,7 +40,7 @@
 ## To-Do (ver 0.2)
   - 동영상 플레이
   - 기획안 구체화 1차작업
-  - 맵 에디터
+  - 맵 에디터 제작
   - 플레이어의 벽, 사물 인식 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
 
 이 페이지는 마크다운 에디터 (MarkDown Editor) [hashify.me](http://hashify.me/) 로 제작 되었습니다.
