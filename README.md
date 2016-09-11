@@ -13,7 +13,7 @@
   - 동영상 플레이어
   - 맵 에디터
   - PPT 제작
-  - 벽, 사물 충돌처리 ([Separating Axis Theorem 알고리즘 기반](http://www.metanetsoftware.com/technique/tutorialA.html))
+  - 벽, 사물 충돌처리 (Separating Axis Theorem 알고리즘 기반 [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
 
 ## Done
 ### ver 0.1
