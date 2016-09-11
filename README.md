@@ -9,11 +9,6 @@
   - 차현민 (ckckck23) : 맵제작, 디자인
   - 차명도 (aw9223) : 프로그램 설계및 개발, Github README.md 관리
 
-## To-Do
-  - 동영상 플레이
-  - 맵 에디터
-  - 플레이어의 벽, 사물 인식 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
-
 ## Done
 ### ver 0.1
   - (2016-09-06) 차명도 (aw9223)
@@ -28,11 +23,17 @@
       - http://soundarbour.sakura.ne.jp/BGM.html
       - http://www.vita-chi.net/sozai1.htm
       - http://www.senses-circuit.com/material/se_life.html
+
 ## Demo
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
+
+## To-Do
+  - 동영상 플레이
+  - 맵 에디터
+  - 플레이어의 벽, 사물 인식 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
 
 이 페이지는 마크다운 에디터 (MarkDown Editor) [hashify.me](http://hashify.me/) 로 제작 되었습니다.
 
