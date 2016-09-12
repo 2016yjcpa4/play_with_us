@@ -2,6 +2,10 @@
 
 2학년 2학기 CP-A반 Java 4조는 깃허브(Github)를 사용하여 프로젝트 협업 개발경험을 쌓기위해 개설되었습니다.
 
+### 깃허브(Github) 란?
+> Powerful collaboration, code review, and code management for open source and private projects. Public projects are always free. Work together across unlimited private repositories for $7 / month.
+오픈 소스와 비공개 프로젝트를 위한 강력한 협업, 코드 미리보기, 그리고 코드 관리. 공개 프로젝트는 항상 무료입니다. 월 7$면 비공개 프로젝트를 제한 없이 생성할 수 있습니다.
+
 저희 프로젝트는 2주 단위로 짧게 짧게 개발을 진행 해가는 [애자일 개발 방법론](https://ko.wikipedia.org/wiki/%EC%95%A0%EC%9E%90%EC%9D%BC_%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4_%EA%B0%9C%EB%B0%9C)을 채택 하였습니다.
 
 애자일 방법론은 위키백과에서 다음과 같이 설명하고 있습니다.
