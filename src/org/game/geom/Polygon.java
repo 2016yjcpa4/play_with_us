@@ -8,12 +8,27 @@ import org.game.math.Vector2D;
 
 public class Polygon {
 
+    private List<Vector2D> e = new ArrayList<>();
+    private List<Vector2D> norm = new ArrayList<>();
     private List<Point2D> vtx = new ArrayList<>();
 
     public Polygon() {
     }
 
     public Polygon(List<Point2D> l) {
+        int len = l.size();
+        
+        for (int n = 0; n < len; ++n) {
+            Point2D p1 = l.get(n);
+            Point2D p2 = l.get(n < len - 1 ? n + 1 : 0);
+            
+            Vector2D e = new Vector2D(p2).sub(p1);
+            Vector2D norm = e.perp().norm();
+            
+            this.e.add(e);
+            this.norm.add(norm);
+        }
+        
         vtx.addAll(l);
     }
 

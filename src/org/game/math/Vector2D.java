@@ -46,18 +46,29 @@ public class Vector2D {
         return Math.atan2(dy, dx);
     }
     
-    public double lengthSquared() {
-        return dx * dx + dy * dy;
-    }
-    
     public double length() {
-        return Math.sqrt(lengthSquared());
+        return Math.sqrt(dot(this));
     }
     
-    public void normalize() {
+    public Vector2D norm() {
         double len = length();
-        dx = dx / len;
-        dy = dy / len;
+        
+        if (len > 0) {
+            dx = dx / len;
+            dy = dy / len;
+        }
+        
+        return this;
+    }
+    
+    public Vector2D perp() {
+        double x = dx;
+        double y = dy;
+        
+        this.dx = y;
+        this.dy = -x;
+        
+        return this;
     }
     
     public double dot(double x, double y)       { return dx * x + dy * y; }
