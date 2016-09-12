@@ -37,7 +37,7 @@
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
 
-## To-Do (ver 0.2)
+## To-Do (ver 0.1)
   - 동영상 플레이
   - 기획안 구체화 1차작업
   - 맵 에디터 제작
