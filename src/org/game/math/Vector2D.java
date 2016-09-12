@@ -47,10 +47,14 @@ public class Vector2D {
     }
     
     public double length() {
-        return Math.sqrt(dot(this));
+        return length(true);
     }
     
-    public Vector2D norm() {
+    public double length(boolean sqrt) {
+        return sqrt ? Math.sqrt(dot(this)) : dot(this);
+    }
+    
+    public Vector2D normalize() {
         double len = length();
         
         if (len > 0) {

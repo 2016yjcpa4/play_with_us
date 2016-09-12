@@ -23,7 +23,7 @@ public class Polygon {
             Point2D p2 = l.get(n < len - 1 ? n + 1 : 0);
             
             Vector2D e = new Vector2D(p2).sub(p1);
-            Vector2D norm = e.perp().norm();
+            Vector2D norm = e.perp().normalize();
             
             this.e.add(e);
             this.norm.add(norm);
