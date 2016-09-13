@@ -30,7 +30,7 @@ public class Ghost implements DrawableObject {
     }
     
     public double getDistanceToPlayer() {
-        return new Vector2D(pos).sub(map.getPlayer().getPosition()).length();
+        return new Vector2D(pos).sub(map.getPlayer().getPosition()).len();
     }
     
     @Override

@@ -208,7 +208,7 @@ public class Polygon implements Shape {
         Vector2D differenceV = T_VECTORS.pop().set(b.getPosition()).sub(a.getPosition());
         double totalRadius = a.getRadius() + b.getRadius();
         double totalRadiusSq = totalRadius * totalRadius;
-        double distanceSq = differenceV.lengthSquared();
+        double distanceSq = differenceV.len2();
 
         if (distanceSq > totalRadiusSq) {
             // They do not intersect 
@@ -247,7 +247,7 @@ public class Polygon implements Shape {
     private static final int RIGHT_VORNOI_REGION = 1;
     
     private static int vornoiRegion(Vector2D line, Vector2D point) {
-        double len2 = line.lengthSquared();
+        double len2 = line.len2();
         double dp = point.dot(line);
 
         if (dp < 0) return LEFT_VORNOI_REGION;
@@ -280,7 +280,7 @@ public class Polygon implements Shape {
             // If the distance between the center of the circle and the point
             // is bigger than the radius, the polygon is definitely not fully in
             // the circle.
-            if (response != null && point.lengthSquared() > radius2) {
+            if (response != null && point.len2() > radius2) {
                 response.aInB = false;
             }
 
@@ -298,7 +298,7 @@ public class Polygon implements Shape {
                 if (region == RIGHT_VORNOI_REGION) {
 
                     // It's in the region we want.  Check if the circle intersects the point.
-                    double dist = point.length();
+                    double dist = point.len();
                     if (dist > radius) {
                         // No intersection
                         T_VECTORS.push(circlePos);
@@ -328,7 +328,7 @@ public class Polygon implements Shape {
                 if (region == LEFT_VORNOI_REGION) {
 
                     // It's in the region we want.  Check if the circle intersects the point.
-                    double dist = point.length();
+                    double dist = point.len();
                     if (dist > radius) {
                         // No intersection
                         T_VECTORS.push(circlePos);

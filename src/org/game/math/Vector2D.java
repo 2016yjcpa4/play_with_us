@@ -60,16 +60,16 @@ public class Vector2D {
         return Math.atan2(dy, dx);
     }
     
-    public double lengthSquared() {
+    public double len2() {
         return dot(this);
     }
     
-    public double length() {
-        return Math.sqrt(lengthSquared());
+    public double len() {
+        return Math.sqrt(len2());
     }
     
     public Vector2D normalize() {
-        double len = length();
+        double len = len();
         
         if (len > 0) {
             dx = dx / len;
