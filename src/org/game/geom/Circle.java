@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.game.math.Point2D;
 
-public class Circle {
+public class Circle implements Shape {
     
     private Point2D pos = new Point2D();
     private int rad;

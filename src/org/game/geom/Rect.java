@@ -9,13 +9,11 @@ import org.game.math.Vector2D;
 public class Rect extends Polygon {
 
     public Rect(int x, int y, int w, int h) {
-        List<Point2D> l = new ArrayList<Point2D>() {{
+        super(new ArrayList<Point2D>() {{
             add(new Point2D(x, y));
             add(new Point2D(w + x, y));
             add(new Point2D(w + x, h + y));
             add(new Point2D(x, h + y));
-        }};
-        
-        addAll(l);
+        }});
     }
 }

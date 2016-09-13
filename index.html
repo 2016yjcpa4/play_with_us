@@ -746,12 +746,16 @@ canvas {display:block}
 
         // If any of the edge normals of A is a separating axis, no intersection.
         while (aLen--) {
-            if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, a.normals[aLen], response)) return false;
+            if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, a.normals[aLen], response)) {
+                return false;
+            }
         }
 
         // If any of the edge normals of B is a separating axis, no intersection.
         while (bLen--) {
-            if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, b.normals[bLen], response)) return false;
+            if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, b.normals[bLen], response)) {
+                return false;
+            }
         }
 
         // Since none of the edge normals of A or B are a separating axis, there is an intersection

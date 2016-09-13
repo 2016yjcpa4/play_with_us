@@ -15,6 +15,10 @@ public class Vector2D {
     public Vector2D(Point2D p) {
         this(p.getX(), p.getY());
     }
+
+    public Vector2D(Vector2D v) {
+        this(v.getX(), v.getY());
+    }
     
     public Vector2D(double dx, double dy) {
         this.dx = dx;
@@ -37,21 +41,31 @@ public class Vector2D {
         this.dy = y;
     }
     
-    public void set(double x, double y) {
+    public Vector2D set(double x, double y) {
         this.dx = x;
         this.dy = y;
+        
+        return this;
+    }
+    
+    public Vector2D set(Point2D p) {
+        return set(p.getX(), p.getY());
+    }
+    
+    public Vector2D set(Vector2D v) {
+        return set(v.getX(), v.getY());
     }
     
     public double angle() {
         return Math.atan2(dy, dx);
     }
     
-    public double length() {
-        return length(true);
+    public double lengthSquared() {
+        return dot(this);
     }
     
-    public double length(boolean sqrt) {
-        return sqrt ? Math.sqrt(dot(this)) : dot(this);
+    public double length() {
+        return Math.sqrt(lengthSquared());
     }
     
     public Vector2D normalize() {
@@ -61,6 +75,13 @@ public class Vector2D {
             dx = dx / len;
             dy = dy / len;
         }
+        
+        return this;
+    }
+    
+    public Vector2D reverse() {
+        this.dx = -dx;
+        this.dy = -dy;
         
         return this;
     }

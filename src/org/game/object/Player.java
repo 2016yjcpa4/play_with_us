@@ -98,29 +98,13 @@ public class Player extends Circle implements DrawableObject {
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
         Game g= (Game) c;
-        if (g.w) {
-            vel.setY(-4);
-        }
+        if (g.w) vel.setY(-4);
+        if (g.s) vel.setY(4);
+        if (g.a) vel.setX(-4);
+        if (g.d) vel.setX(4);
         
-        if (g.s) {
-            vel.setY(4);
-        }
-        
-        if (g.a) {
-            vel.setX(-4);
-        }
-        
-        if (g.d) {
-            vel.setX(4);
-        }
-        
-        if ( ! (g.w || g.s)) {
-            vel.setY(0);
-        }
-        
-        if ( ! (g.a || g.d)) {
-            vel.setX(0);
-        }
+        if ( ! (g.w || g.s)) vel.setY(0);
+        if ( ! (g.a || g.d)) vel.setX(0);
         
         Point2D p = getPosition();
         int x = (int) (p.getX() + vel.getX());
@@ -138,15 +122,17 @@ public class Player extends Circle implements DrawableObject {
         } 
         
         g2d.setColor(Color.CYAN);
+        
         int dx = (int) (x + 20 * Math.cos(getAngle()));
         int dy = (int) (y + 20 * Math.sin(getAngle()));
 
         
-        
+        Polygon.SATResponse r = new Polygon.SATResponse();
         
         for(Wall w : map.getWall()) {
-            if (w.isIntesects(this)) {
+            if (Polygon.testPolygonCircle(w, this, r)) {
                 g2d.setColor(Color.RED);
+                break;
             }
         }
         
