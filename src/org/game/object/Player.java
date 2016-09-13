@@ -127,10 +127,10 @@ public class Player extends Circle implements DrawableObject {
         int dy = (int) (y + 20 * Math.sin(getAngle()));
 
         
-        Polygon.SATResponse r = new Polygon.SATResponse();
+        //Polygon.SATResponse r = new Polygon.SATResponse();
         
         for(Wall w : map.getWall()) {
-            if (Polygon.testPolygonCircle(w, this, r)) {
+            if (Polygon.testPolygonCircle(w, this, null)) {
                 g2d.setColor(Color.RED);
                 break;
             }
