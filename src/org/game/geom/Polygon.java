@@ -7,9 +7,9 @@ import org.game.math.Matrix2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 
-public class Polygon implements Shape {
-
-    private List<Vector2D> e = new ArrayList<>();
+public class Polygon implements Shape { 
+    
+    private List<Vector2D> edges = new ArrayList<>();
     private List<Vector2D> norm = new ArrayList<>();
     private List<Point2D> vtx = new ArrayList<>();
 
@@ -17,22 +17,28 @@ public class Polygon implements Shape {
     }
 
     public Polygon(List<Point2D> l) {
-        int len = l.size();
         
-        if(Polygon.LEFT_VORNOI_REGION == 0);
+        vtx.addAll(l);
+        
+        reset();
+    }
+    
+    private void reset() { 
+        int len = vtx.size(); 
+        
+        edges.clear();
+        norm.clear();
         
         for (int n = 0; n < len; ++n) {
-            Point2D p1 = l.get(n);
-            Point2D p2 = l.get(n < len - 1 ? n + 1 : 0);
+            Point2D p1 = vtx.get(n);
+            Point2D p2 = vtx.get(n < len - 1 ? n + 1 : 0);
             
             Vector2D e = new Vector2D(p2).sub(p1);
             Vector2D norm = new Vector2D(e).perp().normalize();
             
-            this.e.add(e);
+            this.edges.add(e);
             this.norm.add(norm);
-        }
-        
-        vtx.addAll(l);
+        } 
     }
 
     public int[] getXPoints() {
@@ -63,13 +69,15 @@ public class Polygon implements Shape {
             p.setX((int) (x * m.getA() + y * m.getC() + m.getE()));
             p.setY((int) (x * m.getB() + y * m.getD() + m.getF()));
         }
+        
+        reset();
     }
-
+    
     public Point2D getPosition() {
         Vector2D v = new Vector2D();
 
         for (int n = 0; n < vtx.size(); n++) {
-            v = v.sum(vtx.get(n));
+            v = v.add(vtx.get(n));
         }
 
         int x = (int) (v.getX() / (float) vtx.size());
@@ -78,29 +86,15 @@ public class Polygon implements Shape {
         return new Point2D(x, y);
     }
     
-    private static Stack<List<Double>> T_ARRAYS = new Stack<>();
-    private static Stack<Vector2D> T_VECTORS = new Stack<>();
-    
-    static {
-        for (int n = 0; n < 5; ++n) {
-            T_ARRAYS.push(new ArrayList());
-        }
-        
-        for (int n = 0; n < 10; ++n) {
-            T_VECTORS.push(new Vector2D());
-        }
-    }
-    
     public static class SATResponse {
         
         public Shape a;
         public Shape b;
+        public Vector2D overlapN = new Vector2D();
+        public Vector2D overlapV = new Vector2D();
         
         public boolean aInB;
         public boolean bInA;
-        
-        public Vector2D overlapN = new Vector2D();
-        public Vector2D overlapV = new Vector2D();
         public double overlap;
         
         public SATResponse() {
@@ -115,135 +109,32 @@ public class Polygon implements Shape {
         };
     } 
     
-    public static void getFlattenPointsOn(List<Point2D> vtx, Vector2D norm, List l) {
-        double min = Double.MAX_VALUE;
-        double max = Double.MIN_VALUE;
+    private static class RangeResult {
+        public double min;
+        public double max;
         
-        for (int n = vtx.size() - 1; 0 >= n; --n) {
-            
-            double d = new Vector2D(vtx.get(n)).dot(norm);
+        public RangeResult(double min, double max) {
+            this.min = min;
+            this.max = max;
+        }
+    }
+    
+    public static RangeResult flattenPointsOn(List<Point2D> points, Vector2D norm) {
+        double min = Double.MAX_VALUE;
+        double max = -Double.MAX_VALUE;
+        int i = points.size();
+        for(; i >= 0; i--) { 
+            double d = new Vector2D(points.get(i)).dot(norm);
             
             min = Math.min(min, d);
             max = Math.max(max, d);
         }
         
-        l.set(0, min);
-        l.set(1, max);
+        return new RangeResult(min, max);
     }
     
-    public static boolean isSeparatingAxis(Point2D aPos, Point2D bPos, List<Point2D> aPoints, List<Point2D> bPoints, Vector2D axis, SATResponse response) {
-        List<Double> rangeA = T_ARRAYS.pop();
-        List<Double> rangeB = T_ARRAYS.pop();
-        
-        Vector2D offsetV = T_VECTORS.pop().set(bPos).sub(aPos);
-        double projectedOffset = offsetV.dot(axis);
-        
-        // Project the polygons onto the axis.
-        getFlattenPointsOn(aPoints, axis, rangeA);
-        getFlattenPointsOn(bPoints, axis, rangeB);
-
-        // Move B's range to its position relative to A.
-        rangeB.set(0, rangeB.get(0) + projectedOffset);
-        rangeB.set(1, rangeB.get(1) + projectedOffset);
-        
-        // Check if there is a gap. If there is, this is a separating axis and we can stop
-        if (rangeA.get(0) > rangeB.get(1) || rangeB.get(0) > rangeA.get(1)) {
-            T_VECTORS.push(offsetV);
-            T_ARRAYS.push(rangeA);
-            T_ARRAYS.push(rangeB);
-            return true;
-        }
-        
-        
-        // If we're calculating a response, calculate the overlap.
-        if (response != null) {
-            double overlap = 0;
-            // A starts further left than B
-            if (rangeA.get(0) < rangeB.get(0)) {
-                response.aInB = false;
-                // A ends before B does. We have to pull A out of B
-                if (rangeA.get(1) < rangeB.get(1)) {
-                    overlap = rangeA.get(1) - rangeB.get(0);
-                    response.bInA = false;
-                    // B is fully inside A.  Pick the shortest way out.
-                } else {
-                    double option1 = rangeA.get(1) - rangeB.get(0);
-                    double option2 = rangeB.get(1) - rangeA.get(0);
-                    overlap = option1 < option2 ? option1 : -option2;
-                }
-                // B starts further left than A
-            } else {
-                response.bInA = false;
-                // B ends before A ends. We have to push A out of B
-                if (rangeA.get(1) > rangeB.get(1)) {
-                    overlap = rangeA.get(0) - rangeB.get(1);
-                    response.aInB = false;
-                    // A is fully inside B.  Pick the shortest way out.
-                } else {
-                    double option1 = rangeA.get(1) - rangeB.get(0);
-                    double option2 = rangeB.get(1) - rangeA.get(0);
-                    overlap = option1 < option2 ? option1 : -option2;
-                }
-            }
-
-            // If this is the smallest amount of overlap we've seen so far, set it as the minimum overlap.
-            double absOverlap = Math.abs(overlap);
-            if (absOverlap < response.overlap) {
-                response.overlap = absOverlap;
-                response.overlapN.set(axis);
-                if (overlap < 0) {
-                    response.overlapN.reverse();
-                }
-            }
-        }
-        
-        T_VECTORS.push(offsetV);
-        T_ARRAYS.push(rangeA);
-        T_ARRAYS.push(rangeB);
-        return false;
-    }
-    
-    
-    public static boolean testCircleCircle(Circle a, Circle b, SATResponse response) {
-        Vector2D differenceV = T_VECTORS.pop().set(b.getPosition()).sub(a.getPosition());
-        double totalRadius = a.getRadius() + b.getRadius();
-        double totalRadiusSq = totalRadius * totalRadius;
-        double distanceSq = differenceV.len2();
-
-        if (distanceSq > totalRadiusSq) {
-            // They do not intersect 
-            T_VECTORS.push(differenceV);
-            return false;
-        }
-
-        // They intersect. If we're calculating a response, calculate the overlap.
-        if (response != null) {
-            double dist = Math.sqrt(distanceSq);
-            response.a = a;
-            response.b = b;
-            response.overlap = totalRadius - dist;
-            response.overlapN.set(differenceV.normalize());
-            response.overlapV.set(differenceV).mult(response.overlap);
-            response.aInB = a.getRadius() <= b.getRadius() && dist <= b.getRadius() - a.getRadius();
-            response.bInA = b.getRadius() <= a.getRadius() && dist <= a.getRadius() - b.getRadius();
-        }
-
-        T_VECTORS.push(differenceV);
-        return true;
-    }
-    /**
-     * @const
-     */
-    private static final int LEFT_VORNOI_REGION = -1;
-
-    /**
-     * @const
-     */
-    private static final int MIDDLE_VORNOI_REGION = 0;
-
-    /**
-     * @const
-     */
+    private static final int LEFT_VORNOI_REGION = -1; 
+    private static final int MIDDLE_VORNOI_REGION = 0; 
     private static final int RIGHT_VORNOI_REGION = 1;
     
     private static int vornoiRegion(Vector2D line, Vector2D point) {
@@ -253,16 +144,18 @@ public class Polygon implements Shape {
         if (dp < 0) return LEFT_VORNOI_REGION;
         if (dp > len2) return RIGHT_VORNOI_REGION;
         return MIDDLE_VORNOI_REGION;
-    }
+    } 
     
-    public static boolean testPolygonCircle(Polygon polygon, Circle circle, SATResponse response) { 
-        Vector2D circlePos = T_VECTORS.pop().set(circle.getPosition()).sub(polygon.getPosition());
+    
+    public static boolean testPolygonCircle(Polygon polygon, Circle circle, SATResponse response) {
+         
+        Vector2D circlePos = new Vector2D(circle.getPosition());//.sub(polygon.getPosition());
         double radius = circle.getRadius();
         double radius2 = radius * radius;
         List<Point2D> points = polygon.vtx;
         int len = points.size();
-        Vector2D edge = T_VECTORS.pop();
-        Vector2D point = T_VECTORS.pop();
+        Vector2D edge = new Vector2D();
+        Vector2D point = new Vector2D();
 
         // For each edge in the polygon
         for (int i = 0; i < len; i++) {
@@ -272,10 +165,10 @@ public class Polygon implements Shape {
             Vector2D overlapN = null;
 
             // Get the edge
-            edge.set(polygon.e.get(i));
+            edge = new Vector2D(polygon.edges.get(i));
 
             // Calculate the center of the cirble relative to the starting point of the edge
-            point.set(circlePos).sub(points.get(i));
+            point = circlePos.sub(points.get(i));
 
             // If the distance between the center of the circle and the point
             // is bigger than the radius, the polygon is definitely not fully in
@@ -289,10 +182,10 @@ public class Polygon implements Shape {
             if (region == LEFT_VORNOI_REGION) {
 
                 // Need to make sure we're in the RIGHT_VORNOI_REGION of the previous edge.
-                edge.set(polygon.e.get(prev));
+                edge = polygon.edges.get(prev);
 
                 // Calculate the center of the circle relative the starting point of the previous edge
-                Vector2D point2 = T_VECTORS.pop().set(circlePos).sub(points.get(prev));
+                Vector2D point2 = circlePos.sub(points.get(prev));
 
                 region = vornoiRegion(edge, point2);
                 if (region == RIGHT_VORNOI_REGION) {
@@ -300,11 +193,7 @@ public class Polygon implements Shape {
                     // It's in the region we want.  Check if the circle intersects the point.
                     double dist = point.len();
                     if (dist > radius) {
-                        // No intersection
-                        T_VECTORS.push(circlePos);
-                        T_VECTORS.push(edge);
-                        T_VECTORS.push(point);
-                        T_VECTORS.push(point2);
+                        // No intersection 
                         return false;
                     } 
                     else if (response != null) {
@@ -314,15 +203,14 @@ public class Polygon implements Shape {
                         overlap = radius - dist;
                     }
                 }
-                T_VECTORS.push(point2);
             } 
             else if (region == RIGHT_VORNOI_REGION) {
 
                 // Need to make sure we're in the left region on the next edge
-                edge.set(polygon.e.get(next));
+                edge = (polygon.edges.get(next));
 
                 // Calculate the center of the circle relative to the starting point of the next edge
-                point.set(circlePos).sub(points.get(next));
+                point = circlePos.sub(points.get(next));
 
                 region = vornoiRegion(edge, point);
                 if (region == LEFT_VORNOI_REGION) {
@@ -330,12 +218,9 @@ public class Polygon implements Shape {
                     // It's in the region we want.  Check if the circle intersects the point.
                     double dist = point.len();
                     if (dist > radius) {
-                        // No intersection
-                        T_VECTORS.push(circlePos);
-                        T_VECTORS.push(edge);
-                        T_VECTORS.push(point);
+                        // No intersection 
                         return false;
-                    } 
+                    }
                     else if (response != null) {
                         // It intersects, calculate the overlap
                         response.bInA = false;
@@ -356,10 +241,7 @@ public class Polygon implements Shape {
                 double distAbs = Math.abs(dist);
 
                 // If the circle is on the outside of the edge, there is no intersection
-                if (dist > 0 && distAbs > radius) {
-                    T_VECTORS.push(circlePos);
-                    T_VECTORS.push(normal);
-                    T_VECTORS.push(point);
+                if (dist > 0 && distAbs > radius) { 
                     return false;
                 } 
                 else if (response != null) {
@@ -378,7 +260,7 @@ public class Polygon implements Shape {
             // (overlapN may be null if the circle was in the wrong Vornoi region)
             if (overlapN != null && response != null && Math.abs(overlap) < Math.abs(response.overlap)) {
                 response.overlap = overlap;
-                response.overlapN.set(overlapN);
+                response.overlapN = new Vector2D(overlapN);
             }
         }
 
@@ -386,12 +268,10 @@ public class Polygon implements Shape {
         if (response != null) {
             response.a = polygon;
             response.b = circle;
-            response.overlapV.set(response.overlapN).mult(response.overlap);
-        }
-
-        T_VECTORS.push(circlePos);
-        T_VECTORS.push(edge);
-        T_VECTORS.push(point);
+            response.overlapV = response.overlapN.scale(response.overlap);
+        } 
+        
         return true;
-    }
+    };
+    
 }

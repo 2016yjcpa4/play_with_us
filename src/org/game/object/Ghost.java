@@ -46,15 +46,18 @@ public class Ghost implements DrawableObject {
             return;
         }
         
-        vel.set(0, 0);
+        vel.setX(0);
+        vel.setY(0);
         
         if (isNearPlayer) { // 플레이어가 근처에 있는경우
-            vel.set(speed, speed);
+            vel.setX(speed);
+            vel.setY(speed); 
         }
         
         if (isLightProjected  // 플레이어 손전등에 비춰진상태
             || (isNearPlayer && map.getPlayer().isTurnOnFlash())) {// 플레이어가 근처에있으면서 플래시가 켜진 경우
-            vel.set(speed * 2, speed * 2);
+            vel.setX(speed * 2);
+            vel.setY(speed * 2); 
         }
         
         if (vel.getX() != 0 && vel.getY() != 0) {

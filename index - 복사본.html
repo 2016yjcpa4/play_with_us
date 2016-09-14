@@ -337,11 +337,20 @@ canvas {display:block}
     var Response = function () {
         this.a = null;
         this.b = null;
+        this.aInB = false;
+        this.bInA = false;
+        this.overlap = 0;
         this.overlapN = new Vector(); // Unit vector in the direction of overlap
         this.overlapV = new Vector(); // Subtract this from a's position to extract it from b
         this.clear();
     };
     SAT.Response = Response;
+    
+    
+    var Range = function (min, max) {
+        this.min = min;
+        this.max = max;
+    };
 
 
     /**
@@ -369,7 +378,7 @@ canvas {display:block}
      *   result[0] will be the minimum value,
      *   result[1] will be the maximum value.
      */
-    var flattenPointsOn = function (points, normal, result) {
+    var flattenPointsOn = function (points, normal) {
         var min = Number.MAX_VALUE;
         var max = -Number.MAX_VALUE;
         var i = points.length;
@@ -379,8 +388,8 @@ canvas {display:block}
             if (dot < min) min = dot;
             if (dot > max) max = dot;
         }
-        result[0] = min;
-        result[1] = max;
+        
+        return new Range(min, max);
     };
 
 
@@ -401,26 +410,20 @@ canvas {display:block}
      *   the direction of the overlap will be populated.
      */
     var isSeparatingAxis = function (aPos, bPos, aPoints, bPoints, axis, response) {
-        var rangeA = T_ARRAYS.pop();
-        var rangeB = T_ARRAYS.pop();
-
         // Get the magnitude of the offset between the two polygons
-        var offsetV = T_VECTORS.pop().copy(bPos).sub(aPos);
+        var offsetV = new Vector().copy(bPos).sub(aPos);
         var projectedOffset = offsetV.dot(axis);
 
         // Project the polygons onto the axis.
-        flattenPointsOn(aPoints, axis, rangeA);
-        flattenPointsOn(bPoints, axis, rangeB);
+        var rangeA = flattenPointsOn(aPoints, axis);
+        var rangeB = flattenPointsOn(bPoints, axis);
 
         // Move B's range to its position relative to A.
-        rangeB[0] += projectedOffset;
-        rangeB[1] += projectedOffset;
+        rangeB.min += projectedOffset;
+        rangeB.max += projectedOffset;
 
         // Check if there is a gap. If there is, this is a separating axis and we can stop
-        if (rangeA[0] > rangeB[1] || rangeB[0] > rangeA[1]) {
-            T_VECTORS.push(offsetV);
-            T_ARRAYS.push(rangeA);
-            T_ARRAYS.push(rangeB);
+        if (rangeA.min > rangeB.max || rangeB.min > rangeA.max) { 
             return true;
         }
 
@@ -428,29 +431,29 @@ canvas {display:block}
         if (response) {
             var overlap = 0;
             // A starts further left than B
-            if (rangeA[0] < rangeB[0]) {
+            if (rangeA.min < rangeB.min) {
                 response.aInB = false;
                 // A ends before B does. We have to pull A out of B
-                if (rangeA[1] < rangeB[1]) {
-                    overlap = rangeA[1] - rangeB[0];
+                if (rangeA.max < rangeB.max) {
+                    overlap = rangeA.max - rangeB.min;
                     response.bInA = false;
                     // B is fully inside A.  Pick the shortest way out.
                 } else {
-                    var option1 = rangeA[1] - rangeB[0];
-                    var option2 = rangeB[1] - rangeA[0];
+                    var option1 = rangeA.max - rangeB.min;
+                    var option2 = rangeB.max - rangeA.min;
                     overlap = option1 < option2 ? option1 : -option2;
                 }
                 // B starts further left than A
             } else {
                 response.bInA = false;
                 // B ends before A ends. We have to push A out of B
-                if (rangeA[1] > rangeB[1]) {
-                    overlap = rangeA[0] - rangeB[1];
+                if (rangeA.max > rangeB.max) {
+                    overlap = rangeA.min - rangeB.max;
                     response.aInB = false;
                     // A is fully inside B.  Pick the shortest way out.
                 } else {
-                    var option1 = rangeA[1] - rangeB[0];
-                    var option2 = rangeB[1] - rangeA[0];
+                    var option1 = rangeA.max - rangeB.min;
+                    var option2 = rangeB.max - rangeA.min;
                     overlap = option1 < option2 ? option1 : -option2;
                 }
             }
@@ -465,10 +468,7 @@ canvas {display:block}
                 }
             }
         }
-
-        T_VECTORS.push(offsetV);
-        T_ARRAYS.push(rangeA);
-        T_ARRAYS.push(rangeB);
+ 
         return false;
     };
 
@@ -523,14 +523,13 @@ canvas {display:block}
      * @return {boolean} true if the circles intersect, false if they don't. 
      */
     var testCircleCircle = function (a, b, response) {
-        var differenceV = T_VECTORS.pop().copy(b.pos).sub(a.pos);
+        var differenceV = new Vector().copy(b.pos).sub(a.pos);
         var totalRadius = a.r + b.r;
         var totalRadiusSq = totalRadius * totalRadius;
         var distanceSq = differenceV.len2();
 
         if (distanceSq > totalRadiusSq) {
             // They do not intersect 
-            T_VECTORS.push(differenceV);
             return false;
         }
 
@@ -546,7 +545,6 @@ canvas {display:block}
             response.bInA = b.r <= a.r && dist <= a.r - b.r;
         }
 
-        T_VECTORS.push(differenceV);
         return true;
     };
     SAT.testCircleCircle = testCircleCircle;
@@ -562,13 +560,13 @@ canvas {display:block}
      * @return {boolean} true if they intersect, false if they don't.
      */
     var testPolygonCircle = function (polygon, circle, response) {
-        var circlePos = T_VECTORS.pop().copy(circle.pos).sub(polygon.pos);
+        var circlePos = new Vector().copy(circle.pos);//.sub(polygon.pos);
         var radius = circle.r;
         var radius2 = radius * radius;
         var points = polygon.points;
         var len = points.length;
-        var edge = T_VECTORS.pop();
-        var point = T_VECTORS.pop();
+        var edge = new Vector();
+        var point = new Vector();
 
         // For each edge in the polygon
         for (var i = 0; i < len; i++) {
@@ -598,7 +596,7 @@ canvas {display:block}
                 edge.copy(polygon.edges[prev]);
 
                 // Calculate the center of the circle relative the starting point of the previous edge
-                var point2 = T_VECTORS.pop().copy(circlePos).sub(points[prev]);
+                var point2 = new Vector().copy(circlePos).sub(points[prev]);
 
                 region = vornoiRegion(edge, point2);
                 if (region === RIGHT_VORNOI_REGION) {
@@ -607,10 +605,6 @@ canvas {display:block}
                     var dist = point.len();
                     if (dist > radius) {
                         // No intersection
-                        T_VECTORS.push(circlePos);
-                        T_VECTORS.push(edge);
-                        T_VECTORS.push(point);
-                        T_VECTORS.push(point2);
                         return false;
                     } else if (response) {
                         // It intersects, calculate the overlap
@@ -619,7 +613,6 @@ canvas {display:block}
                         overlap = radius - dist;
                     }
                 }
-                T_VECTORS.push(point2);
             } else if (region === RIGHT_VORNOI_REGION) {
 
                 // Need to make sure we're in the left region on the next edge
@@ -635,9 +628,6 @@ canvas {display:block}
                     var dist = point.len();
                     if (dist > radius) {
                         // No intersection
-                        T_VECTORS.push(circlePos);
-                        T_VECTORS.push(edge);
-                        T_VECTORS.push(point);
                         return false;
                     } else if (response) {
                         // It intersects, calculate the overlap
@@ -660,9 +650,6 @@ canvas {display:block}
 
                 // If the circle is on the outside of the edge, there is no intersection
                 if (dist > 0 && distAbs > radius) {
-                    T_VECTORS.push(circlePos);
-                    T_VECTORS.push(normal);
-                    T_VECTORS.push(point);
                     return false;
                 } else if (response) {
                     // It intersects, calculate the overlap.
@@ -690,10 +677,6 @@ canvas {display:block}
             response.b = circle;
             response.overlapV.copy(response.overlapN).scale(response.overlap);
         }
-
-        T_VECTORS.push(circlePos);
-        T_VECTORS.push(edge);
-        T_VECTORS.push(point);
         return true;
     };
     SAT.testPolygonCircle = testPolygonCircle;
@@ -794,16 +777,37 @@ var height = canvas.height = window.innerHeight;
 
 var V = SAT.Vector;
 var P = SAT.Polygon;
+var C = SAT.Circle;
 
-P.prototype.collidesWith = function(polygon, response){
-    return SAT.testPolygonPolygon(this, polygon, response);
+C.prototype.draw = function (ctx) {   
+    ctx.save();
+    ctx.beginPath(); 
+    ctx.arc(this.pos.x, this.pos.y, this.r, 0, 2 * Math.PI, false);
+    if (this.collide) {
+        ctx.fillStyle = 'red';
+    } else {
+        ctx.fillStyle = 'green';
+    }
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore(); 
+};
+
+
+P.prototype.collidesWith = function(circle, response){
+    return SAT.testPolygonCircle(this, circle, response);
 };
 
 P.prototype.draw = function (ctx) {
     var points = this.points;
     var i = points.length;
 
-    ctx.save();
+    ctx.save(); 
+    
     ctx.translate(this.pos.x, this.pos.y);
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -829,18 +833,21 @@ P.prototype.drawBounds = function(ctx){
     ctx.strokeRect(bounds.x, bounds.y, bounds.w, bounds.h);
 };
 
-
+/*
 var pointer = new P(new V(0, 0), [
     new V(0, 0),
     new V(30, 0),
     new V(0, 30)
 ]);
+*/
 
-var polygon = new P(new V(100, 100), [
-    new V(5, 5),
-    new V(100, 50),
-    new V(50, 100),
-    new V(10, 90)
+var pointer = new C(new V(0, 0), 20);
+
+var polygon = new P(new V(0, 0), [
+    new V(55, 55),
+    new V(150, 100),
+    new V(100, 150),
+    new V(60, 140)
 ]);
 
 var response = new SAT.Response();
@@ -851,22 +858,23 @@ document.onmousemove = function (e) {
     response.clear();
     var collided = polygon.collidesWith(pointer, response);
     if (collided) {
+        pointer.collide = true;
         pointer.pos.x += response.overlapV.x;
         pointer.pos.y += response.overlapV.y;
-        //polygon.pos.x -= response.overlapV.x;
-        //polygon.pos.y -= response.overlapV.y;
+    } else {
+        
+        pointer.collide = false;
     }
 };
 
 (function draw() {
     ctx.clearRect(0, 0, width, height);
 
-    ctx.fillStyle = "red";
-    pointer.draw(ctx);
-
     ctx.fillStyle = "black";
     polygon.draw(ctx);
     polygon.drawBounds(ctx);
+ 
+    pointer.draw(ctx);
 
     setTimeout(draw, 1000 / 60);
 }());

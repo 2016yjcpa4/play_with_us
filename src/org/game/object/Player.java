@@ -107,11 +107,9 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.a || g.d)) vel.setX(0);
         
         Point2D p = getPosition();
-        int x = (int) (p.getX() + vel.getX());
-        int y = (int) (p.getY() + vel.getY());
+        double x = p.getX() + vel.getX();
+        double y = p.getY() + vel.getY();
         int rad = getRadius();
-        
-        p.set(x, y);
         
         g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
@@ -123,24 +121,33 @@ public class Player extends Circle implements DrawableObject {
         
         g2d.setColor(Color.CYAN);
         
+        
         int dx = (int) (x + 20 * Math.cos(getAngle()));
         int dy = (int) (y + 20 * Math.sin(getAngle()));
 
         
-        //Polygon.SATResponse r = new Polygon.SATResponse();
+        p.set((int) x, (int) y);
+        
+        Polygon.SATResponse r = new Polygon.SATResponse();
         
         for(Wall w : map.getWall()) {
-            if (Polygon.testPolygonCircle(w, this, null)) {
+            if (Polygon.testPolygonCircle(w, this, r)) {
                 g2d.setColor(Color.RED);
-                break;
+                
+                x += r.overlapV.getX();
+                y += r.overlapV.getY();  
+                
+                r.clear();
             }
         }
+
+        
+        p.set((int) x, (int) y);
+        
+        g2d.drawLine((int) x, (int) y, dx, dy);
         
         
-        g2d.drawLine(x, y, dx, dy);
-        
-        
-        g2d.drawOval(x - rad, y - rad, rad * 2, rad * 2);
+        g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
     }
 
 }
