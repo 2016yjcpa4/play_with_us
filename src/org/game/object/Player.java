@@ -92,7 +92,7 @@ public class Player extends Circle implements DrawableObject {
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(getPosition()).angle();
+        return dir.sub(getPosition()).getAngle();
     }
     
     @Override
@@ -131,7 +131,7 @@ public class Player extends Circle implements DrawableObject {
         Polygon.SATResponse r = new Polygon.SATResponse();
         
         for(Wall w : map.getWall()) {
-            if (Polygon.testPolygonCircle(w, this, r)) {
+            if (Polygon.isCollidePolygonCircle(w, this, r)) {
                 g2d.setColor(Color.RED);
                 
                 x += r.overlapV.getX();

@@ -30,7 +30,7 @@ public class Ghost implements DrawableObject {
     }
     
     public double getDistanceToPlayer() {
-        return new Vector2D(pos).sub(map.getPlayer().getPosition()).len();
+        return new Vector2D(pos).sub(map.getPlayer().getPosition()).getLength();
     }
     
     @Override
@@ -66,7 +66,7 @@ public class Ghost implements DrawableObject {
             
             if ( ! l.isEmpty()) {
                 
-                double angle = new Vector2D(l.get(0)).sub(pos).angle();
+                double angle = new Vector2D(l.get(0)).sub(pos).getAngle();
                 int x = (int) (pos.getX() + vel.getX() * Math.cos(angle));
                 int y = (int) (pos.getY() + vel.getY() * Math.sin(angle));
                 

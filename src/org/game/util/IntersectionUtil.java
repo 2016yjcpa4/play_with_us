@@ -83,7 +83,7 @@ public class IntersectionUtil {
         Vector2D v1 = new Vector2D((p.getX() + Math.cos(angle)) - p.getX(), (p.getY() + Math.sin(angle)) - p.getY());
         Vector2D v2 = new Vector2D(l.getX2() - l.getX1(), l.getY2() - l.getY1());
 
-        if (v1.getX() / v1.len() == v2.getX() / v2.len() && v1.getY() / v1.len() == v2.getY() / v2.len()) {
+        if (v1.getX() / v1.getLength() == v2.getX() / v2.getLength() && v1.getY() / v1.getLength() == v2.getY() / v2.getLength()) {
             return null;
         }
 

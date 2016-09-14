@@ -54,7 +54,7 @@ public class Map implements DrawableObject {
         
         Wall w = new Wall(507, 0, 10, 500);
         
-        w.transform(Matrix2D.rotate(Math.toRadians(30)));
+        w.transform(Matrix2D.rotate(Math.toRadians(40)));
         
         // 장애물 2
         wall.add(w);
@@ -122,14 +122,14 @@ public class Map implements DrawableObject {
         
         for(Wall w : wall) {
             
-            Point2D p1 = w.getVertex().get(w.getVertex().size() - 1);
-            Point2D p2 = w.getVertex().get(0);
+            Point2D p1 = w.getPoints().get(w.getPoints().size() - 1);
+            Point2D p2 = w.getPoints().get(0);
 
             l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
                 
-            for(int n = 1; n < w.getVertex().size(); ++n) {
-                p1 = w.getVertex().get(n - 1);
-                p2 = w.getVertex().get(n);
+            for(int n = 1; n < w.getPoints().size(); ++n) {
+                p1 = w.getPoints().get(n - 1);
+                p2 = w.getPoints().get(n);
                 
                 l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
             }
