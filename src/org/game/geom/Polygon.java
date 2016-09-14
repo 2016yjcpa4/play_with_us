@@ -65,7 +65,9 @@ public class Polygon implements Shape {
     }
 
     public void transform(Matrix2D m, Point2D about) {
-        m = Matrix2D.translate(about.getX(), about.getY()).concat(m).concat(Matrix2D.translate(-about.getX(), -about.getY()));
+        m = Matrix2D.translate(about.getX(), about.getY())
+                    .concat(m)
+                    .concat(Matrix2D.translate(-about.getX(), -about.getY()));
 
         for (Point2D p : getPoints()) {
             double x = p.getX();
@@ -97,50 +99,25 @@ public class Polygon implements Shape {
 
         public Shape a;
         public Shape b;
+        public boolean hasAInB;
+        public boolean hasBInA;
+        
+        public double overlap;
         public Vector2D overlapN = new Vector2D();
         public Vector2D overlapV = new Vector2D();
 
-        public boolean aInB;
-        public boolean bInA;
-        public double overlap;
-
-        public SATResponse() {
+        public SATResponse(Shape a, Shape b) {
+            this.a = a;
+            this.b = b;
             clear();
         }
 
         public SATResponse clear() {
-            this.aInB = true; // Is a fully inside b?
-            this.bInA = true; // Is b fully inside a?
+            this.hasAInB = true; // Is a fully inside b?
+            this.hasBInA = true; // Is b fully inside a?
             this.overlap = Double.MAX_VALUE; // Amount of overlap (magnitude of overlapV). Can be 0 (if a and b are touching)
             return this;
         }
-    ;
-
-    } 
-    
-    private static class RangeResult {
-
-        public double min;
-        public double max;
-
-        public RangeResult(double min, double max) {
-            this.min = min;
-            this.max = max;
-        }
-    }
-
-    public static RangeResult flattenPointsOn(List<Point2D> points, Vector2D norm) {
-        double min = Double.MAX_VALUE;
-        double max = -Double.MAX_VALUE;
-        int i = points.size();
-        for (; i >= 0; i--) {
-            double d = new Vector2D(points.get(i)).scalar(norm);
-
-            min = Math.min(min, d);
-            max = Math.max(max, d);
-        }
-
-        return new RangeResult(min, max);
     }
 
     private static final int LEFT_VORNOI_REGION = -1;
@@ -161,125 +138,81 @@ public class Polygon implements Shape {
         return MIDDLE_VORNOI_REGION;
     }
 
-    public static boolean isCollidePolygonCircle(Polygon polygon, Circle circle, SATResponse response) {
-
-        Vector2D circlePos = new Vector2D(circle.getPosition());//.sub(polygon.getPosition());
-        double rad = circle.getRadius();
-        List<Point2D> points = polygon.getPoints();
-        int len = points.size();
-        Vector2D edge = new Vector2D();
-        Vector2D point = new Vector2D();
-
-        // For each edge in the polygon
-        for (int i = 0; i < len; i++) {
+    public static SATResponse isCollidePolygonCircle(Polygon a, Circle b) { 
+        Vector2D pos = new Vector2D(b.getPosition()); 
+        double rad = b.getRadius();
+        List<Point2D> points = a.getPoints();
+        int len = points.size();  
+        
+        SATResponse res = new SATResponse(a, b);
+ 
+        for (int n = 0; n < len; n++) {
             double overlap = 0;
-            Vector2D overlapN = null;
-
-            // Calculate the center of the cirble relative to the starting point of the edge
-            point = circlePos.sub(points.get(i));
-
-            // If the distance between the center of the circle and the point
-            // is bigger than the radius, the polygon is definitely not fully in
-            // the circle.
-            if (response != null && point.getLengthSquared() > (rad * rad)) {
-                response.aInB = false;
+            Vector2D overlapN = null; 
+            Vector2D v1 = pos.sub(points.get(n));
+ 
+            if (v1.getLengthSquared() > (rad * rad)) {
+                res.hasAInB = false;
             }
-
-            // Calculate which Vornoi region the center of the circle is in.
-            int region = getVornoiRegion(polygon.getEdge(i), point);
-            if (region == LEFT_VORNOI_REGION) {
-                int prev = (i == 0) ? len - 1 : i - 1;
-
-                // Need to make sure we're in the RIGHT_VORNOI_REGION of the previous edge.
-                edge = polygon.e.get(prev);
-
-                // Calculate the center of the circle relative the starting point of the previous edge
-                Vector2D point2 = circlePos.sub(points.get(prev));
-
-                region = getVornoiRegion(edge, point2);
-                if (region == RIGHT_VORNOI_REGION) {
-
-                    // It's in the region we want.  Check if the circle intersects the point.
-                    double dist = point.getLength();
-                    if (dist > rad) {
-                        // No intersection 
-                        return false;
-                    } else if (response != null) {
-                        // It intersects, calculate the overlap
-                        response.bInA = false;
-                        overlapN = point.setNormalize();
-                        overlap = rad - dist;
-                    }
+            
+            int r = getVornoiRegion(a.getEdge(n), v1);
+            if (r == LEFT_VORNOI_REGION) {
+                int prev = (n == 0) ? len - 1 : n - 1;
+  
+                Vector2D v2 = pos.sub(points.get(prev));
+ 
+                if (getVornoiRegion(a.getEdge(prev), v2) == RIGHT_VORNOI_REGION) { 
+                    double dist = v1.getLength();
+                    if (dist > rad) { 
+                        return null;
+                    } 
+                     
+                    res.hasBInA = false;
+                    overlapN = v1.setNormalize();
+                    overlap = rad - dist; 
                 }
-            } else if (region == RIGHT_VORNOI_REGION) {
-                int next = (i == len - 1) ? 0 : i + 1;
-
-                // Need to make sure we're in the left region on the next edge
-                edge = polygon.e.get(next);
-
-                // Calculate the center of the circle relative to the starting point of the next edge
-                point = circlePos.sub(points.get(next));
-
-                region = getVornoiRegion(edge, point);
-                if (region == LEFT_VORNOI_REGION) {
-
-                    // It's in the region we want.  Check if the circle intersects the point.
-                    double dist = point.getLength();
-                    if (dist > rad) {
-                        // No intersection 
-                        return false;
-                    } else if (response != null) {
-                        // It intersects, calculate the overlap
-                        response.bInA = false;
-                        overlapN = point.setNormalize();
-                        overlap = rad - dist;
-                    }
-                }
-                // MIDDLE_VORNOI_REGION
-            } else { 
-                // Get the edge
-                edge = new Vector2D(polygon.getEdge(i));
-
-                // Need to check if the circle is intersecting the edge,
-                // Change the edge into its "edge normal".
-                Vector2D normal = edge.setPerpendicular().setNormalize();
-
-                // Find the perpendicular distance between the center of the 
-                // circle and the edge.
-                double dist = point.scalar(normal);
-                double distAbs = Math.abs(dist);
-
-                // If the circle is on the outside of the edge, there is no intersection
-                if (dist > 0 && distAbs > rad) {
-                    return false;
-                } else if (response != null) {
-                    // It intersects, calculate the overlap.
-                    overlapN = normal;
+            } 
+            else if (r == RIGHT_VORNOI_REGION) {
+                int next = (n == len - 1) ? 0 : n + 1; 
+                
+                Vector2D v2 = pos.sub(points.get(next));
+ 
+                if (getVornoiRegion(a.getEdge(next), v2) == LEFT_VORNOI_REGION) { 
+                    double dist = v2.getLength();
+                    if (dist > rad) { 
+                        return null;
+                    } 
+                    
+                    res.hasBInA = false;
+                    overlapN = v2.setNormalize();
                     overlap = rad - dist;
-                    // If the center of the circle is on the outside of the edge, or part of the
-                    // circle is on the outside, the circle is not fully inside the polygon.
-                    if (dist >= 0 || overlap < 2 * rad) {
-                        response.bInA = false;
-                    }
+                } 
+            } 
+            else { 
+                Vector2D norm = new Vector2D(a.getEdge(n)).setPerpendicular().setNormalize();
+ 
+                double dist = v1.scalar(norm); 
+ 
+                if (dist > 0 && Math.abs(dist) > rad) {
+                    return null;
                 }
-            }
-
-            // If this is the smallest overlap we've seen, keep it. 
-            // (overlapN may be null if the circle was in the wrong Vornoi region)
-            if (overlapN != null && response != null && Math.abs(overlap) < Math.abs(response.overlap)) {
-                response.overlap = overlap;
-                response.overlapN = new Vector2D(overlapN);
+                
+                overlapN = norm;
+                overlap = rad - dist; 
+                if (dist >= 0 || overlap < (2 * rad)) {
+                    res.hasBInA = false;
+                }
+            } 
+            
+            if (overlapN != null && Math.abs(overlap) < Math.abs(res.overlap)) {
+                res.overlap = overlap;
+                res.overlapN = overlapN;
             }
         }
+ 
+        res.overlapV = res.overlapN.scale(res.overlap);
 
-        // Calculate the final overlap vector - based on the smallest overlap.
-        if (response != null) {
-            response.a = polygon;
-            response.b = circle;
-            response.overlapV = response.overlapN.scale(response.overlap);
-        }
-
-        return true;
+        return res;
     }
 ;
 
