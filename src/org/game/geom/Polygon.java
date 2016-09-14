@@ -1,6 +1,7 @@
 package org.game.geom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import org.game.math.Matrix2D;
@@ -95,28 +96,53 @@ public class Polygon implements Shape {
         return new Point2D(x, y);
     }
 
-    public static class SATResponse {
+    public static class SATOverlapResult {
 
         public Shape a;
         public Shape b;
         public boolean hasAInB;
         public boolean hasBInA;
         
-        public double overlap;
-        public Vector2D overlapN = new Vector2D();
-        public Vector2D overlapV = new Vector2D();
+        public double dist;
+        public Vector2D dir;
+        public Vector2D overlap;
 
-        public SATResponse(Shape a, Shape b) {
-            this.a = a;
-            this.b = b;
+        public SATOverlapResult() {
             clear();
         }
-
-        public SATResponse clear() {
-            this.hasAInB = true; // Is a fully inside b?
-            this.hasBInA = true; // Is b fully inside a?
-            this.overlap = Double.MAX_VALUE; // Amount of overlap (magnitude of overlapV). Can be 0 (if a and b are touching)
-            return this;
+        
+        public void clear() {
+            this.dist = Double.MAX_VALUE;
+            this.hasAInB = true;
+            this.hasBInA = true;
+            this.dir = null;
+            this.overlap = null;
+            this.a = null;
+            this.b = null;
+        }
+        
+        public void setDistance(double dist) {
+            this.dist = dist;
+        }
+        
+        public double getDistance() {
+            return dist;
+        }
+        
+        public Vector2D getDirection() {
+            return dir;
+        }
+        
+        public void setDirection(Vector2D dir) {
+            this.dir = dir;
+        }
+        
+        public Vector2D getOverlap() {
+            return overlap;
+        }
+        
+        public void setOverlap(Vector2D overlap) {
+            this.overlap = overlap;
         }
     }
 
@@ -138,81 +164,94 @@ public class Polygon implements Shape {
         return MIDDLE_VORNOI_REGION;
     }
 
-    public static SATResponse isCollidePolygonCircle(Polygon a, Circle b) { 
-        Vector2D pos = new Vector2D(b.getPosition()); 
-        double rad = b.getRadius();
-        List<Point2D> points = a.getPoints();
-        int len = points.size();  
+    public static boolean isCollidePolygonCircle(Polygon a, Circle b, SATOverlapResult r) {  
+        if (r != null) {
+            r.clear();
+        }
         
-        SATResponse res = new SATResponse(a, b);
- 
+        int rad = b.getRadius(); 
+        int len = a.getPoints().size(); 
+        
         for (int n = 0; n < len; n++) {
-            double overlap = 0;
-            Vector2D overlapN = null; 
-            Vector2D v1 = pos.sub(points.get(n));
+            double dist = 0;
+            Vector2D dir = null; 
+            Vector2D v = new Vector2D(b.getPosition()).sub(a.getPoints().get(n));
  
-            if (v1.getLengthSquared() > (rad * rad)) {
-                res.hasAInB = false;
+            if (v.getLengthSquared() > (rad * rad)) {
+                r.hasAInB = false;
             }
             
-            int r = getVornoiRegion(a.getEdge(n), v1);
-            if (r == LEFT_VORNOI_REGION) {
-                int prev = (n == 0) ? len - 1 : n - 1;
-  
-                Vector2D v2 = pos.sub(points.get(prev));
- 
-                if (getVornoiRegion(a.getEdge(prev), v2) == RIGHT_VORNOI_REGION) { 
-                    double dist = v1.getLength();
-                    if (dist > rad) { 
-                        return null;
+            switch(getVornoiRegion(a.getEdge(n), v)) {
+                case LEFT_VORNOI_REGION: {
+                    int prv = (n - 1 + len) % len;
+
+                    Vector2D v2 = new Vector2D(b.getPosition()).sub(a.getPoints().get(prv));
+
+                    if (getVornoiRegion(a.getEdge(prv), v2) == RIGHT_VORNOI_REGION) {  
+                        
+                        if (v.getLength() > rad) { 
+                            return false;
+                        } 
+                        else if (r != null) {
+                            r.hasBInA = false;
+
+                            dist = rad - v.getLength(); 
+                            dir = v.setNormalize();
+                        }
+                    }
+                    break;
+                }
+                case RIGHT_VORNOI_REGION: {    
+                    int nxt = (n + 1) % len;
+
+                    Vector2D v2 = new Vector2D(b.getPosition()).sub(a.getPoints().get(nxt));
+
+                    if (getVornoiRegion(a.getEdge(nxt), v2) == LEFT_VORNOI_REGION) {  
+                        
+                        if (v2.getLength() > rad) { 
+                            return false;
+                        }  
+                        else if (r != null) {
+                            r.hasBInA = false;
+
+                            dist = rad - v2.getLength();
+                            dir = v2.setNormalize();
+                        }
                     } 
-                     
-                    res.hasBInA = false;
-                    overlapN = v1.setNormalize();
-                    overlap = rad - dist; 
+                    break;
                 }
-            } 
-            else if (r == RIGHT_VORNOI_REGION) {
-                int next = (n == len - 1) ? 0 : n + 1; 
-                
-                Vector2D v2 = pos.sub(points.get(next));
- 
-                if (getVornoiRegion(a.getEdge(next), v2) == LEFT_VORNOI_REGION) { 
-                    double dist = v2.getLength();
-                    if (dist > rad) { 
-                        return null;
+                case MIDDLE_VORNOI_REGION: {
+                    Vector2D norm = new Vector2D(a.getEdge(n)).setPerpendicular().setNormalize();
+
+                    double d = v.scalar(norm); 
+
+                    if (d > 0 && Math.abs(d) > rad) {
+                        return false;
                     } 
-                    
-                    res.hasBInA = false;
-                    overlapN = v2.setNormalize();
-                    overlap = rad - dist;
-                } 
-            } 
-            else { 
-                Vector2D norm = new Vector2D(a.getEdge(n)).setPerpendicular().setNormalize();
- 
-                double dist = v1.scalar(norm); 
- 
-                if (dist > 0 && Math.abs(dist) > rad) {
-                    return null;
+                    else if (r != null) {
+                        dir = norm;
+                        dist = rad - d; 
+
+                        if (d >= 0 || dist < (2 * rad)) {
+                            r.hasBInA = false;
+                        }
+                    }
                 }
-                
-                overlapN = norm;
-                overlap = rad - dist; 
-                if (dist >= 0 || overlap < (2 * rad)) {
-                    res.hasBInA = false;
-                }
-            } 
+            }
             
-            if (overlapN != null && Math.abs(overlap) < Math.abs(res.overlap)) {
-                res.overlap = overlap;
-                res.overlapN = overlapN;
+            if (dir != null && Math.abs(dist) < Math.abs(r.getDistance())) {
+                r.setDistance(dist);
+                r.setDirection(dir);
             }
         }
  
-        res.overlapV = res.overlapN.scale(res.overlap);
-
-        return res;
+        if (r != null) {
+            r.a = a;
+            r.b = b;
+            r.setOverlap(r.getDirection().scale(r.getDistance()));
+        }
+        
+        return true;
     }
 ;
 

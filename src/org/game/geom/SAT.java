@@ -18,20 +18,6 @@ public class SAT {
     private static final int RIGHT_VORNOI_REGION = 1;
 
     public static class CollisionResponse {
-        
-        public Shape a;
-        public Shape b;
-        
-        public boolean hasAInB = true;
-        public boolean hasBInA = true;
-        
-        public Vector2D overlapN = new Vector2D();
-        public Vector2D overlapV = new Vector2D();
-
-        public double overlap = Double.MAX_VALUE;
-
-        public CollisionResponse() {
-        }
     }
     
     private static int getVornoiRegion(Vector2D v1, Vector2D v2) { 

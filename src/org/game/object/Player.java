@@ -20,6 +20,7 @@ import org.game.util.IntersectionUtil;
 public class Player extends Circle implements DrawableObject {
     
     private static final boolean DEBUG = true;
+    Polygon.SATOverlapResult r = new Polygon.SATOverlapResult();
     
     private Map map;
 
@@ -128,14 +129,13 @@ public class Player extends Circle implements DrawableObject {
         
         p.set((int) x, (int) y);
         
-        Polygon.SATResponse r;
         
         for(Wall w : map.getWall()) {
-            if ((r = Polygon.isCollidePolygonCircle(w, this)) != null) {
+            if (Polygon.isCollidePolygonCircle(w, this, r)) {
                 g2d.setColor(Color.RED);
                 
-                x += r.overlapV.getX();
-                y += r.overlapV.getY(); 
+                x += r.overlap.getX();
+                y += r.overlap.getY(); 
             }
         }
 
