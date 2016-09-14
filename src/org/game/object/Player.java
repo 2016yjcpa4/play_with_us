@@ -128,16 +128,14 @@ public class Player extends Circle implements DrawableObject {
         
         p.set((int) x, (int) y);
         
-        Polygon.SATResponse r = new Polygon.SATResponse();
+        Polygon.SATResponse r;
         
         for(Wall w : map.getWall()) {
-            if (Polygon.isCollidePolygonCircle(w, this, r)) {
+            if ((r = Polygon.isCollidePolygonCircle(w, this)) != null) {
                 g2d.setColor(Color.RED);
                 
                 x += r.overlapV.getX();
-                y += r.overlapV.getY();  
-                
-                r.clear();
+                y += r.overlapV.getY(); 
             }
         }
 
