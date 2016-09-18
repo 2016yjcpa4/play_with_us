@@ -20,7 +20,6 @@ import org.game.util.IntersectionUtil;
 public class Player extends Circle implements DrawableObject {
     
     private static final boolean DEBUG = true;
-    Polygon.SATOverlapResult r = new Polygon.SATOverlapResult();
     
     private Map map;
 
@@ -54,13 +53,13 @@ public class Player extends Circle implements DrawableObject {
         this.isTurnOnFlash = ! this.isTurnOnFlash;
     }
     
-    public List<Point2D> projectLight() {
+    public Polygon projectLight() {
         return projectLight(Math.toRadians(25));
     }
     
-    private List<Point2D> projectLight(double rangeAngle) { 
+    private Polygon projectLight(double rangeAngle) { 
         if ( ! isTurnOnFlash) {
-            return Collections.emptyList();
+            return null;
         }
         
         List<Point2D> l = new ArrayList<>();
@@ -70,7 +69,7 @@ public class Player extends Circle implements DrawableObject {
             l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
         }
         
-        return l;
+        return new Polygon(l);
     }
     
     /**
@@ -115,10 +114,10 @@ public class Player extends Circle implements DrawableObject {
         g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
         if (isTurnOnFlash) {
-            List<Point2D> l = projectLight();
+            Polygon l = projectLight();
             
-            g2d.fillPolygon(Point2D.getXPoints(l), Point2D.getYPoints(l), l.size());
-        } 
+            g2d.fillPolygon(l.getXPoints(), l.getYPoints(), l.getXPoints().length);
+        }
         
         g2d.setColor(Color.CYAN);
         
@@ -130,13 +129,8 @@ public class Player extends Circle implements DrawableObject {
         p.set((int) x, (int) y);
         
         
-        for(Wall w : map.getWall()) {
-            if (Polygon.isCollidePolygonCircle(w, this, r)) {
-                g2d.setColor(Color.RED);
-                
-                x += r.overlap.getX();
-                y += r.overlap.getY(); 
-            }
+        for(Polygon w : map.getWall()) {
+            
         }
 
         
