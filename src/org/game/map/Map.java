@@ -9,7 +9,6 @@ import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.geom.Circle;
-import org.game.geom.Polygon;
 import org.game.geom.Rect;
 import org.game.object.Ghost;
 import org.game.object.Player;
@@ -19,7 +18,6 @@ import org.game.map.TileMap;
 import org.game.map.TileNode;
 import org.game.math.Matrix2D;
 import org.game.object.Wall;
-import org.game.object.Wall1;
 import org.game.util.IntersectionUtil;
 
 public class Map implements DrawableObject {
@@ -31,7 +29,7 @@ public class Map implements DrawableObject {
     public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 11.0);
     public static final int TILE_ROWS = (int) (MAP_HEIGHT / 11.0);
     
-    private List<Polygon> wall = new ArrayList();
+    private List<Wall> wall = new ArrayList();
     private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
     
     private Player player;
@@ -61,21 +59,19 @@ public class Map implements DrawableObject {
         // 장애물 2
         wall.add(w);
         
-        wall.add(new Wall1());
-        
         Ghost m;
         
-        m = new Ghost(0, 0, this);
+        m = new Ghost(this);
         m.getPosition().setX(50);
         m.getPosition().setY(50);
         mobs.add(m);
         
-        m = new Ghost(0, 0, this);
+        m = new Ghost(this);
         m.getPosition().setX(760);
         m.getPosition().setY(560);
         mobs.add(m);
         
-        m = new Ghost(0, 0, this);
+        m = new Ghost(this);
         m.getPosition().setX(50);
         m.getPosition().setY(550);
         mobs.add(m);
@@ -117,14 +113,14 @@ public class Map implements DrawableObject {
                          , (int) (y / getTileHeight()));
     }
 
-    public List<Polygon> getWall() {
+    public List<Wall> getWall() {
         return wall;
     }
     
     public List<Line2D> getWall2() {
         List<Line2D> l = new ArrayList<>();
         
-        for(Polygon w : wall) {
+        for(Wall w : wall) {
             
             Point2D p1 = w.getPoints().get(w.getPoints().size() - 1);
             Point2D p2 = w.getPoints().get(0);
@@ -188,8 +184,8 @@ public class Map implements DrawableObject {
             }
         }
 
-        for (Polygon w : wall) {
-            ((DrawableObject)w).draw(c, g2d);
+        for (Wall w : wall) {
+            w.draw(c, g2d);
         } 
         
         for(Ghost g : mobs) {
