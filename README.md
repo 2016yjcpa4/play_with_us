@@ -34,6 +34,9 @@
       - http://soundarbour.sakura.ne.jp/BGM.html
       - http://www.vita-chi.net/sozai1.htm
       - http://www.senses-circuit.com/material/se_life.html
+  - (2016-10-04)
+    1. Github 의 Issues 기능과 Projects 기능을 4조 조원에게 전파하여 활성화 시켰습니다.
+      - Issues 기능과 Projects 기능을 사용하여 회의내용을 문서화 시켜 신뢰성있는 프로그램을 제작하는데에 기여합니다.
 
 ## Demo
 
