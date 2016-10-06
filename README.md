@@ -28,12 +28,6 @@
     3. A-스타(A-Star) 알고리즘([설명](http://www.pgr21.com/pb/pb.php?id=recommend&no=259))을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
     4. 캔버스 2D (Canvas 2D)의 그래픽을 사용하여 2D 그래픽을 구현합니다.
     5. 귀신(Ghost)과 사용자(Player)간의 상호작용을 정리하였습니다.
-  - (2016-09-09) 신은재 (eunjaeshin)
-    1. 효과음 출처
-      - http://www.hanac200x.jp/
-      - http://soundarbour.sakura.ne.jp/BGM.html
-      - http://www.vita-chi.net/sozai1.htm
-      - http://www.senses-circuit.com/material/se_life.html
   - (2016-10-04)
     1. Github 의 Issues 기능과 Projects 기능을 4조 조원에게 전파하여 활성화 시켰습니다.
       - Issues 기능과 Projects 기능을 사용하여 회의내용을 문서화 시켜 신뢰성있는 프로그램을 제작하는데에 기여합니다.
