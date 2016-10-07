@@ -21,36 +21,11 @@
   - 차현민 (ckckck23) : 맵제작, 디자인
   - 차명도 (aw9223) : 프로그램 설계및 개발, 깃허브 관리, README.md 관리
 
-## Done (ver 0.1 ~ )
-  - (2016-09-06) 차명도 (aw9223)
-    1. 레이캐스트(Raycast) 알고리즘([설명](http://developug.blogspot.kr/2014/10/raycast.html))을 사용하여 손전등 구현이 완료되었습니다.
-    2. 브레젠햄의 직선(Bresenham's Line) 알고리즘을 사용하여 타일(Tile) 기반의 맵 제작을 하였습니다.
-    3. A-스타(A-Star) 알고리즘([설명](http://www.pgr21.com/pb/pb.php?id=recommend&no=259))을 사용하여 A지점에서 B지점으로 가는 최단거리 알고리즘을 적용하였습니다.
-    4. 캔버스 2D (Canvas 2D)의 그래픽을 사용하여 2D 그래픽을 구현합니다.
-    5. 귀신(Ghost)과 사용자(Player)간의 상호작용을 정리하였습니다.
-  - (2016-10-04)
-    1. Github 의 Issues 기능과 Projects 기능을 4조 조원에게 전파하여 활성화 시켰습니다.
-      - Issues 기능과 Projects 기능을 사용하여 회의내용을 문서화 시켜 신뢰성있는 프로그램을 제작하는데에 기여합니다.
-  - (2016-10-06)
-    1. 문서, 회의 내용을 정리하기위한 프로세스 v0.1 을 만들었습니다.
-      1. Projects 페이지에서 조원들과 회의합니다.
-      2. 회의에서 나온 이슈를 Projects 에서 노트를 추가하고 Issues 페이지에서 Issue 를 추가합니다.
-      3. 등록된 Issue 를 중심으로 회의를 하고 마무리가 진행되면 해당 Issue 는 Closed Issue 로 전환합니다.
-      4. Projects 에서 등록된 노트는 Done(완료) 행으로 이동합니다.
-      5. 경우에 따라서 완료된 Issue 는 다시 검토로 이동하여 회의를 진행할 수 있습니다.
-
 ## Demo
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
-
-## To-Do (ver 0.1)
-  - 동영상 플레이
-  - 기획안 구체화 1차작업
-  - 맵 에디터 제작
-  - 플레이어의 벽, 사물 인식 ([Separating Axis Theorem 알고리즘 기반](http://wizardmania.tistory.com/28) [예제1](http://www.metanetsoftware.com/technique/tutorialA.html), [예제2](http://fiddle.jshell.net/ARTsinn/FpEZf/light/))
-  - Polygon Convex Decomposition 
 
 이 페이지는 마크다운 에디터 (MarkDown Editor) [hashify.me](http://hashify.me/) 로 제작 되었습니다.
 
