@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import org.game.geom.Polygon;
 
 public class Game extends CanvasView implements MouseMotionListener, MouseListener, KeyListener {
 
@@ -41,10 +42,19 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
         map.setPlayer(player);
     }
     
+    private List<Polygon> p = Polygon.getSamples();
+    
     @Override
     protected void draw(Graphics2D g2d) {  
         super.draw(g2d);
         
+        for(Polygon e : p) {
+            
+            g2d.setColor(Color.red);
+            g2d.drawPolygon(e.getXPoints(), e.getYPoints(), e.getXPoints().length);
+        }
+        
+        /*
         if (isGameOver) {
             // TODO 게임오버 처리
             String s = "게임오버";
@@ -58,21 +68,11 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
             g2d.setFont(f); 
             g2d.setColor(Color.RED);
             g2d.drawString(s, x, y);
-            
-            /*
-            try {
-                Image img = ImageIO.read(new File("res/ghost2.jpg"));
-                
-                g2d.drawImage(img, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-            }
-            catch(IOException e) {
-                e.printStackTrace();
-            }*/
         } 
         else {
             map.draw(this, g2d);
             player.draw(this, g2d);
-        }
+        }*/
     } 
     
     public void setGameOver() {

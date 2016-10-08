@@ -30,7 +30,7 @@ public class Ghost implements DrawableObject {
     }
     
     public double getDistanceToPlayer() {
-        return new Vector2D(pos).sub(map.getPlayer().getPosition()).getLength();
+        return 0;//new Vector2D(pos).sub(map.getPlayer().getPosition()).getLength();
     }
     
     @Override
@@ -62,7 +62,7 @@ public class Ghost implements DrawableObject {
         
         if (vel.getX() != 0 && vel.getY() != 0) {
             
-            List<Point2D> l = map.getPath(pos, map.getPlayer().getPosition());
+            List<Point2D> l = null;//map.getPath(pos, map.getPlayer().getPosition());
             
             if ( ! l.isEmpty()) {
                 

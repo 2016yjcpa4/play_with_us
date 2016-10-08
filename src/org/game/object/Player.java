@@ -20,7 +20,6 @@ import org.game.util.IntersectionUtil;
 public class Player extends Circle implements DrawableObject {
     
     private static final boolean DEBUG = true;
-    Polygon.SATOverlapResult r = new Polygon.SATOverlapResult();
     
     private Map map;
 
@@ -30,7 +29,7 @@ public class Player extends Circle implements DrawableObject {
     private Vector2D vel = new Vector2D();    
     
     public Player(Map m) {
-        super(250, 300, 13);
+        //super(250, 300, 13);
         this.map = m;
     }
     
@@ -64,10 +63,10 @@ public class Player extends Circle implements DrawableObject {
         }
         
         List<Point2D> l = new ArrayList<>();
-        l.add(getPosition());
+        //l.add(getPosition());
         
         for (double ang = (getAngle() - rangeAngle); ang <= (getAngle() + rangeAngle); ang += (Math.PI * 2 / 1000)) { 
-            l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
+            //l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
         }
         
         return l;
@@ -93,7 +92,8 @@ public class Player extends Circle implements DrawableObject {
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(getPosition()).getAngle();
+        return 0;
+        //return dir.sub(getPosition()).getAngle();
     }
     
     @Override
@@ -107,10 +107,10 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.w || g.s)) vel.setY(0);
         if ( ! (g.a || g.d)) vel.setX(0);
         
-        Point2D p = getPosition();
+        Point2D p = null;//getPosition();
         double x = p.getX() + vel.getX();
         double y = p.getY() + vel.getY();
-        int rad = getRadius();
+        int rad = 0;//getRadius();
         
         g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
@@ -125,19 +125,6 @@ public class Player extends Circle implements DrawableObject {
         
         int dx = (int) (x + 20 * Math.cos(getAngle()));
         int dy = (int) (y + 20 * Math.sin(getAngle()));
-
-        
-        p.set((int) x, (int) y);
-        
-        
-        for(Wall w : map.getWall()) {
-            if (Polygon.isCollidePolygonCircle(w, this, r)) {
-                g2d.setColor(Color.RED);
-                
-                x += r.overlap.getX();
-                y += r.overlap.getY(); 
-            }
-        }
 
         
         p.set((int) x, (int) y);
