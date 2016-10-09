@@ -137,10 +137,6 @@ public class Polygon implements Shape {
         return getDecomposedPolygons(new Polygon(l));
     }
 
-    public static ArrayList<Polygon> getDecomposedPolygons(Polygon p) {
-        return getDecomposedPolygons(p, new ArrayList<Polygon>());
-    }
-
     private static class DecomposedPolygon {
 
         private Polygon o;
@@ -182,6 +178,10 @@ public class Polygon implements Shape {
         public void setIndex(int n) {
             this.n = n;
         }
+    }
+
+    public static ArrayList<Polygon> getDecomposedPolygons(Polygon p) {
+        return getDecomposedPolygons(p, new ArrayList<Polygon>());
     }
 
     private static ArrayList<Polygon> getDecomposedPolygons(Polygon o, ArrayList<Polygon> r) {
@@ -353,6 +353,7 @@ public class Polygon implements Shape {
         return r;
     }
 
+    // TODO 리팩토링
     private static Point2D getIntersectionPoint(Point2D p1, Point2D p2, Point2D p3, Point2D p4) {
         double a1 = p2.getY() - p1.getY();
         double b1 = p1.getX() - p2.getX();
