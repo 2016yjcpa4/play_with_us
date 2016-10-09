@@ -184,50 +184,6 @@ public class Polygon implements Shape {
         }
     }
 
-    private static void setKeepOnlyClosestIntersection(DecomposedPolygon u, DecomposedPolygon l, Polygon o, int v) {
-
-        for (int n = 0; n < o.getPoints().size(); ++n) {
-            
-            if (Triangle.isLeft(o.getPoint(v - 1), o.getPoint(v), o.getPoint(n)) 
-             && Triangle.isRightOn(o.getPoint(v - 1), o.getPoint(v), o.getPoint(n - 1))) { // if line intersects with an edge
-
-                Point2D p = getIntersectionPoint(o.getPoint(v - 1)
-                                               , o.getPoint(v)
-                                               , o.getPoint(n)
-                                               , o.getPoint(n - 1)); // find the point of intersection
-
-                if (Triangle.isRight(o.getPoint(v + 1), o.getPoint(v), p)) { // make sure it's inside the poly
-
-                    double d = new Vector2D(o.getPoint(v)).sub(p).getLengthSquared();
-                    if (d < l.getDistance()) { // keep only the closest intersection
-                        l.setDistance(d);
-                        l.setPoint(p);
-                        l.setIndex(n);
-                    }
-                }
-            }
-            
-            if (Triangle.isLeft(o.getPoint(v + 1), o.getPoint(v), o.getPoint(n + 1))
-             && Triangle.isRightOn(o.getPoint(v + 1), o.getPoint(v), o.getPoint(n))) {
-
-                Point2D p = getIntersectionPoint(o.getPoint(v + 1)
-                                               , o.getPoint(v)
-                                               , o.getPoint(n)
-                                               , o.getPoint(n + 1));
-
-                if (Triangle.isLeft(o.getPoint(v - 1), o.getPoint(v), p)) {
-
-                    double d = new Vector2D(o.getPoint(v)).sub(p).getLengthSquared();
-                    if (d < u.getDistance()) {
-                        u.setDistance(d);
-                        u.setPoint(p);
-                        u.setIndex(n);
-                    }
-                }
-            }
-        }
-    }
-
     private static ArrayList<Polygon> getDecomposedPolygons(Polygon o, ArrayList<Polygon> r) {
 
         int len = o.getPoints().size();
@@ -243,7 +199,46 @@ public class Polygon implements Shape {
 
             if (Triangle.isRight(o.getPoint(n - 1), o.getPoint(n), o.getPoint(n + 1))) {
 
-                setKeepOnlyClosestIntersection(u, l, o, n);
+                for (int k = 0; k < o.getPoints().size(); ++k) {
+
+                    if (Triangle.isLeft(o.getPoint(n - 1), o.getPoint(n), o.getPoint(k)) 
+                     && Triangle.isRightOn(o.getPoint(n - 1), o.getPoint(n), o.getPoint(k - 1))) { // if line intersects with an edge
+
+                        Point2D p = getIntersectionPoint(o.getPoint(n - 1)
+                                                       , o.getPoint(n)
+                                                       , o.getPoint(k)
+                                                       , o.getPoint(k - 1)); // find the point of intersection
+
+                        if (Triangle.isRight(o.getPoint(n + 1), o.getPoint(n), p)) { // make sure it's inside the poly
+
+                            double d = new Vector2D(o.getPoint(n)).sub(p).getLengthSquared();
+                            if (d < l.getDistance()) { // keep only the closest intersection
+                                l.setDistance(d);
+                                l.setPoint(p);
+                                l.setIndex(k);
+                            }
+                        }
+                    }
+
+                    if (Triangle.isLeft(o.getPoint(n + 1), o.getPoint(n), o.getPoint(k + 1))
+                     && Triangle.isRightOn(o.getPoint(n + 1), o.getPoint(n), o.getPoint(k))) {
+
+                        Point2D p = getIntersectionPoint(o.getPoint(n + 1)
+                                                       , o.getPoint(n)
+                                                       , o.getPoint(k)
+                                                       , o.getPoint(k + 1));
+
+                        if (Triangle.isLeft(o.getPoint(n - 1), o.getPoint(n), p)) {
+
+                            double d = new Vector2D(o.getPoint(n)).sub(p).getLengthSquared();
+                            if (d < u.getDistance()) {
+                                u.setDistance(d);
+                                u.setPoint(p);
+                                u.setIndex(k);
+                            }
+                        }
+                    }
+                }
 
                 if (l.getIndex() == (u.getIndex() + 1) % len) {
                     Point2D p = new Point2D((l.getPoint().getX() + u.getPoint().getX()) / 2, (l.getPoint().getY() + u.getPoint().getY()) / 2);
