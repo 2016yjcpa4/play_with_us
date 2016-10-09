@@ -1,5 +1,6 @@
 package org.game.geom;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,20 +75,8 @@ public class Polygon implements Shape {
         return p.get(n < 0 ? n % len + len : n % len);
     }
 
-    public void addPoint(Point2D p) {
+    protected void addPoint(Point2D p) {
         this.p.add(p);
-    }
-
-    private static final int MAX_LEVEL = 100;
-
-    private void push(Point2D p) {
-        this.p.add(p);
-    }
-
-    private static void polygonAppend(Polygon polygon, Polygon poly, int from, int to) {
-        for (int i = from; i < to; i++) {
-            polygon.push(poly.getPoint(i));
-        }
     }
 
     public static List<Polygon> getSamples() {
@@ -148,145 +137,214 @@ public class Polygon implements Shape {
         return getDecomposedPolygons(new Polygon(l));
     }
 
-    private static ArrayList<Polygon> getDecomposedPolygons(Polygon p) {
-        return getDecomposedPolygons(p, new ArrayList<Polygon>(), 0);
+    public static ArrayList<Polygon> getDecomposedPolygons(Polygon p) {
+        return getDecomposedPolygons(p, new ArrayList<Polygon>());
+    }
+    
+    private static class DecomposedPolygon {
+        
+        private Polygon o;
+        private Point2D p;
+        private double d;
+        private int n;
+        
+        public DecomposedPolygon() {
+            this.o = new Polygon();
+            this.p = new Point2D();
+            this.d = Double.MAX_VALUE;
+            this.n = 0;
+        }
+        
+        public Polygon getPolygon() {
+            return o;
+        }
+        
+        public Point2D getPoint() {
+            return p;
+        }
+        
+        public void setPoint(Point2D p) {
+            this.p = p;
+        }
+        
+        public void setDistance(double d) {
+            this.d = d;
+        }
+        
+        public double getDistance() {
+            return d;
+        }
+        
+        public int getIndex() {
+            return n;
+        }
+        
+        public void setIndex(int n) {
+            this.n = n;
+        }
     }
 
-    private static ArrayList<Polygon> getDecomposedPolygons(Polygon polygon, ArrayList<Polygon> result, int level) {
+    private static ArrayList<Polygon> getDecomposedPolygons(Polygon polygon, ArrayList<Polygon> r) {
 
-        Point2D up = new Point2D(), lp = new Point2D(); // Points
-        Polygon lowerPoly = new Polygon();
-        Polygon upperPoly = new Polygon(); // polygons
+        int len = polygon.getPoints().size();
+        
+        DecomposedPolygon u = new DecomposedPolygon(); // upper polygon
+        DecomposedPolygon l = new DecomposedPolygon(); // lower polygon
 
-        if (polygon.getPoints().size() < 3) {
-            return result;
+        if (len < 3) {
+            return r;
         }
 
-        if (level > MAX_LEVEL) {
-            return result;
-        }
-
-        for (int n = 0; n < polygon.getPoints().size(); ++n) {
+        for (int n = 0; n < len; ++n) {
+            
             if (Triangle.isRight(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(n + 1))) {
-                double ud = Double.MAX_VALUE;
-                double ld = Double.MAX_VALUE;
-                int un = 0;
-                int ln = 0; // Integers
-
-                for (int n2 = 0; n2 < polygon.getPoints().size(); ++n2) {
+                
+                for (int n2 = 0; n2 < len; ++n2) {
                     if (Triangle.isLeft(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(n2)) 
-                        && Triangle.isRightOn(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(n2 - 1))) { // if line intersects with an edge
+                     && Triangle.isRightOn(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(n2 - 1))) { // if line intersects with an edge
+                        
                         Point2D p = getIntersectionPoint(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(n2), polygon.getPoint(n2 - 1)); // find the point of intersection
+                        
                         if (Triangle.isRight(polygon.getPoint(n + 1), polygon.getPoint(n), p)) { // make sure it's inside the poly
+                        
                             double d = new Vector2D(polygon.getPoint(n)).sub(p).getLengthSquared();
-                            if (d < ld) { // keep only the closest intersection
-                                ld = d;
-                                lp = p;
-                                ln = n2;
+                            if (d < l.getDistance()) { // keep only the closest intersection
+                                l.setDistance(d);
+                                l.setPoint(p);
+                                l.setIndex(n2);
                             }
                         }
                     }
-                    if (Triangle.isLeft(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(n2 + 1)) && Triangle.isRightOn(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(n2))) {
+                    if (Triangle.isLeft(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(n2 + 1))
+                     && Triangle.isRightOn(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(n2))) {
+                        
                         Point2D p = getIntersectionPoint(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(n2), polygon.getPoint(n2 + 1));
+                        
                         if (Triangle.isLeft(polygon.getPoint(n - 1), polygon.getPoint(n), p)) {
+                            
                             double d = new Vector2D(polygon.getPoint(n)).sub(p).getLengthSquared();
-                            if (d < ud) {
-                                ud = d;
-                                up = p;
-                                un = n2;
+                            if (d < u.getDistance()) {
+                                u.setDistance(d);
+                                u.setPoint(p);
+                                u.setIndex(n2);
                             }
                         }
                     }
                 }
 
                 // if there are no vertices to connect to, choose a point in the middle
-                if (ln == (un + 1) % polygon.getPoints().size()) {
-                    Point2D p = new Point2D((lp.getX() + up.getX()) / 2, (lp.getY() + up.getY()) / 2);
+                if (l.getIndex() == (u.getIndex() + 1) % len) {
+                    Point2D p = new Point2D((l.getPoint().getX() + u.getPoint().getX()) / 2
+                                          , (l.getPoint().getY() + u.getPoint().getY()) / 2);
 
-                    if (n < un) {
-                        for (int k = n; k < un + 1; k++) {
-                            lowerPoly.push(polygon.getPoint(k));
+                    if (n < u.getIndex()) {
+                        
+                        for (int k = n; k < u.getIndex() + 1; k++) {
+                            l.getPolygon().addPoint(polygon.getPoint(k));
                         }
 
-                        lowerPoly.push(p);
-                        upperPoly.push(p);
-                        if (ln != 0) {
-                            for (int k = ln; k < polygon.getPoints().size(); k++) {
-                                upperPoly.push(polygon.getPoint(k));
+                        l.getPolygon().addPoint(p);
+                        u.getPolygon().addPoint(p);
+                        
+                        if (l.getIndex() != 0) {
+                            for (int k = l.getIndex(); k < len; k++) {
+                                u.getPolygon().addPoint(polygon.getPoint(k));
                             }
-
                         }
+                        
                         for (int k = 0; k < n + 1; k++) {
-                            upperPoly.push(polygon.getPoint(k));
+                            u.getPolygon().addPoint(polygon.getPoint(k));
                         }
                     } else {
                         if (n != 0) {
-                            for (int k = n; k < polygon.getPoints().size(); k++) {
-                                lowerPoly.push(polygon.getPoint(k));
+                            for (int k = n; k < len; k++) {
+                                l.getPolygon().addPoint(polygon.getPoint(k));
                             }
                         }
 
-                        for (int k = 0; k < un + 1; k++) {
-                            lowerPoly.push(polygon.getPoint(k));
+                        for (int k = 0; k < u.getIndex() + 1; k++) {
+                            l.getPolygon().addPoint(polygon.getPoint(k));
                         }
-                        lowerPoly.push(p);
-                        upperPoly.push(p);
+                        
+                        l.getPolygon().addPoint(p);
+                        u.getPolygon().addPoint(p);
 
-                        for (int k = ln; k < n + 1; k++) {
-                            upperPoly.push(polygon.getPoint(k));
+                        for (int k = l.getIndex(); k < n + 1; k++) {
+                            u.getPolygon().addPoint(polygon.getPoint(k));
                         }
                     }
                 } else {
-                    if (ln > un) {
-                        un += polygon.getPoints().size();
+                    if (l.getIndex() > u.getIndex()) {
+                        u.setIndex(u.getIndex() + len);
                     }
-                    int closestIndex = 0;
-                    double closestDist = Double.MAX_VALUE;
+                    
+                    DecomposedPolygon c = new DecomposedPolygon(); // lower polygon 
 
-                    if (un < ln) {
-                        return result;
+                    if (u.getIndex() < l.getIndex()) {
+                        return r;
                     }
 
-                    for (int j = ln; j <= un; ++j) {
+                    for (int j = l.getIndex(); j <= u.getIndex(); ++j) {
+                        
                         if (Triangle.isLeftOn(polygon.getPoint(n - 1), polygon.getPoint(n), polygon.getPoint(j))
                          && Triangle.isRightOn(polygon.getPoint(n + 1), polygon.getPoint(n), polygon.getPoint(j))) {
+                            
                             double d = new Vector2D(polygon.getPoint(n)).sub(polygon.getPoint(j)).getLengthSquared();
-                            if (d < closestDist) {
-                                closestDist = d;
-                                closestIndex = j % polygon.getPoints().size();
+                            if (d < c.getDistance()) {
+                                c.setDistance(d);
+                                c.setIndex(j % len);
                             }
                         }
                     }
 
-                    if (n < closestIndex) {
-                        polygonAppend(lowerPoly, polygon, n, closestIndex + 1);
-                        if (closestIndex != 0) {
-                            polygonAppend(upperPoly, polygon, closestIndex, polygon.getPoints().size());
+                    if (n < c.getIndex()) {
+                        
+                        for (int k = n; k < c.getIndex() + 1; k++) {
+                            l.getPolygon().addPoint(polygon.getPoint(k));
                         }
-                        polygonAppend(upperPoly, polygon, 0, n + 1);
+                        
+                        if (c.getIndex() != 0) {
+                            for (int k = c.getIndex(); k < len; k++) {
+                                u.getPolygon().addPoint(polygon.getPoint(k));
+                            }
+                        }
+                        
+                        for (int k = 0; k < n + 1; k++) {
+                            u.getPolygon().addPoint(polygon.getPoint(k));
+                        }
                     } else {
+                        
                         if (n != 0) {
-                            polygonAppend(lowerPoly, polygon, n, polygon.getPoints().size());
+                            for (int k = n; k < len; k++) {
+                                l.getPolygon().addPoint(polygon.getPoint(k));
+                            }
                         }
-                        polygonAppend(lowerPoly, polygon, 0, closestIndex + 1);
-                        polygonAppend(upperPoly, polygon, closestIndex, n + 1);
+                        
+                        for (int k = 0; k < c.getIndex() + 1; k++) {
+                            l.getPolygon().addPoint(polygon.getPoint(k));
+                        }
+                        
+                        for (int k = c.getIndex(); k < n + 1; k++) {
+                            u.getPolygon().addPoint(polygon.getPoint(k));
+                        }
                     }
                 }
 
-                if (lowerPoly.getPoints().size() < upperPoly.getPoints().size()) {
-                    getDecomposedPolygons(lowerPoly, result, level + 1);
-                    getDecomposedPolygons(upperPoly, result, level + 1);
+                if (l.getPolygon().getPoints().size() < u.getPolygon().getPoints().size()) {
+                    getDecomposedPolygons(l.getPolygon(), r);
+                    getDecomposedPolygons(u.getPolygon(), r);
                 } else {
-                    getDecomposedPolygons(upperPoly, result, level + 1);
-                    getDecomposedPolygons(lowerPoly, result, level + 1);
+                    getDecomposedPolygons(u.getPolygon(), r);
+                    getDecomposedPolygons(l.getPolygon(), r);
                 }
 
-                return result;
+                return r;
             }
         }
-        result.add(polygon);
+        
+        r.add(polygon);
 
-        return result;
+        return r;
     }
 
     private static Point2D getIntersectionPoint(Point2D p1, Point2D p2, Point2D q1, Point2D q2) {
