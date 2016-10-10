@@ -106,7 +106,7 @@ public class Raycast {
         r.add(max);
 
         for(Point2D e : p) {
-            
+            //http://stackoverflow.com/questions/12234574/calculating-if-an-angle-is-between-two-angles
             // TODO
             double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());
             
