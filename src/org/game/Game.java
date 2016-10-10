@@ -42,19 +42,10 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
         map.setPlayer(player);
     }
     
-    private List<Polygon> p = Polygon.getSamples();
-    
     @Override
     protected void draw(Graphics2D g2d) {  
         super.draw(g2d);
-        
-        for(Polygon e : p) {
-            
-            g2d.setColor(Color.red);
-            g2d.drawPolygon(e.getXPoints(), e.getYPoints(), e.getXPoints().length);
-        }
-        
-        /*
+         
         if (isGameOver) {
             // TODO 게임오버 처리
             String s = "게임오버";
@@ -72,7 +63,7 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
         else {
             map.draw(this, g2d);
             player.draw(this, g2d);
-        }*/
+        }
     } 
     
     public void setGameOver() {

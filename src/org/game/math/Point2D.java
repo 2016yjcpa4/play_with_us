@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Point2D {
     
-    private int x;
-    private int y;
+    public int x;
+    public int y;
     
     public Point2D() {
         this(0, 0);
@@ -36,12 +36,19 @@ public class Point2D {
     public int getY() {
         return y;
     }
+    
+    public boolean equals(Object o) {
+        
+        Point2D p = (Point2D) o;
+        
+        return p.getX() == getX() && p.getY() == getY();
+    }
 
     public static int[] getXPoints(List<Point2D> l) {
         int[] x = new int[l.size()];
         
         for (int n = 0; n < l.size(); ++n) {
-            x[n] = l.get(n).getX();
+            x[n] = (int) l.get(n).getX();
         }
         
         return x;
@@ -51,9 +58,14 @@ public class Point2D {
         int[] y = new int[l.size()];
         
         for (int n = 0; n < l.size(); ++n) {
-            y[n] = l.get(n).getY();
+            y[n] = (int) l.get(n).getY();
         }
         
         return y;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{x:%d, y:%d}", x, y);
     }
 }

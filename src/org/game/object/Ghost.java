@@ -30,16 +30,16 @@ public class Ghost implements DrawableObject {
     }
     
     public double getDistanceToPlayer() {
-        return 0;//new Vector2D(pos).sub(map.getPlayer().getPosition()).getLength();
+        return new Vector2D(pos).sub(map.getPlayer().getPosition()).getLength();
     }
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) {
         Game g = (Game) c;
-        double distanceToPlayer = getDistanceToPlayer();
-        boolean isNearPlayer = distanceToPlayer < 200;
-        boolean isClosePlayer = distanceToPlayer < 100;
-        boolean isLightProjected = IntersectionUtil.hasPoint(pos, map.getPlayer().projectLight());
+        double distanceToPlayer = 100;//getDistanceToPlayer();
+        boolean isNearPlayer = false;//distanceToPlayer < 200;
+        boolean isClosePlayer = false;//distanceToPlayer < 100;
+        boolean isLightProjected = false;//IntersectionUtil.hasPoint(pos, map.getPlayer().projectLight());
         
         if (distanceToPlayer < 30) {
             g.setGameOver();
@@ -62,7 +62,7 @@ public class Ghost implements DrawableObject {
         
         if (vel.getX() != 0 && vel.getY() != 0) {
             
-            List<Point2D> l = null;//map.getPath(pos, map.getPlayer().getPosition());
+            List<Point2D> l = map.getPath(pos, map.getPlayer().getPosition());
             
             if ( ! l.isEmpty()) {
                 

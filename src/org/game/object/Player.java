@@ -10,12 +10,13 @@ import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
-import org.game.geom.Circle;
+import org.game.geom.Circle; 
 import org.game.geom.Polygon;
 import org.game.math.Matrix2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.IntersectionUtil; 
+import org.game.util.Raycast;
 
 public class Player extends Circle implements DrawableObject {
     
@@ -29,7 +30,7 @@ public class Player extends Circle implements DrawableObject {
     private Vector2D vel = new Vector2D();    
     
     public Player(Map m) {
-        //super(250, 300, 13);
+        super(250, 300, 13);
         this.map = m;
     }
     
@@ -53,23 +54,34 @@ public class Player extends Circle implements DrawableObject {
         this.isTurnOnFlash = ! this.isTurnOnFlash;
     }
     
-    public List<Point2D> projectLight() {
+    public List<Polygon> projectLight() {
         return projectLight(Math.toRadians(25));
     }
     
-    private List<Point2D> projectLight(double rangeAngle) { 
+    private List<Polygon> projectLight(double rangeAngle) { 
         if ( ! isTurnOnFlash) {
             return Collections.emptyList();
         }
         
         List<Point2D> l = new ArrayList<>();
-        //l.add(getPosition());
+        l.add(getPosition());
         
-        for (double ang = (getAngle() - rangeAngle); ang <= (getAngle() + rangeAngle); ang += (Math.PI * 2 / 1000)) { 
-            //l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
+        for (Point2D e : Raycast.getRaycastPoints(getPosition(), getAngle(), map.getWall2())) { 
+            l.add(e);    
         }
         
-        return l;
+        /*for (Double d : Raycast.getAngles(getPosition(), getAngle(), map.getWall2())) {
+            l.add(IntersectionUtil.getIntersection(getPosition(), d, map.getWall2()));    
+        }*/
+        
+        //for (double ang = (getAngle() - rangeAngle); ang <= (getAngle() + rangeAngle); ang += (Math.PI * 2 / 1000)) { 
+        //    l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
+        //}
+        
+        List<Polygon> a = new ArrayList<>();
+        a.add(new Polygon(l));
+        
+        return a;
     }
     
     /**
@@ -92,8 +104,7 @@ public class Player extends Circle implements DrawableObject {
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return 0;
-        //return dir.sub(getPosition()).getAngle();
+        return dir.sub(getPosition()).getAngle();
     }
     
     @Override
@@ -107,17 +118,34 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.w || g.s)) vel.setY(0);
         if ( ! (g.a || g.d)) vel.setX(0);
         
-        Point2D p = null;//getPosition();
+        Point2D p = getPosition();
         double x = p.getX() + vel.getX();
         double y = p.getY() + vel.getY();
-        int rad = 0;//getRadius();
+        int rad = getRadius();
         
-        g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
         
         if (isTurnOnFlash) {
-            List<Point2D> l = projectLight();
+            List<Polygon> l = projectLight();
             
-            g2d.fillPolygon(Point2D.getXPoints(l), Point2D.getYPoints(l), l.size());
+            
+            for(int i = 0; i < l.size(); ++i) {
+                
+                Polygon e = l.get(i);
+                
+                g2d.setColor(new Color((int) (Math.random()*256)
+                                     , (int) (Math.random()*256)
+                                     , (int) (Math.random()*256)));
+                
+                
+                for(Point2D e2 : e.getPoints()) {
+                    g2d.drawLine(p.getX(), p.getY(), e2.getX(), e2.getY());
+                }
+                
+                //g2d.drawLine(p.getX(), p.getY(), e.getX(), e.getY());
+                //g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
+            }
+            
+            
         } 
         
         g2d.setColor(Color.CYAN);
