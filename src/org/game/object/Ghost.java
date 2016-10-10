@@ -11,7 +11,7 @@ import org.game.Game;
 import org.game.geom.Polygon;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
-import org.game.util.IntersectionUtil;
+import org.game.util.BresenhamLineUtil;
 
 public class Ghost implements DrawableObject {
 

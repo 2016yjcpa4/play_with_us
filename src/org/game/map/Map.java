@@ -18,7 +18,7 @@ import org.game.map.TileMap;
 import org.game.map.TileNode;
 import org.game.math.Matrix2D;
 import org.game.object.Wall;
-import org.game.util.IntersectionUtil;
+import org.game.util.BresenhamLineUtil;
 
 public class Map implements DrawableObject {
 
@@ -80,7 +80,7 @@ public class Map implements DrawableObject {
             Point2D t1 = getTileIndexByPoint2D(l.getX1(), l.getY1());
             Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
 
-            for (Point2D p : IntersectionUtil.getBresenhamLines(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
+            for (Point2D p : BresenhamLineUtil.getBresenhamLine(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
                 if (tiles.isWithin(p.getX(), p.getY())) {
                     tiles.getNode(p.getX(), p.getY()).setNotWalkable();
                 }

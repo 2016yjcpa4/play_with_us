@@ -1,19 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.game.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.game.math.Line2D;
 import org.game.math.Point2D;
-import org.game.math.Vector2D;
 
-public class IntersectionUtil {
+public class BresenhamLineUtil {
+    
+    private BresenhamLineUtil() {
+    }
 
-    public static List<Point2D> getBresenhamLines(int x1, int y1, int x2, int y2) {
+    public static List<Point2D> getBresenhamLine(int x1, int y1, int x2, int y2) {
         List<Point2D> l = new ArrayList<>();
 
         int x = x1 < x2 ? 1 : -1;

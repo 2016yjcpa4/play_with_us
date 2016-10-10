@@ -15,8 +15,8 @@ import org.game.geom.Polygon;
 import org.game.math.Matrix2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
-import org.game.util.IntersectionUtil; 
-import org.game.util.Raycast;
+import org.game.util.BresenhamLineUtil; 
+import org.game.util.RaycastUtil;
 
 public class Player extends Circle implements DrawableObject {
     
@@ -66,7 +66,7 @@ public class Player extends Circle implements DrawableObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D e : Raycast.getRaycastPoints(getPosition(), getAngle(), map.getWall2())) { 
+        for (Point2D e : RaycastUtil.getRaycast(getPosition(), getAngle(), map.getWall2())) { 
             l.add(e);    
         }
         

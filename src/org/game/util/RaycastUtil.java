@@ -16,9 +16,9 @@ import org.game.math.LineF2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 
-public class Raycast {
+public class RaycastUtil {
 
-    private Raycast() {
+    private RaycastUtil() {
 
     }
 
@@ -35,7 +35,7 @@ public class Raycast {
         }
     }
 
-    private static IntersectionResult getIntersection2(LineF2D ray, Line2D segment) {
+    private static IntersectionResult getIntersection(LineF2D ray, Line2D segment) {
 
         // RAY in parametric: Point + Delta*T1
         double r_px = ray.getX1();
@@ -94,11 +94,11 @@ public class Raycast {
         return r;
     }
 
-    public static double getDiff(double src, double dst) {
+    private static double getDiff(double src, double dst) {
         return (src - dst + Math.PI + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
     }
 
-    public static List<Double> getAngles(Point2D s, double dir, List<Line2D> l) {
+    private static List<Double> getAngles(Point2D s, double dir, List<Line2D> l) {
         List<Double> r = new ArrayList<>();
 
         List<Point2D> p = getPoints(l);
@@ -135,7 +135,7 @@ public class Raycast {
         return r;
     }
 
-    public static List<Point2D> getRaycastPoints(Point2D s, double ang, List<Line2D> l) {
+    public static List<Point2D> getRaycast(Point2D s, double ang, List<Line2D> l) {
 
         List<IntersectionResult> intersects = new ArrayList();
 
@@ -153,7 +153,7 @@ public class Raycast {
             // Find CLOSEST intersection
             IntersectionResult closestIntersect = null;
             for (Line2D e : l) {
-                IntersectionResult intersect = getIntersection2(ray, e);
+                IntersectionResult intersect = getIntersection(ray, e);
                 
                 if (intersect == null) {
                     continue;
