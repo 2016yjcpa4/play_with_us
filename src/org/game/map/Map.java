@@ -52,8 +52,13 @@ public class Map implements DrawableObject {
         // 장애물 1
         wall.add(new Wall(300, 200, 10, 400));
         
-        Wall w = new Wall(507, 0, 10, 500);
+        Wall w = new Wall(550, 0, 10, 400);
         
+        w.transform(Matrix2D.rotate(Math.toRadians(40)));
+        wall.add(w);
+        
+        
+        w = new Wall(100, 100, 150, 150);
         w.transform(Matrix2D.rotate(Math.toRadians(40)));
         
         // 장애물 2
