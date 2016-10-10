@@ -127,14 +127,14 @@ public class Player extends Circle implements DrawableObject {
         if (isTurnOnFlash) {
             List<Polygon> l = projectLight();
             
+                
+                g2d.setColor(new Color(255
+                                     , 255
+                                     , 0, (int) (255 * 0.70)));
             
             for(int i = 0; i < l.size(); ++i) {
                 
                 Polygon e = l.get(i);
-                
-                g2d.setColor(new Color((int) (Math.random()*256)
-                                     , (int) (Math.random()*256)
-                                     , (int) (Math.random()*256)));
                 
                 
                 for(Point2D e2 : e.getPoints()) {
@@ -142,7 +142,7 @@ public class Player extends Circle implements DrawableObject {
                 }
                 
                 //g2d.drawLine(p.getX(), p.getY(), e.getX(), e.getY());
-                //g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
+                g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
             }
             
             

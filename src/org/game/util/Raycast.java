@@ -6,6 +6,7 @@
 package org.game.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -18,24 +19,22 @@ import org.game.math.Vector2D;
 public class Raycast {
 
     private Raycast() {
-        
+
     }
-    
+
     private static class IntersectionResult {
-        
+
         public double x;
         public double y;
         public double param;
-        public double angle;
-        
+
         public IntersectionResult(double x, double y, double param) {
             this.x = x;
             this.y = y;
             this.param = param;
         }
     }
-    
-    
+
     private static IntersectionResult getIntersection2(LineF2D ray, Line2D segment) {
 
         // RAY in parametric: Point + Delta*T1
@@ -67,84 +66,100 @@ public class Raycast {
         double T1 = (s_px + s_dx * T2 - r_px) / r_dx;
 
         // Must be within parametic whatevers for RAY/SEGMENT
-        if (T1 < 0)
+        if (T1 < 0) {
             return null;
-        if (T2 < 0 || T2 > 1)
+        }
+        if (T2 < 0 || T2 > 1) {
             return null;
+        }
 
         return new IntersectionResult(r_px + r_dx * T1,
-                                      r_py + r_dy * T1, 
-                                      T1);
+                r_py + r_dy * T1,
+                T1);
 
     }
-    
+
     private static List<Point2D> getPoints(List<Line2D> l) {
         List<Point2D> r = new ArrayList<>();
-        
+
         for (Line2D e : l) {
-            
+
             Point2D p1 = new Point2D(e.getX1(), e.getY1());
             Point2D p2 = new Point2D(e.getX2(), e.getY2());
-             
+
             r.add(p1);
             r.add(p2);
         }
-        
+
         return r;
     }
-    
-    public static List<Double> getAngles(Point2D s, double ang2, List<Line2D> l) {
-        List<Double> r = new ArrayList<>();
-        
-        List<Point2D> p = getPoints(l);
-        
-        double max = ang2 + Math.toRadians(25);
-        double min = ang2 - Math.toRadians(25);
 
-        
+    public static double getDiff(double src, double dst) {
+        return (src - dst + Math.PI + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
+    }
+
+    public static List<Double> getAngles(Point2D s, double dir, List<Line2D> l) {
+        List<Double> r = new ArrayList<>();
+
+        List<Point2D> p = getPoints(l);
+
+        double max = dir + Math.toRadians(25);
+        double min = dir - Math.toRadians(25);
+
         r.add(min);
         r.add(max);
 
-        for(Point2D e : p) {
-            //http://stackoverflow.com/questions/12234574/calculating-if-an-angle-is-between-two-angles
-            // TODO
+        final double d = Math.toRadians(25);
+
+        for (Point2D e : p) {
             double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());
-            
-        
-            double anglediff = (ang2 - ang + 180 + 360) % 360 - 180;
-        
-            if (-25 <= anglediff && anglediff <= 25) {
-                r.add(ang - 0.0001);
-                r.add(ang);
+
+            double anglediff = getDiff(dir, ang);
+
+            // 양쪽으로 편차를 더 두어 벽이있는지 체크함
+            if (-d <= anglediff && anglediff <= d) {
+                r.add(ang - 0.0001); 
+                r.add(ang); 
                 r.add(ang + 0.0001);
             }
         }
+
+        r.sort(new Comparator<Double>() {
+            @Override
+            public int compare(Double a, Double b) {
+                return getDiff(a, b) > 0 ? 1 : -1;
+            }
+        });
+
         
         return r;
     }
-    
+
     public static List<Point2D> getRaycastPoints(Point2D s, double ang, List<Line2D> l) {
-        
+
         List<IntersectionResult> intersects = new ArrayList();
-        
+
         for (Double angle : getAngles(s, ang, l)) {
 
             // Calculate dx & dy from angle
             double dx = Math.cos(angle);
             double dy = Math.sin(angle);
-            
+
             LineF2D ray = new LineF2D(s.getX(),
-                                    s.getY(),
-                                    (s.getX() + dx),
-                                    (s.getY() + dy));
-
-
+                    s.getY(),
+                    (s.getX() + dx),
+                    (s.getY() + dy));
 
             // Find CLOSEST intersection
             IntersectionResult closestIntersect = null;
             for (Line2D e : l) {
                 IntersectionResult intersect = getIntersection2(ray, e);
+                
                 if (intersect == null) {
+                    continue;
+                }
+
+                if (Double.isNaN(intersect.x) || Double.isNaN(intersect.y)) {
                     continue;
                 }
                 
@@ -154,35 +169,22 @@ public class Raycast {
             }
 
             // Intersect angle
-            if (closestIntersect == null)
+            if (closestIntersect == null) {
                 continue;
-            
-            closestIntersect.angle = angle;
+            }
 
             // Add to list of intersects
             intersects.add(closestIntersect);
 
         }
-        // Sort intersects by angle
-        intersects.sort(new Comparator<IntersectionResult>() {
-            @Override
-            public int compare(IntersectionResult a, IntersectionResult b) {
-                if (a.angle > b.angle) {
-                    return 1;
-                } else if (a.angle < b.angle) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-        
+
         List<Point2D> ll = new ArrayList<>();
-        
-        for(IntersectionResult r : intersects) {
+
+        for (IntersectionResult r : intersects) {
             ll.add(new Point2D((int) r.x, (int) r.y));
         }
         
+
         return ll;
     }
 }
