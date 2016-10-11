@@ -71,4 +71,8 @@ public class Polygon implements Shape {
 
         return p.get(n < 0 ? n % len + len : n % len);
     }
+    
+    public void add(Point2D p) {
+        this.p.add(p);
+    }
 }

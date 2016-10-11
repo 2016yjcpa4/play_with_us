@@ -118,9 +118,9 @@ public class RaycastUtil {
 
             // 양쪽으로 편차를 더 두어 벽이있는지 체크함
             if (-d <= anglediff && anglediff <= d) {
-                r.add(ang - 0.0001); 
+                r.add(ang - 0.01); 
                 r.add(ang); 
-                r.add(ang + 0.0001);
+                r.add(ang + 0.01);
             }
         }
 

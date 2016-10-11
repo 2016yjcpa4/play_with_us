@@ -11,6 +11,7 @@ import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.geom.Circle; 
+import org.game.geom.EarCutTriangulator;
 import org.game.geom.Polygon;
 import org.game.math.Matrix2D;
 import org.game.math.Point2D;
@@ -72,7 +73,8 @@ public class Player extends Circle implements DrawableObject {
         
         List<Polygon> a = new ArrayList<>();
         a.add(new Polygon(l));
-        return a; 
+        //return a;
+        return new EarCutTriangulator().triangulate(new Polygon(l)); 
     }
     
     /**
@@ -118,22 +120,18 @@ public class Player extends Circle implements DrawableObject {
         if (isTurnOnFlash) {
             List<Polygon> l = projectLight();
             
-                
-                g2d.setColor(new Color(255
-                                     , 255
-                                     , 0, (int) (255 * 0.70)));
-            
-            for(int i = 0; i < l.size(); ++i) {
-                
-                Polygon e = l.get(i);
-                
-                
-                for(Point2D e2 : e.getPoints()) {
-                    //g2d.drawLine(p.getX(), p.getY(), e2.getX(), e2.getY());
+            if( ! l.isEmpty()) {
+                    g2d.setColor(new Color(255
+                                         , 255
+                                         , 0, (int) (255 * 0.70)));
+
+                for(int i = 0; i < l.size(); ++i) {
+
+                    Polygon e = l.get(i);
+
+
+                    g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
                 }
-                
-                //g2d.drawLine(p.getX(), p.getY(), e.getX(), e.getY());
-                g2d.drawPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
             }
             
             
