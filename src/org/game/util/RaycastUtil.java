@@ -110,6 +110,8 @@ public class RaycastUtil {
         r.add(max);
 
         final double d = Math.toRadians(25);
+        
+        final double d2 = Math.toRadians(0.65);
 
         for (Point2D e : p) {
             double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());
@@ -118,16 +120,23 @@ public class RaycastUtil {
 
             // 양쪽으로 편차를 더 두어 벽이있는지 체크함
             if (-d <= anglediff && anglediff <= d) {
-                r.add(ang - 0.01); 
+                r.add(ang - d2); 
                 r.add(ang); 
-                r.add(ang + 0.01);
+                r.add(ang + d2);
             }
         }
 
         r.sort(new Comparator<Double>() {
             @Override
             public int compare(Double a, Double b) {
-                return getDiff(a, b) >= 0 ? 1 : -1;
+                double c = getDiff(a, b);
+                
+                if (c > 0) {
+                    return 1;
+                }else if (c < 0) {
+                    return -1;
+                }
+                return 0;
             }
         });
 

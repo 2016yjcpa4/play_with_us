@@ -95,9 +95,10 @@ public class Player extends Circle implements DrawableObject {
         return vel;
     }     
     
+    private int d = 0;
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(getPosition()).getAngle();
+        return Math.toRadians((d += 1) % 360);//dir.sub(getPosition()).getAngle();
     }
     
     @Override
@@ -121,13 +122,13 @@ public class Player extends Circle implements DrawableObject {
             List<Polygon> l = projectLight();
             
             if( ! l.isEmpty()) {
-                    g2d.setColor(new Color(255
-                                         , 255
-                                         , 0, (int) (255 * 0.70)));
-
                 for(int i = 0; i < l.size(); ++i) {
 
                     Polygon e = l.get(i);
+
+                    g2d.setColor(new Color((int) (Math.random() * 256)
+                                         , (int) (Math.random() * 256)
+                                         , (int) (Math.random() * 256), (int) (255 * 0.70)));
 
 
                     g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
