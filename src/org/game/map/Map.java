@@ -1,10 +1,15 @@
 package org.game.map;
  
+import com.sun.javafx.tk.Toolkit;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
@@ -22,7 +27,7 @@ import org.game.util.BresenhamLineUtil;
 
 public class Map implements DrawableObject {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final int MAP_WIDTH = 800;
     public static final int MAP_HEIGHT = 600;
     
@@ -35,34 +40,46 @@ public class Map implements DrawableObject {
     private Player player;
     private List<Ghost> mobs = new ArrayList<>();
     
+    private Image img;
+    
     public Map() { 
         // 기본적으로 맵의 테두리를 만들고...
         // 북쪽
         wall.add(new Wall(0, 0, MAP_WIDTH - 10, 10));
         
         // 동쪽
-        wall.add(new Wall(MAP_WIDTH - 10, 0, 10, MAP_HEIGHT));
+        wall.add(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));
         
         // 남쪽
         wall.add(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));
         
         // 서쪽
-        wall.add(new Wall(0, 0, 10, MAP_HEIGHT - 10));
+        wall.add(new Wall(20, 0, 10, MAP_HEIGHT - 10));
         
         // 장애물 1
-        wall.add(new Wall(300, 200, 10, 400));
-        
-        Wall w = new Wall(550, 0, 10, 400);
-        
-        w.transform(Matrix2D.rotate(Math.toRadians(40)));
-        wall.add(w);
-        
-        
-        w = new Wall(100, 100, 150, 150);
-        w.transform(Matrix2D.rotate(Math.toRadians(40)));
+        wall.add(new Wall(215, 0, 35, 400));
         
         // 장애물 2
-        wall.add(w);
+        wall.add(new Wall(510, 0, 35, 400));
+        
+        // 장애물 3
+        wall.add(new Wall(10, 130, 205, 30));
+        
+        // 장애물 4
+        wall.add(new Wall(545, 130, 245, 30));
+        
+        // 장애물 5
+        wall.add(new Wall(0, 440, MAP_WIDTH, 30));
+        
+        // 장애물 6
+        wall.add(new Wall(315, 220, 130, 35));
+        
+        try {
+            img = ImageIO.read(new File("./res/map.png"));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
         
         Ghost m;
         
@@ -170,6 +187,11 @@ public class Map implements DrawableObject {
     @Override
     public void draw(CanvasView c, Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
+        
+        g2d.drawImage(img, 0, 0, null);
+        
+        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.7)));
+        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
          
         if (Game.DEBUG && Map.DEBUG) { 
             g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.20)));
@@ -189,9 +211,11 @@ public class Map implements DrawableObject {
             }
         }
 
-        for (Wall w : wall) {
-            w.draw(c, g2d);
-        } 
+        if(Map.DEBUG) {
+            for (Wall w : wall) {
+                w.draw(c, g2d);
+            } 
+        }
         
         for(Ghost g : mobs) {
             g.draw(c, g2d);

@@ -111,7 +111,7 @@ public class RaycastUtil {
 
         final double d = Math.toRadians(25);
         
-        final double d2 = Math.toRadians(0.65);
+        final double d2 = Math.toRadians(2);
 
         for (Point2D e : p) {
             double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());

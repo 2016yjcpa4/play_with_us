@@ -2,14 +2,19 @@ package org.game.object;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List; 
+import javax.imageio.ImageIO;
 
 import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
+import org.game.Sprite;
 import org.game.geom.Circle; 
 import org.game.geom.EarCutTriangulator;
 import org.game.geom.Polygon;
@@ -30,9 +35,14 @@ public class Player extends Circle implements DrawableObject {
     private Vector2D dir = new Vector2D(0, 0);    
     private Vector2D vel = new Vector2D();    
     
+    
+    private Sprite sp = new Sprite();
+    
     public Player(Map m) {
         super(250, 300, 13);
         this.map = m;
+        
+        sp.loadSprite("player");
     }
     
     public void setMap(Map m) {
@@ -95,10 +105,9 @@ public class Player extends Circle implements DrawableObject {
         return vel;
     }     
     
-    private int d = 0;
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return Math.toRadians((d += 1) % 360);//dir.sub(getPosition()).getAngle();
+        return dir.sub(getPosition()).getAngle();
     }
     
     @Override
@@ -112,6 +121,10 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.w || g.s)) vel.setY(0);
         if ( ! (g.a || g.d)) vel.setX(0);
         
+        if (vel.getX() != 0 || vel.getY() != 0) {
+            i++;
+        }
+        
         Point2D p = getPosition();
         double x = p.getX() + vel.getX();
         double y = p.getY() + vel.getY();
@@ -120,37 +133,61 @@ public class Player extends Circle implements DrawableObject {
         
         if (isTurnOnFlash) {
             List<Polygon> l = projectLight();
+             
             
-            if( ! l.isEmpty()) {
-                for(int i = 0; i < l.size(); ++i) {
 
-                    Polygon e = l.get(i);
+            /*
+            g2d.setColor(new Color((int) (Math.random() * 256)
+                                 , (int) (Math.random() * 256)
+                                 , (int) (Math.random() * 256), (int) (255 * 0.50)));
+            */
+            
+            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
+            
+            for(int i = 0; i < l.size(); ++i) {
 
-                    g2d.setColor(new Color((int) (Math.random() * 256)
-                                         , (int) (Math.random() * 256)
-                                         , (int) (Math.random() * 256), (int) (255 * 0.70)));
+                Polygon e = l.get(i);
 
 
-                    g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
-                }
+                g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
             }
-            
             
         } 
         
         g2d.setColor(Color.CYAN);
         
-        
         int dx = (int) (x + 20 * Math.cos(getAngle()));
         int dy = (int) (y + 20 * Math.sin(getAngle()));
 
+        g2d.drawImage(sp.getSprite(i % 3, getGridIndex()), (int) x - rad, (int) y - rad, null);
         
         p.set((int) x, (int) y);
         
-        g2d.drawLine((int) x, (int) y, dx, dy);
-        
-        
-        g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
+        //g2d.drawLine((int) x , (int) y, dx, dy);
+        //g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
     }
+    
+    private int i = 0;
 
+    public static double normalAbsoluteAngleDegrees(double angle) {
+        return (angle %= 360) >= 0 ? angle : (angle + 360);
+    }
+    
+    private int getGridIndex() {
+        double ang = normalAbsoluteAngleDegrees(Math.toDegrees(getAngle()));
+        
+        if (45 <= ang && ang < 135) {
+            return 0;
+        }
+        
+        if (135 <= ang && ang < 225) {
+            return 1;
+        }
+        
+        if (225 <= ang && ang < 315) {
+            return 3;
+        }
+        
+        return 2;
+    }
 }
