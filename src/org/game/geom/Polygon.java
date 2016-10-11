@@ -66,67 +66,9 @@ public class Polygon implements Shape {
         return new Point2D(x, y);
     }
 
-    public double getArea() {
-        throw new UnsupportedOperationException();
-    }
-
     public Point2D getPoint(int n) {
         int len = p.size();
 
         return p.get(n < 0 ? n % len + len : n % len);
     }
-
-    protected void push(Point2D p) {
-        this.p.add(p);
-    }
-    protected void addPoint(Point2D p) {
-        this.p.add(p);
-    }
- 
-
-
-    // ----------------------------------------------------------
-    /**
-     * Adds a sequence of vertices from another polygon to the end of this one.
-     *
-     * @param source the polygon to copy the vertices from
-     * @param start the starting index of the vertices to copy
-     * @param end the ending index of the vertices to copy (this vertex is NOT
-     *     included)
-     */
-    public void addFrom(Polygon source, int start, int end)
-    {
-        for (int i = start; i < end; i++)
-        {
-            p.add(source.get(i));
-        }
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Gets the vertex at the specified index. This accessor is circular;
-     * negative indices and indices greater than the size of the polygon are
-     * wrapped appropriately.
-     *
-     * @param index the index of the vertex to get
-     * @return the vertex at the specified index
-     */
-    public Point2D get(int index)
-    {
-        int realIndex = wrap(index, size());
-        return (p.get(realIndex));
-    }
-
-    private static int wrap(int a, int b)
-    {
-        return (a < 0) ? (a % b + b) : (a % b);
-    }
-    public int size()
-    {
-        return p.size();
-    }
-    
-    
-    
 }

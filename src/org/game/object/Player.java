@@ -66,22 +66,13 @@ public class Player extends Circle implements DrawableObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D e : RaycastUtil.getRaycast(getPosition(), getAngle(), map.getWall2())) { 
+        for (Point2D e : RaycastUtil.getRaycast(getPosition(), getAngle(), map.getWall2())) {  
             l.add(e);    
         }
         
-        /*for (Double d : Raycast.getAngles(getPosition(), getAngle(), map.getWall2())) {
-            l.add(IntersectionUtil.getIntersection(getPosition(), d, map.getWall2()));    
-        }*/
-        
-        //for (double ang = (getAngle() - rangeAngle); ang <= (getAngle() + rangeAngle); ang += (Math.PI * 2 / 1000)) { 
-        //    l.add(IntersectionUtil.getIntersection(getPosition(), ang, map.getWall2()));
-        //}
-        
         List<Polygon> a = new ArrayList<>();
         a.add(new Polygon(l));
-        
-        return a;
+        return a; 
     }
     
     /**
@@ -138,11 +129,11 @@ public class Player extends Circle implements DrawableObject {
                 
                 
                 for(Point2D e2 : e.getPoints()) {
-                    g2d.drawLine(p.getX(), p.getY(), e2.getX(), e2.getY());
+                    //g2d.drawLine(p.getX(), p.getY(), e2.getX(), e2.getY());
                 }
                 
                 //g2d.drawLine(p.getX(), p.getY(), e.getX(), e.getY());
-                g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
+                g2d.drawPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
             }
             
             
