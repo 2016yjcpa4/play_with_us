@@ -61,7 +61,7 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
             g2d.drawString(s, x, y);
         } 
         else {
-            map.draw(this, g2d);
+            //map.draw(this, g2d);
             player.draw(this, g2d);
         }
     } 

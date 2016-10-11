@@ -184,9 +184,6 @@ public class Map implements DrawableObject {
         g2d.setColor(Color.WHITE);
         
         g2d.drawImage(img, 0, 0, null);
-        
-        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.7)));
-        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
          
         if (Game.DEBUG && Map.DEBUG) { 
             g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.20)));

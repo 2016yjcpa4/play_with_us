@@ -38,8 +38,8 @@ public class Ghost implements DrawableObject {
     public void draw(CanvasView c, Graphics2D g2d) {
         Game g = (Game) c;
         double distanceToPlayer = getDistanceToPlayer();
-        boolean isNearPlayer = distanceToPlayer < 200;
-        boolean isClosePlayer = distanceToPlayer < 100;
+        boolean isNearPlayer = false;//distanceToPlayer < 200;
+        boolean isClosePlayer = false;//distanceToPlayer < 100;
         boolean isLightProjected = false;//IntersectionUtil.hasPoint(pos, map.getPlayer().projectLight());
         
         if (distanceToPlayer < 30) {

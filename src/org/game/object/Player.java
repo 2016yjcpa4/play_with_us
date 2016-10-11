@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MultipleGradientPaint;
 import java.awt.RadialGradientPaint;
+import java.awt.geom.Arc2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
+import org.game.Main;
 import org.game.Sprite;
 import org.game.geom.Circle; 
 import org.game.geom.EarCutTriangulator;
 import org.game.geom.Polygon;
+import static org.game.map.Map.MAP_HEIGHT;
+import static org.game.map.Map.MAP_WIDTH;
 import org.game.math.Matrix2D;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
@@ -111,6 +115,12 @@ public class Player extends Circle implements DrawableObject {
         return dir.sub(getPosition()).getAngle();
     }
     
+    private java.awt.Polygon pr() {
+        Polygon p = projectLight();
+        
+        return new java.awt.Polygon(p.getXPoints(), p.getYPoints(), p.getPoints().size());
+    }
+    
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
         Game g= (Game) c;
@@ -135,10 +145,13 @@ public class Player extends Circle implements DrawableObject {
         int rad = 16;//getRadius();
         
         
+map.draw(c, g2d);
+g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.9)));
+g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         if (isTurnOnFlash) {
             Polygon e = projectLight();
             
-            RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
+            /*RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
                                                                 new float[] { 0.8f, 1f },
                                                                 new Color[] {
                                                                     new Color(255, 255, 0, (int) (255 * 0.3)),
@@ -148,7 +161,21 @@ public class Player extends Circle implements DrawableObject {
             g2d.setPaint(paint);
             
             g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size()); 
+            */
             
+        
+            int spread = 40;
+            int radius = 300;
+            java.awt.Polygon arc = pr();
+            GradientPaint gp = new GradientPaint(p.x, p.y, new Color(0,0,0,0), p.x + radius * (float)Math.cos(Math.toRadians(getAngle())),p.y-radius*(float)Math.sin(Math.toRadians(getAngle())),new Color(0,0,0));
+            g2d.clip(arc);
+            map.draw(c, g2d);
+            g2d.setPaint(gp);
+            g2d.fill(arc);
+            g2d.draw(arc);
+            g2d.setClip(null);
+            
+            //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);
         } 
         
         g2d.setColor(Color.CYAN);
