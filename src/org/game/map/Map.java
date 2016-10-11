@@ -214,4 +214,11 @@ public class Map implements DrawableObject {
         }
     }
 
+    @Override
+    public void update(CanvasView c) {
+        for(Ghost g : mobs) {
+            g.update(c);
+        }
+    }
+
 }

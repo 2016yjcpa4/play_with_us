@@ -31,5 +31,9 @@ public class Wall extends Rect implements DrawableObject {
         g2d.fillOval(p.getX() - 2, p.getY() - 2, 4, 4);
         
     }
+
+    @Override
+    public void update(CanvasView g) { 
+    }
     
 }

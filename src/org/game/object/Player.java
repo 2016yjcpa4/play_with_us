@@ -1,11 +1,12 @@
 package org.game.object;
-
+ 
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MultipleGradientPaint;
 import java.awt.RadialGradientPaint;
+import java.awt.RenderingHints;
 import java.awt.geom.Arc2D;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.Collections;
 import java.util.List; 
 import javafx.scene.paint.RadialGradient;
 import javax.imageio.ImageIO;
-
+ 
 import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
@@ -31,13 +32,13 @@ import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.BresenhamLineUtil; 
 import org.game.util.RaycastUtil;
-
+ 
 public class Player extends Circle implements DrawableObject {
     
     private static final boolean DEBUG = true;
     
     private Map map;
-
+ 
     private boolean isTurnOnFlash = false;
      
     private Vector2D dir = new Vector2D(0, 0);    
@@ -123,73 +124,50 @@ public class Player extends Circle implements DrawableObject {
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) { 
-        Game g= (Game) c;
-        if (g.w) vel.setY(-4);
-        if (g.s) vel.setY(4);
-        if (g.a) vel.setX(-4);
-        if (g.d) vel.setX(4);
-        
-        if ( ! (g.w || g.s)) vel.setY(0);
-        if ( ! (g.a || g.d)) vel.setX(0);
-        
-        if (vel.getX() != 0 || vel.getY() != 0) {
-            i += 0.333;
-        }
         
         Point2D p = getPosition();
         float x = p.getX() + vel.getX();
         float y = p.getY() + vel.getY();
-        
-        float dx = (int) (x + 200 * Math.cos(getAngle()));
-        float dy = (int) (y + 200 * Math.sin(getAngle()));
+         
         int rad = 16;//getRadius();
         
         
-map.draw(c, g2d);
-g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.9)));
-g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        //원본 맵을 그리고
+        map.draw(c, g2d);
+        
+        // 검은 마스크를 씌움...
+        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.8)));
+        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        
         if (isTurnOnFlash) {
-            Polygon e = projectLight();
-            
-            /*RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
-                                                                new float[] { 0.8f, 1f },
+            RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
+                                                                new float[] { 0.7f, 1f },
                                                                 new Color[] {
-                                                                    new Color(255, 255, 0, (int) (255 * 0.3)),
-                                                                    new Color(255, 255, 0, (int) (255 * 0))
+                                                                    new Color(0, 0, 0, (int) (255 * 0)),
+                                                                    new Color(0, 0, 0, (int) (255 * 0.8))
                                                                 });
         
-            g2d.setPaint(paint);
+            java.awt.Polygon arc = pr(); 
             
-            g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size()); 
-            */
-            
-        
-            int spread = 40;
-            int radius = 300;
-            java.awt.Polygon arc = pr();
-            GradientPaint gp = new GradientPaint(p.x, p.y, new Color(0,0,0,0), p.x + radius * (float)Math.cos(Math.toRadians(getAngle())),p.y-radius*(float)Math.sin(Math.toRadians(getAngle())),new Color(0,0,0));
             g2d.clip(arc);
-            map.draw(c, g2d);
-            g2d.setPaint(gp);
-            g2d.fill(arc);
-            g2d.draw(arc);
+            map.draw(c, g2d); // 밝은부분만 그려짐
+            g2d.setPaint(paint);
+            g2d.fill(arc); 
             g2d.setClip(null);
             
             //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);
         } 
         
         g2d.setColor(Color.CYAN);
-
+ 
         g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) x - rad, (int) y - rad, null);
-        
-        p.set((int) x, (int) y);
         
         //g2d.drawLine((int) x , (int) y, dx, dy);
         //g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
     }
     
     private double i = 0;
-
+ 
     public static double normalAbsoluteAngleDegrees(double angle) {
         return (angle %= 360) >= 0 ? angle : (angle + 360);
     }
@@ -210,5 +188,27 @@ g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         }
         
         return 2;
+    }
+
+    @Override
+    public void update(CanvasView c) {
+        Game g= (Game) c;
+        if (g.w) vel.setY(-4);
+        if (g.s) vel.setY(4);
+        if (g.a) vel.setX(-4);
+        if (g.d) vel.setX(4);
+        
+        if ( ! (g.w || g.s)) vel.setY(0);
+        if ( ! (g.a || g.d)) vel.setX(0);
+        
+        Point2D p = getPosition();
+        float x = p.getX() + vel.getX();
+        float y = p.getY() + vel.getY();
+         
+        if (vel.getX() != 0 || vel.getY() != 0) {
+            i += 0.333;
+        }
+        
+        p.set((int) x, (int) y);
     }
 }

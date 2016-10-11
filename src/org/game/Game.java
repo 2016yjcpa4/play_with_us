@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.game.geom.Polygon;
+import org.game.object.Ghost;
 
 public class Game extends CanvasView implements MouseMotionListener, MouseListener, KeyListener {
 
@@ -61,7 +62,9 @@ public class Game extends CanvasView implements MouseMotionListener, MouseListen
             g2d.drawString(s, x, y);
         } 
         else {
-            //map.draw(this, g2d);
+            map.update(this);
+            
+            player.update(this);
             player.draw(this, g2d);
         }
     } 

@@ -36,10 +36,45 @@ public class Ghost implements DrawableObject {
     
     @Override
     public void draw(CanvasView c, Graphics2D g2d) {
+        
+        
+        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
+        
+    }
+    
+    private double angle = 0;
+    private Sprite sp = new Sprite();
+
+    private double i = 0;
+
+    public static double normalAbsoluteAngleDegrees(double angle) {
+        return (angle %= 360) >= 0 ? angle : (angle + 360);
+    }
+    
+    private int getGridIndex() {
+        double ang = normalAbsoluteAngleDegrees(Math.toDegrees(angle));
+        
+        if (45 <= ang && ang < 135) {
+            return 0;
+        }
+        
+        if (135 <= ang && ang < 225) {
+            return 1;
+        }
+        
+        if (225 <= ang && ang < 315) {
+            return 3;
+        }
+        
+        return 2;
+    }
+
+    @Override
+    public void update(CanvasView c) {
         Game g = (Game) c;
         double distanceToPlayer = getDistanceToPlayer();
-        boolean isNearPlayer = false;//distanceToPlayer < 200;
-        boolean isClosePlayer = false;//distanceToPlayer < 100;
+        boolean isNearPlayer = distanceToPlayer < 200;
+        boolean isClosePlayer = distanceToPlayer < 100;
         boolean isLightProjected = false;//IntersectionUtil.hasPoint(pos, map.getPlayer().projectLight());
         
         if (distanceToPlayer < 30) {
@@ -81,16 +116,12 @@ public class Ghost implements DrawableObject {
                 if (Game.DEBUG) {
  
                     for (Point2D p : l) {
-                        g2d.setColor(Color.RED);
-                        g2d.fillOval(p.getX() - 2, p.getY() - 2, 4, 4);
+                        //g2d.setColor(Color.RED);
+                        //g2d.fillOval(p.getX() - 2, p.getY() - 2, 4, 4);
                     } 
                 }
             }
         }
-        
-        
-        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
-        
         if (isLightProjected || isClosePlayer) {
             //g2d.setColor(Color.CYAN);
             //g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
@@ -98,32 +129,5 @@ public class Ghost implements DrawableObject {
             //g2d.setColor(Color.GRAY);
             //g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
         }
-    }
-    
-    private double angle = 0;
-    private Sprite sp = new Sprite();
-
-    private double i = 0;
-
-    public static double normalAbsoluteAngleDegrees(double angle) {
-        return (angle %= 360) >= 0 ? angle : (angle + 360);
-    }
-    
-    private int getGridIndex() {
-        double ang = normalAbsoluteAngleDegrees(Math.toDegrees(angle));
-        
-        if (45 <= ang && ang < 135) {
-            return 0;
-        }
-        
-        if (135 <= ang && ang < 225) {
-            return 1;
-        }
-        
-        if (225 <= ang && ang < 315) {
-            return 3;
-        }
-        
-        return 2;
     }
 }
