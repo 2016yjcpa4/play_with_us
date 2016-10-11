@@ -127,7 +127,7 @@ public class RaycastUtil {
         r.sort(new Comparator<Double>() {
             @Override
             public int compare(Double a, Double b) {
-                return getDiff(a, b) > 0 ? 1 : -1;
+                return getDiff(a, b) >= 0 ? 1 : -1;
             }
         });
 
