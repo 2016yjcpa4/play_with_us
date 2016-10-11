@@ -1,13 +1,17 @@
 package org.game.object;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MultipleGradientPaint;
+import java.awt.RadialGradientPaint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List; 
+import javafx.scene.paint.RadialGradient;
 import javax.imageio.ImageIO;
 
 import org.game.map.Map;
@@ -65,13 +69,13 @@ public class Player extends Circle implements DrawableObject {
         this.isTurnOnFlash = ! this.isTurnOnFlash;
     }
     
-    public List<Polygon> projectLight() {
+    public Polygon projectLight() {
         return projectLight(Math.toRadians(25));
     }
     
-    private List<Polygon> projectLight(double rangeAngle) { 
+    private Polygon projectLight(double rangeAngle) { 
         if ( ! isTurnOnFlash) {
-            return Collections.emptyList();
+            return null;
         }
         
         List<Point2D> l = new ArrayList<>();
@@ -81,10 +85,7 @@ public class Player extends Circle implements DrawableObject {
             l.add(e);    
         }
         
-        List<Polygon> a = new ArrayList<>();
-        a.add(new Polygon(l));
-        //return a;
-        return new EarCutTriangulator().triangulate(new Polygon(l)); 
+        return new Polygon(l); 
     }
     
     /**
@@ -122,44 +123,37 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.a || g.d)) vel.setX(0);
         
         if (vel.getX() != 0 || vel.getY() != 0) {
-            i++;
+            i += 0.333;
         }
         
         Point2D p = getPosition();
-        double x = p.getX() + vel.getX();
-        double y = p.getY() + vel.getY();
-        int rad = getRadius();
+        float x = p.getX() + vel.getX();
+        float y = p.getY() + vel.getY();
+        
+        float dx = (int) (x + 200 * Math.cos(getAngle()));
+        float dy = (int) (y + 200 * Math.sin(getAngle()));
+        int rad = 16;//getRadius();
         
         
         if (isTurnOnFlash) {
-            List<Polygon> l = projectLight();
-             
+            Polygon e = projectLight();
             
-
-            /*
-            g2d.setColor(new Color((int) (Math.random() * 256)
-                                 , (int) (Math.random() * 256)
-                                 , (int) (Math.random() * 256), (int) (255 * 0.50)));
-            */
+            RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
+                                                                new float[] { 0.8f, 1f },
+                                                                new Color[] {
+                                                                    new Color(255, 255, 0, (int) (255 * 0.3)),
+                                                                    new Color(255, 255, 0, (int) (255 * 0))
+                                                                });
+        
+            g2d.setPaint(paint);
             
-            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.20)));
-            
-            for(int i = 0; i < l.size(); ++i) {
-
-                Polygon e = l.get(i);
-
-
-                g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size());
-            }
+            g2d.fillPolygon(e.getXPoints(), e.getYPoints(), e.getPoints().size()); 
             
         } 
         
         g2d.setColor(Color.CYAN);
-        
-        int dx = (int) (x + 20 * Math.cos(getAngle()));
-        int dy = (int) (y + 20 * Math.sin(getAngle()));
 
-        g2d.drawImage(sp.getSprite(i % 3, getGridIndex()), (int) x - rad, (int) y - rad, null);
+        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) x - rad, (int) y - rad, null);
         
         p.set((int) x, (int) y);
         
@@ -167,7 +161,7 @@ public class Player extends Circle implements DrawableObject {
         //g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
     }
     
-    private int i = 0;
+    private double i = 0;
 
     public static double normalAbsoluteAngleDegrees(double angle) {
         return (angle %= 360) >= 0 ? angle : (angle + 360);

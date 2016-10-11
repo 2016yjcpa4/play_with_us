@@ -72,7 +72,7 @@ public class Map implements DrawableObject {
         wall.add(new Wall(0, 440, MAP_WIDTH, 30));
         
         // 장애물 6
-        wall.add(new Wall(315, 220, 130, 35));
+        wall.add(new Wall(315, 220, 130, 65));
         
         try {
             img = ImageIO.read(new File("./res/map.png"));
@@ -84,18 +84,13 @@ public class Map implements DrawableObject {
         Ghost m;
         
         m = new Ghost(this);
-        m.getPosition().setX(50);
-        m.getPosition().setY(50);
+        m.getPosition().setX(80);
+        m.getPosition().setY(300);
         mobs.add(m);
         
         m = new Ghost(this);
-        m.getPosition().setX(760);
-        m.getPosition().setY(560);
-        mobs.add(m);
-        
-        m = new Ghost(this);
-        m.getPosition().setX(50);
-        m.getPosition().setY(550);
+        m.getPosition().setX(740);
+        m.getPosition().setY(360);
         mobs.add(m);
         
         for(Line2D l : getWall2()) {

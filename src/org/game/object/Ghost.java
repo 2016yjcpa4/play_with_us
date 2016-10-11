@@ -8,6 +8,7 @@ import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
+import org.game.Sprite;
 import org.game.geom.Polygon;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
@@ -36,9 +37,9 @@ public class Ghost implements DrawableObject {
     @Override
     public void draw(CanvasView c, Graphics2D g2d) {
         Game g = (Game) c;
-        double distanceToPlayer = 100;//getDistanceToPlayer();
-        boolean isNearPlayer = false;//distanceToPlayer < 200;
-        boolean isClosePlayer = false;//distanceToPlayer < 100;
+        double distanceToPlayer = getDistanceToPlayer();
+        boolean isNearPlayer = distanceToPlayer < 200;
+        boolean isClosePlayer = distanceToPlayer < 100;
         boolean isLightProjected = false;//IntersectionUtil.hasPoint(pos, map.getPlayer().projectLight());
         
         if (distanceToPlayer < 30) {
@@ -60,13 +61,17 @@ public class Ghost implements DrawableObject {
             vel.setY(speed * 2); 
         }
         
+        if (vel.getX() != 0 || vel.getY() != 0) {
+            i += 0.5;
+        }
+        
         if (vel.getX() != 0 && vel.getY() != 0) {
             
             List<Point2D> l = map.getPath(pos, map.getPlayer().getPosition());
             
             if ( ! l.isEmpty()) {
                 
-                double angle = new Vector2D(l.get(0)).sub(pos).getAngle();
+                angle = new Vector2D(l.get(0)).sub(pos).getAngle();
                 int x = (int) (pos.getX() + vel.getX() * Math.cos(angle));
                 int y = (int) (pos.getY() + vel.getY() * Math.sin(angle));
                 
@@ -83,13 +88,42 @@ public class Ghost implements DrawableObject {
             }
         }
         
+        
+        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
+        
         if (isLightProjected || isClosePlayer) {
-            g2d.setColor(Color.CYAN);
-            g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
+            //g2d.setColor(Color.CYAN);
+            //g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
         } else if (Game.DEBUG) {
-            g2d.setColor(Color.GRAY);
-            g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
+            //g2d.setColor(Color.GRAY);
+            //g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
         }
     }
+    
+    private double angle = 0;
+    private Sprite sp = new Sprite();
 
+    private double i = 0;
+
+    public static double normalAbsoluteAngleDegrees(double angle) {
+        return (angle %= 360) >= 0 ? angle : (angle + 360);
+    }
+    
+    private int getGridIndex() {
+        double ang = normalAbsoluteAngleDegrees(Math.toDegrees(angle));
+        
+        if (45 <= ang && ang < 135) {
+            return 0;
+        }
+        
+        if (135 <= ang && ang < 225) {
+            return 1;
+        }
+        
+        if (225 <= ang && ang < 315) {
+            return 3;
+        }
+        
+        return 2;
+    }
 }
