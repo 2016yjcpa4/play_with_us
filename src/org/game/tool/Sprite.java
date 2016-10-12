@@ -58,19 +58,68 @@ public class Sprite {
     private static final int WINDOW_WIDTH = 1024;
     private static final int WINDOW_HEIGHT = 768;
 
-    private final Map<String, BufferedImage> imageMap;
+    private Map<String, BufferedImage> imageMap;
 
     private JList list;
 
     private LinkedList<BufferedImage> imgs = new LinkedList<>();
 
     public Sprite() {
-        imageMap = createImageMap();
+        
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.red);
+        p1.setBounds(10, 10, 200, 250);
+        
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.blue);
+        p2.setBounds(220, 10, 790, 250);
+        p2.setLayout(null);
+        
+        Canvas c = new Canvas();
+        c.setBackground(Color.red);
+        c.setBounds(630, 10, 150, 150);
+        p2.add(c);
+        
+        JLabel l1 = new JLabel("FPS");
+        l1.setBounds(630, 175, 150, 25);
+        p2.add(l1);
+        
+        JTextField tf1 = new JTextField();
+        tf1.setBounds(670, 175, 110, 25);
+        p2.add(tf1);
+        
+        JLabel l2 = new JLabel("이름");
+        l2.setBounds(630, 205, 150, 25);
+        p2.add(l2);
+        
+        JTextField tf2 = new JTextField();
+        tf2.setBounds(670, 205, 110, 25);
+        p2.add(tf2);
+        
+        JPanel p3 = new JPanel();
+        p3.setBackground(Color.black);
+        p3.setBounds(10, 270, 1000, 500);
+        
+        
+        JFrame f = new JFrame();
+        f.setLayout(null);
+        f.add(p1);
+        f.add(p2);
+        f.add(p3);
+        
+        
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.pack(); 
+        f.setSize(1025, 805);
+        f.setResizable(false);
+        f.setVisible(true);
+        
+        /*imageMap = createImageMap();
         list = new JList(imageMap.keySet().toArray(new String[0]));
         list.setCellRenderer(new CheckAndImageListRenderer());
         list.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(0);
-        list.setPreferredSize(new Dimension(WINDOW_WIDTH, 0));
+        list.setBounds(0, 0, 300, 300);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -88,6 +137,7 @@ public class Sprite {
         jp.setBackground(Color.red);
         
         JPanel jp3 = new JPanel();
+        jp3.setLayout(null);
         
         final Canvas c = new GameCanvas() {
 
@@ -120,23 +170,27 @@ public class Sprite {
         jp3.add(c);
         
         JList list2 = new JList(new String[] { "A", "B", "C"});
-        list2.setPreferredSize(new Dimension(400, 150));
+        list2.setBounds(0, 0, 400, 150);
         list2.setBackground(Color.black);
         list2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         list2.setEnabled(false);
         list2.setVisibleRowCount(1); 
+        jp.setLayout(null);
         jp.add(list2, BorderLayout.CENTER);
         
         jp.add(jp3, BorderLayout.EAST);
-
+        
+        JScrollPane sp = new JScrollPane(list);
+        sp.setBounds(0, 300, WINDOW_WIDTH, 500);
+        
         JFrame frame = new JFrame();
-        frame.add(jp, BorderLayout.NORTH);
-        frame.add(new JScrollPane(list), BorderLayout.WEST);
+        frame.setLayout(null);
+        frame.add(jp);
+        frame.add(sp);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setSize(1024, 768);
-        frame.setVisible(true); 
+        frame.pack(); 
+        frame.setSize(1280, 800);
+        frame.setVisible(true); */
     }
 
     public class CheckAndImageListRenderer extends JPanel implements ListCellRenderer {
