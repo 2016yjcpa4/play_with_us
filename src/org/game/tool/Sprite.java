@@ -93,7 +93,7 @@ public class Sprite {
                         d = (delta - System.currentTimeMillis()); 
 
                         try {
-                            Thread.sleep(Math.max(0, d));
+                            Thread.sleep(Math.max(0, delta - System.currentTimeMillis()));
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -161,9 +161,9 @@ public class Sprite {
                 public void paint(Graphics g) {
                     super.paint(g); //To change body of generated methods, choose Tools | Templates.
                     
-                    del += d;
+                    del += d; 
                     
-                    if(del > 1000 * 1) {
+                    if(del > (1000 * 0.5)) {
                         
                         del = 0;
                     
@@ -176,6 +176,8 @@ public class Sprite {
                 }
                 
             };
+            
+            System.out.println("ㅇㅇ");
             
             p.setPreferredSize(new Dimension(100, 100));
                     
