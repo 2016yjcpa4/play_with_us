@@ -6,6 +6,7 @@
 package org.game.tool;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -31,118 +32,133 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.OverlayLayout;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.game.GameCanvas;
 
 public class Sprite {
+    
+    private static final int WINDOW_WIDTH = 1024;
+    private static final int WINDOW_HEIGHT = 768;
 
     private final Map<String, BufferedImage> imageMap;
 
     private JList list;
-    
+
     private LinkedList<BufferedImage> imgs = new LinkedList<>();
-    
+
     public Sprite() {
         imageMap = createImageMap();
         list = new JList(imageMap.keySet().toArray(new String[0]));
         list.setCellRenderer(new CheckAndImageListRenderer());
-        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); 
         list.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(0);
-        list.setPreferredSize(new Dimension(600, 300));
+        list.setPreferredSize(new Dimension(WINDOW_WIDTH, 0));
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-            
+
                 imgs.clear();
-                
-                for(Object s :  list.getSelectedValuesList()) {
+
+                for (Object s : list.getSelectedValuesList()) {
                     imgs.add(imageMap.get(s));
                 }
             }
         });
         
-        GameCanvas cv = new GameCanvas() {
-            
-            private int i = 0;
-            
-            @Override
-            protected void draw(Graphics2D g2d) {
-                super.draw(g2d); //To change body of generated methods, choose Tools | Templates.
-            
-                if (!imgs.isEmpty()) {
-                    
-                    i += delta;
-                    
-                    if (i > (1000 * 0.5)) {
-                    
-                        i = 0;
-                        
-                        imgs.offer(imgs.poll());
-                    }
-                    
+        JPanel jp = new JPanel(); 
+        jp.setBackground(Color.red);
+        
+        JPanel jp3 = new JPanel();
+        
+        final Canvas c = new GameCanvas() {
 
-                    g2d.drawImage(imgs.peek(), 0, 0, null);
+           private int i = 0;
 
-                }
-            }
-        };
- 
+           @Override
+           protected void draw(Graphics2D g2d) {
+               super.draw(g2d); //To change body of generated methods, choose Tools | Templates.
+
+               if (!imgs.isEmpty()) {
+
+                   i += delta;
+
+                   if (i > (1000 * 0.5)) {
+
+                       i = 0;
+
+                       imgs.offer(imgs.poll());
+                   }
+                   
+                   BufferedImage b = imgs.peek();
+
+                   g2d.drawImage(b, canvas.getWidth() / 2 - b.getWidth() / 2,  canvas.getHeight()/ 2 - b.getHeight() / 2, null);
+
+               }
+           }
+       }.getCanvas();
+        c.setBounds(0, 0, 150, 150); 
+        
+        jp3.add(c);
+        
+        JList list2 = new JList(new String[] { "A", "B", "C"});
+        list2.setPreferredSize(new Dimension(400, 150));
+        list2.setBackground(Color.black);
+        list2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        list2.setEnabled(false);
+        list2.setVisibleRowCount(1); 
+        jp.add(list2, BorderLayout.CENTER);
+        
+        jp.add(jp3, BorderLayout.EAST);
+
         JFrame frame = new JFrame();
+        frame.add(jp, BorderLayout.NORTH);
         frame.add(new JScrollPane(list), BorderLayout.WEST);
-        frame.add(cv.getCanvas(), BorderLayout.CENTER); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack(); 
-        frame.setVisible(true);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setSize(1024, 768);
+        frame.setVisible(true); 
     }
-    
+
     public class CheckAndImageListRenderer extends JPanel implements ListCellRenderer {
 
-        private final JLabel label = new JLabel();
-        private final JCheckBox check = new JCheckBox();
+        private final JLabel l = new JLabel();
 
         @Override
-        public Component getListCellRendererComponent(
-                JList list, Object value, int index,
-                boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList v, Object o, int n, boolean s, boolean f) {
 
             removeAll();
 
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+            if (s) {
+                setBackground(v.getSelectionBackground());
+                setForeground(v.getSelectionForeground());
             } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
+                setBackground(v.getBackground());
+                setForeground(v.getForeground());
             }
 
-            check.setComponentOrientation(list.getComponentOrientation());
-            check.setFont(list.getFont());
-            check.setForeground(getForeground());
-            check.setBackground(getBackground());
-            check.setSelected(isSelected);
-            check.setEnabled(list.isEnabled());
-            if (isSelected)
-                check.setText(Integer.toString(list.getSelectedValuesList().indexOf(value) + 1));
-            else 
-                check.setText("");
-            label.setIcon(new ImageIcon(imageMap.get(value)));
+            l.setIcon(new ImageIcon(imageMap.get(o)));
 
-            add(check);
-            add(label);
+            add(l);
 
             return this;
         }
@@ -198,12 +214,12 @@ public class Sprite {
 
                 int p[] = bi.getRaster().getPixel(x, y, new int[4]);
 
-                int argb = 0;
-                argb += (((int) p[0] & 0xff) << 24); // alpha
-                argb += ((int) p[1] & 0xff); // blue
-                argb += (((int) p[2] & 0xff) << 8); // green
-                argb += (((int) p[3] & 0xff) << 16); // red
-                r[y][x] = argb;
+                int n = 0;
+                n += (((int) p[0] & 0xff) << 24); // alpha
+                n += ((int) p[1] & 0xff); // blue
+                n += (((int) p[2] & 0xff) << 8); // green
+                n += (((int) p[3] & 0xff) << 16); // red
+                r[y][x] = n;
             }
         }
 
