@@ -17,7 +17,7 @@ import javafx.scene.paint.RadialGradient;
 import javax.imageio.ImageIO;
  
 import org.game.map.Map;
-import org.game.CanvasView;
+import org.game.GameCanvas;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.Main;
@@ -123,7 +123,7 @@ public class Player extends Circle implements DrawableObject {
     }
     
     @Override
-    public void draw(CanvasView c, Graphics2D g2d) { 
+    public void draw(GameCanvas c, Graphics2D g2d) { 
         
         Point2D p = getPosition();
         float x = p.getX() + vel.getX();
@@ -191,7 +191,7 @@ public class Player extends Circle implements DrawableObject {
     }
 
     @Override
-    public void update(CanvasView c) {
+    public void update(GameCanvas c) {
         Game g= (Game) c;
         if (g.w) vel.setY(-4);
         if (g.s) vel.setY(4);

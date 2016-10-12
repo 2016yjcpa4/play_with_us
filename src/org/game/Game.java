@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 import org.game.geom.Polygon;
 import org.game.object.Ghost;
 
-public class Game extends CanvasView implements MouseMotionListener, MouseListener, KeyListener {
+public class Game extends GameCanvas implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
               

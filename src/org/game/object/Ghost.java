@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.util.List; 
 
 import org.game.map.Map;
-import org.game.CanvasView;
+import org.game.GameCanvas;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.SpriteManager;
@@ -35,7 +35,7 @@ public class Ghost implements DrawableObject {
     }
     
     @Override
-    public void draw(CanvasView c, Graphics2D g2d) {
+    public void draw(GameCanvas c, Graphics2D g2d) {
         
         
         g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
@@ -70,7 +70,7 @@ public class Ghost implements DrawableObject {
     }
 
     @Override
-    public void update(CanvasView c) {
+    public void update(GameCanvas c) {
         Game g = (Game) c;
         double distanceToPlayer = getDistanceToPlayer();
         boolean isNearPlayer = distanceToPlayer < 200;

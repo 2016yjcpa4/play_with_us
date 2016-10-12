@@ -7,16 +7,28 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 
-public class CanvasView extends Thread {
+public class GameCanvas extends Thread {
 
     private static final int FPS = 30;
     private static final int FRAME_DELAY = 1000 / FPS;
 
-    private boolean isRunning = true;
+    private boolean isRunning = false;
     
-    protected Canvas canvas = new Canvas();
+    protected long delta;
+    
+    protected Canvas canvas = new Canvas() {
+        
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g); //To change body of generated methods, choose Tools | Templates.
+        
+            if ( ! isRunning) {
+                start();
+            }
+        }
+    };
 
-    public CanvasView() {
+    public GameCanvas() {
     }
 
     public Canvas getCanvas() {
@@ -24,8 +36,15 @@ public class CanvasView extends Thread {
     }
 
     @Override
+    public synchronized void start() {
+        isRunning = true;
+        
+        super.start();
+    }
+
+    @Override
     public void run() {
-        long delta = System.currentTimeMillis();
+        long n = System.currentTimeMillis();
 
         canvas.createBufferStrategy(2);
         BufferStrategy bs = canvas.getBufferStrategy();
@@ -33,10 +52,12 @@ public class CanvasView extends Thread {
         while (isRunning) {
             update(bs);
 
-            delta += FRAME_DELAY;
+            n += FRAME_DELAY;
 
+            delta = n - System.currentTimeMillis();
+            
             try {
-                Thread.sleep(Math.max(0, delta - System.currentTimeMillis()));
+                Thread.sleep(Math.max(0, delta));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

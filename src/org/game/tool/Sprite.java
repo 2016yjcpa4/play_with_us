@@ -45,146 +45,68 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.game.CanvasView;
+import org.game.GameCanvas;
 
 public class Sprite {
 
     private final Map<String, BufferedImage> imageMap;
 
     private JList list;
-    private JList list2;
     
-    private DefaultListModel list2model;
-    
-    private long d;
+    private LinkedList<BufferedImage> imgs = new LinkedList<>();
     
     public Sprite() {
         imageMap = createImageMap();
         list = new JList(imageMap.keySet().toArray(new String[0]));
         list.setCellRenderer(new CheckAndImageListRenderer());
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); 
-        
-        list2model = new DefaultListModel();
-        
-        list2 = new JList();  
-        list2.setModel(list2model);
-        list2.setCellRenderer(new AnimateImageListRenderer());
-        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        list.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
             
-        new Thread() {
-
-            private static final int FPS = 30;
-            private static final int FRAME_DELAY = 1000 / FPS;
-
-            private boolean isRunning = true;
-
-            public void run() {
-                while(true) {
-                    
-                    long delta = System.currentTimeMillis();
-
-
-                    while (isRunning) {
-                        list2.repaint();
-
-                        delta += FRAME_DELAY;
-                        
-                        d = (delta - System.currentTimeMillis()); 
-
-                        try {
-                            Thread.sleep(Math.max(0, delta - System.currentTimeMillis()));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                imgs.clear();
+                
+                for(Object s :  list.getSelectedValuesList()) {
+                    imgs.add(imageMap.get(s));
                 }
             }
-        }.start();
-
-        JButton btn = new JButton("추가");
-        btn.addActionListener(new ActionListener() {
+        });
+        
+        GameCanvas cv = new GameCanvas() {
+            
+            private int i = 0;
             
             @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                    LinkedList<BufferedImage> b = new LinkedList<>();
+            protected void draw(Graphics2D g2d) {
+                super.draw(g2d); //To change body of generated methods, choose Tools | Templates.
+            
+                if (!imgs.isEmpty()) {
                     
-                    for(Object a : list.getSelectedValuesList()) {
-                        b.add(imageMap.get(a));
+                    i += delta;
+                    
+                    if (i > (1000 * 0.5)) {
+                    
+                        i = 0;
+                        
+                        imgs.offer(imgs.poll());
                     }
                     
-                    list2model.addElement(b);
+
+                    g2d.drawImage(imgs.peek(), 0, 0, null);
+
+                }
             }
-        });
+        };
  
         JFrame frame = new JFrame();
         frame.add(new JScrollPane(list), BorderLayout.WEST);
-        frame.add(new JScrollPane(list2), BorderLayout.CENTER);
-        frame.add(btn, BorderLayout.SOUTH);
+        frame.add(cv.getCanvas(), BorderLayout.CENTER); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack(); 
         frame.setVisible(true);
     }
     
-    
-    private static class SpriteImage {
-        
-        public String name;
-        
-        public LinkedList<BufferedImage> imgs;
-        
-        public int width;
-        public int height;
-        
-        public int fps;
-        
-    }
-    
-    public class AnimateImageListRenderer implements ListCellRenderer { 
-
-        @Override
-        public Component getListCellRendererComponent(
-                JList list, Object value, int index,
-                boolean isSelected, boolean cellHasFocus) {
-            
-            final SpriteImage si = new SpriteImage();
-
-            si.fps = 30;
-            si.imgs = (LinkedList<BufferedImage>) value;
-            
-            JPanel p = new JPanel() {
-                
-                private int del;
-                
-                @Override
-                public void paint(Graphics g) {
-                    super.paint(g); //To change body of generated methods, choose Tools | Templates.
-                    
-                    del += d; 
-                    
-                    if(del > (1000 * 0.5)) {
-                        
-                        del = 0;
-                    
-                        BufferedImage b = si.imgs.poll();
-
-                        g.drawImage(b, 0, 0, null);
-
-                        si.imgs.offer(b);
-                    }
-                }
-                
-            };
-            
-            System.out.println("ㅇㅇ");
-            
-            p.setPreferredSize(new Dimension(100, 100));
-                    
-            return p;
-        }
-    }
-
     public class CheckAndImageListRenderer extends JPanel implements ListCellRenderer {
 
         private final JLabel label = new JLabel();
@@ -211,6 +133,10 @@ public class Sprite {
             check.setBackground(getBackground());
             check.setSelected(isSelected);
             check.setEnabled(list.isEnabled());
+            if (isSelected)
+                check.setText(Integer.toString(list.getSelectedValuesList().indexOf(value) + 1));
+            else 
+                check.setText("");
             label.setIcon(new ImageIcon(imageMap.get(value)));
 
             add(check);
