@@ -61,6 +61,8 @@ public class Sprite {
         list.setCellRenderer(new CheckAndImageListRenderer());
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); 
         list.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        list.setVisibleRowCount(0);
+        list.setPreferredSize(new Dimension(600, 300));
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
