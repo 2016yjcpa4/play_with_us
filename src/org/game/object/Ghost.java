@@ -8,7 +8,7 @@ import org.game.map.Map;
 import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
-import org.game.Sprite;
+import org.game.SpriteManager;
 import org.game.geom.Polygon;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
@@ -43,7 +43,7 @@ public class Ghost implements DrawableObject {
     }
     
     private double angle = 0;
-    private Sprite sp = new Sprite();
+    private SpriteManager sp = new SpriteManager();
 
     private double i = 0;
 

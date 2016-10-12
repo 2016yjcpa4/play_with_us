@@ -21,7 +21,7 @@ import org.game.CanvasView;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.Main;
-import org.game.Sprite;
+import org.game.SpriteManager;
 import org.game.geom.Circle; 
 import org.game.geom.EarCutTriangulator;
 import org.game.geom.Polygon;
@@ -45,7 +45,7 @@ public class Player extends Circle implements DrawableObject {
     private Vector2D vel = new Vector2D();    
     
     
-    private Sprite sp = new Sprite();
+    private SpriteManager sp = new SpriteManager();
     
     public Player(Map m) {
         super(250, 300, 13);
@@ -136,7 +136,7 @@ public class Player extends Circle implements DrawableObject {
         map.draw(c, g2d);
         
         // 검은 마스크를 씌움...
-        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.8)));
+        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.85)));
         g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         
         if (isTurnOnFlash) {
@@ -144,7 +144,7 @@ public class Player extends Circle implements DrawableObject {
                                                                 new float[] { 0.7f, 1f },
                                                                 new Color[] {
                                                                     new Color(0, 0, 0, (int) (255 * 0)),
-                                                                    new Color(0, 0, 0, (int) (255 * 0.8))
+                                                                    new Color(0, 0, 0, (int) (255 * 0.85))
                                                                 });
         
             java.awt.Polygon arc = pr(); 

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Sprite {
+public class SpriteManager {
 
     private BufferedImage spriteSheet;
     private final int TILE_SIZE = 32;
