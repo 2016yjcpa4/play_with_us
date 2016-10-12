@@ -67,38 +67,42 @@ public class Sprite {
     public Sprite() {
         
         JPanel p1 = new JPanel();
-        p1.setBackground(Color.red);
-        p1.setBounds(10, 10, 200, 250);
+        {
+            p1.setBackground(Color.red);
+            p1.setBounds(10, 10, 200, 280);
+        }
         
         JPanel p2 = new JPanel();
-        p2.setBackground(Color.blue);
-        p2.setBounds(220, 10, 790, 250);
-        p2.setLayout(null);
-        
-        Canvas c = new Canvas();
-        c.setBackground(Color.red);
-        c.setBounds(630, 10, 150, 150);
-        p2.add(c);
-        
-        JLabel l1 = new JLabel("FPS");
-        l1.setBounds(630, 175, 150, 25);
-        p2.add(l1);
-        
-        JTextField tf1 = new JTextField();
-        tf1.setBounds(670, 175, 110, 25);
-        p2.add(tf1);
-        
-        JLabel l2 = new JLabel("이름");
-        l2.setBounds(630, 205, 150, 25);
-        p2.add(l2);
-        
-        JTextField tf2 = new JTextField();
-        tf2.setBounds(670, 205, 110, 25);
-        p2.add(tf2);
+        {
+            p2.setBackground(Color.blue);
+            p2.setBounds(220, 10, 790, 280);
+            p2.setLayout(null);
+
+            Canvas c = new Canvas();
+            c.setBackground(Color.red);
+            c.setBounds(630, 10, 150, 150);
+            p2.add(c);
+
+            JLabel l1 = new JLabel("FPS");
+            l1.setBounds(630, 175, 150, 25);
+            p2.add(l1);
+
+            JTextField tf1 = new JTextField();
+            tf1.setBounds(670, 175, 110, 25);
+            p2.add(tf1);
+
+            JLabel l2 = new JLabel("이름");
+            l2.setBounds(630, 205, 150, 25);
+            p2.add(l2);
+
+            JTextField tf2 = new JTextField();
+            tf2.setBounds(670, 205, 110, 25);
+            p2.add(tf2);
+        }
         
         JPanel p3 = new JPanel();
         p3.setBackground(Color.black);
-        p3.setBounds(10, 270, 1000, 500);
+        p3.setBounds(10, 300, 1000, 500);
         
         
         JFrame f = new JFrame();
@@ -110,7 +114,7 @@ public class Sprite {
         
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.pack(); 
-        f.setSize(1025, 805);
+        f.setSize(1025, 835);
         f.setResizable(false);
         f.setVisible(true);
         
