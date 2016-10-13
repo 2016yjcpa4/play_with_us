@@ -41,32 +41,113 @@ import org.game.util.ImageUtil;
 
 public class SpriteTool {
 
+
+    private JTextField tf1;
+    private JTextField tf2;
+    private JList l1;
     private JList sprites;
     private JList frames; // 작업중인 이미지를 프레임단위로 목록을 보여줌.
     private JFrame window; // 창
     private AnimateCanvas canvas = new AnimateCanvas(); // 작업중인 이미지를 애니메이션 형태로 보여주는 캔버스
 
+    private static class SpriteListRenderer extends JPanel implements ListCellRenderer {
+
+        @Override
+        public Component getListCellRendererComponent(JList v, Object o, int n, boolean b, boolean f) {
+            removeAll();
+            setLayout(new OverlayLayout(this));
+            setBorder(new EmptyBorder(20, 20, 20, 20));
+            
+            SpriteSheet s = (SpriteSheet) o;
+            
+            if (b) {
+                setBackground(v.getSelectionBackground());
+                setForeground(v.getSelectionForeground());
+            } else {
+                setBackground(v.getBackground());
+                setForeground(v.getForeground());
+            }
+            
+            JLabel l = new JLabel();
+            l.setIcon(new ImageIcon(s.getSpriteImages().get(0).getImage()));
+            l.setText(s.getId());
+
+            add(l);
+
+            return this;
+        }
+    }
+    
+    private static class ImageListRenderer extends JPanel implements ListCellRenderer {
+
+        @Override
+        public Component getListCellRendererComponent(JList v, Object o, int n, boolean s, boolean f) {
+            removeAll();
+            setLayout(new OverlayLayout(this));
+            setBorder(new EmptyBorder(20, 20, 20, 20));
+            
+            BufferedImage b = ((ImageUtil.SpriteImage) o).getImage();
+            
+            if (s) {
+                setBackground(v.getSelectionBackground());
+                setForeground(v.getSelectionForeground());
+            } else {
+                setBackground(v.getBackground());
+                setForeground(v.getForeground());
+            }
+            
+            JLabel l = new JLabel();
+            l.setIcon(new ImageIcon(b));
+
+            add(l);
+
+            return this;
+        }
+    }
+
+    
     public SpriteTool() {
+
         JPanel p1 = new JPanel();
         {
             p1.setBounds(10, 10, 200, 280);
             p1.setLayout(new BorderLayout());
             
             sprites = new JList(new DefaultListModel());
+            sprites.setCellRenderer(new SpriteListRenderer());
+            sprites.addListSelectionListener(new ListSelectionListener() {
+                
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    
+                    DefaultListModel m = (DefaultListModel) l1.getModel();
+                    m.clear();
+                    
+                    SpriteSheet o = (SpriteSheet) sprites.getSelectedValue();
+                    
+                    for (ImageUtil.SpriteImage s : o.getSpriteImages()) {
+                        m.addElement(s);
+                    }
+                    
+                    tf1.setText(String.valueOf(o.getFPS() / 1000f));
+                    tf2.setText(o.getId());
+                    
+                    canvas.setFrameImages(getImagesByJList(l1));
+                }
+            });
             sprites.setBounds(0, 0, 200, 280);
             
             p1.add(new JScrollPane(sprites), BorderLayout.CENTER);
         }
 
         JPanel p2 = new JPanel();
-        JList l1;
         {
             p2.setBounds(220, 10, 790, 280);
             p2.setLayout(null);
             
             {
                 l1 = new JList(new DefaultListModel());
-                l1.setCellRenderer(new ImageSelectorListRenderer());
+                l1.setCellRenderer(new ImageListRenderer());
                 l1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
                 l1.setVisibleRowCount(1);
                 l1.addListSelectionListener(new ListSelectionListener() {
@@ -114,9 +195,7 @@ public class SpriteTool {
                 c.setBounds(580, 0, 200, 175);
                 p2.add(c);
             }
-
-            JTextField tf1;
-            JTextField tf2;
+            
             {
                 JLabel l2 = new JLabel("FPS");
                 l2.setBounds(580, 185, 150, 25);
@@ -171,8 +250,6 @@ public class SpriteTool {
                         
                         DefaultListModel m2 = (DefaultListModel) sprites.getModel();
                         m2.addElement(new SpriteSheet(imgs, fps, id));
-                        
-                        // TODO...
                     }
                 });
                 b1.setBounds(580, 250, 60, 25);
@@ -183,6 +260,17 @@ public class SpriteTool {
                 p2.add(b2);
 
                 JButton b3 = new JButton("삭제");
+                b3.addActionListener(new ActionListener() {
+                    
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println(sprites.getSelectedIndex());
+                        if (sprites.getSelectedIndex() != -1) {
+                            DefaultListModel m = (DefaultListModel) sprites.getModel();
+                            m.removeElement(sprites.getSelectedIndex());
+                        }
+                    }
+                });
                 b3.setBounds(720, 250, 60, 25);
                 p2.add(b3);
             }
@@ -194,7 +282,7 @@ public class SpriteTool {
             p3.setLayout(new BorderLayout());
 
             frames = new JList(new DefaultListModel());
-            frames.setCellRenderer(new ImageSelectorListRenderer());
+            frames.setCellRenderer(new ImageListRenderer());
             frames.addListSelectionListener(new ListSelectionListener() {
                 
                 @Override
@@ -313,6 +401,7 @@ public class SpriteTool {
             DefaultListModel m = ((DefaultListModel) frames.getModel());
             m.removeAllElements();
             
+            // TODO 계속해서 짤라야할듯...
             for(ImageUtil.SpriteImage s : ImageUtil.getSlicedImagesByAlphaLines(fc.getSelectedFile())) {
                 m.addElement(s);
             }
@@ -332,33 +421,6 @@ public class SpriteTool {
         }
         
         return r;
-    }
-
-    public class ImageSelectorListRenderer extends JPanel implements ListCellRenderer {
-
-        @Override
-        public Component getListCellRendererComponent(JList v, Object o, int n, boolean s, boolean f) {
-            removeAll();
-            setLayout(new OverlayLayout(this));
-            setBorder(new EmptyBorder(20, 20, 20, 20));
-            
-            BufferedImage b = ((ImageUtil.SpriteImage) o).getImage();
-            
-            if (s) {
-                setBackground(v.getSelectionBackground());
-                setForeground(v.getSelectionForeground());
-            } else {
-                setBackground(v.getBackground());
-                setForeground(v.getForeground());
-            }
-            
-            JLabel l = new JLabel();
-            l.setIcon(new ImageIcon(b));
-
-            add(l);
-
-            return this;
-        }
     }
 
     public static void main(String[] args) {

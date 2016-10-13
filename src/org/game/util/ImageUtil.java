@@ -21,18 +21,36 @@ public class ImageUtil {
         int h = b.getHeight();
 
         int[][] r = new int[h][w];
+        
+        if (b.getAlphaRaster() != null) {
 
-        for (int x = 0; x < w; ++x) {
-            for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                for (int y = 0; y < h; ++y) {
 
-                int p[] = b.getRaster().getPixel(x, y, new int[4]);
+                    int p[] = b.getRaster().getPixel(x, y, new int[4]);
 
-                int n = 0;
-                n += ((int) p[0] & 0xff) << 24; // alpha
-                n += ((int) p[1] & 0xff);       // blue
-                n += ((int) p[2] & 0xff) << 8;  // green
-                n += ((int) p[3] & 0xff) << 16; // red
-                r[y][x] = n;
+                    int n = 0;
+                    n += ((int) p[0] & 0xFF) << 24; // alpha
+                    n += ((int) p[1] & 0xFF);       // blue
+                    n += ((int) p[2] & 0xFF) << 8;  // green
+                    n += ((int) p[3] & 0xFF) << 16; // red
+                    r[y][x] = n;
+                }
+            }
+        } else {
+
+            for (int x = 0; x < w; ++x) {
+                for (int y = 0; y < h; ++y) {
+
+                    int p[] = b.getRaster().getPixel(x, y, new int[3]);
+
+                    int n = 0;
+                    n += ((int) 255  & 0xFF) << 24; // 255 alpha
+                    n += ((int) p[0] & 0xFF);       // blue
+                    n += ((int) p[1] & 0xFF) << 8;  // green
+                    n += ((int) p[2] & 0xFF) << 16; // red
+                    r[y][x] = n;
+                }
             }
         }
 
@@ -56,11 +74,11 @@ public class ImageUtil {
             e.printStackTrace();
             return l;
         }
-
-        for (SpriteImage sx : getSlicedImagesByAlphaAxisX(b)) { // X 축을 기준으로 이미지를 잘라버림
-            for (SpriteImage sy : getSlicedImagesByAlphaAxisY(sx.getImage())) { // Y 축을 기준으로 이미지를 잘라버림
-                sy.x = sx.x;
-                l.add(sy);
+        
+        for (SpriteImage sy : getSlicedImagesByAlphaAxisY(b)) { // X 축을 기준으로 이미지를 잘라버림
+            for (SpriteImage sx : getSlicedImagesByAlphaAxisX(sy.getImage())) { // Y 축을 기준으로 이미지를 잘라버림
+                sx.y = sy.y;
+                l.add(sx);
             }
         }
 
@@ -85,7 +103,7 @@ public class ImageUtil {
             boolean isAlphaLine = true;
 
             for (int x = 0; x < p[0].length; ++x) {
-
+                
                 if (x == p[0].length || (p[y][x] >> 24) != 0x00) {
                     isAlphaLine = false;
 
