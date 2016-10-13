@@ -45,7 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.game.GameCanvas;
+import org.game.GameLoop;
 
 public class SpriteTool { 
 
@@ -111,7 +111,7 @@ public class SpriteTool {
             }
 
             {
-                Canvas c = canvas.getComponent();
+                Canvas c = canvas.getCanvas();
                 c.setBounds(580, 10, 200, 150);
                 p2.add(c);
             }
@@ -437,7 +437,7 @@ public class SpriteTool {
         return r;
     }
     
-    private static class AnimateCanvas extends GameCanvas {
+    private static class AnimateCanvas extends GameLoop {
         
         private long delta = 0;
         private float delay = 0;

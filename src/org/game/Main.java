@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) { 
         
         JFrame f = new JFrame();
-        f.getContentPane().add(new Game().getComponent()); 
+        f.getContentPane().add(new Game().getCanvas()); 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1024, 768);
         //f.setResizable(false);

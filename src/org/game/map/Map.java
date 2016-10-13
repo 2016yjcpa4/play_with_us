@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import org.game.GameCanvas;
+import org.game.GameLoop;
 import org.game.DrawableObject;
 import org.game.Game;
 import org.game.geom.Circle;
@@ -180,7 +180,7 @@ public class Map implements DrawableObject {
     
 
     @Override
-    public void draw(GameCanvas c, Graphics2D g2d) {
+    public void draw(GameLoop c, Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         
         g2d.drawImage(img, 0, 0, null);
@@ -215,7 +215,7 @@ public class Map implements DrawableObject {
     }
 
     @Override
-    public void update(GameCanvas c) {
+    public void update(GameLoop c) {
         for(Ghost g : mobs) {
             g.update(c);
         }

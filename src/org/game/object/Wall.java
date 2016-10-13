@@ -2,7 +2,7 @@ package org.game.object;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import org.game.GameCanvas;
+import org.game.GameLoop;
 import org.game.DrawableObject;
 import org.game.geom.Rect;
 import org.game.math.Point2D;
@@ -14,7 +14,7 @@ public class Wall extends Rect implements DrawableObject {
     }
 
     @Override
-    public void draw(GameCanvas g, Graphics2D g2d) {
+    public void draw(GameLoop g, Graphics2D g2d) {
         int[] x = getXPoints();
         int[] y = getYPoints();
         
@@ -33,7 +33,7 @@ public class Wall extends Rect implements DrawableObject {
     }
 
     @Override
-    public void update(GameCanvas g) { 
+    public void update(GameLoop g) { 
     }
     
 }

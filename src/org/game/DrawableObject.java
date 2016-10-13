@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 public interface DrawableObject {
     
-    void update(GameCanvas g);
+    void update(GameLoop g);
 
-    void draw(GameCanvas g, Graphics2D g2d);
+    void draw(GameLoop g, Graphics2D g2d);
 }
