@@ -14,7 +14,7 @@ public class GameCanvas extends Thread {
 
     private boolean isRunning = false;
     
-    protected long delta;
+    private long delta;
     
     protected Canvas canvas = new Canvas() {
         
@@ -31,8 +31,12 @@ public class GameCanvas extends Thread {
     public GameCanvas() {
     }
 
-    public Canvas getCanvas() {
+    public Canvas getComponent() {
         return canvas;
+    }
+    
+    public long getDelta() {
+        return delta;
     }
 
     @Override
