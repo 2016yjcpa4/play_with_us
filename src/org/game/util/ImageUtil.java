@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 
@@ -22,38 +23,21 @@ public class ImageUtil {
 
         int[][] r = new int[h][w];
         
-        if (b.getAlphaRaster() != null) {
+        for (int x = 0; x < w; ++x) {
+            for (int y = 0; y < h; ++y) {
 
-            for (int x = 0; x < w; ++x) {
-                for (int y = 0; y < h; ++y) {
+                int p[] = b.getRaster().getPixel(x, y, new int[4]);
 
-                    int p[] = b.getRaster().getPixel(x, y, new int[4]);
-
-                    int n = 0;
-                    n += ((int) p[0] & 0xFF) << 24; // alpha
-                    n += ((int) p[1] & 0xFF);       // blue
-                    n += ((int) p[2] & 0xFF) << 8;  // green
-                    n += ((int) p[3] & 0xFF) << 16; // red
-                    r[y][x] = n;
-                }
-            }
-        } else {
-
-            for (int x = 0; x < w; ++x) {
-                for (int y = 0; y < h; ++y) {
-
-                    int p[] = b.getRaster().getPixel(x, y, new int[3]);
-
-                    int n = 0;
-                    n += ((int) 255  & 0xFF) << 24; // 255 alpha
-                    n += ((int) p[0] & 0xFF);       // blue
-                    n += ((int) p[1] & 0xFF) << 8;  // green
-                    n += ((int) p[2] & 0xFF) << 16; // red
-                    r[y][x] = n;
-                }
+                int n = 0;
+                n += ((int) p[0] & 0xFF) << 24; // alpha
+                n += ((int) p[1] & 0xFF);       // blue
+                n += ((int) p[2] & 0xFF) << 8;  // green
+                n += ((int) p[3] & 0xFF) << 16; // red
+                
+                r[y][x] = n;
             }
         }
-
+        
         return r;
     }
 
@@ -75,8 +59,15 @@ public class ImageUtil {
             return l;
         }
         
-        for (SpriteImage sy : getSlicedImagesByAlphaAxisY(b)) { // X 축을 기준으로 이미지를 잘라버림
-            for (SpriteImage sx : getSlicedImagesByAlphaAxisX(sy.getImage())) { // Y 축을 기준으로 이미지를 잘라버림
+        return getSlicedImagesByAlphaLines(b);
+    }
+    
+    public static List<SpriteImage> getSlicedImagesByAlphaLines(BufferedImage b) {
+        List<SpriteImage> l = new ArrayList<>();
+ 
+        
+        for (SpriteImage sy : getSlicedImagesByAlphaRows(b)) { // X 축을 기준으로 이미지를 잘라버림
+            for (SpriteImage sx : getSlicedImagesByAlphaColumns(sy.getImage())) { // Y 축을 기준으로 이미지를 잘라버림
                 sx.y = sy.y;
                 l.add(sx);
             }
@@ -91,32 +82,31 @@ public class ImageUtil {
      * @param b
      * @return
      */
-    public static List<SpriteImage> getSlicedImagesByAlphaAxisY(BufferedImage b) {
+    public static List<SpriteImage> getSlicedImagesByAlphaRows(BufferedImage b) {
         final List<SpriteImage> r = new ArrayList<>();
         final int p[][] = getImagePixels(b);
-
-        int g = p.length;
-        int l = -1;
+        
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
 
         for (int y = 0; y < p.length; ++y) {
 
             boolean isAlphaLine = true;
 
             for (int x = 0; x < p[0].length; ++x) {
-                
-                if (x == p[0].length || (p[y][x] >> 24) != 0x00) {
-                    isAlphaLine = false;
-
-                    l = Math.max(y, l);
-                    g = Math.min(y, g);
+                if ((p[y][x] >> 24) > 0) { // 투명도가 좀 찐하다 생각되면
+                    isAlphaLine = false; // 투명한 라인이 아님...
+                    
+                    maxY = Math.max(y, maxY);
+                    minY = Math.min(y, minY);
                 }
             }
 
-            if (g != p.length && isAlphaLine) {
-                r.add(new SpriteImage(b.getSubimage(0, g, p[0].length, l - g), 0, g, p[0].length, l - g));
+            if (minY != Integer.MAX_VALUE && isAlphaLine) {
+                r.add(new SpriteImage(b.getSubimage(0, minY, p[0].length, maxY - minY), 0, minY, p[0].length, maxY - minY));
 
-                l = g;
-                g = p.length;
+                maxY = minY;
+                minY = Integer.MAX_VALUE;
             }
         }
 
@@ -129,11 +119,11 @@ public class ImageUtil {
      * @param b
      * @return
      */
-    public static List<SpriteImage> getSlicedImagesByAlphaAxisX(BufferedImage b) {
+    public static List<SpriteImage> getSlicedImagesByAlphaColumns(BufferedImage b) {
         List<SpriteImage> r = new ArrayList<>();
         int p[][] = getImagePixels(b);
 
-        int g = -1;
+        int g = 0;
         int l = p[0].length;
 
         for (int x = 0; x < p[0].length; ++x) {
@@ -142,7 +132,7 @@ public class ImageUtil {
 
             for (int y = 0; y < p.length; ++y) {
 
-                if (y == p.length || (p[y][x] >> 24) != 0x00) {
+                if (y == p.length - 1 || (p[y][x] >> 24) > (255 * 0.1)) {
                     isAlphaLine = false;
 
                     g = Math.max(x, g);
@@ -150,7 +140,7 @@ public class ImageUtil {
                 }
             }
 
-            if (l != p[0].length && isAlphaLine) {
+            if (l != p[0].length - 1 && isAlphaLine) {
                 
                 r.add(new SpriteImage(b.getSubimage(l, 0, g - l, p.length), l, 0, g - l, p.length));
 
@@ -188,6 +178,14 @@ public class ImageUtil {
         
         public int getY() {
             return y;
+        }
+        
+        public int getWidth() {
+            return img.getWidth();
+        }
+        
+        public int getHeight() {
+            return img.getHeight();
         }
     }
 }

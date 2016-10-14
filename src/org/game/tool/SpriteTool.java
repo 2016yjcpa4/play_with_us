@@ -2,19 +2,24 @@ package org.game.tool;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.OverlayLayout;
@@ -46,7 +52,6 @@ public class SpriteTool {
     private JTextField tf2;
     private JList l1;
     private JList sprites;
-    private JList frames; // 작업중인 이미지를 프레임단위로 목록을 보여줌.
     private JFrame window; // 창
     private AnimateCanvas canvas = new AnimateCanvas(); // 작업중인 이미지를 애니메이션 형태로 보여주는 캔버스
 
@@ -280,28 +285,12 @@ public class SpriteTool {
         {
             p3.setBounds(10, 300, 1000, 470);
             p3.setLayout(new BorderLayout());
+            
+            JScrollPane sp = new JScrollPane(mSpriteCanvas.getCanvas());
+            
+            sp.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
 
-            frames = new JList(new DefaultListModel());
-            frames.setCellRenderer(new ImageListRenderer());
-            frames.addListSelectionListener(new ListSelectionListener() {
-                
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if(e.getValueIsAdjusting()) {
-                        DefaultListModel m = ((DefaultListModel) l1.getModel());
-
-                        for(Object o : frames.getSelectedValuesList()) {
-                            m.addElement(o);
-                        }
-
-                        canvas.setFrameImages(getImagesByJList(l1));
-                    }
-                }
-            });
-            frames.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-            frames.setVisibleRowCount(0);
-            frames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            p3.add(new JScrollPane(frames), BorderLayout.CENTER);
+            p3.add(sp, BorderLayout.CENTER);
         }
 
         window = new JFrame();
@@ -394,17 +383,40 @@ public class SpriteTool {
     }
     
     private void loadResource() {
+
+        try {
+            BufferedImage b = ImageIO.read(new File("./FF6_iOS_Terra_Sprites_4x.png"));
+
+            mSpriteCanvas.setImage(b);
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        if (1==1) {
+            return;
+        }
         JFileChooser fc = new JFileChooser();
         int n = fc.showOpenDialog(window);
 
         if (n == JFileChooser.APPROVE_OPTION) {
-            DefaultListModel m = ((DefaultListModel) frames.getModel());
+            
+            try {
+                BufferedImage b = ImageIO.read(fc.getSelectedFile());
+
+                mSpriteCanvas.setImage(b);
+            }
+            catch(IOException e) {
+                e.printStackTrace();
+            }
+            /*DefaultListModel m = ((DefaultListModel) frames.getModel());
             m.removeAllElements();
             
             // TODO 계속해서 짤라야할듯...
             for(ImageUtil.SpriteImage s : ImageUtil.getSlicedImagesByAlphaLines(fc.getSelectedFile())) {
                 m.addElement(s);
-            }
+            }*/
+            
         } else {
             // TODO exception
         }
@@ -425,6 +437,38 @@ public class SpriteTool {
 
     public static void main(String[] args) {
         new SpriteTool(); 
+    }
+    
+    private SpriteCanvas mSpriteCanvas = new SpriteCanvas();
+    
+    private static class SpriteCanvas extends GameLoop {
+        
+        private BufferedImage mImage;
+        private List<ImageUtil.SpriteImage> mSprites = new ArrayList<>();
+        
+        public void setImage(BufferedImage b) {
+            synchronized(mSprites) {
+                mImage = b;
+                mSprites = ImageUtil.getSlicedImagesByAlphaLines(b);
+            }
+        }
+        
+        @Override
+        protected void draw(Graphics2D g2d) {
+            super.draw(g2d);
+            
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            
+            if (mImage != null) {
+                g2d.setColor(Color.BLACK);
+                for (ImageUtil.SpriteImage s : ImageUtil.getSlicedImagesByAlphaRows(mImage)) {//mSprites) {
+                    g2d.drawRect(s.getX(), s.getY(), s.getWidth(), s.getHeight());
+                }
+                
+                g2d.drawImage(mImage, 0, 0, null);
+            }
+        }
     }
 
     private static class AnimateCanvas extends GameLoop {
