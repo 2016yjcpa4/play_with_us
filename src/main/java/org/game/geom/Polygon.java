@@ -9,12 +9,16 @@ import org.game.math.Vector2D;
 public class Polygon implements Shape {
 
     protected List<Point2D> mPoints = new ArrayList<>();
+    protected List<Vector2D> mEdges = new ArrayList<>();
+    protected List<Vector2D> mNormals = new ArrayList<>();
 
     public Polygon() {
     }
 
     public Polygon(List<Point2D> p) {
         mPoints.addAll(p);
+        
+        calc();
     }
 
     public int[] getXPoints() {
@@ -68,6 +72,31 @@ public class Polygon implements Shape {
         return mPoints.get(n < 0 ? 
                                 n % len + len : 
                                 n % len);
+    }
+    
+    public Vector2D getEdge(int n) {
+        int len = mEdges.size();
+
+        return mEdges.get(n < 0 ? 
+                                n % len + len : 
+                                n % len);
+    }
+    
+    private void calc() {
+        mEdges.clear();
+        mNormals.clear();
+        
+        List<Point2D> points = getPoints();
+        int len = points.size();
+        for (int i = 0; i < len; i++) {
+            Point2D p1 = points.get(i);
+            Point2D p2 = i < len - 1 ? points.get(i + 1) : points.get(0);
+            Vector2D e = new Vector2D(p2).sub(p1);
+            Vector2D n = new Vector2D(e).setPerpendicular().setNormalize();
+            
+            mEdges.add(e);
+            mNormals.add(n);
+        }
     }
     
     public void add(Point2D p) {

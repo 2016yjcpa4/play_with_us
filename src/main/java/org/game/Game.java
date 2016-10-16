@@ -4,8 +4,6 @@ import org.game.GameLoop;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import kr.ac.yeungin.cpa.java4.play_with_us.object.Player;
-import kr.ac.yeungin.cpa.java4.play_with_us.map.Map;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -19,8 +17,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import kr.ac.yeungin.cpa.java4.play_with_us.geom.Polygon;
-import kr.ac.yeungin.cpa.java4.play_with_us.object.Ghost;
+import org.game.map.Map;
+import org.game.object.Player;
 
 public class Game extends GameLoop implements MouseMotionListener, MouseListener, KeyListener {
 

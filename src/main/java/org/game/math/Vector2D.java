@@ -41,6 +41,16 @@ public class Vector2D {
         this.y = dy;
     }
     
+    public void set(Vector2D v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
+    
+    public void set(Point2D v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
+    
     public double getAngle() {
         return Math.atan2(this.y, this.x);
     }
@@ -54,11 +64,11 @@ public class Vector2D {
     }
     
     public Vector2D setNormalize() {
-        float len = (float) getLength();
+        float n = (float) getLength();
         
-        if (len > 0) {
-            this.x = this.x / len;
-            this.y = this.y / len;
+        if (n > 0) {
+            this.x = this.x / n;
+            this.y = this.y / n;
         }
         
         return this;
