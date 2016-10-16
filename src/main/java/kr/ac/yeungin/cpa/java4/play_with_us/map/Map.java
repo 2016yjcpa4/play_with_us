@@ -23,7 +23,7 @@ import kr.ac.yeungin.cpa.java4.play_with_us.map.TileMap;
 import kr.ac.yeungin.cpa.java4.play_with_us.map.TileNode;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Matrix2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.object.Wall;
-import kr.ac.yeungin.cpa.java4.play_with_us.util.BresenhamLineUtil;
+import kr.ac.yeungin.cpa.java4.play_with_us.geom.BresenhamLine;
 
 public class Map implements DrawableObject {
 
@@ -97,7 +97,7 @@ public class Map implements DrawableObject {
             Point2D t1 = getTileIndexByPoint2D(l.getX1(), l.getY1());
             Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
 
-            for (Point2D p : BresenhamLineUtil.getBresenhamLine(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
+            for (Point2D p : BresenhamLine.getBresenhamLine(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
                 if (tiles.isWithin(p.getX(), p.getY())) {
                     tiles.getNode(p.getX(), p.getY()).setNotWalkable();
                 }

@@ -1,12 +1,12 @@
-package kr.ac.yeungin.cpa.java4.play_with_us.util;
+package kr.ac.yeungin.cpa.java4.play_with_us.geom;
 
 import java.util.ArrayList;
 import java.util.List;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 
-public class BresenhamLineUtil {
+public class BresenhamLine {
     
-    private BresenhamLineUtil() {
+    private BresenhamLine() {
     }
 
     public static List<Point2D> getBresenhamLine(int x1, int y1, int x2, int y2) {

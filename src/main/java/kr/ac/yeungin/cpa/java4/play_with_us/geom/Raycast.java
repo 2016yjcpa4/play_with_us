@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kr.ac.yeungin.cpa.java4.play_with_us.util;
+package kr.ac.yeungin.cpa.java4.play_with_us.geom;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,9 +16,9 @@ import kr.ac.yeungin.cpa.java4.play_with_us.math.LineF2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Vector2D;
 
-public class RaycastUtil {
+public class Raycast {
 
-    private RaycastUtil() {
+    private Raycast() {
 
     }
 

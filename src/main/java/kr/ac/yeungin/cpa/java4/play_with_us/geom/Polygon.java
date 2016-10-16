@@ -1,46 +1,42 @@
 package kr.ac.yeungin.cpa.java4.play_with_us.geom;
 
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Matrix2D;
-import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Vector2D;
 
 public class Polygon implements Shape {
 
-    protected List<Point2D> p = new ArrayList<>();
+    protected List<Point2D> mPoints = new ArrayList<>();
 
     public Polygon() {
     }
 
     public Polygon(List<Point2D> p) {
-        this.p.addAll(p);
+        mPoints.addAll(p);
     }
 
     public int[] getXPoints() {
-        return Point2D.getXPoints(p);
+        return Point2D.getXPoints(mPoints);
     }
 
     public int[] getYPoints() {
-        return Point2D.getYPoints(p);
+        return Point2D.getYPoints(mPoints);
     }
 
     public List<Point2D> getPoints() {
-        return p;
+        return mPoints;
     }
 
     public void transform(Matrix2D m) {
         transform(m, getPosition());
     }
 
-    public void transform(Matrix2D m, Point2D about) {
-        m = Matrix2D.translate(about.getX(), about.getY())
-                .concat(m)
-                .concat(Matrix2D.translate(-about.getX(), -about.getY()));
+    public void transform(Matrix2D m, Point2D c) {
+        m = Matrix2D.translate(c.getX(), c.getY())
+                    .concat(m)
+                    .concat(Matrix2D.translate(-c.getX(), -c.getY()));
 
         for (Point2D p : getPoints()) {
             double x = p.getX();
@@ -52,12 +48,12 @@ public class Polygon implements Shape {
     }
 
     public Point2D getPosition() {
-        int len = p.size();
+        int len = mPoints.size();
 
         Vector2D v = new Vector2D();
 
         for (int n = 0; n < len; ++n) {
-            v = v.add(new Vector2D(p.get(n).x, p.get(n).y));
+            v = v.add(new Vector2D(mPoints.get(n).x, mPoints.get(n).y));
         }
 
         int x = (int) (v.getX() / len);
@@ -67,12 +63,14 @@ public class Polygon implements Shape {
     }
 
     public Point2D getPoint(int n) {
-        int len = p.size();
+        int len = mPoints.size();
 
-        return p.get(n < 0 ? n % len + len : n % len);
+        return mPoints.get(n < 0 ? 
+                                n % len + len : 
+                                n % len);
     }
     
     public void add(Point2D p) {
-        this.p.add(p);
+        mPoints.add(p);
     }
 }

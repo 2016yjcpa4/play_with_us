@@ -30,8 +30,8 @@ import static kr.ac.yeungin.cpa.java4.play_with_us.map.Map.MAP_WIDTH;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Matrix2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Vector2D;
-import kr.ac.yeungin.cpa.java4.play_with_us.util.BresenhamLineUtil;
-import kr.ac.yeungin.cpa.java4.play_with_us.util.RaycastUtil;
+import kr.ac.yeungin.cpa.java4.play_with_us.geom.BresenhamLine;
+import kr.ac.yeungin.cpa.java4.play_with_us.geom.Raycast;
  
 public class Player extends Circle implements DrawableObject {
     
@@ -86,7 +86,7 @@ public class Player extends Circle implements DrawableObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D e : RaycastUtil.getRaycast(getPosition(), getAngle(), map.getWall2())) {  
+        for (Point2D e : Raycast.getRaycast(getPosition(), getAngle(), map.getWall2())) {  
             l.add(e);    
         }
         

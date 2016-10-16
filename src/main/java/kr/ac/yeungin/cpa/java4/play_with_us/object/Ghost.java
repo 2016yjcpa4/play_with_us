@@ -12,7 +12,7 @@ import kr.ac.yeungin.cpa.java4.play_with_us.SpriteManager;
 import kr.ac.yeungin.cpa.java4.play_with_us.geom.Polygon;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Point2D;
 import kr.ac.yeungin.cpa.java4.play_with_us.math.Vector2D;
-import kr.ac.yeungin.cpa.java4.play_with_us.util.BresenhamLineUtil;
+import kr.ac.yeungin.cpa.java4.play_with_us.geom.BresenhamLine;
 
 public class Ghost implements DrawableObject {
 
