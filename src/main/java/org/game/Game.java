@@ -17,8 +17,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import org.game.map.Light;
 import org.game.map.Map;
-import org.game.object.Player;
+import org.game.map.Player;
 
 public class Game extends GameLoop implements MouseMotionListener, MouseListener, KeyListener {
 
@@ -65,11 +66,6 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
             
             player.update(this);
             player.draw(this, g2d);
-            
-            g2d.setColor(Color.RED);
-            g2d.setFont(new Font("굴림", Font.PLAIN, 40)); 
-            g2d.drawString("게임시작", 80, canvas.getHeight() - 190);
-            g2d.drawString("게임종료", 80, canvas.getHeight() - 100);
         }
     } 
     

@@ -13,9 +13,6 @@ import org.game.Game;
 import org.game.geom.BresenhamLine;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
-import org.game.object.Ghost;
-import org.game.object.Player;
-import org.game.object.Wall;
 
 public class Map implements DrawableObject {
 

@@ -1,4 +1,4 @@
-package org.game.object;
+package org.game.map;
  
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -151,10 +151,10 @@ public class Player extends Circle implements DrawableObject {
         
             java.awt.Polygon arc = pr(); 
             
-            g2d.clip(arc);
+            g2d.setClip(arc);
             map.draw(c, g2d); // 밝은부분만 그려짐
             g2d.setPaint(paint);
-            g2d.fill(arc); 
+            g2d.fill(arc);
             g2d.setClip(null);
             
             //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);

@@ -110,8 +110,6 @@ public class Raycast {
 
         final double d = Math.toRadians(25);
         
-        final double d2 = Math.toRadians(2);
-
         for (Point2D e : p) {
             double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());
 
@@ -119,9 +117,9 @@ public class Raycast {
 
             // 양쪽으로 편차를 더 두어 벽이있는지 체크함
             if (-d <= anglediff && anglediff <= d) {
-                r.add(ang - d2); 
+                r.add(ang - 0.0001); 
                 r.add(ang); 
-                r.add(ang + d2);
+                r.add(ang + 0.0001);
             }
         }
 

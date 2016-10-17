@@ -1,4 +1,4 @@
-package org.game.object;
+package org.game.map;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
