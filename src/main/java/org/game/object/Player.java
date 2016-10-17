@@ -29,6 +29,7 @@ import static org.game.map.Map.MAP_HEIGHT;
 import static org.game.map.Map.MAP_WIDTH; 
 import org.game.geom.BresenhamLine;
 import org.game.geom.Raycast;
+import org.game.geom.SAT;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
  
@@ -209,5 +210,17 @@ public class Player extends Circle implements DrawableObject {
         }
         
         p.set((int) x, (int) y);
+        
+        for(Wall w : map.getWall()) {
+            
+            SAT.Response r = new SAT.Response();
+            if(SAT.testPolygonCircle(w, this, r)) {
+                
+                x = p.getX() + r.overlapV.x;
+                y = p.getY() + r.overlapV.y;
+                
+                p.set((int) x, (int) y);
+            }
+        }
     }
 }

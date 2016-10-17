@@ -77,9 +77,10 @@ public class Polygon implements Shape {
     public Vector2D getEdge(int n) {
         int len = mEdges.size();
 
-        return mEdges.get(n < 0 ? 
+        Vector2D v = new Vector2D(mEdges.get(n < 0 ? 
                                 n % len + len : 
-                                n % len);
+                                n % len));
+        return v;
     }
     
     private void calc() {
