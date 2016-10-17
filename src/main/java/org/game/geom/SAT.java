@@ -192,7 +192,7 @@ public class SAT {
             response.a = polygon;
             response.b = circle;
             response.overlapV.set(response.overlapN);
-            response.overlapV.scale(response.overlap);
+            response.overlapV = response.overlapV.scale(response.overlap);
         }
         return true;
     }

@@ -9,14 +9,13 @@ import javax.imageio.ImageIO;
 public class SpriteManager {
 
     private BufferedImage spriteSheet;
-    private final int TILE_SIZE = 32;
 
     public BufferedImage loadSprite(String file) {
 
         BufferedImage sprite = null;
 
         try {
-            sprite = ImageIO.read(new File("res/" + file + ".png"));
+            sprite = ImageIO.read(new File("res/" + file));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -24,12 +23,12 @@ public class SpriteManager {
         return sprite;
     }
 
-    public BufferedImage getSprite(int xGrid, int yGrid) {
+    public BufferedImage getSprite(String name, int x, int y, int w, int h) {
 
         if (spriteSheet == null) {
-            spriteSheet = loadSprite("player");
+            spriteSheet = loadSprite(name);
         }
 
-        return spriteSheet.getSubimage(xGrid * TILE_SIZE, yGrid * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        return spriteSheet.getSubimage(x * w, y * h, w, h);
     }
 }

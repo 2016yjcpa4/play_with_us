@@ -20,8 +20,8 @@ import org.game.object.Wall;
 public class Map implements DrawableObject {
 
     public static final boolean DEBUG = false;
-    public static final int MAP_WIDTH = 800;
-    public static final int MAP_HEIGHT = 600;
+    public static final int MAP_WIDTH = 1280;
+    public static final int MAP_HEIGHT = 800;
     
     public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 11.0);
     public static final int TILE_ROWS = (int) (MAP_HEIGHT / 11.0);
@@ -49,22 +49,10 @@ public class Map implements DrawableObject {
         wall.add(new Wall(20, 0, 10, MAP_HEIGHT - 10));
         
         // 장애물 1
-        wall.add(new Wall(215, 0, 35, 400));
-        
-        // 장애물 2
-        wall.add(new Wall(510, 0, 35, 400));
-        
-        // 장애물 3
-        wall.add(new Wall(10, 130, 205, 30));
-        
-        // 장애물 4
-        wall.add(new Wall(545, 130, 245, 30));
-        
-        // 장애물 5
-        wall.add(new Wall(0, 440, MAP_WIDTH, 30));
-        
-        // 장애물 6
-        wall.add(new Wall(315, 220, 130, 65));
+        wall.add(new Wall(10, 10, 480, 305));
+        wall.add(new Wall(750, 10, 500, 305));
+        wall.add(new Wall(30, 535, 550, 385));
+        wall.add(new Wall(660, 490, 600, 385));
         
         try {
             img = ImageIO.read(new File("./res/map.png"));
@@ -77,12 +65,12 @@ public class Map implements DrawableObject {
         
         m = new Ghost(this);
         m.getPosition().setX(80);
-        m.getPosition().setY(300);
+        m.getPosition().setY(430);
         mobs.add(m);
         
         m = new Ghost(this);
-        m.getPosition().setX(740);
-        m.getPosition().setY(360);
+        m.getPosition().setX(1000);
+        m.getPosition().setY(400);
         mobs.add(m);
         
         for(Line2D l : getWall2()) {

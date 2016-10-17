@@ -38,7 +38,7 @@ public class Ghost implements DrawableObject {
     public void draw(GameLoop c, Graphics2D g2d) {
         
         
-        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
+        g2d.drawImage(sp.getSprite("ghost.png", (int) (i % 3), getGridIndex(), 48, 100), (int) pos.getX() - 16, (int) pos.getY() - 16, null);
         
     }
     

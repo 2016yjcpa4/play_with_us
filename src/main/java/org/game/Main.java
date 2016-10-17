@@ -43,7 +43,7 @@ public class Main {
         c.add(g.getCanvas());
         c.add(v.getCanvas());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(1024, 768);
+        f.setSize(1280, 800);
         //setResizable(false);
     }
     
@@ -62,7 +62,7 @@ public class Main {
                 v.getCanvas().setVisible(false);
                 v.stop();
             }
-        }, 7000);
+        }, 1000);
         
         v.addListener(new VLC.Listener() {
             

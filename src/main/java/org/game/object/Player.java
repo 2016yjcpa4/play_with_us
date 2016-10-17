@@ -48,7 +48,7 @@ public class Player extends Circle implements DrawableObject {
     private SpriteManager sp = new SpriteManager();
     
     public Player(Map m) {
-        super(320, 150, 13);
+        super(620, 700, 42);
         this.map = m;
         
         sp.loadSprite("player");
@@ -126,25 +126,27 @@ public class Player extends Circle implements DrawableObject {
     public void draw(GameLoop c, Graphics2D g2d) { 
         
         Point2D p = getPosition();
-        float x = p.getX() + vel.getX();
-        float y = p.getY() + vel.getY();
+        float x = p.getX();
+        float y = p.getY();
          
-        int rad = 16;//getRadius();
-        
+        int rad = getRadius();
         
         //원본 맵을 그리고
         map.draw(c, g2d);
+            
+        float dark = 0.90f;
         
         // 검은 마스크를 씌움...
-        g2d.setColor(new Color(0, 0, 0, (int)(255 * 0.85)));
+        g2d.setColor(new Color(0, 0, 0, (int)(255 * dark)));
         g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         
         if (isTurnOnFlash) {
-            RadialGradientPaint paint = new RadialGradientPaint(x, y, 300f,
+            
+            RadialGradientPaint paint = new RadialGradientPaint(x, y, 400f,
                                                                 new float[] { 0.7f, 1f },
                                                                 new Color[] {
                                                                     new Color(0, 0, 0, (int) (255 * 0)),
-                                                                    new Color(0, 0, 0, (int) (255 * 0.85))
+                                                                    new Color(0, 0, 0, (int) (255 * dark))
                                                                 });
         
             java.awt.Polygon arc = pr(); 
@@ -158,10 +160,10 @@ public class Player extends Circle implements DrawableObject {
             //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);
         } 
         
-        g2d.setColor(Color.CYAN);
- 
-        g2d.drawImage(sp.getSprite((int) (i % 3), getGridIndex()), (int) x - rad, (int) y - rad, null);
         
+        g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 42, 92), (int) x - rad / 2, (int) y - rad, null);
+        
+        //g2d.setColor(Color.CYAN);
         //g2d.drawLine((int) x , (int) y, dx, dy);
         //g2d.drawOval((int) x - rad, (int) y - rad, rad * 2, rad * 2);
     }
@@ -202,25 +204,27 @@ public class Player extends Circle implements DrawableObject {
         if ( ! (g.a || g.d)) vel.setX(0);
         
         Point2D p = getPosition();
-        float x = p.getX() + vel.getX();
-        float y = p.getY() + vel.getY();
-         
+        
         if (vel.getX() != 0 || vel.getY() != 0) {
             i += 0.333;
         }
         
-        p.set((int) x, (int) y);
+        Vector2D v = new Vector2D(vel);
+        int x = (int) (p.getX() + vel.getX());
+        int y = (int) (p.getY() + vel.getY());
+
+        p.set(x, y);
         
         for(Wall w : map.getWall()) {
-            
+
             SAT.Response r = new SAT.Response();
-            if(SAT.testPolygonCircle(w, this, r)) {
-                
-                x = p.getX() + r.overlapV.x;
-                y = p.getY() + r.overlapV.y;
-                
-                p.set((int) x, (int) y);
+            if (SAT.testPolygonCircle(w, this, r)) {
+
+                v = r.overlapV.add(p);
+
+                p.set((int) (v.getX()), (int) (v.getY()));
             }
         }
+        
     }
 }
