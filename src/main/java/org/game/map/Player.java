@@ -74,19 +74,15 @@ public class Player extends Circle implements DrawableObject {
         this.isTurnOnFlash = ! this.isTurnOnFlash;
     }
     
-    public Polygon projectLight() {
-        return projectLight(Math.toRadians(25));
-    }
-    
-    private Polygon projectLight(double rangeAngle) { 
+    private Polygon projectLight(Point2D pos, double ang) { 
         if ( ! isTurnOnFlash) {
             return null;
         }
         
         List<Point2D> l = new ArrayList<>();
-        l.add(getPosition());
+        l.add(pos);
         
-        for (Point2D e : Raycast.getRaycast(getPosition(), getAngle(), map.getWall2())) {  
+        for (Point2D e : Raycast.getRaycast(pos, ang, map.getWall2())) {  
             l.add(e);    
         }
         
@@ -116,8 +112,8 @@ public class Player extends Circle implements DrawableObject {
         return dir.sub(getPosition()).getAngle();
     }
     
-    private java.awt.Polygon pr() {
-        Polygon p = projectLight();
+    private java.awt.Polygon pr(Point2D pos, double angle) {
+        Polygon p = projectLight(pos, angle);
         
         return new java.awt.Polygon(p.getXPoints(), p.getYPoints(), p.getPoints().size());
     }
@@ -142,26 +138,27 @@ public class Player extends Circle implements DrawableObject {
         
         if (isTurnOnFlash) {
             
-            RadialGradientPaint paint = new RadialGradientPaint(x, y, 400f,
+
+            java.awt.Polygon arc = pr(getPosition(), getAngle()); 
+
+            g2d.setClip(arc); // 밝은 영역
+            map.draw(c, g2d); // 그 부분만 그려짐
+            g2d.setPaint(new RadialGradientPaint(x, y, 400f,
                                                                 new float[] { 0.7f, 1f },
                                                                 new Color[] {
                                                                     new Color(0, 0, 0, (int) (255 * 0)),
                                                                     new Color(0, 0, 0, (int) (255 * dark))
-                                                                });
-        
-            java.awt.Polygon arc = pr(); 
+                                                                })); // 그라데이션 삽입
+            g2d.fill(arc); // 채움 
             
-            g2d.setClip(arc);
-            map.draw(c, g2d); // 밝은부분만 그려짐
-            g2d.setPaint(paint);
-            g2d.fill(arc);
-            g2d.setClip(null);
+            
+            g2d.setClip(null); // 초기화
             
             //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);
         } 
         
         
-        g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 42, 92), (int) x - rad / 2, (int) y - rad, null);
+        g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 36, 82), (int) x - rad / 2, (int) y - rad, null);
         
         //g2d.setColor(Color.CYAN);
         //g2d.drawLine((int) x , (int) y, dx, dy);

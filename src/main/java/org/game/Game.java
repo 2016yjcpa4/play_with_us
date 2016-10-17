@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import org.game.map.Light;
 import org.game.map.Map;
 import org.game.map.Player;
 
