@@ -173,40 +173,34 @@ public class Player extends Circle implements GraphicObject {
         double angle2 = Math.toRadians(90);
         
         if (isTurnOnFlash) {
-            
-            Area a;
-            
-            
-            //a = new Area(new Rectangle2D.Double(0, 0, MAP_WIDTH, MAP_HEIGHT));
-            //a.subtract(getArea(pos, ang2));
-            //a.subtract(getArea(getPosition(), angle));
+             
             {
+                // 까만색 마스크를 씌웁니다... 
                 BufferedImage bi = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D gg = bi.createGraphics();
 
                 gg.setPaint(new Color(0, 0, 0, (int) (255 * 0.75f)));
                 gg.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
                 
+                // 아직 이해를 못했는데 이작업을 하고...
                 gg.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
                 
                 
+                // 빛을 비추고...
                 Area s1 = getArea(pos1, angle1);
                 gg.setClip(s1); 
                 gg.setPaint(getRadialGradientPaint(pos1.getX(), pos1.getY())); // 그라데이션 삽입 
                 gg.fill(s1);
                 
-                
+                // 빛을 또 비추고...
                 Area s2 = getArea(pos2, angle2);
                 gg.setClip(s2); 
                 gg.setPaint(getRadialGradientPaint(pos2.getX(), pos2.getY())); // 그라데이션 삽입 
                 gg.fill(s2);
                 
-                
+                // 그렇게 작업된 image 를 드로잉
                 g2d.drawImage(bi, 0, 0, null);
             }
-            
-            //g2d.drawImage(createLayer(getPosition(), angle), 0, 0, null); 
-            //g2d.drawImage(createLayer(pos, ang2), 0, 0, null);
             
         } 
         
