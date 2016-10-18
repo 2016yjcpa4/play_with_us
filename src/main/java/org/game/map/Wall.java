@@ -3,11 +3,11 @@ package org.game.map;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.game.GameLoop;
-import org.game.DrawableObject;
 import org.game.geom.Rect; 
 import org.game.math.Point2D;
+import org.game.GraphicObject;
 
-public class Wall extends Rect implements DrawableObject {
+public class Wall extends Rect implements GraphicObject {
     
     public Wall(int x, int y, int w, int h) {
         super(x, y, w, h);

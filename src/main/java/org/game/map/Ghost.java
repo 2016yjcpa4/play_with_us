@@ -6,15 +6,15 @@ import java.util.List;
 
 import org.game.map.Map;
 import org.game.GameLoop;
-import org.game.DrawableObject;
 import org.game.Game;
 import org.game.SpriteManager;
 import org.game.geom.Polygon; 
 import org.game.geom.BresenhamLine;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
+import org.game.GraphicObject;
 
-public class Ghost implements DrawableObject {
+public class Ghost implements GraphicObject {
 
     private Map map;
     

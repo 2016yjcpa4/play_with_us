@@ -3,7 +3,7 @@ package org.game;
 import org.game.GameLoop;
 import java.awt.Graphics2D;
 
-public interface DrawableObject {
+public interface GraphicObject {
     
     void update(GameLoop g);
 

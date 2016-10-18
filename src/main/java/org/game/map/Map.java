@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.game.GameLoop;
-import org.game.DrawableObject;
 import org.game.Game; 
 import org.game.geom.BresenhamLine;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
+import org.game.GraphicObject;
 
-public class Map implements DrawableObject {
+public class Map implements GraphicObject {
 
     public static final boolean DEBUG = false;
     public static final int MAP_WIDTH = 1280;

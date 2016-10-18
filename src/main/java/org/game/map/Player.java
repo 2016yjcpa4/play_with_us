@@ -23,7 +23,6 @@ import javax.imageio.ImageIO;
  
 import org.game.map.Map;
 import org.game.GameLoop;
-import org.game.DrawableObject;
 import org.game.Game;
 import org.game.Main;
 import org.game.SpriteManager;
@@ -38,8 +37,9 @@ import org.game.geom.SAT;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.ColorUtil;
+import org.game.GraphicObject;
  
-public class Player extends Circle implements DrawableObject {
+public class Player extends Circle implements GraphicObject {
     
     private static final boolean DEBUG = true;
     
