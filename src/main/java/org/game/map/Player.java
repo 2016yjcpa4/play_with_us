@@ -175,6 +175,7 @@ public class Player extends Circle implements GraphicObject {
         if (isTurnOnFlash) {
              
             {
+                // https://www.youtube.com/watch?v=KjfbzDGrRfI (ForeignGuyMike 감사합니다.)
                 // 까만색 마스크를 씌웁니다... 
                 BufferedImage bi = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D gg = bi.createGraphics();
