@@ -1,5 +1,6 @@
 package org.game.map;
  
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
@@ -131,27 +132,24 @@ public class Player extends Circle implements GraphicObject {
                                        300f,
                                        new float[] { 0.5f, 1f },
                                        new Color[] {
-                                           new Color(0, 0, 0, (int) (255 * 0)),
-                                           new Color(0, 0, 0, (int) (255 * 0.95f))
+                                           new Color(0, 0, 0, (int) (255 * 0.75f)),
+                                           new Color(0, 0, 0, (int) (255 * 0))
                                        });
     }
     
     private BufferedImage createLayer(Point2D pos, double ang) {
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        
         Graphics2D g2d = b.createGraphics();
         
-        Shape ss = g2d.getClip();
-
         Area s = getArea(pos, ang);
         g2d.setClip(s); 
         g2d.setPaint(getRadialGradientPaint(pos.getX(), pos.getY())); // 그라데이션 삽입 
         g2d.fill(s);
         
-        g2d.setClip(ss);
-        
         return b;
     }
+    
+    int s = 0;
     
     @Override
     public void draw(GameLoop c, Graphics2D g2d) { 
@@ -161,46 +159,55 @@ public class Player extends Circle implements GraphicObject {
         float y = p.getY();
          
         int rad = getRadius();
-        
-        float dark = 0.95f;
-        
+         
         //원본 맵을 그리고
         map.draw(c, g2d);
-        g2d.setColor(new Color(0, 0, 0, (int) (255 * dark)));
-        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT); // 채움 
-            
+        
         Shape s = g2d.getClip();
         
         // 검은 마스크를 씌움...
         
-        Point2D pos = new Point2D(620, 130);
-        double angle = getAngle();
-        double ang2 = Math.toRadians(90);
+        Point2D pos1 = getPosition();
+        Point2D pos2 = new Point2D(620, 130);
+        double angle1 = getAngle();
+        double angle2 = Math.toRadians(90);
         
         if (isTurnOnFlash) {
             
             Area a;
             
-            // 빛을 비춰지는 부분 모든영역을 투명하게해서 clip 합니다.
-            a = new Area();
-            a.add(getArea(pos, ang2));
-            a.add(getArea(getPosition(), angle));
-            g2d.setClip(a);
-            map.draw(c, g2d);
-            g2d.setPaint(ColorUtil.TRANSPARENT);
-            g2d.fill(a);
             
-            // 빛발산 효과 (그라데이션)를 추가합니다.
-            g2d.drawImage(createLayer(pos, ang2), 0, 0, null); // 채움
-            g2d.drawImage(createLayer(getPosition(), angle), 0, 0, null); // 채움
+            //a = new Area(new Rectangle2D.Double(0, 0, MAP_WIDTH, MAP_HEIGHT));
+            //a.subtract(getArea(pos, ang2));
+            //a.subtract(getArea(getPosition(), angle));
+            {
+                BufferedImage bi = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D gg = bi.createGraphics();
+
+                gg.setPaint(new Color(0, 0, 0, (int) (255 * 0.75f)));
+                gg.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+                
+                gg.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
+                
+                
+                Area s1 = getArea(pos1, angle1);
+                gg.setClip(s1); 
+                gg.setPaint(getRadialGradientPaint(pos1.getX(), pos1.getY())); // 그라데이션 삽입 
+                gg.fill(s1);
+                
+                
+                Area s2 = getArea(pos2, angle2);
+                gg.setClip(s2); 
+                gg.setPaint(getRadialGradientPaint(pos2.getX(), pos2.getY())); // 그라데이션 삽입 
+                gg.fill(s2);
+                
+                
+                g2d.drawImage(bi, 0, 0, null);
+            }
             
-            // 빛이 교차되는부분은 밝게
-            a = new Area(getArea(pos, ang2));
-            a.intersect(getArea(getPosition(), angle));
-            g2d.setClip(a);
-            map.draw(c, g2d);
-            g2d.setPaint(ColorUtil.TRANSPARENT);
-            g2d.fill(a);
+            //g2d.drawImage(createLayer(getPosition(), angle), 0, 0, null); 
+            //g2d.drawImage(createLayer(pos, ang2), 0, 0, null);
+            
         } 
         
         g2d.setClip(s);
