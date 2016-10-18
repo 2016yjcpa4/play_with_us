@@ -5,9 +5,14 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MultipleGradientPaint;
+import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import org.game.geom.Raycast;
 import org.game.geom.SAT;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
+import org.game.util.ColorUtil;
  
 public class Player extends Circle implements DrawableObject {
     
@@ -112,10 +118,39 @@ public class Player extends Circle implements DrawableObject {
         return dir.sub(getPosition()).getAngle();
     }
     
-    private java.awt.Polygon pr(Point2D pos, double angle) {
-        Polygon p = projectLight(pos, angle);
+    private Area getArea(Point2D pos, double ang) {
+        int w = 600;
+        Area s = new Area(new Arc2D.Double(pos.getX() - w / 2, pos.getY() - w / 2, w, w, -Math.toDegrees(ang) - 25, 50, Arc2D.PIE));
+        s.intersect(new Area(projectLight(pos, ang).toPolygon()));
+        return s;
+    }
+    
+    private static Paint getRadialGradientPaint(int x, int y) {
+        return new RadialGradientPaint(x, 
+                                       y,
+                                       300f,
+                                       new float[] { 0.5f, 1f },
+                                       new Color[] {
+                                           new Color(0, 0, 0, (int) (255 * 0)),
+                                           new Color(0, 0, 0, (int) (255 * 0.95f))
+                                       });
+    }
+    
+    private BufferedImage createLayer(Point2D pos, double ang) {
+        BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         
-        return new java.awt.Polygon(p.getXPoints(), p.getYPoints(), p.getPoints().size());
+        Graphics2D g2d = b.createGraphics();
+        
+        Shape ss = g2d.getClip();
+
+        Area s = getArea(pos, ang);
+        g2d.setClip(s); 
+        g2d.setPaint(getRadialGradientPaint(pos.getX(), pos.getY())); // 그라데이션 삽입 
+        g2d.fill(s);
+        
+        g2d.setClip(ss);
+        
+        return b;
     }
     
     @Override
@@ -127,36 +162,51 @@ public class Player extends Circle implements DrawableObject {
          
         int rad = getRadius();
         
+        float dark = 0.95f;
+        
         //원본 맵을 그리고
         map.draw(c, g2d);
+        g2d.setColor(new Color(0, 0, 0, (int) (255 * dark)));
+        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT); // 채움 
             
-        float dark = 0.90f;
+        Shape s = g2d.getClip();
         
         // 검은 마스크를 씌움...
-        g2d.setColor(new Color(0, 0, 0, (int)(255 * dark)));
-        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        
+        Point2D pos = new Point2D(620, 130);
+        double angle = getAngle();
+        double ang2 = Math.toRadians(90);
         
         if (isTurnOnFlash) {
             
-
-            java.awt.Polygon arc = pr(getPosition(), getAngle()); 
-
-            g2d.setClip(arc); // 밝은 영역
-            map.draw(c, g2d); // 그 부분만 그려짐
-            g2d.setPaint(new RadialGradientPaint(x, y, 400f,
-                                                                new float[] { 0.7f, 1f },
-                                                                new Color[] {
-                                                                    new Color(0, 0, 0, (int) (255 * 0)),
-                                                                    new Color(0, 0, 0, (int) (255 * dark))
-                                                                })); // 그라데이션 삽입
-            g2d.fill(arc); // 채움 
+            Area a;
             
+            // 빛을 비춰지는 부분 모든영역을 투명하게해서 clip 합니다.
+            a = new Area();
+            a.add(getArea(pos, ang2));
+            a.add(getArea(getPosition(), angle));
+            g2d.setClip(a);
+            map.draw(c, g2d);
+            g2d.setPaint(ColorUtil.TRANSPARENT);
+            g2d.fill(a);
             
-            g2d.setClip(null); // 초기화
+            // 빛발산 효과 (그라데이션)를 추가합니다.
+            g2d.drawImage(createLayer(pos, ang2), 0, 0, null); // 채움
+            g2d.drawImage(createLayer(getPosition(), angle), 0, 0, null); // 채움
             
-            //g2d.drawImage(Main.draw(g2d, x, y, dx, dy, 0.3, Color.black, Color.black), 0, 0, null);
+            // 빛이 교차되는부분은 밝게
+            a = new Area(getArea(pos, ang2));
+            a.intersect(getArea(getPosition(), angle));
+            g2d.setClip(a);
+            map.draw(c, g2d);
+            g2d.setPaint(ColorUtil.TRANSPARENT);
+            g2d.fill(a);
         } 
         
+        g2d.setClip(s);
+        
+        
+        g2d.setColor(Color.red);
         
         g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 36, 82), (int) x - rad / 2, (int) y - rad, null);
         

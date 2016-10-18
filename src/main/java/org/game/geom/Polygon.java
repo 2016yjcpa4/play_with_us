@@ -103,4 +103,8 @@ public class Polygon implements Shape {
     public void add(Point2D p) {
         mPoints.add(p);
     }
+    
+    public java.awt.Polygon toPolygon() {
+        return new java.awt.Polygon(getXPoints(), getYPoints(), getPoints().size());
+    }
 }
