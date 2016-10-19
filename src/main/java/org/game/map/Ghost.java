@@ -12,9 +12,9 @@ import org.game.geom.Polygon;
 import org.game.geom.BresenhamLine;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
-import org.game.MapObject;
 
-public class Ghost implements MapObject {
+public class Ghost {
+    /*implements MapObject {
 
     private Map map;
     
@@ -137,5 +137,5 @@ public class Ghost implements MapObject {
     @Override
     public Map getMap() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 }

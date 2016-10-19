@@ -13,9 +13,10 @@ import javax.imageio.ImageIO;
 import org.game.GameLoop;
 import org.game.Game; 
 import org.game.geom.BresenhamLine;
+import org.game.geom.Polygon;
+import org.game.geom.Rect;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
-import org.game.MapObject;
 
 public class Map {
 
@@ -43,6 +44,8 @@ public class Map {
         addObject(new Wall(750, 10, 500, 305));
         addObject(new Wall(30, 535, 550, 385));
         addObject(new Wall(660, 490, 600, 385));
+         
+        addObject(new Player());
         
         try {
             img = ImageIO.read(new File("./res/map.png"));
@@ -81,6 +84,10 @@ public class Map {
         o.setMap(this);
         
         mObject.add(o);
+        
+        if (o instanceof Player) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
+            addObject(((Player) o).getLight());
+        }
     }
     
     public float getDarkness() {
@@ -121,9 +128,11 @@ public class Map {
         
         for(Wall w : getAllWall()) {
             
-            for(int n = 0; n < w.getPoints().size(); ++n) {
-                Point2D p1 = w.getPoint(n);
-                Point2D p2 = w.getPoint(n + 1);
+            Polygon p = w.getCollider();
+            
+            for(int n = 0; n < p.getPoints().size(); ++n) {
+                Point2D p1 = p.getPoint(n);
+                Point2D p2 = p.getPoint(n + 1);
 
                 l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
             }
@@ -166,18 +175,15 @@ public class Map {
         _g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
         _g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         
-        {
-            // 아직 이해를 못했는데 이작업을 하고...
-            _g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
+        _g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
-            for(MapObject o : mObject) {
-                if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
-                    o.draw(g, _g2d);
-                }
+        for(MapObject o : mObject) {
+            if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
+                o.draw(g, _g2d);
             }
-
-            _g2d.dispose();
         }
+
+        _g2d.dispose(); 
         
         g2d.drawImage(b, 0, 0, null);
     }

@@ -11,19 +11,29 @@ import org.game.GameLoop;
 import org.game.geom.Polygon;
 import org.game.geom.Raycast;
 import org.game.math.Point2D;
-import org.game.MapObject;
 
-public class Light implements MapObject {
+public class Light extends MapObject {
 
-    private Map mMap;
-    
-    private Point2D mPosition = new Point2D(); // 위치
     private double mAngle; // 각도
     private float mLength = 300f; // 빛의 길이
     private double mExtent = 50; // 빛의 범위
     
-    public Point2D getPosition() {
-        return mPosition;
+    private boolean mTurnOff = false;
+    
+    public void setTurnOff() {
+        mTurnOff = true;
+    }
+    
+    public void setTurnOn() {
+        mTurnOff = false;
+    }
+    
+    public boolean isTurnOn() {
+        return !mTurnOff;
+    }
+    
+    public boolean isTurnOff() {
+        return mTurnOff;
     }
     
     public double getAngle() {
@@ -36,14 +46,6 @@ public class Light implements MapObject {
     
     public double getExtent() {
         return mExtent;
-    }
-    
-    public Map getMap() {
-        return mMap;
-    }
-    
-    public void setMap(Map m) {
-        mMap = m;
     }
     
     private Polygon getRaycast() {    
@@ -81,6 +83,10 @@ public class Light implements MapObject {
 
     @Override
     public void draw(GameLoop g, Graphics2D g2d) {
+        if (mTurnOff) {
+            return;
+        }
+        
         Area a = getArea();
         Point2D p = getPosition();
         

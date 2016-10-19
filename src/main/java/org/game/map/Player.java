@@ -38,13 +38,12 @@ import org.game.geom.SAT;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.ColorUtil;
-import org.game.MapObject;
  
-public class Player extends Circle implements MapObject {
+public class Player extends MapObject {
     
     private static final boolean DEBUG = true;
     
-    private Map map;
+    private Circle mShape;
  
     private boolean isTurnOnFlash = true;
      
@@ -54,7 +53,7 @@ public class Player extends Circle implements MapObject {
         
         @Override
         public Map getMap() {
-            return Player.this.map; //To change body of generated methods, choose Tools | Templates.
+            return Player.this.getMap(); //To change body of generated methods, choose Tools | Templates.
         }
         
         @Override
@@ -74,15 +73,8 @@ public class Player extends Circle implements MapObject {
     
     private SpriteManager sp = new SpriteManager();
     
-    public Player(Map m) {
-        super(620, 700, 42);
-        this.map = m;
-        
-        sp.loadSprite("player");
-    }
-    
-    public void setMap(Map m) {
-        this.map = m;
+    public Player() {
+        mShape = new Circle(620, 700, 42);
     }
     
     public boolean isTurnOnFlash() {
@@ -99,21 +91,6 @@ public class Player extends Circle implements MapObject {
     
     public void toggleFlash() {
         this.isTurnOnFlash = ! this.isTurnOnFlash;
-    }
-    
-    private Polygon projectLight(Point2D pos, double ang) { 
-        if ( ! isTurnOnFlash) {
-            return null;
-        }
-        
-        List<Point2D> l = new ArrayList<>();
-        l.add(pos);
-        
-        for (Point2D e : Raycast.getRaycast(pos, ang, map.getAllLine())) {  
-            l.add(e);    
-        }
-        
-        return new Polygon(l); 
     }
     
     /**
@@ -139,6 +116,10 @@ public class Player extends Circle implements MapObject {
         return dir.sub(getPosition()).getAngle();
     }
     
+    public Point2D getPosition() {
+        return mShape.getPosition();
+    }
+    
     int s = 0;
     
     @Override
@@ -148,7 +129,7 @@ public class Player extends Circle implements MapObject {
         float x = p.getX();
         float y = p.getY();
          
-        int rad = getRadius();
+        int rad = mShape.getRadius();
         
         g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 36, 82), (int) x - rad / 2, (int) y - rad, null);
     }
@@ -200,10 +181,10 @@ public class Player extends Circle implements MapObject {
 
         p.set(x, y);
         
-        for(Wall w : map.getAllWall()) {
+        for(Wall w : getMap().getAllWall()) {
 
             SAT.Response r = new SAT.Response();
-            if (SAT.testPolygonCircle(w, this, r)) {
+            if (SAT.testPolygonCircle(w.getCollider(), mShape, r)) {
 
                 v = r.overlapV.add(p);
 
@@ -211,10 +192,5 @@ public class Player extends Circle implements MapObject {
             }
         }
         
-    }
-
-    @Override
-    public Map getMap() {
-        return map;
     }
 }

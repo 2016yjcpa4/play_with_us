@@ -17,17 +17,17 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import org.game.map.Light;
 import org.game.map.Map;
 import org.game.map.Player;
+import org.game.math.Vector2D;
 
 public class Game extends GameLoop implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
               
-    private boolean isGameOver = false; 
-    
-    private Player mPlayer;  
-    private Map map;
+    private boolean mIsGameOver = false;
+    private Map mMap;
     
     public boolean w, s, a, d;
 
@@ -36,19 +36,14 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
         canvas.addMouseMotionListener(this);
         canvas.addKeyListener(this);
         
-        map = new Map();
-        mPlayer = new Player(map);
-        
-        map.addObject(mPlayer);
-        
-        map.addObject(mPlayer.getLight());
+        mMap = new Map();
     }
     
     @Override
     protected void draw(Graphics2D g2d) {  
         super.draw(g2d);
          
-        if (isGameOver) {
+        if (mIsGameOver) {
             // TODO 게임오버 처리
             String s = "게임오버";
             
@@ -63,13 +58,13 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
             g2d.drawString(s, x, y);
         } 
         else {
-            map.update(this);
-            map.draw(this, g2d);
+            mMap.update(this);
+            mMap.draw(this, g2d);
         }
     } 
     
     public void setGameOver() {
-        isGameOver = true;
+        mIsGameOver = true;
     }
 
     @Override
@@ -89,7 +84,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
                 s = true;
                 break;
             case KeyEvent.VK_A:
-                mPlayer.getVelocity().setX(-4);
+                //mPlayer.getVelocity().setX(-4);
                 a = true;
                 break;
             case KeyEvent.VK_D:
@@ -97,7 +92,12 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
                 d = true;
                 break;
             case KeyEvent.VK_F:
-                mPlayer.toggleFlash();
+                Light l = mMap.getPlayer().getLight();
+                if(l.isTurnOff()) {
+                    l.setTurnOn();
+                } else {
+                    l.setTurnOff();
+                }
                 break;
         }
     }
@@ -128,8 +128,10 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mPlayer.getDirection().setX(e.getX());
-        mPlayer.getDirection().setY(e.getY());
+        Vector2D v = mMap.getPlayer().getDirection();
+        
+        v.setX(e.getX());
+        v.setY(e.getY());
     }
 
     @Override
@@ -140,6 +142,8 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3)
         {
+            Light l = mMap.getPlayer().getLight();
+            l.setTurnOn();
         }
     }
 
@@ -147,6 +151,8 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3)
         {
+            Light l = mMap.getPlayer().getLight();
+            l.setTurnOff();
         }
     }
 

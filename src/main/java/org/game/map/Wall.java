@@ -3,20 +3,30 @@ package org.game.map;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.game.GameLoop;
+import org.game.geom.Polygon;
 import org.game.geom.Rect; 
 import org.game.math.Point2D;
-import org.game.MapObject;
 
-public class Wall extends Rect implements MapObject {
+public class Wall extends MapObject {
+    
+    private Polygon mCollider;
     
     public Wall(int x, int y, int w, int h) {
-        super(x, y, w, h);
+        mCollider = new Rect(x, y, w, h);
+    }
+    
+    public Polygon getCollider() {
+        return mCollider;
+    }
+    
+    public Point2D getPosition () {
+        return mCollider.getPosition();
     }
 
     @Override
     public void draw(GameLoop g, Graphics2D g2d) {
-        int[] x = getXPoints();
-        int[] y = getYPoints();
+        int[] x = mCollider.getXPoints();
+        int[] y = mCollider.getYPoints();
         
         Point2D p = getPosition(); 
          
@@ -34,16 +44,6 @@ public class Wall extends Rect implements MapObject {
 
     @Override
     public void update(GameLoop g) { 
-    }
-
-    @Override
-    public void setMap(Map m) {
-        
-    }
-
-    @Override
-    public Map getMap() {
-        return null;
     }
     
 }
