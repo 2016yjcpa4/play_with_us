@@ -44,20 +44,10 @@ import org.game.util.ColorUtil;
  
 public class Player extends MapObject {
     
-    private static final boolean DEBUG = true;
-    
-    private Circle mShape;
- 
-    private boolean isTurnOnFlash = true;
-     
-    private Vector2D dir = new Vector2D(0, 0);    
-    private Vector2D vel = new Vector2D();    
+    private Circle mCollider;
+    private Vector2D mDir = new Vector2D(0, 0);    
+    private Vector2D mVel = new Vector2D();    
     private Light mLight = new Light() {
-        
-        @Override
-        public Map getMap() {
-            return Player.this.getMap(); //To change body of generated methods, choose Tools | Templates.
-        }
         
         @Override
         public Point2D getPosition() {
@@ -77,23 +67,7 @@ public class Player extends MapObject {
     private SpriteManager sp = new SpriteManager();
     
     public Player() {
-        mShape = new Circle(620, 700, 42);
-    }
-    
-    public boolean isTurnOnFlash() {
-        return isTurnOnFlash;
-    }
-    
-    public void setTurnOffFlash() {
-        this.isTurnOnFlash = false;
-    }
-    
-    public void setTurnOnFlash() {
-        this.isTurnOnFlash = true;
-    }
-    
-    public void toggleFlash() {
-        this.isTurnOnFlash = ! this.isTurnOnFlash;
+        mCollider = new Circle(620, 700, 42);
     }
     
     /**
@@ -102,7 +76,7 @@ public class Player extends MapObject {
      * @return Vector2D 클래스로 반환됩니다. 
      */
     public Vector2D getDirection() {
-        return dir;
+        return mDir;
     }
     
     /**
@@ -111,16 +85,16 @@ public class Player extends MapObject {
      * @return 
      */
     public Vector2D getVelocity() {
-        return vel;
+        return mVel;
     }     
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(getPosition()).angle();
+        return mDir.sub(getPosition()).angle();
     }
     
     public Point2D getPosition() {
-        return mShape.getPosition();
+        return mCollider.getPosition();
     }
     
     int s = 0;
@@ -132,7 +106,7 @@ public class Player extends MapObject {
         float x = p.getX();
         float y = p.getY();
          
-        int rad = mShape.getRadius();
+        int rad = mCollider.getRadius();
         
         g2d.drawImage(sp.getSprite("player.png", (int) (i % 3), getGridIndex(), 36, 82), (int) x - rad / 2, (int) y - rad, null);
     }
@@ -165,35 +139,35 @@ public class Player extends MapObject {
     public void update(Game g) { 
         InputManager m = g.getInputManager();
         
-        if (m.isKeyPressed(KeyEvent.VK_W)) vel.setY(-4);
-        if (m.isKeyPressed(KeyEvent.VK_S)) vel.setY(4);
-        if (m.isKeyPressed(KeyEvent.VK_A)) vel.setX(-4);
-        if (m.isKeyPressed(KeyEvent.VK_D)) vel.setX(4);
+        if (m.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-4);
+        if (m.isKeyPressed(KeyEvent.VK_S)) mVel.setY(4);
+        if (m.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-4);
+        if (m.isKeyPressed(KeyEvent.VK_D)) mVel.setX(4);
         
-        if ( ! (m.isKeyPressed(KeyEvent.VK_W) || m.isKeyPressed(KeyEvent.VK_S))) vel.setY(0);
-        if ( ! (m.isKeyPressed(KeyEvent.VK_A) || m.isKeyPressed(KeyEvent.VK_D))) vel.setX(0);
+        if ( ! (m.isKeyPressed(KeyEvent.VK_W) || m.isKeyPressed(KeyEvent.VK_S))) mVel.setY(0);
+        if ( ! (m.isKeyPressed(KeyEvent.VK_A) || m.isKeyPressed(KeyEvent.VK_D))) mVel.setX(0);
         
         if (m.isMousePressed(MouseEvent.BUTTON3)) mLight.setTurnOn();
         if (m.isMouseReleased(MouseEvent.BUTTON3)) mLight.setTurnOff();
         
-        dir.set(m.getMousePosition());
+        mDir.set(m.getMousePosition());
         
         Point2D p = getPosition();
         
-        if (vel.getX() != 0 || vel.getY() != 0) {
+        if (mVel.getX() != 0 || mVel.getY() != 0) {
             i += 0.333;
         }
         
-        Vector2D v = new Vector2D(vel);
-        int x = (int) (p.getX() + vel.getX());
-        int y = (int) (p.getY() + vel.getY());
+        Vector2D v = new Vector2D(mVel);
+        int x = (int) (p.getX() + mVel.getX());
+        int y = (int) (p.getY() + mVel.getY());
 
         p.set(x, y);
         
         for(Wall w : getMap().getAllWall()) {
 
             SAT.Response r = new SAT.Response();
-            if (SAT.testPolygonCircle(w.getCollider(), mShape, r)) {
+            if (SAT.testPolygonCircle(w.getCollider(), mCollider, r)) {
 
                 v = r.overlapV.add(p);
 
