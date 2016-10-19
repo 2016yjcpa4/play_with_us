@@ -1,8 +1,11 @@
 package org.game.map;
  
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.Area;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +34,11 @@ public class Map implements GraphicObject {
     
     private Image img;
     
-    public Map() { 
-        // 기본적으로 맵의 테두리를 만들고...
-        // 북쪽
-        wall.add(new Wall(0, 0, MAP_WIDTH - 10, 10));
-        
-        // 동쪽
-        wall.add(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));
-        
-        // 남쪽
-        wall.add(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));
-        
-        // 서쪽
-        wall.add(new Wall(20, 0, 10, MAP_HEIGHT - 10));
+    public Map() {
+        wall.add(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
+        wall.add(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));// 동쪽
+        wall.add(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));// 남쪽
+        wall.add(new Wall(20, 0, 10, MAP_HEIGHT - 10));// 서쪽
         
         // 장애물 1
         wall.add(new Wall(10, 10, 480, 305));
@@ -58,19 +53,7 @@ public class Map implements GraphicObject {
             e.printStackTrace();
         }
         
-        Ghost m;
-        
-        m = new Ghost(this);
-        m.getPosition().setX(80);
-        m.getPosition().setY(430);
-        mobs.add(m);
-        
-        m = new Ghost(this);
-        m.getPosition().setX(1000);
-        m.getPosition().setY(400);
-        mobs.add(m);
-        
-        for(Line2D l : getWall2()) {
+        for(Line2D l : getAllLineForProject()) {
             Point2D t1 = getTileIndexByPoint2D(l.getX1(), l.getY1());
             Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
 
@@ -88,6 +71,10 @@ public class Map implements GraphicObject {
     
     public Player getPlayer() {
         return player;
+    }
+    
+    public float getDarkness() {
+        return 0.75f;
     }
     
     public int getTileWidth() {
@@ -111,20 +98,15 @@ public class Map implements GraphicObject {
         return wall;
     }
     
-    public List<Line2D> getWall2() {
+    public List<Line2D> getAllLineForProject() {
         List<Line2D> l = new ArrayList<>();
         
-        for(Wall w : wall) {
+        for(Wall w : getWall()) {
             
-            Point2D p1 = w.getPoints().get(w.getPoints().size() - 1);
-            Point2D p2 = w.getPoints().get(0);
+            for(int n = 0; n < w.getPoints().size(); ++n) {
+                Point2D p1 = w.getPoint(n);
+                Point2D p2 = w.getPoint(n + 1);
 
-            l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
-                
-            for(int n = 1; n < w.getPoints().size(); ++n) {
-                p1 = w.getPoints().get(n - 1);
-                p2 = w.getPoints().get(n);
-                
                 l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
             }
         }
@@ -155,6 +137,22 @@ public class Map implements GraphicObject {
         return l;
     }
     
+    public BufferedImage getLightImage() {
+        BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = b.createGraphics();
+
+        g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
+        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+
+        // 아직 이해를 못했는데 이작업을 하고...
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
+
+        player.getLight().draw(null, g2d);
+        
+        g2d.dispose();
+        
+        return b;
+    }
 
     @Override
     public void draw(GameLoop c, Graphics2D g2d) {
@@ -189,10 +187,18 @@ public class Map implements GraphicObject {
         for(Ghost g : mobs) {
             g.draw(c, g2d);
         }
+        
+         
+        g2d.drawImage(getLightImage(), 0, 0, null);
+        
+        
+        player.draw(c, g2d);
     }
 
     @Override
     public void update(GameLoop c) {
+        player.update(c);
+        
         for(Ghost g : mobs) {
             g.update(c);
         }

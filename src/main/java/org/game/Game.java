@@ -62,9 +62,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
         } 
         else {
             map.update(this);
-            
-            player.update(this);
-            player.draw(this, g2d);
+            map.draw(this, g2d);
         }
     } 
     
