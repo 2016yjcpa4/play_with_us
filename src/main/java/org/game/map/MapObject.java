@@ -16,7 +16,7 @@ public abstract class MapObject {
         return mMap;
     }
     
-    abstract void update(Game g);
+    public abstract void update(Game g);
 
-    abstract void draw(Game g, Graphics2D g2d);
+    public abstract void draw(Game g, Graphics2D g2d);
 }

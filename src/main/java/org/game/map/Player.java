@@ -11,6 +11,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -26,6 +27,7 @@ import javax.imageio.ImageIO;
 import org.game.map.Map;
 import org.game.GameLoop;
 import org.game.Game;
+import org.game.InputManager;
 import org.game.Main;
 import org.game.SpriteManager;
 import org.game.geom.Circle;
@@ -161,13 +163,20 @@ public class Player extends MapObject {
 
     @Override
     public void update(Game g) { 
-        if (g.getInputManager().isPressed(KeyEvent.VK_W)) vel.setY(-4);
-        if (g.getInputManager().isPressed(KeyEvent.VK_S)) vel.setY(4);
-        if (g.getInputManager().isPressed(KeyEvent.VK_A)) vel.setX(-4);
-        if (g.getInputManager().isPressed(KeyEvent.VK_D)) vel.setX(4);
+        InputManager m = g.getInputManager();
         
-        if ( ! (g.getInputManager().isPressed(KeyEvent.VK_W) || g.getInputManager().isPressed(KeyEvent.VK_S))) vel.setY(0);
-        if ( ! (g.getInputManager().isPressed(KeyEvent.VK_A) || g.getInputManager().isPressed(KeyEvent.VK_D))) vel.setX(0);
+        if (m.isKeyPressed(KeyEvent.VK_W)) vel.setY(-4);
+        if (m.isKeyPressed(KeyEvent.VK_S)) vel.setY(4);
+        if (m.isKeyPressed(KeyEvent.VK_A)) vel.setX(-4);
+        if (m.isKeyPressed(KeyEvent.VK_D)) vel.setX(4);
+        
+        if ( ! (m.isKeyPressed(KeyEvent.VK_W) || m.isKeyPressed(KeyEvent.VK_S))) vel.setY(0);
+        if ( ! (m.isKeyPressed(KeyEvent.VK_A) || m.isKeyPressed(KeyEvent.VK_D))) vel.setX(0);
+        
+        if (m.isMousePressed(MouseEvent.BUTTON3)) mLight.setTurnOn();
+        if (m.isMouseReleased(MouseEvent.BUTTON3)) mLight.setTurnOff();
+        
+        dir.set(m.getMousePosition());
         
         Point2D p = getPosition();
         

@@ -61,15 +61,9 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
             case KeyEvent.VK_S:
             case KeyEvent.VK_A:
             case KeyEvent.VK_D:
-                mInput.put(e.getKeyCode(), InputManager.KeyState.PRESSED);
+                mInput.setKeyPress(e.getKeyCode());
                 break;
             case KeyEvent.VK_F:
-                Light l = mMap.getPlayer().getLight();
-                if(l.isTurnOff()) {
-                    l.setTurnOn();
-                } else {
-                    l.setTurnOff();
-                }
                 break;
         }
     }
@@ -82,7 +76,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
             case KeyEvent.VK_S: 
             case KeyEvent.VK_A: 
             case KeyEvent.VK_D: 
-                mInput.put(e.getKeyCode(), InputManager.KeyState.RELEASED);
+                mInput.setKeyRelease(e.getKeyCode());
                 break;
         }
     }
@@ -94,10 +88,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Vector2D v = mMap.getPlayer().getDirection();
-        
-        v.setX(e.getX());
-        v.setY(e.getY());
+        mInput.setMousePosition(e.getX(), e.getY());
     }
 
     @Override
@@ -106,20 +97,12 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3)
-        {
-            Light l = mMap.getPlayer().getLight();
-            l.setTurnOn();
-        }
+        mInput.setMousePress(e.getButton());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3)
-        {
-            Light l = mMap.getPlayer().getLight();
-            l.setTurnOff();
-        }
+        mInput.setMouseRelease(e.getButton());
     }
 
     @Override

@@ -26,21 +26,6 @@ public class Wall extends MapObject {
 
     @Override
     public void draw(Game g, Graphics2D g2d) {
-        int[] x = mCollider.getXPoints();
-        int[] y = mCollider.getYPoints();
-        
-        Point2D p = getPosition(); 
-         
-        
-        g2d.setColor(Color.BLACK);
-        g2d.fillPolygon(x, y, x.length);
-        
-        g2d.setColor(Color.GRAY);
-        g2d.drawPolygon(x, y, x.length);
-        
-        g2d.setColor(Color.RED);
-        g2d.fillOval(p.getX() - 2, p.getY() - 2, 4, 4);
-        
     }
 
     @Override
