@@ -8,12 +8,12 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
 import org.game.GameLoop;
-import org.game.GraphicObject;
 import org.game.geom.Polygon;
 import org.game.geom.Raycast;
 import org.game.math.Point2D;
+import org.game.MapObject;
 
-public class Light implements GraphicObject {
+public class Light implements MapObject {
 
     private Map mMap;
     
@@ -42,11 +42,15 @@ public class Light implements GraphicObject {
         return mMap;
     }
     
+    public void setMap(Map m) {
+        mMap = m;
+    }
+    
     private Polygon getRaycast() {    
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllLineForProject())) {  
+        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllLine())) {  
             l.add(p);    
         }
         

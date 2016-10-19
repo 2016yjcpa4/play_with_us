@@ -5,9 +5,9 @@ import java.awt.Graphics2D;
 import org.game.GameLoop;
 import org.game.geom.Rect; 
 import org.game.math.Point2D;
-import org.game.GraphicObject;
+import org.game.MapObject;
 
-public class Wall extends Rect implements GraphicObject {
+public class Wall extends Rect implements MapObject {
     
     public Wall(int x, int y, int w, int h) {
         super(x, y, w, h);
@@ -34,6 +34,16 @@ public class Wall extends Rect implements GraphicObject {
 
     @Override
     public void update(GameLoop g) { 
+    }
+
+    @Override
+    public void setMap(Map m) {
+        
+    }
+
+    @Override
+    public Map getMap() {
+        return null;
     }
     
 }

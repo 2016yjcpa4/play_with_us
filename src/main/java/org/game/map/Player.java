@@ -38,9 +38,9 @@ import org.game.geom.SAT;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 import org.game.util.ColorUtil;
-import org.game.GraphicObject;
+import org.game.MapObject;
  
-public class Player extends Circle implements GraphicObject {
+public class Player extends Circle implements MapObject {
     
     private static final boolean DEBUG = true;
     
@@ -109,7 +109,7 @@ public class Player extends Circle implements GraphicObject {
         List<Point2D> l = new ArrayList<>();
         l.add(pos);
         
-        for (Point2D e : Raycast.getRaycast(pos, ang, map.getAllLineForProject())) {  
+        for (Point2D e : Raycast.getRaycast(pos, ang, map.getAllLine())) {  
             l.add(e);    
         }
         
@@ -200,7 +200,7 @@ public class Player extends Circle implements GraphicObject {
 
         p.set(x, y);
         
-        for(Wall w : map.getWall()) {
+        for(Wall w : map.getAllWall()) {
 
             SAT.Response r = new SAT.Response();
             if (SAT.testPolygonCircle(w, this, r)) {
@@ -211,5 +211,10 @@ public class Player extends Circle implements GraphicObject {
             }
         }
         
+    }
+
+    @Override
+    public Map getMap() {
+        return map;
     }
 }

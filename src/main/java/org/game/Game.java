@@ -26,7 +26,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
               
     private boolean isGameOver = false; 
     
-    private Player player;  
+    private Player mPlayer;  
     private Map map;
     
     public boolean w, s, a, d;
@@ -37,9 +37,11 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
         canvas.addKeyListener(this);
         
         map = new Map();
-        player = new Player(map);
+        mPlayer = new Player(map);
         
-        map.setPlayer(player);
+        map.addObject(mPlayer);
+        
+        map.addObject(mPlayer.getLight());
     }
     
     @Override
@@ -87,7 +89,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
                 s = true;
                 break;
             case KeyEvent.VK_A:
-                player.getVelocity().setX(-4);
+                mPlayer.getVelocity().setX(-4);
                 a = true;
                 break;
             case KeyEvent.VK_D:
@@ -95,7 +97,7 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
                 d = true;
                 break;
             case KeyEvent.VK_F:
-                player.toggleFlash();
+                mPlayer.toggleFlash();
                 break;
         }
     }
@@ -126,8 +128,8 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        player.getDirection().setX(e.getX());
-        player.getDirection().setY(e.getY());
+        mPlayer.getDirection().setX(e.getX());
+        mPlayer.getDirection().setY(e.getY());
     }
 
     @Override
@@ -138,7 +140,6 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3)
         {
-            player.setTurnOnFlash();
         }
     }
 
@@ -146,7 +147,6 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3)
         {
-            player.setTurnOffFlash();
         }
     }
 

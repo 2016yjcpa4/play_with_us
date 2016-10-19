@@ -12,9 +12,9 @@ import org.game.geom.Polygon;
 import org.game.geom.BresenhamLine;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
-import org.game.GraphicObject;
+import org.game.MapObject;
 
-public class Ghost implements GraphicObject {
+public class Ghost implements MapObject {
 
     private Map map;
     
@@ -127,5 +127,15 @@ public class Ghost implements GraphicObject {
             //g2d.setColor(Color.GRAY);
             //g2d.fillRect(pos.getX() - 5, pos.getY() - 5, 10, 10);
         }
+    }
+
+    @Override
+    public void setMap(Map m) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map getMap() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

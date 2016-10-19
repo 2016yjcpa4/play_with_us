@@ -15,9 +15,9 @@ import org.game.Game;
 import org.game.geom.BresenhamLine;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
-import org.game.GraphicObject;
+import org.game.MapObject;
 
-public class Map implements GraphicObject {
+public class Map {
 
     public static final boolean DEBUG = false;
     public static final int MAP_WIDTH = 1280;
@@ -26,25 +26,23 @@ public class Map implements GraphicObject {
     public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 11.0);
     public static final int TILE_ROWS = (int) (MAP_HEIGHT / 11.0);
     
-    private List<Wall> wall = new ArrayList();
-    private TileMap tiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
+    private TileMap mTiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
     
-    private Player player;
-    private List<Ghost> mobs = new ArrayList<>();
+    private List<MapObject> mObject = new ArrayList<>();
     
     private Image img;
     
     public Map() {
-        wall.add(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
-        wall.add(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));// 동쪽
-        wall.add(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));// 남쪽
-        wall.add(new Wall(20, 0, 10, MAP_HEIGHT - 10));// 서쪽
+        addObject(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
+        addObject(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));// 동쪽
+        addObject(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));// 남쪽
+        addObject(new Wall(20, 0, 10, MAP_HEIGHT - 10));// 서쪽
         
         // 장애물 1
-        wall.add(new Wall(10, 10, 480, 305));
-        wall.add(new Wall(750, 10, 500, 305));
-        wall.add(new Wall(30, 535, 550, 385));
-        wall.add(new Wall(660, 490, 600, 385));
+        addObject(new Wall(10, 10, 480, 305));
+        addObject(new Wall(750, 10, 500, 305));
+        addObject(new Wall(30, 535, 550, 385));
+        addObject(new Wall(660, 490, 600, 385));
         
         try {
             img = ImageIO.read(new File("./res/map.png"));
@@ -53,24 +51,36 @@ public class Map implements GraphicObject {
             e.printStackTrace();
         }
         
-        for(Line2D l : getAllLineForProject()) {
+        for(Line2D l : getAllLine()) {
             Point2D t1 = getTileIndexByPoint2D(l.getX1(), l.getY1());
             Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
 
             for (Point2D p : BresenhamLine.getBresenhamLine(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
-                if (tiles.isWithin(p.getX(), p.getY())) {
-                    tiles.getNode(p.getX(), p.getY()).setNotWalkable();
+                if (mTiles.isWithin(p.getX(), p.getY())) {
+                    mTiles.getNode(p.getX(), p.getY()).setNotWalkable();
                 }
             }
         }
     }
     
-    public void setPlayer(Player p) {
-        this.player = p;
+    public Player getPlayer() {
+        for(MapObject o : getAllObject()) {
+            if (o instanceof Player) {
+                return (Player) o;
+            }
+        }
+        
+        return null;
     }
     
-    public Player getPlayer() {
-        return player;
+    public List<MapObject> getAllObject() {
+        return mObject;
+    }
+    
+    public void addObject(MapObject o) {
+        o.setMap(this);
+        
+        mObject.add(o);
     }
     
     public float getDarkness() {
@@ -94,14 +104,22 @@ public class Map implements GraphicObject {
                          , (int) (y / getTileHeight()));
     }
 
-    public List<Wall> getWall() {
-        return wall;
+    public List<Wall> getAllWall() {
+        List<Wall> l = new ArrayList<>();
+        
+        for(MapObject o : getAllObject()) {
+            if (o instanceof Wall) {
+                l.add((Wall) o);
+            }
+        }
+        
+        return l;
     }
     
-    public List<Line2D> getAllLineForProject() {
+    public List<Line2D> getAllLine() {
         List<Line2D> l = new ArrayList<>();
         
-        for(Wall w : getWall()) {
+        for(Wall w : getAllWall()) {
             
             for(int n = 0; n < w.getPoints().size(); ++n) {
                 Point2D p1 = w.getPoint(n);
@@ -114,12 +132,6 @@ public class Map implements GraphicObject {
         return l;
     }
     
-//    public List<Line2D> getObstacle() { 
-//        List<Line2D> l = new ArrayList<>(getWall());
-//        
-//        return l;
-//    }
-    
     public List<Point2D> getPath(Point2D p1, Point2D p2) {
         return getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
@@ -130,77 +142,50 @@ public class Map implements GraphicObject {
         
         List<Point2D> l = new ArrayList<>();
         
-        for(TileNode n : tiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
-            l.add(new  Point2D(n.getX() * getTileWidth() + (getTileWidth() / 2) , n.getY() * getTileHeight() + (getTileHeight() / 2)));
+        for(TileNode t : mTiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
+            l.add(new  Point2D(t.getX() * getTileWidth() + (getTileWidth() / 2) , t.getY() * getTileHeight() + (getTileHeight() / 2)));
         }
         
         return l;
     }
-    
-    public BufferedImage getLightImage() {
-        BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = b.createGraphics();
 
-        g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
-        g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-
-        // 아직 이해를 못했는데 이작업을 하고...
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
-
-        player.getLight().draw(null, g2d);
-        
-        g2d.dispose();
-        
-        return b;
-    }
-
-    @Override
-    public void draw(GameLoop c, Graphics2D g2d) {
+    public void draw(GameLoop g, Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         
         g2d.drawImage(img, 0, 0, null);
-         
-        if (Game.DEBUG && Map.DEBUG) { 
-            g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.20)));
 
-            for (int y = 0; y < tiles.getRows(); ++y) {
-                for (int x = 0; x < tiles.getColumns(); ++x) {
-
-                    TileNode n = tiles.getNode(x, y);
-
-                    if (n.canWalk()) {
-                        g2d.drawRect(getTileWidth() * x, getTileHeight() * y, getTileWidth(), getTileHeight());
-                    }
-                    else {
-                        g2d.fillRect(getTileWidth() * x, getTileHeight() * y, getTileWidth(), getTileHeight());
-                    }
-                }
+        for(MapObject o : mObject) {
+            if ( ! (o instanceof Light)) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
+                o.draw(g, g2d);
             }
         }
+    
+        BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D _g2d = b.createGraphics();
 
-        if(Map.DEBUG) {
-            for (Wall w : wall) {
-                w.draw(c, g2d);
-            } 
+        _g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
+        _g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        
+        {
+            // 아직 이해를 못했는데 이작업을 하고...
+            _g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
+
+            for(MapObject o : mObject) {
+                if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
+                    o.draw(g, _g2d);
+                }
+            }
+
+            _g2d.dispose();
         }
         
-        for(Ghost g : mobs) {
-            g.draw(c, g2d);
-        }
-        
-         
-        g2d.drawImage(getLightImage(), 0, 0, null);
-        
-        
-        player.draw(c, g2d);
+        g2d.drawImage(b, 0, 0, null);
     }
 
-    @Override
-    public void update(GameLoop c) {
-        player.update(c);
-        
-        for(Ghost g : mobs) {
-            g.update(c);
+    public void update(GameLoop g) {
+
+        for(MapObject o : mObject) {
+            o.update(g);
         }
     }
 
