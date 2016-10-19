@@ -25,19 +25,19 @@ public class TileNode {
         return mParent;
     }
  
-    public void setH(int h) {
+    public void setHeuristic(int h) {
         mHeuristic = h;
     }
  
-    public int getH() {
+    public int getHeuristic() {
         return mHeuristic;
     }
  
-    public void setG(int g) {
+    public void setGoal(int g) {
         mGoal = g;
     }
  
-    public int getG() {
+    public int getGoal() {
         return mGoal;
     }
  

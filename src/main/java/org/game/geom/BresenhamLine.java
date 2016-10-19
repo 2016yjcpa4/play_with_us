@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List; 
 import org.game.math.Point2D;
 
+/**
+ * 브레젠헴의 직선 알고리즘.
+ * 
+ * 타일에서 직선을 그 었을경우, 교차되는 타일 인덱스를 가져옵니다.
+ * 
+ * @author 차명도.
+ */
 public class BresenhamLine {
     
     private BresenhamLine() {

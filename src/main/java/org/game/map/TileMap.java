@@ -66,7 +66,7 @@ public class TileMap {
                 int dx = Math.abs(d.getX() - x);
                 int dy = Math.abs(d.getY() - y);
                 
-                getNode(x, y).setH(dx + dy);
+                getNode(x, y).setHeuristic(dx + dy);
             }
         }
 
@@ -87,16 +87,16 @@ public class TileMap {
 
                 if ( ! c.contains(e)) {
                     if (o.contains(e)) {
-                        int g = n.getG() + 10;
+                        int g = n.getGoal() + 10;
 
-                        if (g < e.getG()) {
+                        if (g < e.getGoal()) {
                             e.setParent(n);
-                            e.setG(g);
+                            e.setGoal(g);
                         }
                     } 
                     else {
                         e.setParent(n);
-                        e.setG(n.getG() + 10);
+                        e.setGoal(n.getGoal() + 10);
                         o.add(e);
                     }
                 }
