@@ -25,16 +25,14 @@ import org.game.math.Vector2D;
 public class Game extends GameLoop implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
-              
-    private boolean mIsGameOver = false;
+               
     private Map mMap;
-    
-    public boolean w, s, a, d;
+    private InputManager mInput = new InputManager();
 
     public Game() { 
-        canvas.addMouseListener(this);
-        canvas.addMouseMotionListener(this);
-        canvas.addKeyListener(this);
+        mCanvas.addMouseListener(this);
+        mCanvas.addMouseMotionListener(this);
+        mCanvas.addKeyListener(this);
         
         mMap = new Map();
     }
@@ -42,31 +40,15 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     @Override
     protected void draw(Graphics2D g2d) {  
         super.draw(g2d);
-         
-        if (mIsGameOver) {
-            // TODO 게임오버 처리
-            String s = "게임오버";
-            
-            Font f = new Font("굴림", Font.PLAIN, 70);
-            FontMetrics fm = g2d.getFontMetrics(f);
-            
-            int x = (canvas.getWidth() - fm.stringWidth(s)) / 2;
-            int y = ((canvas.getHeight() - fm.getHeight()) / 2) + fm.getAscent();
-            
-            g2d.setFont(f); 
-            g2d.setColor(Color.RED);
-            g2d.drawString(s, x, y);
-        } 
-        else {
-            mMap.update(this);
-            mMap.draw(this, g2d);
-        }
+          
+        mMap.update(this);
+        mMap.draw(this, g2d);
     } 
     
-    public void setGameOver() {
-        mIsGameOver = true;
+    public InputManager getInputManager() {
+        return mInput;
     }
-
+    
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -76,20 +58,10 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
         switch (e.getKeyCode()) 
         {
             case KeyEvent.VK_W:
-                //player.getVelocity().setY(-4);
-                w = true;
-                break;
             case KeyEvent.VK_S:
-                //player.getVelocity().setY(4);
-                s = true;
-                break;
             case KeyEvent.VK_A:
-                //mPlayer.getVelocity().setX(-4);
-                a = true;
-                break;
             case KeyEvent.VK_D:
-                //player.getVelocity().setX(4);
-                d = true;
+                mInput.put(e.getKeyCode(), InputManager.KeyState.PRESSED);
                 break;
             case KeyEvent.VK_F:
                 Light l = mMap.getPlayer().getLight();
@@ -106,17 +78,11 @@ public class Game extends GameLoop implements MouseMotionListener, MouseListener
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) 
         {
-            case KeyEvent.VK_W:
-                w = false;
-                break;
-            case KeyEvent.VK_S:
-                s = false;
-                break;
-            case KeyEvent.VK_A:
-                a = false;
-                break;
-            case KeyEvent.VK_D:
-                d = false;
+            case KeyEvent.VK_W: 
+            case KeyEvent.VK_S: 
+            case KeyEvent.VK_A: 
+            case KeyEvent.VK_D: 
+                mInput.put(e.getKeyCode(), InputManager.KeyState.RELEASED);
                 break;
         }
     }

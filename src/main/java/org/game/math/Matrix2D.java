@@ -2,12 +2,12 @@ package org.game.math;
 
 public class Matrix2D {
     
-    private final double a;
-    private final double b;
-    private final double c;
-    private final double d;
-    private final double e;
-    private final double f;
+    private final double mA;
+    private final double mB;
+    private final double mC;
+    private final double mD;
+    private final double mE;
+    private final double mF;
     
     public Matrix2D() {
         this(1, 0, 0, 1, 0, 0);
@@ -19,67 +19,67 @@ public class Matrix2D {
                      double d,
                      double e,
                      double f) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.e = e;
-        this.f = f;
+        mA = a;
+        mB = b;
+        mC = c;
+        mD = d;
+        mE = e;
+        mF = f;
     }
     
     public Matrix2D concat(Matrix2D o) {
         return new Matrix2D(
-            a * o.a + c * o.b,
-            b * o.a + d * o.b,
-            a * o.c + c * o.d,
-            b * o.c + d * o.d,
-            a * o.e + c * o.f + e,
-            b * o.e + d * o.f + f
+            getA() * o.getA() + getC() * o.getB(),
+            getB() * o.getA() + getD() * o.getB(),
+            getA() * o.getC() + getC() * o.getD(),
+            getB() * o.getC() + getD() * o.getD(),
+            getA() * o.getE() + getC() * o.getF() + getE(),
+            getB() * o.getE() + getD() * o.getF() + getF()
         );
     } 
     
     public double getA() {
-        return a;
+        return mA;
     }
     
     public double getB() {
-        return b;
+        return mB;
     }
     
     public double getC() {
-        return c;
+        return mC;
     }
     
     public double getD() {
-        return d;
+        return mD;
     }
     
     public double getE() {
-        return e;
+        return mE;
     }
     
     public double getF() {
-        return f;
+        return mF;
     }
     
     public static Matrix2D translate(double x, double y) {
         return new Matrix2D(1, 0, 0, 1, x, y);
     }
     
-    public static Matrix2D rotate(double rad) {
-        return  new Matrix2D(Math.cos(rad), 
-                             Math.sin(rad), 
-                            -Math.sin(rad), 
-                            Math.cos(rad), 
+    public static Matrix2D rotate(double n) {
+        return  new Matrix2D(Math.cos(n), 
+                             Math.sin(n), 
+                            -Math.sin(n), 
+                            Math.cos(n), 
                             0, 
                             0);
     }
     
-    public static Matrix2D scale(double s) {
-        return scale(s, s);
+    public static Matrix2D scale(double n) {
+        return scale(n, n);
     }
     
-    public static Matrix2D scale(double sx, double sy) {
-        return new Matrix2D(sx, 0, 0, sy, 0, 0);
+    public static Matrix2D scale(double x, double y) {
+        return new Matrix2D(x, 0, 0, y, 0, 0);
     }
 }

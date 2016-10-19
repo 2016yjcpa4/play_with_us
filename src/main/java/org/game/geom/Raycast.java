@@ -11,8 +11,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.game.math.Line2D;
-import org.game.math.LineF2D;
+import org.game.math.Line2D; 
 import org.game.math.Point2D;
 
 public class Raycast {
@@ -34,7 +33,7 @@ public class Raycast {
         }
     }
 
-    private static IntersectionResult getIntersection(LineF2D ray, Line2D segment) {
+    private static IntersectionResult getIntersection(Line2D ray, Line2D segment) {
 
         // RAY in parametric: Point + Delta*T1
         double r_px = ray.getX1();
@@ -83,8 +82,8 @@ public class Raycast {
 
         for (Line2D e : l) {
 
-            Point2D p1 = new Point2D(e.getX1(), e.getY1());
-            Point2D p2 = new Point2D(e.getX2(), e.getY2());
+            Point2D p1 = new Point2D((int) e.getX1(), (int) e.getY1());
+            Point2D p2 = new Point2D((int) e.getX2(), (int) e.getY2());
 
             r.add(p1);
             r.add(p2);
@@ -148,10 +147,10 @@ public class Raycast {
         for (Double angle : getAngles(s, ang, l)) {
 
             // Calculate dx & dy from angle
-            double dx = Math.cos(angle);
-            double dy = Math.sin(angle);
+            float dx = (float) Math.cos(angle);
+            float dy = (float) Math.sin(angle);
 
-            LineF2D ray = new LineF2D(s.getX(),
+            Line2D ray = new Line2D(s.getX(),
                     s.getY(),
                     (s.getX() + dx),
                     (s.getY() + dy));

@@ -458,7 +458,7 @@ public class SpriteTool {
             super.draw(g2d);
             
             g2d.setColor(Color.WHITE);
-            g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            g2d.fillRect(0, 0, mCanvas.getWidth(), mCanvas.getHeight());
             
             if (mImage != null) {
                 g2d.setColor(Color.BLACK);
@@ -501,8 +501,8 @@ public class SpriteTool {
                 }
 
                 BufferedImage b = frame.peek();
-                int x = canvas.getWidth() / 2 - b.getWidth() / 2;
-                int y = canvas.getHeight() / 2 - b.getHeight() / 2;
+                int x = mCanvas.getWidth() / 2 - b.getWidth() / 2;
+                int y = mCanvas.getHeight() / 2 - b.getHeight() / 2;
 
                 g2d.drawImage(b, x, y, null);
             }

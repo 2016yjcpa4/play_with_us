@@ -2,34 +2,31 @@ package org.game.math;
 
 public class Line2D {
 
-    private final int x1;
-    private final int y1;
+    private final float mX1, mY1;
+    private final float mX2, mY2;
 
-    private final int x2;
-    private final int y2;
+    public Line2D(float x1, float y1, float x2, float y2) {
+        mX1 = x1;
+        mY1 = y1;
 
-    public Line2D(int x1, int y1, int x2, int y2) {
-        this.x1 = x1;
-        this.y1 = y1;
-
-        this.x2 = x2;
-        this.y2 = y2;
+        mX2 = x2;
+        mY2 = y2;
     }
 
-    public int getX1() {
-        return x1;
+    public float getX1() {
+        return mX1;
     }
 
-    public int getY1() {
-        return y1;
+    public float getY1() {
+        return mY1;
     } 
 
-    public int getX2() {
-        return x2;
+    public float getX2() {
+        return mX2;
     }
 
-    public int getY2() {
-        return y2;
+    public float getY2() {
+        return mY2;
     } 
      
 }

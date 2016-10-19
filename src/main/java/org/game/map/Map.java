@@ -4,17 +4,14 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import org.game.GameLoop;
 import org.game.Game; 
 import org.game.geom.BresenhamLine;
 import org.game.geom.Polygon;
-import org.game.geom.Rect;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
 
@@ -55,10 +52,10 @@ public class Map {
         }
         
         for(Line2D l : getAllLine()) {
-            Point2D t1 = getTileIndexByPoint2D(l.getX1(), l.getY1());
-            Point2D t2 = getTileIndexByPoint2D(l.getX2(), l.getY2());
+            Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
+            Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
 
-            for (Point2D p : BresenhamLine.getBresenhamLine(t1.getX(), t1.getY(), t2.getX(), t2.getY())) {
+            for (Point2D p : BresenhamLine.getBresenhamLine(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
                 if (mTiles.isWithin(p.getX(), p.getY())) {
                     mTiles.getNode(p.getX(), p.getY()).setNotWalkable();
                 }
@@ -102,11 +99,11 @@ public class Map {
         return MAP_HEIGHT / TILE_ROWS;
     }
     
-    public Point2D getTileIndexByPoint2D(Point2D p) {
-        return getTileIndexByPoint2D(p.getX(), p.getY());
+    public Point2D getTileIndex(Point2D p) {
+        return Map.this.getTileIndex(p.getX(), p.getY());
     }
     
-    public Point2D getTileIndexByPoint2D(int x, int y) {
+    public Point2D getTileIndex(int x, int y) {
         return new Point2D((int) (x / getTileWidth())
                          , (int) (y / getTileHeight()));
     }
@@ -146,49 +143,50 @@ public class Map {
     }
     
     public List<Point2D> getPath(int x1, int y1, int x2, int y2) {
-        Point2D p1 = getTileIndexByPoint2D(x1, y1);
-        Point2D p2 = getTileIndexByPoint2D(x2, y2);
+        Point2D p1 = Map.this.getTileIndex(x1, y1);
+        Point2D p2 = Map.this.getTileIndex(x2, y2);
         
         List<Point2D> l = new ArrayList<>();
         
         for(TileNode t : mTiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
-            l.add(new  Point2D(t.getX() * getTileWidth() + (getTileWidth() / 2) , t.getY() * getTileHeight() + (getTileHeight() / 2)));
+            
+            l.add(new  Point2D(t.getX() * getTileWidth()  + (getTileWidth() / 2),
+                               t.getY() * getTileHeight() + (getTileHeight() / 2)));
         }
         
         return l;
     }
-
-    public void draw(GameLoop g, Graphics2D g2d) {
-        g2d.setColor(Color.WHITE);
-        
+    
+    public void draw(Game g, Graphics2D g2d) {
         g2d.drawImage(img, 0, 0, null);
 
         for(MapObject o : mObject) {
-            if ( ! (o instanceof Light)) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
+            if ( ! (o instanceof Light) 
+              && ! (o instanceof Player)) { // 빛 오브젝트와 플레이어는 아래에서 별도로 처리됩니다.
                 o.draw(g, g2d);
             }
         }
-    
+        
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D _g2d = b.createGraphics();
-
         _g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
         _g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        
         _g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
         for(MapObject o : mObject) {
             if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
-                o.draw(g, _g2d);
+                o.draw(null, _g2d);
             }
         }
 
         _g2d.dispose(); 
         
         g2d.drawImage(b, 0, 0, null);
+        
+        getPlayer().draw(g, g2d);
     }
 
-    public void update(GameLoop g) {
+    public void update(Game g) {
 
         for(MapObject o : mObject) {
             o.update(g);

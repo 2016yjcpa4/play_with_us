@@ -8,24 +8,24 @@ import org.game.math.Point2D;
  
 public class TileMap { 
     
-    private final TileNode[][] nodes;
+    private final TileNode[][] mNodes;
  
     public TileMap(int w, int h) {
-        this.nodes = new TileNode[w][h];
+        mNodes = new TileNode[w][h];
         
-        for (int y = 0; y < nodes[0].length; y++) {
-            for (int x = 0; x < nodes.length; x++) {
-                this.nodes[x][y] = new TileNode(x, y);
+        for (int y = 0; y < mNodes[0].length; y++) {
+            for (int x = 0; x < mNodes.length; x++) {
+                mNodes[x][y] = new TileNode(x, y);
             }
         }
     }
 
     public int getColumns() {
-        return nodes.length;
+        return mNodes.length;
     }
  
     public int getRows() {
-        return nodes[0].length;
+        return mNodes[0].length;
     }
 
     public boolean isWithin(int x, int y) {
@@ -33,49 +33,55 @@ public class TileMap {
             && 0 <= y && y <= (getRows() - 1);
     }  
 
-    public List<TileNode> getPath(int srcX, int srcY, int dstX, int dstY) {
-        TileNode src = getNode(srcX, srcY);
-        TileNode dst = getNode(dstX, dstY);
+    public List<TileNode> getPath(int sx, int sy, int dx, int dy) {
+        TileNode s = getNode(sx, sy);
+        TileNode d = getNode(dx, dy);
         
-        return getPath(src, dst);
+        return getPath(s, d);
     }
 
     public TileNode getNode(int x, int y) {
-        return nodes[x][y];
+        return mNodes[x][y];
     }
  
     public TileNode[][] getNodes() {
-        return nodes;
+        return mNodes;
     }
     
-    public List<TileNode> getPath(TileNode src, TileNode dst) {
+    /**
+     * 
+     * @param s 출발지 노드
+     * @param d 목적지 노드
+     * @return 출발지에서 목적지까지의 최단거리 노드를 List 형태로 반환
+     */
+    public List<TileNode> getPath(TileNode s, TileNode d) {
         
-        if ( ! dst.canWalk()) {
+        if ( ! d.canWalk()) {
             return Collections.emptyList();
         }
 
         // 모든 노드에 H 값을 도착점과의 거리로 H 값을 기록합니다.
         for (int y = 0; y < getRows(); y++) {
             for (int x = 0; x < getColumns(); x++) {
-                int dx = Math.abs(dst.getX() - x);
-                int dy = Math.abs(dst.getY() - y);
+                int dx = Math.abs(d.getX() - x);
+                int dy = Math.abs(d.getY() - y);
                 
                 getNode(x, y).setH(dx + dy);
             }
         }
 
-        TileNode n = src;
+        TileNode n = s;
         List<TileNode> o = new ArrayList<>(); // 열린 노드
         List<TileNode> c = new ArrayList<>(); // 닫힌 노드
 
-        boolean isPathFound = false;
+        boolean b = false;
 
-        while ( ! isPathFound && ! c.contains(dst)) {
+        while ( ! b && ! c.contains(d)) {
             for (TileNode e : getNeighbors(n)) {
-                if (e == dst) {
-                    dst.setParent(n);
-                    isPathFound = true;
-                    c.add(dst);
+                if (e == d) {
+                    d.setParent(n);
+                    b = true;
+                    c.add(d);
                     break;
                 }
 
@@ -96,7 +102,7 @@ public class TileMap {
                 }
             }
 
-            if ( ! isPathFound) {
+            if ( ! b) {
                 c.add(n);
                 o.remove(n);
 
@@ -111,10 +117,10 @@ public class TileMap {
         List<TileNode> l = new ArrayList<>();
         
         do {
-            l.add(dst);
-            dst = dst.getParent();
+            l.add(d);
+            d = d.getParent();
         } 
-        while (dst != src);
+        while (d != s);
 
         Collections.reverse(l);
         return l;
@@ -126,7 +132,7 @@ public class TileMap {
      * 플레이어를 기준으로 동,서,남,북 노드를 체크하고 걸어갈 수 있는 노드들만 리스트형태로 가져옵니다.
      * 
      * @param n 기준점이 되는 노드 입니다.
-     * @return 
+     * @return 이웃한 노드들을 List 형태로 반환
      */
     private List<TileNode> getNeighbors(TileNode n) {
         List<TileNode> l = new ArrayList<>();

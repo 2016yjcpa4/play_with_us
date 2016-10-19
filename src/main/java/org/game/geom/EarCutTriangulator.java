@@ -38,9 +38,9 @@ public final class EarCutTriangulator {
         
         for(int i = 0; i < p.size(); i += 3) {
             Polygon pp = new Polygon();
-            pp.add(new Point2D((int) p.get(i).x, (int) p.get(i).y));
-            pp.add(new Point2D((int) p.get(i + 1).x, (int) p.get(i + 1).y));
-            pp.add(new Point2D((int) p.get(i + 2).x, (int) p.get(i + 2).y));
+            pp.add(new Point2D((int) p.get(i).getX(), (int) p.get(i).getY()));
+            pp.add(new Point2D((int) p.get(i + 1).getX(), (int) p.get(i + 1).getY()));
+            pp.add(new Point2D((int) p.get(i + 2).getX(), (int) p.get(i + 2).getY()));
             
             a.add(pp);
         }
@@ -63,12 +63,12 @@ public final class EarCutTriangulator {
 			int ptType[] = classifyPoints(polygon);
 
 			for (int i = 0; i < polygon.size(); i++) {
-				float x1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).x;
-				float y1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).y;
-				float x2 = polygon.get(i).x;
-				float y2 = polygon.get(i).y;
-				float x3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).x;
-				float y3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).y;
+				float x1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).getX();
+				float y1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).getY();
+				float x2 = polygon.get(i).getX();
+				float y2 = polygon.get(i).getY();
+				float x3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).getX();
+				float y3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).getY();
 
 				if (ear(polygon, ptType, x1, y1, x2, y2, x3, y3)) {
 
@@ -98,7 +98,7 @@ public final class EarCutTriangulator {
 		for (int i = 0; i < polygon.size(); i++) {
 			Vector2D p1 = polygon.get(i);
 			Vector2D p2 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1);
-			area += p1.x * p2.y - p2.x * p1.y;
+			area += p1.getX() * p2.getY() - p2.getX() * p1.getY();
 		}
 
 		if (area < 0)
@@ -124,24 +124,24 @@ public final class EarCutTriangulator {
 
 		for (int i = 0; i < polygon.size(); i++) {
 			if (i == 0) {
-				if (convex(polygon.get(polygon.size() - 1).x, polygon.get(polygon.size() - 1).y, polygon.get(i).x, polygon.get(i).y,
-					polygon.get(i + 1).x, polygon.get(i + 1).y)) {
+				if (convex(polygon.get(polygon.size() - 1).getX(), polygon.get(polygon.size() - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(),
+					polygon.get(i + 1).getX(), polygon.get(i + 1).getY())) {
 					ptType[i] = 1; /* point is convex */
 				} else {
 					ptType[i] = -1; /* point is concave */
 					concaveCount++;
 				}
 			} else if (i == polygon.size() - 1) {
-				if (convex(polygon.get(i - 1).x, polygon.get(i - 1).y, polygon.get(i).x, polygon.get(i).y, polygon.get(0).x,
-					polygon.get(0).y)) {
+				if (convex(polygon.get(i - 1).getX(), polygon.get(i - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(), polygon.get(0).getX(),
+					polygon.get(0).getY())) {
 					ptType[i] = 1; /* point is convex */
 				} else {
 					ptType[i] = -1; /* point is concave */
 					concaveCount++;
 				}
 			} else { /* i > 0 */
-				if (convex(polygon.get(i - 1).x, polygon.get(i - 1).y, polygon.get(i).x, polygon.get(i).y, polygon.get(i + 1).x,
-					polygon.get(i + 1).y)) {
+				if (convex(polygon.get(i - 1).getX(), polygon.get(i - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(), polygon.get(i + 1).getX(),
+					polygon.get(i + 1).getY())) {
 					ptType[i] = 1; /* point is convex */
 				} else {
 					ptType[i] = -1; /* point is concave */
@@ -190,12 +190,12 @@ public final class EarCutTriangulator {
 
 		while ((i < polygon.size() - 1) && (noPointInTriangle)) {
 			if ((ptType[i] == -1) /* point is concave */
-				&& (((polygon.get(i).x != x1) && (polygon.get(i).y != y1)) || ((polygon.get(i).x != x2) && (polygon.get(i).y != y2)) || ((polygon
-					.get(i).x != x3) && (polygon.get(i).y != y3)))) {
+				&& (((polygon.get(i).getX() != x1) && (polygon.get(i).getY() != y1)) || ((polygon.get(i).getX() != x2) && (polygon.get(i).getY() != y2)) || ((polygon
+					.get(i).getX() != x3) && (polygon.get(i).getY() != y3)))) {
 
-				area1 = area(x1, y1, x2, y2, polygon.get(i).x, polygon.get(i).y);
-				area2 = area(x2, y2, x3, y3, polygon.get(i).x, polygon.get(i).y);
-				area3 = area(x3, y3, x1, y1, polygon.get(i).x, polygon.get(i).y);
+				area1 = area(x1, y1, x2, y2, polygon.get(i).getX(), polygon.get(i).getY());
+				area2 = area(x2, y2, x3, y3, polygon.get(i).getX(), polygon.get(i).getY());
+				area3 = area(x3, y3, x1, y1, polygon.get(i).getX(), polygon.get(i).getY());
 
 				if (area1 > 0) if ((area2 > 0) && (area3 > 0)) noPointInTriangle = false;
 				if (area1 <= 0) if ((area2 <= 0) && (area3 <= 0)) noPointInTriangle = false;

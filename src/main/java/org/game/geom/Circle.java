@@ -5,19 +5,20 @@ import java.util.List;
 import org.game.math.Point2D;
 
 public class Circle implements Shape { 
-    private Point2D pos = new Point2D();
-    private int rad;
+    
+    private Point2D mPos = new Point2D();
+    private int mRadius;
      
-    public Circle(int x, int y, int rad) {
-        this.pos.set(x, y);
-        this.rad = rad;
+    public Circle(int x, int y, int r) {
+        mPos.set(x, y);
+        mRadius = r;
     }
     
     public int getRadius() {
-        return rad;
+        return mRadius;
     }
     
     public Point2D getPosition() {
-        return pos;
+        return mPos;
     }
 }

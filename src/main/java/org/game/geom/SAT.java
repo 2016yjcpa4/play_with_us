@@ -54,7 +54,7 @@ public class SAT {
      * RIGHT_VORONOI_REGION (1) if it is the right region.
      */
     private static int voronoiRegion(Vector2D line, Vector2D point) {
-        double len2 = line.getLengthSquared();
+        double len2 = line.lengthSquared();
         double dp = point.scalar(line);
         // If the point is beyond the start of the line, it is in the
         // left voronoi region.
@@ -108,7 +108,7 @@ public class SAT {
             // If the distance between the center of the circle and the point
             // is bigger than the radius, the polygon is definitely not fully in
             // the circle.
-            if (response != null && point.getLengthSquared() > radius2) {
+            if (response != null && point.lengthSquared() > radius2) {
                 response.aInB = false;
             }
 
@@ -123,14 +123,14 @@ public class SAT {
                 region = voronoiRegion(edge, point2);
                 if (region == RIGHT_VORONOI_REGION) {
                     // It's in the region we want.  Check if the circle intersects the point.
-                    double dist = point.getLength();
+                    double dist = point.length();
                     if (dist > radius) {
                         // No intersection 
                         return false;
                     } else if (response != null) {
                         // It intersects, calculate the overlap.
                         response.bInA = false;
-                        overlapN = point.setNormalize();
+                        overlapN = point.norm();
                         overlap = (float) (radius - dist);
                     }
                 }
@@ -143,14 +143,14 @@ public class SAT {
                 region = voronoiRegion(edge, point);
                 if (region == LEFT_VORONOI_REGION) {
                     // It's in the region we want.  Check if the circle intersects the point.
-                    float dist = (float) point.getLength();
+                    float dist = (float) point.length();
                     if (dist > radius) {
                         // No intersection 
                         return false;
                     } else if (response != null) {
                         // It intersects, calculate the overlap.
                         response.bInA = false;
-                        overlapN = point.setNormalize();
+                        overlapN = point.norm();
                         overlap = radius - dist;
                     }
                 }
@@ -158,7 +158,7 @@ public class SAT {
             } else {
                 // Need to check if the circle is intersecting the edge,
                 // Change the edge into its "edge normal".
-                Vector2D normal = edge.setPerpendicular().setNormalize();
+                Vector2D normal = edge.perp().norm();
                 // Find the perpendicular distance between the center of the 
                 // circle and the edge.
                 double dist = point.scalar(normal);
@@ -192,7 +192,7 @@ public class SAT {
             response.a = polygon;
             response.b = circle;
             response.overlapV.set(response.overlapN);
-            response.overlapV = response.overlapV.scale(response.overlap);
+            response.overlapV = response.overlapV.mult(response.overlap);
         }
         return true;
     }

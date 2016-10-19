@@ -10,6 +10,7 @@ import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -113,7 +114,7 @@ public class Player extends MapObject {
     
     // Math.atan2(dir - pos) = 각도
     public double getAngle() {
-        return dir.sub(getPosition()).getAngle();
+        return dir.sub(getPosition()).angle();
     }
     
     public Point2D getPosition() {
@@ -123,7 +124,7 @@ public class Player extends MapObject {
     int s = 0;
     
     @Override
-    public void draw(GameLoop c, Graphics2D g2d) { 
+    public void draw(Game g, Graphics2D g2d) { 
         
         Point2D p = getPosition();
         float x = p.getX();
@@ -159,15 +160,14 @@ public class Player extends MapObject {
     }
 
     @Override
-    public void update(GameLoop c) {
-        Game g= (Game) c;
-        if (g.w) vel.setY(-4);
-        if (g.s) vel.setY(4);
-        if (g.a) vel.setX(-4);
-        if (g.d) vel.setX(4);
+    public void update(Game g) { 
+        if (g.getInputManager().isPressed(KeyEvent.VK_W)) vel.setY(-4);
+        if (g.getInputManager().isPressed(KeyEvent.VK_S)) vel.setY(4);
+        if (g.getInputManager().isPressed(KeyEvent.VK_A)) vel.setX(-4);
+        if (g.getInputManager().isPressed(KeyEvent.VK_D)) vel.setX(4);
         
-        if ( ! (g.w || g.s)) vel.setY(0);
-        if ( ! (g.a || g.d)) vel.setX(0);
+        if ( ! (g.getInputManager().isPressed(KeyEvent.VK_W) || g.getInputManager().isPressed(KeyEvent.VK_S))) vel.setY(0);
+        if ( ! (g.getInputManager().isPressed(KeyEvent.VK_A) || g.getInputManager().isPressed(KeyEvent.VK_D))) vel.setX(0);
         
         Point2D p = getPosition();
         

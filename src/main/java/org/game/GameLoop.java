@@ -12,17 +12,17 @@ public class GameLoop extends Thread {
     private static final int FPS = 30;
     private static final int FRAME_DELAY = 1000 / FPS;
 
-    private boolean isRunning = false;
+    private boolean mIsRunning = false;
     
-    private long delta;
+    private long mDelta;
     
-    protected Canvas canvas = new Canvas() {
+    protected Canvas mCanvas = new Canvas() {
         
         @Override
         public void paint(Graphics g) {
             super.paint(g); //To change body of generated methods, choose Tools | Templates.
         
-            if ( ! isRunning) {
+            if ( ! mIsRunning) {
                 start();
             }
         }
@@ -32,16 +32,16 @@ public class GameLoop extends Thread {
     }
 
     public Canvas getCanvas() {
-        return canvas;
+        return mCanvas;
     }
     
     public long getDelta() {
-        return delta;
+        return mDelta;
     }
 
     @Override
     public synchronized void start() {
-        isRunning = true;
+        mIsRunning = true;
         
         super.start();
     }
@@ -50,18 +50,18 @@ public class GameLoop extends Thread {
     public void run() {
         long n = System.currentTimeMillis();
 
-        canvas.createBufferStrategy(2);
-        BufferStrategy bs = canvas.getBufferStrategy();
+        mCanvas.createBufferStrategy(2);
+        BufferStrategy bs = mCanvas.getBufferStrategy();
 
-        while (isRunning) {
+        while (mIsRunning) {
             update(bs); 
 
             n += FRAME_DELAY;
 
-            delta = n - System.currentTimeMillis();
+            mDelta = n - System.currentTimeMillis();
             
             try {
-                Thread.sleep(Math.max(0, delta));
+                Thread.sleep(Math.max(0, mDelta));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -71,9 +71,9 @@ public class GameLoop extends Thread {
     private void update(BufferStrategy bs) {
         do {
             do {
-                Graphics g = bs.getDrawGraphics();
-                draw((Graphics2D) g);
-                g.dispose();
+                Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
+                draw(g2d);
+                g2d.dispose();
             } 
             while (bs.contentsRestored());
 
@@ -85,9 +85,9 @@ public class GameLoop extends Thread {
     protected void draw(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // 안티앨리어싱
         
-        g2d.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        g2d.clearRect(0, 0, mCanvas.getWidth(), mCanvas.getHeight());
 
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        g2d.fillRect(0, 0, mCanvas.getWidth(), mCanvas.getHeight());
     }
 }  

@@ -18,7 +18,15 @@ public class Polygon implements Shape {
     public Polygon(List<Point2D> p) {
         mPoints.addAll(p);
         
-        calc();
+        for (int n = 0; n < getPoints().size(); n++) {
+            Point2D p1 = getPoint(n);
+            Point2D p2 = getPoint(n + 1);
+            
+            Vector2D v = new Vector2D(p2).sub(p1);
+            
+            mEdges.add(v);
+            mNormals.add(new Vector2D(v).perp().norm());
+        }
     }
 
     public int[] getXPoints() {
@@ -57,7 +65,7 @@ public class Polygon implements Shape {
         Vector2D v = new Vector2D();
 
         for (int n = 0; n < len; ++n) {
-            v = v.add(new Vector2D(mPoints.get(n).x, mPoints.get(n).y));
+            v = v.add(new Vector2D(mPoints.get(n).getX(), mPoints.get(n).getY()));
         }
 
         int x = (int) (v.getX() / len);
@@ -67,37 +75,19 @@ public class Polygon implements Shape {
     }
 
     public Point2D getPoint(int n) {
-        int len = mPoints.size();
+        int c = mPoints.size();
 
         return mPoints.get(n < 0 ? 
-                                n % len + len : 
-                                n % len);
+                                n % c + c : 
+                                n % c);
     }
     
     public Vector2D getEdge(int n) {
-        int len = mEdges.size();
+        int c = mEdges.size();
 
-        Vector2D v = new Vector2D(mEdges.get(n < 0 ? 
-                                n % len + len : 
-                                n % len));
-        return v;
-    }
-    
-    private void calc() {
-        mEdges.clear();
-        mNormals.clear();
-        
-        List<Point2D> points = getPoints();
-        int len = points.size();
-        for (int i = 0; i < len; i++) {
-            Point2D p1 = points.get(i);
-            Point2D p2 = i < len - 1 ? points.get(i + 1) : points.get(0);
-            Vector2D e = new Vector2D(p2).sub(p1);
-            Vector2D n = new Vector2D(e).setPerpendicular().setNormalize();
-            
-            mEdges.add(e);
-            mNormals.add(n);
-        }
+        return new Vector2D(mEdges.get(n < 0 ? 
+                                n % c + c : 
+                                n % c));
     }
     
     public void add(Point2D p) {

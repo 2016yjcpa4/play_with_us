@@ -4,46 +4,39 @@ import java.util.List;
 
 public class Point2D {
     
-    public int x;
-    public int y;
+    private int mX;
+    private int mY;
     
     public Point2D() {
         this(0, 0);
     }
     
     public Point2D(int x, int y) {
-        this.x = x;
-        this.y = y;
+        mX = x;
+        mY = y;
     }
     
     public void setX(int x) {
-        this.x = x;
+        mX = x;
     }
     
     public void setY(int y) {
-        this.y = y;
+        mY = y;
     }
     
     public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
+        mX = x;
+        mY = y;
     }
     
     public int getX() {
-        return x;
+        return mX;
     }
     
     public int getY() {
-        return y;
+        return mY;
     }
     
-    public boolean equals(Object o) {
-        
-        Point2D p = (Point2D) o;
-        
-        return p.getX() == getX() && p.getY() == getY();
-    }
-
     public static int[] getXPoints(List<Point2D> l) {
         int[] x = new int[l.size()];
         
@@ -62,10 +55,5 @@ public class Point2D {
         }
         
         return y;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("{x:%d, y:%d}", x, y);
     }
 }

@@ -7,13 +7,14 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
-import org.game.GameLoop;
+import org.game.Game;
 import org.game.geom.Polygon;
 import org.game.geom.Raycast;
 import org.game.math.Point2D;
 
 public class Light extends MapObject {
 
+    private Point2D mPos = new Point2D();
     private double mAngle; // 각도
     private float mLength = 300f; // 빛의 길이
     private double mExtent = 50; // 빛의 범위
@@ -48,6 +49,10 @@ public class Light extends MapObject {
         return mExtent;
     }
     
+    public Point2D getPosition() {
+        return mPos;
+    }
+    
     private Polygon getRaycast() {    
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
@@ -77,12 +82,12 @@ public class Light extends MapObject {
     }
 
     @Override
-    public void update(GameLoop g) {
+    public void update(Game g) {
         // 빛에서 업데이트 되는건 없을거같은데....???
     }
 
     @Override
-    public void draw(GameLoop g, Graphics2D g2d) {
+    public void draw(Game g, Graphics2D g2d) {
         if (mTurnOff) {
             return;
         }

@@ -2,6 +2,7 @@ package org.game.map;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import org.game.Game;
 import org.game.GameLoop;
 import org.game.geom.Polygon;
 import org.game.geom.Rect; 
@@ -24,7 +25,7 @@ public class Wall extends MapObject {
     }
 
     @Override
-    public void draw(GameLoop g, Graphics2D g2d) {
+    public void draw(Game g, Graphics2D g2d) {
         int[] x = mCollider.getXPoints();
         int[] y = mCollider.getYPoints();
         
@@ -43,7 +44,7 @@ public class Wall extends MapObject {
     }
 
     @Override
-    public void update(GameLoop g) { 
+    public void update(Game g) { 
     }
     
 }

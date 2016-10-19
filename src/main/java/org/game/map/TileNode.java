@@ -2,66 +2,66 @@ package org.game.map;
 
 public class TileNode {
 
-    private TileNode parent; 
+    private TileNode mParent; 
     
-    private boolean canWalk = true; 
+    private boolean mCanWalk = true; 
     
-    private int x;
-    private int y; 
+    private int mX;
+    private int mY; 
     
-    private int g;
-    private int h; 
+    private int mGoal;
+    private int mHeuristic; 
  
     public TileNode(int x, int y) {
-        this.x = x;
-        this.y = y;
+        mX = x;
+        mY = y;
     }
  
     public void setParent(TileNode n) {
-        this.parent = n;
+        mParent = n;
     }
  
     public TileNode getParent() {
-        return parent;
+        return mParent;
     }
  
     public void setH(int h) {
-        this.h = h;
+        mHeuristic = h;
     }
  
     public int getH() {
-        return h;
+        return mHeuristic;
     }
  
     public void setG(int g) {
-        this.g = g;
+        mGoal = g;
     }
  
     public int getG() {
-        return g;
+        return mGoal;
     }
  
     public int getX() {
-        return x;
+        return mX;
     }
     
     public int getY() {
-        return y;
+        return mY;
     } 
 
     public int getF() {
-        return g + h;
+        return mGoal + mHeuristic;
     } 
     
     public boolean canWalk() {
-        return canWalk;
+        return mCanWalk;
     }
     
     public void setWalkable() {
-        canWalk = true;
+        mCanWalk = true;
     }
     
     public void setNotWalkable() {
-        canWalk = false;
+        mCanWalk = false;
     }
 }
