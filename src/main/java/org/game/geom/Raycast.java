@@ -1,16 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.game.geom;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.game.math.Line2D; 
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
@@ -78,12 +70,10 @@ public class Raycast {
                         n2);
     }
 
-    /**
-     * 들어온 Line2D 에서 시작점과 끝점을 분리하는작업.
-     * 
-     * @param l
-     * @return 분리된 점을 목록형태로 가져옵니다.
-     */
+    private static double getDiff(double n1, double n2) {
+        return (n1 - n2 + Math.PI + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
+    }
+
     private static List<Point2D> getUniquePoints(List<Line2D> l) {
         List<Point2D> r = new ArrayList<>();
 
@@ -95,48 +85,38 @@ public class Raycast {
         return r;
     }
 
-    private static double getDiff(double src, double dst) {
-        return (src - dst + Math.PI + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
-    }
-
-    private static List<Double> getUniqueAngles(Point2D s, double dir, List<Line2D> l) {
+    private static List<Double> getUniqueAngles(Point2D s, double d1, double d2, List<Line2D> l) {
         List<Double> r = new ArrayList<>();
 
-        List<Point2D> p = getUniquePoints(l);
+        r.add(d1 - d2);
+        r.add(d1 + d2);
 
-        double max = dir + Math.toRadians(25);
-        double min = dir - Math.toRadians(25);
+        for (Point2D p : getUniquePoints(l)) {
+            double n1 = Math.atan2(p.getY() - s.getY(), p.getX() - s.getX());
+            double n2 = getDiff(d1, n1);
 
-        r.add(min);
-        r.add(max);
-
-        final double d = Math.toRadians(25);
-        
-        for (Point2D e : p) {
-            double ang = Math.atan2(e.getY() - s.getY(), e.getX() - s.getX());
-
-            double anglediff = getDiff(dir, ang);
-
-            // 양쪽으로 편차를 더 두어 벽이있는지 체크함
-            if (-d <= anglediff && anglediff <= d) {
-                r.add(ang - 0.0001); 
-                r.add(ang); 
-                r.add(ang + 0.0001);
+            if (-d2 <= n2 && n2 <= d2) { // 양쪽으로 편차를 더 두어 벽이있는지 체크함
+                r.add(n1 - 0.0001); 
+                r.add(n1); 
+                r.add(n1 + 0.0001);
             }
         }
 
-        r.sort(new Comparator<Double>() {
+        r.sort(new Comparator() {
             
             @Override
-            public int compare(Double a, Double b) {
-                double c = getDiff(a, b);
+            public int compare(Object o1, Object o2) {
+                double n = getDiff((Double) o1, (Double) o2);
                 
-                if (c > 0) {
+                if (n > 0) {
                     return 1;
-                }else if (c < 0) {
+                }
+                else if (n < 0) {
                     return -1;
                 }
-                return 0;
+                else {
+                    return 0;
+                }
             }
         });
 
@@ -148,7 +128,7 @@ public class Raycast {
 
         List<IntersectionResult> v = new ArrayList();
 
-        for (Double n2 : getUniqueAngles(p, n, l)) {
+        for (Double n2 : getUniqueAngles(p, n, Math.toRadians(25), l)) {
             
             Line2D l2 = new Line2D(p.getX(),
                                     p.getY(),

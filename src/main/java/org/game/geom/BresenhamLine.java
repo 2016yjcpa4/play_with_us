@@ -25,7 +25,7 @@ public class BresenhamLine {
         int dx = Math.abs(x2 - x1);
         int dy = -Math.abs(y2 - y1);
         
-        double e = dx + dy;
+        double n1 = dx + dy;
 
         while (true) {
             
@@ -35,13 +35,13 @@ public class BresenhamLine {
                 break;
             }
             
-            double theta = 2 * e;
+            double n2 = 2 * n1;
             
-            if (theta > dy) {
-                e += dy;
+            if (n2 > dy) {
+                n1 += dy;
                 x1 += x;
-            } else if (theta < dx) {
-                e += dx;
+            } else if (n2 < dx) {
+                n1 += dx;
                 y1 += y;
             }
         }

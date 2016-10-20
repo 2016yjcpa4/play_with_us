@@ -7,241 +7,199 @@ package org.game.geom;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List; 
+import java.util.List;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
 
 /**
- * A simple implementation of the ear cutting algorithm to triangulate simple polygons without holes. For more information see
+ * A simple implementation of the ear cutting algorithm to triangulate simple
+ * polygons without holes. For more information see
  * http://cgm.cs.mcgill.ca/~godfried/teaching/cg-projects/97/Ian/algorithm2.html
+ *
  * @author badlogicgames@gmail.com
- * 
+ *
  */
 public final class EarCutTriangulator {
-	/**
-	 * Triangulates the list of points and returns an array of {@link Vector3} triples that each form a single triangle.
-	 * 
-	 * @param polygon The polygon to triangulate
-	 * @return The list of triangle vertices.
-	 */
-    
-    public  List<Polygon> triangulate (Polygon polygon) { 
+
+    public static List<Polygon> getTriangulate(Polygon p) {
+        EarCutTriangulator t = new EarCutTriangulator();
+        List<Vector2D> l = t.getTriangulate(p.getVectors());
         
-        List<Vector2D> v = new ArrayList<>();
-        
-        for(int i = 0; i < polygon.getPoints().size(); ++i) {
-            v.add(new Vector2D(polygon.getPoint(i)));
+        List<Polygon> r = new ArrayList<>();
+
+        for (int n = 0; n < l.size(); n += 3) {
+            Polygon o = new Polygon();
+            o.addPoint(new Point2D((int) l.get(n).getX(), (int) l.get(n).getY()));
+            o.addPoint(new Point2D((int) l.get(n + 1).getX(), (int) l.get(n + 1).getY()));
+            o.addPoint(new Point2D((int) l.get(n + 2).getX(), (int) l.get(n + 2).getY()));
+            r.add(o);
         }
-        
-        List<Vector2D> p = triangulate(v);
-        List<Polygon> a = new ArrayList<Polygon>();
-        
-        for(int i = 0; i < p.size(); i += 3) {
-            Polygon pp = new Polygon();
-            pp.add(new Point2D((int) p.get(i).getX(), (int) p.get(i).getY()));
-            pp.add(new Point2D((int) p.get(i + 1).getX(), (int) p.get(i + 1).getY()));
-            pp.add(new Point2D((int) p.get(i + 2).getX(), (int) p.get(i + 2).getY()));
-            
-            a.add(pp);
-        }
-        
-        return a;
+
+        return r;
     }
     
-	public  List<Vector2D> triangulate (List<Vector2D> polygon) {
-		List<Vector2D> triangles = new ArrayList<Vector2D>();
-		List<Vector2D> tmp = new ArrayList<Vector2D>(polygon.size());
-		tmp.addAll(polygon);
-		polygon = tmp;
+    private static final int CONVEX_POINT = 1;
+    private static final int CONCAVE_POINT = -1;
+    
+    private int mConcaveCount = 0;
+    
+    private EarCutTriangulator() {
+    }
 
-		if (polygon.size() == 3) {
-			triangles.addAll(polygon);
-			return triangles;
-		}
+    private List<Vector2D> getTriangulate(List<Vector2D> l) {
+        List<Vector2D> r = new ArrayList<Vector2D>();
 
-		while (polygon.size() >= 3) {
-			int ptType[] = classifyPoints(polygon);
+        if (l.size() == 3) {
+            r.addAll(l);
+            return r;
+        }
 
-			for (int i = 0; i < polygon.size(); i++) {
-				float x1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).getX();
-				float y1 = polygon.get(i == 0 ? polygon.size() - 1 : i - 1).getY();
-				float x2 = polygon.get(i).getX();
-				float y2 = polygon.get(i).getY();
-				float x3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).getX();
-				float y3 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1).getY();
+        while (l.size() >= 3) {
+            int p[] = getClassifyPoints(l);
 
-				if (ear(polygon, ptType, x1, y1, x2, y2, x3, y3)) {
+            for (int n = 0; n < l.size(); ++n) {
+                float x1 = l.get(n == 0 ? l.size() - 1 : n - 1).getX();
+                float y1 = l.get(n == 0 ? l.size() - 1 : n - 1).getY();
+                float x2 = l.get(n).getX();
+                float y2 = l.get(n).getY();
+                float x3 = l.get(n == l.size() - 1 ? 0 : n + 1).getX();
+                float y3 = l.get(n == l.size() - 1 ? 0 : n + 1).getY();
 
-					cutEar(polygon, triangles, i);
-					updatePolygon(polygon, i);
-					break;
-				}
-			}
-		}
+                if (isEar(l, p, x1, y1, x2, y2, x3, y3)) {
 
-// if( polygon.size() == 3 )
-// {
-// triangles.add( polygon.get(0) );
-// triangles.add( polygon.get(1) );
-// triangles.add( polygon.get(2) );
-// }
+                    setCutEar(l, r, n);
+                    l.remove(n);
+                    break;
+                }
+            }
+        }
+        
+        return r;
+    }
 
-		return triangles;
-	}
+    public boolean isPolygonClockwise(List<Vector2D> v) {
+        float n = 0;
+        
+        for (int l = 0; l < v.size(); l++) {
+            Vector2D p1 = v.get(l);
+            Vector2D p2 = v.get(l == v.size() - 1 ? 0 : l + 1);
+            n += p1.getX() * p2.getY() - p2.getX() * p1.getY();
+        }
 
-	/*
-	 * polygonClockwise: Returns true if user inputted polygon in clockwise order, false if counterclockwise. The Law of Cosines is
-	 * used to determine the angle.
-	 */
-	public  boolean polygonClockwise (List<Vector2D> polygon) {
-		float area = 0;
-		for (int i = 0; i < polygon.size(); i++) {
-			Vector2D p1 = polygon.get(i);
-			Vector2D p2 = polygon.get(i == polygon.size() - 1 ? 0 : i + 1);
-			area += p1.getX() * p2.getY() - p2.getX() * p1.getY();
-		}
+        if (n < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		if (area < 0)
-			return true;
-		else
-			return false;
-	}
- 
-	 int concaveCount = 0;
+    private int[] getClassifyPoints(List<Vector2D> l) {
+        int[] p = new int[l.size()];
+        mConcaveCount = 0;
 
-	 int[] classifyPoints (List<Vector2D> polygon) {
-		int[] ptType = new int[polygon.size()];
-		concaveCount = 0;
+        if ( ! isPolygonClockwise(l)) {
+            Collections.reverse(l);
+        }
 
-		/*
-		 * Before cutting any ears, we must determine if the polygon was inputted in clockwise order or not, since the algorithm for
-		 * cutting ears assumes that the polygon's points are in clockwise order. If the points are in counterclockwise order, they
-		 * are simply reversed in the array.
-		 */
-		if (!polygonClockwise(polygon)) {
-			Collections.reverse(polygon);
-		}
+        for (int n = 0; n < l.size(); ++n) {
+            if (n == 0) {
+                if (isConvex(l.get(l.size() - 1), l.get(n), l.get(n + 1))) {
+                    p[n] = CONVEX_POINT;
+                } else {
+                    p[n] = CONCAVE_POINT;
+                    mConcaveCount++;
+                }
+            } else if (n == l.size() - 1) {
+                if (isConvex(l.get(n - 1), l.get(n), l.get(0))) {
+                    p[n] = CONVEX_POINT; 
+                } else {
+                    p[n] = CONCAVE_POINT;
+                    mConcaveCount++;
+                }
+            } else if (isConvex(l.get(n - 1), l.get(n), l.get(n + 1))) {
+                p[n] = CONVEX_POINT;
+            } else {
+                p[n] = CONCAVE_POINT;
+                mConcaveCount++;
+            }
+        }
 
-		for (int i = 0; i < polygon.size(); i++) {
-			if (i == 0) {
-				if (convex(polygon.get(polygon.size() - 1).getX(), polygon.get(polygon.size() - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(),
-					polygon.get(i + 1).getX(), polygon.get(i + 1).getY())) {
-					ptType[i] = 1; /* point is convex */
-				} else {
-					ptType[i] = -1; /* point is concave */
-					concaveCount++;
-				}
-			} else if (i == polygon.size() - 1) {
-				if (convex(polygon.get(i - 1).getX(), polygon.get(i - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(), polygon.get(0).getX(),
-					polygon.get(0).getY())) {
-					ptType[i] = 1; /* point is convex */
-				} else {
-					ptType[i] = -1; /* point is concave */
-					concaveCount++;
-				}
-			} else { /* i > 0 */
-				if (convex(polygon.get(i - 1).getX(), polygon.get(i - 1).getY(), polygon.get(i).getX(), polygon.get(i).getY(), polygon.get(i + 1).getX(),
-					polygon.get(i + 1).getY())) {
-					ptType[i] = 1; /* point is convex */
-				} else {
-					ptType[i] = -1; /* point is concave */
-					concaveCount++;
-				}
-			}
-		}
+        return p;
+    }
 
-		return ptType;
-	}
+    private boolean isConvex(Vector2D v1, Vector2D v2, Vector2D v3) {
+        return isConvex(v1.getX(), v1.getY(), v2.getX(), v2.getY(), v3.getX(), v3.getY());
+    }
+    
+    private boolean isConvex(float x1, float y1, float x2, float y2, float x3, float y3) {
+        if (getArea(x1, y1, x2, y2, x3, y3) < 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-	/*
-	 * convex: returns true if point (x2, y2) is convex
-	 */
-	 boolean convex (float x1, float y1, float x2, float y2, float x3, float y3) {
-		if (area(x1, y1, x2, y2, x3, y3) < 0)
-			return false;
-		else
-			return true;
-	}
+    private float getArea(float x1, float y1, float x2, float y2, float x3, float y3) {
+        return x1 * (y3 - y2) 
+             + x2 * (y1 - y3)
+             + x3 * (y2 - y1);
+    }
 
-	/*
-	 * area: determines area of triangle formed by three points
-	 */
-	 float area (float x1, float y1, float x2, float y2, float x3, float y3) {
-		float areaSum = 0;
+    private boolean isTriangleContainsPoint(List<Vector2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
+        int n = 0;
+        boolean r = true;
 
-		areaSum += x1 * (y3 - y2);
-		areaSum += x2 * (y1 - y3);
-		areaSum += x3 * (y2 - y1);
+        while (n < l.size() - 1 && r) {
+            
+            if (p[n] == -1 && (((l.get(n).getX() != x1) && (l.get(n).getY() != y1)) 
+                            || ((l.get(n).getX() != x2) && (l.get(n).getY() != y2))
+                            || ((l.get(n).getX() != x3) && (l.get(n).getY() != y3)))) {
 
-		/*
-		 * for actual area, we need to multiple areaSum * 0.5, but we are only interested in the sign of the area (+/-)
-		 */
+                float n1 = getArea(x1, y1, x2, y2, l.get(n).getX(), l.get(n).getY());
+                float n2 = getArea(x2, y2, x3, y3, l.get(n).getX(), l.get(n).getY());
+                float n3 = getArea(x3, y3, x1, y1, l.get(n).getX(), l.get(n).getY());
 
-		return areaSum;
-	}
+                if (n1 > 0 && n2 > 0 && n3 > 0) {
+                    r = false;
+                }
+                
+                if (n1 <= 0 && n2 <= 0 && n3 <= 0) {
+                    r = false;
+                }
+            }
+            n++;
+        }
+        return !r;
+    }
 
-	/*
-	 * triangleContainsPoints: returns true if the triangle formed by three points contains another point
-	 */
-	 boolean triangleContainsPoint (List<Vector2D> polygon, int[] ptType, float x1, float y1, float x2, float y2, float x3, float y3) {
-		int i = 0;
-		float area1, area2, area3;
-		boolean noPointInTriangle = true;
+    private boolean isEar(List<Vector2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
+        if (mConcaveCount != 0) {
+            if (isTriangleContainsPoint(l, p, x1, y1, x2, y2, x3, y3)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
 
-		while ((i < polygon.size() - 1) && (noPointInTriangle)) {
-			if ((ptType[i] == -1) /* point is concave */
-				&& (((polygon.get(i).getX() != x1) && (polygon.get(i).getY() != y1)) || ((polygon.get(i).getX() != x2) && (polygon.get(i).getY() != y2)) || ((polygon
-					.get(i).getX() != x3) && (polygon.get(i).getY() != y3)))) {
-
-				area1 = area(x1, y1, x2, y2, polygon.get(i).getX(), polygon.get(i).getY());
-				area2 = area(x2, y2, x3, y3, polygon.get(i).getX(), polygon.get(i).getY());
-				area3 = area(x3, y3, x1, y1, polygon.get(i).getX(), polygon.get(i).getY());
-
-				if (area1 > 0) if ((area2 > 0) && (area3 > 0)) noPointInTriangle = false;
-				if (area1 <= 0) if ((area2 <= 0) && (area3 <= 0)) noPointInTriangle = false;
-			}
-			i++;
-		}
-		return !noPointInTriangle;
-	}
-
-	/*
-	 * ear: returns true if the point (x2, y2) is an ear, false otherwise
-	 */
-	 boolean ear (List<Vector2D> polygon, int[] ptType, float x1, float y1, float x2, float y2, float x3, float y3) {
-		if (concaveCount != 0)
-			if (triangleContainsPoint(polygon, ptType, x1, y1, x2, y2, x3, y3))
-				return false;
-			else
-				return true;
-		else
-			return true;
-	}
-
-	/*
-	 * cutEar: creates triangle that represents ear for graphics purposes
-	 */
-	 void cutEar (List<Vector2D> polygon, List<Vector2D> triangles, int index) {
-		if (index == 0) {
-			triangles.add(new Vector2D(polygon.get(polygon.size() - 1)));
-			triangles.add(new Vector2D(polygon.get(index)));
-			triangles.add(new Vector2D(polygon.get(index + 1)));
-		} else if ((index > 0) && (index < polygon.size() - 1)) {
-			triangles.add(new Vector2D(polygon.get(index - 1)));
-			triangles.add(new Vector2D(polygon.get(index)));
-			triangles.add(new Vector2D(polygon.get(index + 1)));
-		} else if (index == polygon.size() - 1) {
-			triangles.add(new Vector2D(polygon.get(index - 1)));
-			triangles.add(new Vector2D(polygon.get(index)));
-			triangles.add(new Vector2D(polygon.get(0)));
-		}
-	}
-
-	/*
-	 * updatePolygon: creates new polygon without the ear that was cut
-	 */
-	 void updatePolygon (List<Vector2D> polygon, int index) {
-		polygon.remove(index);
-	}
+    private void setCutEar(List<Vector2D> v, List<Vector2D> l, int n) {
+        if (n == 0) {
+            l.add(new Vector2D(v.get(v.size() - 1)));
+            l.add(new Vector2D(v.get(n)));
+            l.add(new Vector2D(v.get(n + 1)));
+        } 
+        else if ((n > 0) && (n < v.size() - 1)) {
+            l.add(new Vector2D(v.get(n - 1)));
+            l.add(new Vector2D(v.get(n)));
+            l.add(new Vector2D(v.get(n + 1)));
+        } 
+        else if (n == v.size() - 1) {
+            l.add(new Vector2D(v.get(n - 1)));
+            l.add(new Vector2D(v.get(n)));
+            l.add(new Vector2D(v.get(0)));
+        }
+    } 
 
 }

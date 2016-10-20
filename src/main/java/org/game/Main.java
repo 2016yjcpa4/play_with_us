@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
  * 
  * 외부에서 비디오를 재생시키면 게임스레드를 pause 하고
  * 비디오의 재생이 끝나면 게임스레드를 resume 시킵니다.
- * @author Use
+ * @author 차명도.
  */
 public class Main {
     
