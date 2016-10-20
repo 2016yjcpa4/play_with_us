@@ -144,42 +144,42 @@ public class Raycast {
         return r;
     }
 
-    public static List<Point2D> getRaycast(Point2D s, double ang, List<Line2D> l) {
+    public static List<Point2D> getRaycast(Point2D p, double n, List<Line2D> l) {
 
-        List<IntersectionResult> intersects = new ArrayList();
+        List<IntersectionResult> v = new ArrayList();
 
-        for (Double n : getUniqueAngles(s, ang, l)) {
+        for (Double n2 : getUniqueAngles(p, n, l)) {
             
-            Line2D ray = new Line2D(s.getX(),
-                                s.getY(),
-                                s.getX() + (float) Math.cos(n),
-                                s.getY() + (float) Math.sin(n));
+            Line2D l2 = new Line2D(p.getX(),
+                                    p.getY(),
+                                    p.getX() + (float) Math.cos(n2),
+                                    p.getY() + (float) Math.sin(n2));
 
-            IntersectionResult r2 = null;
+            IntersectionResult v1 = null;
             
-            for (Line2D e : l) {
-                IntersectionResult r = getIntersection(ray, e);
+            for (Line2D l3 : l) {
+                IntersectionResult v2 = getIntersection(l2, l3);
                 
-                if (r == null || r.isNaN()) {
+                if (v2 == null || v2.isNaN()) {
                     continue;
                 }
                 
-                if (r2 == null || r.mParam < r2.mParam) {
-                    r2 = r;
+                if (v1 == null || v2.mParam < v1.mParam) {
+                    v1 = v2;
                 }
             }
 
-            if (r2 == null) {
+            if (v1 == null) {
                 continue;
             }
 
-            intersects.add(r2);
+            v.add(v1);
         }
   
         return new ArrayList<Point2D>() {
             {
-                for (IntersectionResult e : intersects) {
-                    add(e.toPoint());
+                for (IntersectionResult v2 : v) {
+                    add(v2.toPoint());
                 }
             }
         };
