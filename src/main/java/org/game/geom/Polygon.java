@@ -18,10 +18,10 @@ public class Polygon implements Shape {
     public Polygon(List<Point2D> p) {
         mPoints.addAll(p);
         
-        setUpdate();
+        calc();
     }
     
-    protected void setUpdate() {
+    private void calc() {
         mEdges.clear();
         mNormals.clear();;
         
@@ -104,7 +104,7 @@ public class Polygon implements Shape {
     public void addPoint(Point2D p) {
         mPoints.add(p);
         
-        setUpdate();
+        calc();
     }
     
     public List<Vector2D> getVectors() {
