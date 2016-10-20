@@ -13,80 +13,83 @@ import java.util.List;
 import java.util.Set;
 import org.game.math.Line2D; 
 import org.game.math.Point2D;
+import org.game.math.Vector2D;
 
+/**
+ * 레이캐스트.
+ * 
+ * @see http://ncase.me/sight-and-light/
+ */
 public class Raycast {
 
     private Raycast() {
-
     }
 
     private static class IntersectionResult {
 
-        public double x;
-        public double y;
-        public double param;
+        public double mX;
+        public double mY;
+        public double mParam;
 
-        public IntersectionResult(double x, double y, double param) {
-            this.x = x;
-            this.y = y;
-            this.param = param;
+        public IntersectionResult(double x, double y, double n) {
+            this.mX = x;
+            this.mY = y;
+            this.mParam = n;
+        }
+        
+        public boolean isNaN() {
+            return Double.isNaN(mX) || Double.isNaN(mY);
+        }
+        
+        public Point2D toPoint() {
+            return new Point2D((int) mX, (int) mY);
         }
     }
 
-    private static IntersectionResult getIntersection(Line2D ray, Line2D segment) {
-
-        // RAY in parametric: Point + Delta*T1
-        double r_px = ray.getX1();
-        double r_py = ray.getY1();
-        double r_dx = ray.getX2() - ray.getX1();
-        double r_dy = ray.getY2() - ray.getY1();
-
-        // SEGMENT in parametric: Point + Delta*T2
-        double s_px = segment.getX1();
-        double s_py = segment.getY1();
-        double s_dx = segment.getX2() - segment.getX1();
-        double s_dy = segment.getY2() - segment.getY1();
-
-        // Are they parallel? If so, no intersect
-        double r_mag = Math.sqrt(r_dx * r_dx + r_dy * r_dy);
-        double s_mag = Math.sqrt(s_dx * s_dx + s_dy * s_dy);
-        if (r_dx / r_mag == s_dx / s_mag && r_dy / r_mag == s_dy / s_mag) {
-            // Unit vectors are the same.
+    /**
+     * 빔을 쐈을때 벽면에 충돌하는 결과를 반환
+     * 
+     * @param l1 빔
+     * @param l2 벽면
+     * @return 
+     */
+    private static IntersectionResult getIntersection(Line2D l1, Line2D l2) {
+        final Vector2D v1 = new Vector2D(l1.getX2(), l1.getY2()).sub(l1.getX1(), l1.getY1());
+        final Vector2D v2 = new Vector2D(l2.getX2(), l2.getY2()).sub(l2.getX1(), l2.getY1());
+        
+        if (v1.getX() / v1.length() == v2.getX() / v2.length() && v1.getY() / v1.length() == v2.getY() / v2.length()) {
             return null;
         }
 
-        // SOLVE FOR T1 & T2
-        // r_px+r_dx*T1 = s_px+s_dx*T2 && r_py+r_dy*T1 = s_py+s_dy*T2
-        // ==> T1 = (s_px+s_dx*T2-r_px)/r_dx = (s_py+s_dy*T2-r_py)/r_dy
-        // ==> s_px*r_dy + s_dx*T2*r_dy - r_px*r_dy = s_py*r_dx + s_dy*T2*r_dx - r_py*r_dx
-        // ==> T2 = (r_dx*(s_py-r_py) + r_dy*(r_px-s_px))/(s_dx*r_dy - s_dy*r_dx)
-        double T2 = (r_dx * (s_py - r_py) + r_dy * (r_px - s_px)) / (s_dx * r_dy - s_dy * r_dx);
-        double T1 = (s_px + s_dx * T2 - r_px) / r_dx;
+        double n1 = (v1.getX() * (l2.getY1() - l1.getY1()) + v1.getY() * (l1.getX1() - l2.getX1())) / (v2.getX() * v1.getY() - v2.getY() * v1.getX());
+        double n2 = (l2.getX1() + v2.getX() * n1 - l1.getX1()) / v1.getX();
 
-        // Must be within parametic whatevers for RAY/SEGMENT
-        if (T1 < 0) {
+        if (n2 < 0) {
             return null;
         }
-        if (T2 < 0 || T2 > 1) {
+        
+        if (n1 < 0 || n1 > 1) {
             return null;
         }
 
-        return new IntersectionResult(r_px + r_dx * T1,
-                r_py + r_dy * T1,
-                T1);
-
+        return new IntersectionResult(
+                        l1.getX1() + v1.getX() * n2,
+                        l1.getY1() + v1.getY() * n2,
+                        n2);
     }
 
-    private static List<Point2D> getPoints(List<Line2D> l) {
+    /**
+     * 들어온 Line2D 에서 시작점과 끝점을 분리하는작업.
+     * 
+     * @param l
+     * @return 분리된 점을 목록형태로 가져옵니다.
+     */
+    private static List<Point2D> getUniquePoints(List<Line2D> l) {
         List<Point2D> r = new ArrayList<>();
 
-        for (Line2D e : l) {
-
-            Point2D p1 = new Point2D((int) e.getX1(), (int) e.getY1());
-            Point2D p2 = new Point2D((int) e.getX2(), (int) e.getY2());
-
-            r.add(p1);
-            r.add(p2);
+        for (int n = 0; n < l.size(); ++n) {
+            r.add(l.get(n).getStartPoint());
+            r.add(l.get(n).getEndPoint());
         }
 
         return r;
@@ -96,10 +99,10 @@ public class Raycast {
         return (src - dst + Math.PI + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
     }
 
-    private static List<Double> getAngles(Point2D s, double dir, List<Line2D> l) {
+    private static List<Double> getUniqueAngles(Point2D s, double dir, List<Line2D> l) {
         List<Double> r = new ArrayList<>();
 
-        List<Point2D> p = getPoints(l);
+        List<Point2D> p = getUniquePoints(l);
 
         double max = dir + Math.toRadians(25);
         double min = dir - Math.toRadians(25);
@@ -123,6 +126,7 @@ public class Raycast {
         }
 
         r.sort(new Comparator<Double>() {
+            
             @Override
             public int compare(Double a, Double b) {
                 double c = getDiff(a, b);
@@ -144,52 +148,40 @@ public class Raycast {
 
         List<IntersectionResult> intersects = new ArrayList();
 
-        for (Double angle : getAngles(s, ang, l)) {
-
-            // Calculate dx & dy from angle
-            float dx = (float) Math.cos(angle);
-            float dy = (float) Math.sin(angle);
-
+        for (Double n : getUniqueAngles(s, ang, l)) {
+            
             Line2D ray = new Line2D(s.getX(),
-                    s.getY(),
-                    (s.getX() + dx),
-                    (s.getY() + dy));
+                                s.getY(),
+                                s.getX() + (float) Math.cos(n),
+                                s.getY() + (float) Math.sin(n));
 
-            // Find CLOSEST intersection
-            IntersectionResult closestIntersect = null;
+            IntersectionResult r2 = null;
+            
             for (Line2D e : l) {
-                IntersectionResult intersect = getIntersection(ray, e);
+                IntersectionResult r = getIntersection(ray, e);
                 
-                if (intersect == null) {
-                    continue;
-                }
-
-                if (Double.isNaN(intersect.x) || Double.isNaN(intersect.y)) {
+                if (r == null || r.isNaN()) {
                     continue;
                 }
                 
-                if (closestIntersect == null || intersect.param < closestIntersect.param) {
-                    closestIntersect = intersect;
+                if (r2 == null || r.mParam < r2.mParam) {
+                    r2 = r;
                 }
             }
 
-            // Intersect angle
-            if (closestIntersect == null) {
+            if (r2 == null) {
                 continue;
             }
 
-            // Add to list of intersects
-            intersects.add(closestIntersect);
-
+            intersects.add(r2);
         }
-
-        List<Point2D> ll = new ArrayList<>();
-
-        for (IntersectionResult r : intersects) {
-            ll.add(new Point2D((int) r.x, (int) r.y));
-        }
-        
-
-        return ll;
+  
+        return new ArrayList<Point2D>() {
+            {
+                for (IntersectionResult e : intersects) {
+                    add(e.toPoint());
+                }
+            }
+        };
     }
 }

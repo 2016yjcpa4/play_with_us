@@ -28,5 +28,12 @@ public class Line2D {
     public float getY2() {
         return mY2;
     } 
-     
+    
+    public Point2D getStartPoint() {
+        return new Point2D((int) mX1, (int) mY1);
+    }     
+    
+    public Point2D getEndPoint() {
+        return new Point2D((int) mX2, (int) mY2);
+    }     
 }
