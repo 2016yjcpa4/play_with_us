@@ -33,50 +33,47 @@ public class Main {
         return INSTANCE;
     }
     
-    private JFrame f = new JFrame();
-    private Game g = new Game();
-    private Video v = new Video();
+    private JFrame mWindow = new JFrame();
+    private Game mGame = new Game();
+    private Video mVideo = new Video();
     
     private Main() {
-        Container c = f.getContentPane();
+        Container c = mWindow.getContentPane();
         c.setLayout(new OverlayLayout(c));
-        c.add(g.getCanvas());
-        c.add(v.getCanvas());
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(1280, 800);
+        c.add(mGame.getCanvas());
+        c.add(mVideo.getCanvas());
+        mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mWindow.setSize(1280, 800);
         //setResizable(false);
     }
     
     public void play(File f) {
-        
-        // http://stackoverflow.com/questions/16758346/how-pause-and-then-resume-a-thread
-        
-        v.open(f);
-        v.play();
+        mVideo.open(f);
+        mVideo.play();
         
         new Timer().schedule(new TimerTask() {
             
             @Override
             public void run() {
-                g.getCanvas().setVisible(true);
-                v.getCanvas().setVisible(false);
-                v.stop();
+                mGame.getCanvas().setVisible(true);
+                mVideo.getCanvas().setVisible(false);
+                mVideo.stop();
             }
         }, 1000);
         
-        v.addListener(new VLC.Listener() {
+        mVideo.addListener(new VLC.Listener() {
             
             @Override
             public void start() {
-                v.getCanvas().setVisible(true);
-                g.getCanvas().setVisible(false);
+                mVideo.getCanvas().setVisible(true);
+                mGame.getCanvas().setVisible(false);
             }
 
             @Override
             public void stop() {
-                v.getCanvas().setVisible(false);
-                g.getCanvas().setVisible(true);
-                v.close();
+                mVideo.getCanvas().setVisible(false);
+                mGame.getCanvas().setVisible(true);
+                mVideo.close();
             }
 
             @Override
@@ -86,17 +83,17 @@ public class Main {
     }
     
     public void start() {
-        f.setVisible(true);
+        mWindow.setVisible(true);
         
         play(new File("./res/test.mov"));
     }
     
     public Game getGame() {
-        return g;
+        return mGame;
     }
     
     public Video getVideo() {
-        return v;
+        return mVideo;
     }
     
     public static void main(String[] args) { 

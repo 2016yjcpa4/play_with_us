@@ -69,7 +69,7 @@ public class CollisionDetection {
     
     private static int getVoronoiRegion(Vector2D v1, Vector2D v2) {
         double n1 = v1.lengthSquared();
-        double n2 = v2.scalar(v1);
+        double n2 = v2.dot(v1);
         
         if (n2 < 0) {
             return LEFT_VORONOI_REGION;
@@ -156,7 +156,7 @@ public class CollisionDetection {
             } 
             else {
                 Vector2D v4 = v2.perp().norm();
-                double d = v3.scalar(v4);
+                double d = v3.dot(v4);
                 if (d > 0 && Math.abs(d) > c.getRadius()) {
                     return false;
                 }

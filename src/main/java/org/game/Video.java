@@ -8,18 +8,18 @@ import javax.swing.SwingUtilities;
 
 public class Video {
     
-    private VLC v = new VLC();
-    private Canvas c = new Canvas() {
+    private VLC mVLC = new VLC();
+    private Canvas mCanvas = new Canvas() {
         
-        private boolean isPainted = false;
+        private boolean mIsPaint = false;
         
         @Override
         public void paint(Graphics g) {
             super.paint(g); //To change body of generated methods, choose Tools | Templates.
             
-            if ( ! isPainted) {
-                v.setVideoCanvas(this);
-                isPainted = true;
+            if ( ! mIsPaint) {
+                mVLC.setVideoCanvas(this);
+                mIsPaint = true;
             }
         }
     };
@@ -28,26 +28,26 @@ public class Video {
     }
     
     public Canvas getCanvas() {
-        return c;
+        return mCanvas;
     }
     
     public void addListener(VLC.Listener l) {
-        v.addListener(l);
+        mVLC.addListener(l);
     }
     
     public void open(File f) {
-        v.open(f);
+        mVLC.open(f);
     }
     
     public void play() {
-        v.play();
+        mVLC.play();
     } 
     
     public void stop() {
-        v.stop();
+        mVLC.stop();
     } 
     
     public void close() {
-        v.close();
+        mVLC.close();
     }
 }

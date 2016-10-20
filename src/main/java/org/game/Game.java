@@ -1,27 +1,15 @@
 package org.game;
 
 import org.game.GraphicLooper;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import javax.imageio.ImageIO;
-import org.game.map.Light;
 import org.game.map.Map;
-import org.game.map.Player;
-import org.game.math.Vector2D;
 
+// http://stackoverflow.com/questions/16758346/how-pause-and-then-resume-a-thread
 public class Game extends GraphicLooper implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
@@ -55,30 +43,12 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) 
-        {
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_D:
-                mInput.setKeyPress(e.getKeyCode());
-                break;
-            case KeyEvent.VK_F:
-                break;
-        }
+        mInput.setKeyPress(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (e.getKeyCode()) 
-        {
-            case KeyEvent.VK_W: 
-            case KeyEvent.VK_S: 
-            case KeyEvent.VK_A: 
-            case KeyEvent.VK_D: 
-                mInput.setKeyRelease(e.getKeyCode());
-                break;
-        }
+        mInput.setKeyRelease(e.getKeyCode());
     }
 
     @Override

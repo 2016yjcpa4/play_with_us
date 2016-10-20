@@ -123,7 +123,7 @@ public class Map {
     public List<Line2D> getAllLine() {
         List<Line2D> l = new ArrayList<>();
         
-        for(Wall w : getAllWall()) {
+        for (Wall w : getAllWall()) {
             
             Polygon p = w.getCollider();
             
@@ -143,13 +143,12 @@ public class Map {
     }
     
     public List<Point2D> getPath(int x1, int y1, int x2, int y2) {
-        Point2D p1 = Map.this.getTileIndex(x1, y1);
-        Point2D p2 = Map.this.getTileIndex(x2, y2);
+        Point2D p1 = getTileIndex(x1, y1); // 출발지
+        Point2D p2 = getTileIndex(x2, y2); // 목적지
         
         List<Point2D> l = new ArrayList<>();
         
-        for(TileNode t : mTiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
-            
+        for (TileNode t : mTiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) { 
             l.add(new  Point2D(t.getX() * getTileWidth()  + (getTileWidth() / 2),
                                t.getY() * getTileHeight() + (getTileHeight() / 2)));
         }
@@ -168,18 +167,18 @@ public class Map {
         }
         
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D _g2d = b.createGraphics();
-        _g2d.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
-        _g2d.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        _g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
+        Graphics2D t = b.createGraphics();
+        t.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
+        t.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
         for(MapObject o : mObject) {
             if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
-                o.draw(null, _g2d);
+                o.draw(null, t);
             }
         }
 
-        _g2d.dispose(); 
+        t.dispose(); 
         
         g2d.drawImage(b, 0, 0, null);
         
@@ -187,10 +186,8 @@ public class Map {
     }
 
     public void update(Game g) {
-
-        for(MapObject o : mObject) {
+        for (MapObject o : mObject) {
             o.update(g);
         }
     }
-
 }

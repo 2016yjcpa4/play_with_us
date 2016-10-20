@@ -56,7 +56,7 @@ public class Vector2D {
     }
     
     public double lengthSquared() {
-        return scalar(this);
+        return dot(this);
     }
     
     public double length() {
@@ -91,10 +91,10 @@ public class Vector2D {
         return this;
     }
     
-    public double scalar(float x, float y)      { return getX() * x + getY() * y; }
-    public double scalar(float n)               { return scalar(n, n); }
-    public double scalar(Vector2D v)            { return scalar(v.getX(), v.getY()); }
-    public double scalar(Point2D p)             { return scalar(p.getX(), p.getY()); }
+    public double dot(float x, float y)         { return getX() * x + getY() * y; }
+    public double dot(float n)                  { return dot(n, n); }
+    public double dot(Vector2D v)               { return dot(v.getX(), v.getY()); }
+    public double dot(Point2D p)                { return dot(p.getX(), p.getY()); }
     
     public Vector2D add(float x, float y)       { return new Vector2D(getX() + x, getY() + y); }
     public Vector2D add(float n)                { return add(n, n); }
@@ -106,8 +106,8 @@ public class Vector2D {
     public Vector2D sub(Vector2D v)             { return sub(v.getX(), v.getY()); }
     public Vector2D sub(Point2D p)              { return sub(p.getX(), p.getY()); }
     
-    public Vector2D mult(float x, float y)     { return new Vector2D(getX() * x, getY() * y); }
-    public Vector2D mult(float n)              { return mult(n, n); }
-    public Vector2D mult(Point2D p)            { return mult(p.getX(), p.getY()); }
-    public Vector2D mult(Vector2D v)           { return mult(v.getX(), v.getY()); }
+    public Vector2D mult(float x, float y)      { return new Vector2D(getX() * x, getY() * y); }
+    public Vector2D mult(float n)               { return mult(n, n); }
+    public Vector2D mult(Point2D p)             { return mult(p.getX(), p.getY()); }
+    public Vector2D mult(Vector2D v)            { return mult(v.getX(), v.getY()); }
 }

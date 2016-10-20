@@ -38,22 +38,22 @@ public class Point2D {
     }
     
     public static int[] getXPoints(List<Point2D> l) {
-        int[] x = new int[l.size()];
+        int[] r = new int[l.size()];
         
         for (int n = 0; n < l.size(); ++n) {
-            x[n] = (int) l.get(n).getX();
+            r[n] = (int) l.get(n).getX();
         }
         
-        return x;
+        return r;
     }
     
     public static int[] getYPoints(List<Point2D> l) {
-        int[] y = new int[l.size()];
+        int[] r = new int[l.size()];
         
         for (int n = 0; n < l.size(); ++n) {
-            y[n] = (int) l.get(n).getY();
+            r[n] = (int) l.get(n).getY();
         }
         
-        return y;
+        return r;
     }
 }

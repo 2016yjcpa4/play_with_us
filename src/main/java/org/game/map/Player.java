@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import org.game.Game;
 import org.game.InputManager;
-import org.game.SpriteManager;
+import org.game.resource.SpriteManager;
 import org.game.geom.Circle;
 import org.game.geom.CollisionDetection;
 import org.game.math.Point2D;
