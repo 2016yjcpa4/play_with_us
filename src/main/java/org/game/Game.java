@@ -33,11 +33,11 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
     }
     
     private void loadResources() throws Exception {
-        mRes.load("./res/img_map.png",   "map");
-        mRes.load("./res/sp_player.png", "player.walk.north");
-        mRes.load("./res/sp_player.png", "player.walk.south");
-        mRes.load("./res/sp_player.png", "player.walk.east");
-        mRes.load("./res/sp_player.png", "player.walk.west");
+        mRes.load("./res/img_map.png",    "map");
+        mRes.load("./res/img_player.png", "player.walk.north");
+        mRes.load("./res/img_player.png", "player.walk.south");
+        mRes.load("./res/img_player.png", "player.walk.east");
+        mRes.load("./res/img_player.png", "player.walk.west");
     }
     
     @Override
