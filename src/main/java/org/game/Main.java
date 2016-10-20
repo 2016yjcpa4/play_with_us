@@ -91,7 +91,7 @@ public class Main {
 
             @Override
             public void stop() {
-                l.keyReleased(new KeyEvent(mWindow, 0, 0, 0, KeyEvent.VK_ESCAPE));
+                l.keyPressed(new KeyEvent(mWindow, 0, 0, 0, KeyEvent.VK_ESCAPE));
             }
             
             @Override
