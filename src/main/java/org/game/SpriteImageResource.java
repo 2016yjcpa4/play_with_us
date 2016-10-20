@@ -4,13 +4,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import org.game.util.FileUtil;
 
+/**
+ * 리팩토링이 필요합니다.
+ * 
+ * @author 차명도.
+ */
 public class SpriteImageResource extends ImageResource {
 
     private static Map<String, SpriteImage> mSprites = new HashMap<>();

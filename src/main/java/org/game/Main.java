@@ -53,18 +53,14 @@ public class Main {
         play(new File(f));
     }
     
-    public void play(File f) {
+    public void play(File f) {        
+        mGame.pause();        
+        mLayer.moveToFront(mVideoCanvas);
+
         mVLC.open(f);
         mVLC.play();
         
         mVLC.addListener(new VLC.Listener() {
-            
-            @Override
-            public void start() {
-                mGame.pause();
-                
-                mLayer.moveToFront(mVideoCanvas);
-            }
 
             @Override
             public void stop() {                
@@ -73,10 +69,15 @@ public class Main {
                 mLayer.moveToFront(mGame.getCanvas());
                 mVLC.close();
             }
+            
+            @Override
+            public void start() {
+                // 앞에서 게임화면 일시정지와 비디오캔버스를 맨앞으로 보여주는 기능이 이미 구현이 되어있음
+            }
 
             @Override
             public void position(float n) {
-                // 구현하지 않음.
+                // 구현하지 않음
             }
         });
     }
@@ -86,7 +87,7 @@ public class Main {
         
         mVLC.setVideoCanvas(mVideoCanvas);
         
-        play(VideoResource.INTRO_VIDEO);
+        play(VideoResource.MOV_INTRO);
     }
     
     public static void main(String[] args) {
