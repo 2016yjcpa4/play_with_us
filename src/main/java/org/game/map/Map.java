@@ -14,6 +14,7 @@ import org.game.geom.BresenhamLine;
 import org.game.geom.Polygon;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
+import org.game.resource.ResourceManager;
 
 public class Map {
 
@@ -28,8 +29,6 @@ public class Map {
     
     private List<MapObject> mObject = new ArrayList<>();
     
-    private Image img;
-    
     public Map() {
         addObject(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
         addObject(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));// 동쪽
@@ -43,13 +42,6 @@ public class Map {
         addObject(new Wall(660, 490, 600, 385));
          
         addObject(new Player());
-        
-        try {
-            img = ImageIO.read(new File("./res/map.png"));
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
         
         for(Line2D l : getAllLine()) {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
@@ -157,7 +149,8 @@ public class Map {
     }
     
     public void draw(Game g, Graphics2D g2d) {
-        g2d.drawImage(img, 0, 0, null);
+        
+        g2d.drawImage(g.getImage("map"), 0, 0, null);
 
         for(MapObject o : mObject) {
             if ( ! (o instanceof Light) 

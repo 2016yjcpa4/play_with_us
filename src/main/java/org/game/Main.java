@@ -2,11 +2,13 @@ package org.game;
  
 import com.github.axet.play.VLC;
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Container;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
  
@@ -34,77 +36,64 @@ public class Main {
     }
     
     private JFrame mWindow = new JFrame();
+    private JLayeredPane mLayer = new JLayeredPane();
     private Game mGame = new Game();
-    private Video mVideo = new Video();
+    
+    private VLC mVLC = new VLC();
+    private Canvas mVideoCanvas = new Canvas();
     
     private Main() {
-        Container c = mWindow.getContentPane();
-        c.setLayout(new OverlayLayout(c));
-        c.add(mGame.getCanvas());
-        c.add(mVideo.getCanvas());
+        mLayer.setLayout(new OverlayLayout(mLayer));
+        mLayer.add(mGame.getCanvas(), 0);
+        mLayer.add(mVideoCanvas, 1);
+        mLayer.setVisible(true);
+        
+        mWindow.add(mLayer, BorderLayout.CENTER);
         mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mWindow.setSize(1280, 800);
-        //setResizable(false);
+    }
+    
+    public void play(String f) {
+        play(new File(f));
     }
     
     public void play(File f) {
-        mVideo.open(f);
-        mVideo.play();
+        mVLC.open(f);
+        mVLC.play();
         
-        new Timer().schedule(new TimerTask() {
-            
-            @Override
-            public void run() {
-                mGame.getCanvas().setVisible(true);
-                mVideo.getCanvas().setVisible(false);
-                mVideo.stop();
-            }
-        }, 1000);
-        
-        mVideo.addListener(new VLC.Listener() {
+        mVLC.addListener(new VLC.Listener() {
             
             @Override
             public void start() {
-                mVideo.getCanvas().setVisible(true);
-                mGame.getCanvas().setVisible(false);
+                mGame.pause();
+                
+                mLayer.moveToFront(mVideoCanvas);
             }
 
             @Override
-            public void stop() {
-                mVideo.getCanvas().setVisible(false);
-                mGame.getCanvas().setVisible(true);
-                mVideo.close();
+            public void stop() {                
+                mGame.resume();
+                
+                mLayer.moveToFront(mGame.getCanvas());
+                mVLC.close();
             }
 
             @Override
-            public void position(float pos) {
+            public void position(float n) {
+                // 구현하지 않음.
             }
         });
     }
     
-    public void start() {
+    public void launch() {
         mWindow.setVisible(true);
         
-        play(new File("./res/test.mov"));
-    }
-    
-    public Game getGame() {
-        return mGame;
-    }
-    
-    public Video getVideo() {
-        return mVideo;
-    }
-    
-    public static void main(String[] args) { 
+        mVLC.setVideoCanvas(mVideoCanvas);
         
-        SwingUtilities.invokeLater(new Runnable() {
-            
-            @Override
-            public void run() {
-                Main.getInstance().start();
-            }
-        });
+        play("./res/mov_intro.mov");
     }
-
+    
+    public static void main(String[] args) {
+        Main.getInstance().launch(); 
+    }
 }

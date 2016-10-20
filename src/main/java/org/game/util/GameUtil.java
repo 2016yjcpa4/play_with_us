@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.game.util;
 
 public class GameUtil {
@@ -10,21 +5,25 @@ public class GameUtil {
     private GameUtil() {
     }
     
-    public static char getDirectionByDegree(double d) {
+    public static String getDirectionByRadian(double d) {
+        return getDirectionByDegree(Math.toDegrees(d));
+    }
+    
+    public static String getDirectionByDegree(double d) {
         d = MathUtil.getNormalDegrees(d);
         
         if (45 <= d && d < 135) {
-            return 's'; // south
+            return "south"; // 밑으로
         }
         
         if (135 <= d && d < 225) {
-            return 'w'; // west
+            return "west"; // 왼쪽으로
         }
         
         if (225 <= d && d < 315) {
-            return 'n'; // north
+            return "north"; // 위로
         }
         
-        return 'e'; // east
+        return "east"; // 오른쪽으로
     }
 }

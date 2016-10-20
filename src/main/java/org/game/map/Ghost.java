@@ -7,7 +7,7 @@ import java.util.List;
 import org.game.map.Map;
 import org.game.GraphicLooper;
 import org.game.Game;
-import org.game.resource.SpriteManager;
+import org.game.resource.ResourceManager;
 import org.game.geom.Polygon; 
 import org.game.geom.BresenhamLine;
 import org.game.math.Point2D;

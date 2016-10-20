@@ -11,6 +11,23 @@ import org.game.math.Point2D;
  */
 public class InputManager {
     
+    private static InputManager INSTANCE;
+    
+    private InputManager() {
+    }
+    
+    public static InputManager getInstance() {
+        if (INSTANCE == null) {
+            synchronized(InputManager.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new InputManager();
+                }
+            }  
+        }
+        
+        return INSTANCE;
+    }
+    
     enum State {
         
         RELEASED,

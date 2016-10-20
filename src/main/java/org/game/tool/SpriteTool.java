@@ -46,7 +46,7 @@ import org.game.GraphicLooper;
 import org.game.util.ImageUtil;
 
 public class SpriteTool {
-
+/*
 
     private JTextField tf1;
     private JTextField tf2;
@@ -409,13 +409,15 @@ public class SpriteTool {
             catch(IOException e) {
                 e.printStackTrace();
             }
-            /*DefaultListModel m = ((DefaultListModel) frames.getModel());
+            /*
+            DefaultListModel m = ((DefaultListModel) frames.getModel());
             m.removeAllElements();
             
             // TODO 계속해서 짤라야할듯...
             for(ImageUtil.SpriteImage s : ImageUtil.getSlicedImagesByAlphaLines(fc.getSelectedFile())) {
                 m.addElement(s);
-            }*/
+            }
+            /
             
         } else {
             // TODO exception
@@ -508,4 +510,5 @@ public class SpriteTool {
             }
         }
     }
+*/
 }
