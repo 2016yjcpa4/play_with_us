@@ -12,18 +12,13 @@ public class GameUtil {
     public static String getDirectionByDegree(double d) {
         d = MathUtil.getNormalDegrees(d);
         
-        if (45 <= d && d < 135) {
-            return "south"; // 밑으로
-        }
-        
-        if (135 <= d && d < 225) {
-            return "west"; // 왼쪽으로
-        }
-        
-        if (225 <= d && d < 315) {
-            return "north"; // 위로
-        }
-        
-        return "east"; // 오른쪽으로
+        if (22 <= d && d < 67)        return "se";
+        else if (67 <= d && d < 112)  return "s"; 
+        else if (112 <= d && d < 157) return "sw";
+        else if (157 <= d && d < 202) return "w";
+        else if (202 <= d && d < 247) return "nw";
+        else if (247 <= d && d < 292) return "n";
+        else if (292 <= d && d < 337) return "ne";
+        else                          return "e"; // 오른쪽으로
     }
 }

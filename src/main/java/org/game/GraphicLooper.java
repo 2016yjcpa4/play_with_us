@@ -66,6 +66,8 @@ public class GraphicLooper implements Runnable {
 
     public void resume() {
         synchronized (mPauseLock) {
+            mDelta = System.currentTimeMillis();
+        
             mPaused = false;
             mPauseLock.notifyAll();
         }
@@ -100,7 +102,7 @@ public class GraphicLooper implements Runnable {
                 }
             }
             
-            update(bs); 
+            update(bs);
 
             mDelta += FRAME_DELAY;
             

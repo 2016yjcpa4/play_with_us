@@ -3,6 +3,8 @@ package org.game;
 import com.github.axet.play.VLC;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -31,6 +33,8 @@ public class Main {
         return INSTANCE;
     }
     
+    public static final boolean DEBUG = true;
+    
     private JFrame mWindow = new JFrame();
     private JLayeredPane mLayer = new JLayeredPane();
     private Game mGame = new Game();
@@ -53,26 +57,48 @@ public class Main {
         play(new File(f));
     }
     
-    public void play(File f) {        
+    public void play(File f) {
         mGame.pause();        
         mLayer.moveToFront(mVideoCanvas);
 
         mVLC.open(f);
         mVLC.play();
         
+        final KeyListener l = new KeyListener() {
+            
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    mWindow.removeKeyListener(this);
+
+                    mGame.resume();
+
+                    mLayer.moveToFront(mGame.getCanvas());
+                    mVLC.close();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        };
+        
         mVLC.addListener(new VLC.Listener() {
 
             @Override
-            public void stop() {                
-                mGame.resume();
-                
-                mLayer.moveToFront(mGame.getCanvas());
-                mVLC.close();
+            public void stop() {
+                l.keyReleased(new KeyEvent(mWindow, 0, 0, 0, KeyEvent.VK_ESCAPE));
             }
             
             @Override
             public void start() {
-                // 앞에서 게임화면 일시정지와 비디오캔버스를 맨앞으로 보여주는 기능이 이미 구현이 되어있음
+                if (DEBUG) {
+                    mWindow.addKeyListener(l);
+                }
             }
 
             @Override

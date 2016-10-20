@@ -37,7 +37,7 @@ public class Player extends MapObject {
     };
     
     public Player() {
-        mCollider = new Circle(620, 700, 42);
+        mCollider = new Circle(620, 700, 32);
     }
     
     /**
@@ -67,6 +67,10 @@ public class Player extends MapObject {
         return mDir.sub(getPosition()).angle();
     }
     
+    public boolean isTurnOnLight() {
+        return mLight.isTurnOn();
+    }
+    
     /**
      * 플레이어의 현재위치.
      * 
@@ -80,11 +84,15 @@ public class Player extends MapObject {
     public void update(Game g) { 
         InputManager o = g.getInput();
         
+        int n = 3;
+        
+        if (o.isKeyPressed(KeyEvent.VK_SHIFT)) n *= 2;
+        
         // 키를 눌렀을때 플레이어의 각종 처리들
-        if (o.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-4);
-        if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(4);
-        if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-4);
-        if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(4);
+        if (o.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-n);
+        if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(n);
+        if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-n);
+        if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(n);
         if ( ! (o.isKeyPressed(KeyEvent.VK_W) || o.isKeyPressed(KeyEvent.VK_S))) mVel.setY(0);
         if ( ! (o.isKeyPressed(KeyEvent.VK_A) || o.isKeyPressed(KeyEvent.VK_D))) mVel.setX(0);
         if (o.isMousePressed(MouseEvent.BUTTON3)) mLight.setTurnOn();
@@ -120,7 +128,7 @@ public class Player extends MapObject {
         String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
         SpriteImageResource r = ResourceManager.getInstance().getSprite(k);
         
-        SpriteImageResource.SpriteImage.Frame f = r.getFrame(0); // 기본 상태
+        SpriteImageResource.SpriteImage.Frame f = r.getFrame(2); // 기본 상태
         
         if (mVel.getX() != 0 || mVel.getY() != 0) { // 움직임이 발생하면
             f = r.getCurrentFrame(d); // 델타값을 넣어 현재 프레임을 뽑아옴

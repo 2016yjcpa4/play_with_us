@@ -18,7 +18,96 @@ public class SpriteImageResource extends ImageResource {
     private static Map<String, SpriteImage> mSprites = new HashMap<>();
     
     static {
-        mSprites.put("player.walk.south", new SpriteImage() {
+        mSprites.put("player.walk.n", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 4;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.n";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        
+        mSprites.put("player.walk.ne", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 5;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.ne";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.e", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 6;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.e";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.se", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 7;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.se";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.s", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 0;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.s";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.sw", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 1;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.sw";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.w", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 2;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.w";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        mSprites.put("player.walk.nw", new SpriteImage() {
+            {
+                mX = 0;
+                mY = 64 * 3;
+                mWidth = 64;
+                mHeight = 64;
+                mAlias = "player.walk.nw";
+                mFramePerSecond = 100;
+                mSteps = 5;
+            }
+        });
+        /*mSprites.put("player.walk.south", new SpriteImage() {
             {
                 mX = 0;
                 mY = 82 * 0;
@@ -61,7 +150,7 @@ public class SpriteImageResource extends ImageResource {
                 mFramePerSecond = 100;
                 mSteps = 3;
             }
-        });
+        });*/
     }
     
     private SpriteImage mSprite;
@@ -127,7 +216,8 @@ public class SpriteImageResource extends ImageResource {
         }
         
         public Frame getCurrentFrame(long d) {
-            return getFrame((int) (d / mFramePerSecond % mSteps));
+            int n[] = { 2, 3, 4, 3, 2, 1, 0, 1 };
+            return getFrame(n[(int) (d / mFramePerSecond % n.length)]);
         }
 
         public static class Frame {

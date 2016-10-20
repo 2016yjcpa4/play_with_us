@@ -40,6 +40,9 @@ public class Map {
         addObject(new Wall(750, 10, 500, 305));
         addObject(new Wall(30, 535, 550, 385));
         addObject(new Wall(660, 490, 600, 385));
+        
+        addObject(new Ghost(80, 450));
+        addObject(new Ghost(1000, 450));
          
         addObject(new Player());
         
