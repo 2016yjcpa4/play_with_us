@@ -4,3 +4,5 @@
 /build/
 /dist/
 /target/
+/lib/google-api-services-drive-v2-rev241-1.22.0/target/
+/lib/google-api-services-drive-v2-rev135-1.19.0/target/
