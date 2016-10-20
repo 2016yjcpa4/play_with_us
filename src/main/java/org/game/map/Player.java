@@ -6,12 +6,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import org.game.Game;
 import org.game.InputManager;
-import org.game.ResourceManager;
+import org.game.resource.ResourceManager;
 import org.game.geom.Circle;
 import org.game.geom.CollisionDetection;
 import org.game.math.Point2D;
 import org.game.math.Vector2D;
-import org.game.SpriteImageResource;
+import org.game.resource.SpriteImageResource;
 import org.game.util.GameUtil;
  
 public class Player extends MapObject {

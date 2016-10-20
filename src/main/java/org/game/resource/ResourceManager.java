@@ -1,5 +1,7 @@
-package org.game;
+package org.game.resource;
 
+import org.game.resource.ImageResource;
+import org.game.resource.SpriteImageResource;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

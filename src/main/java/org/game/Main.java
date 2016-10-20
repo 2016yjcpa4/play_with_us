@@ -1,5 +1,6 @@
 package org.game;
  
+import org.game.resource.VideoResource;
 import com.github.axet.play.VLC;
 import java.awt.BorderLayout;
 import java.awt.Canvas;

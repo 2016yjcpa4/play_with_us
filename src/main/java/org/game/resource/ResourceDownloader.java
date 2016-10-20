@@ -29,13 +29,38 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
-public class DriveSample {
+//http://stackoverflow.com/questions/22295337/android-downloading-file-by-updating-progress-bar
+public class ResourceDownloader {
+    
+    private static final String CLIENT_ID = "play-with-us/v0.1";
     private static final String ACCESS_TOKEN = "BG8Lirg0MOAAAAAAAAAAC0-b5uDsvabj82WaQjgu4sTvV6LOwKrt1l2_QCixyK2D";
-
+    
+    private DbxClientV2 mClient;
+    
+    public ResourceDownloader() {
+        mClient = new DbxClientV2(new DbxRequestConfig(CLIENT_ID), ACCESS_TOKEN);
+    }
+    
+    public boolean hasPatchFile() {
+        return false;
+    }
+    
+    public void start() {
+        
+    }
+    
+    public interface Listener {
+        
+        void onPrepared(); // 몇개의 파일을 받아와야하는지 검사합니다.
+        
+        void onProgress();
+        
+        void onComplete();
+    }
+    
     public static void main(String args[]) throws DbxException, IOException {
         // Create Dropbox client
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+        DbxClientV2 client = new DbxClientV2(new DbxRequestConfig(CLIENT_ID), ACCESS_TOKEN);
 
         // Get current account info
         FullAccount account = client.users().getCurrentAccount();
@@ -53,12 +78,6 @@ public class DriveSample {
             }
 
             result = client.files().listFolderContinue(result.getCursor());
-        }
-
-        // Upload "test.txt" to Dropbox
-        try (InputStream in = new FileInputStream("README.md")) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
-                .uploadAndFinish(in);
         }
         
         client.files().downloadBuilder("/test.txt").download(new FileOutputStream("test.txt"));

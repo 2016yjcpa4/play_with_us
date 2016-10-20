@@ -1,4 +1,4 @@
-package org.game;
+package org.game.resource;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

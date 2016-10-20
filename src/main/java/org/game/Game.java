@@ -1,5 +1,8 @@
 package org.game;
 
+import org.game.resource.ResourceManager;
+import org.game.resource.ImageResource;
+import org.game.resource.SpriteImageResource;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
