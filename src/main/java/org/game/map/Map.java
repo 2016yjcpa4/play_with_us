@@ -14,7 +14,7 @@ import org.game.geom.BresenhamLine;
 import org.game.geom.Polygon;
 import org.game.math.Line2D;
 import org.game.math.Point2D;
-import org.game.resource.ResourceManager;
+import org.game.ResourceManager;
 
 public class Map {
 

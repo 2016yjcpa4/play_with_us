@@ -8,9 +8,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import org.game.map.Map;
-import org.game.resource.ImageResource;
-import org.game.resource.ResourceManager;
-import org.game.resource.SpriteImageResource;
 
 public class Game extends GraphicLooper implements MouseMotionListener, MouseListener, KeyListener {
 
