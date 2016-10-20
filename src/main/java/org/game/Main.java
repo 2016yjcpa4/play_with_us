@@ -3,14 +3,10 @@ package org.game;
 import com.github.axet.play.VLC;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Container;
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.OverlayLayout;
-import javax.swing.SwingUtilities;
  
 /**
  * 메인 클래스는 비디오와 게임 캔버스를 관리합니다.
@@ -90,7 +86,7 @@ public class Main {
         
         mVLC.setVideoCanvas(mVideoCanvas);
         
-        play("./res/mov_intro.mov");
+        play(VideoResource.INTRO_VIDEO);
     }
     
     public static void main(String[] args) {
