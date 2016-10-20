@@ -1,6 +1,6 @@
 package org.game;
 
-import org.game.GameLoop;
+import org.game.GraphicLooper;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -22,7 +22,7 @@ import org.game.map.Map;
 import org.game.map.Player;
 import org.game.math.Vector2D;
 
-public class Game extends GameLoop implements MouseMotionListener, MouseListener, KeyListener {
+public class Game extends GraphicLooper implements MouseMotionListener, MouseListener, KeyListener {
 
     public static final boolean DEBUG = true;
                

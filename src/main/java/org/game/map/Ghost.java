@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.util.List; 
 
 import org.game.map.Map;
-import org.game.GameLoop;
+import org.game.GraphicLooper;
 import org.game.Game;
 import org.game.SpriteManager;
 import org.game.geom.Polygon; 

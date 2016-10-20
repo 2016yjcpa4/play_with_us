@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 
-public class GameLoop extends Thread {
+public class GraphicLooper extends Thread {
 
     private static final int FPS = 30;
     private static final int FRAME_DELAY = 1000 / FPS;
@@ -28,7 +28,7 @@ public class GameLoop extends Thread {
         }
     };
 
-    public GameLoop() {
+    public GraphicLooper() {
     }
 
     public Canvas getCanvas() {

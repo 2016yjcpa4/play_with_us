@@ -3,7 +3,7 @@ package org.game.map;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.game.Game;
-import org.game.GameLoop;
+import org.game.GraphicLooper;
 import org.game.geom.Polygon;
 import org.game.geom.Rect; 
 import org.game.math.Point2D;

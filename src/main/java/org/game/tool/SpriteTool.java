@@ -42,7 +42,7 @@ import javax.swing.OverlayLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.game.GameLoop; 
+import org.game.GraphicLooper; 
 import org.game.util.ImageUtil;
 
 public class SpriteTool {
@@ -441,7 +441,7 @@ public class SpriteTool {
     
     private SpriteCanvas mSpriteCanvas = new SpriteCanvas();
     
-    private static class SpriteCanvas extends GameLoop {
+    private static class SpriteCanvas extends GraphicLooper {
         
         private BufferedImage mImage;
         private List<ImageUtil.SpriteImage> mSprites = new ArrayList<>();
@@ -471,7 +471,7 @@ public class SpriteTool {
         }
     }
 
-    private static class AnimateCanvas extends GameLoop {
+    private static class AnimateCanvas extends GraphicLooper {
         
         private long delta = 0;
         private float delay = 0;
