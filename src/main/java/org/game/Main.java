@@ -139,12 +139,17 @@ public class Main {
         mRes.setup(new ResourceManager.SetupListener() {
 
             @Override
-            public void onProgress(int success, int error, int total) {
-                r.setProgress((float) success / total);
+            public void onProgress(int progress, int total) {
+                float n = (float) progress / total;
+                
+                r.setProgress(n);
+                r.setMessage(String.format("게임에 필요한 자원을 내려받고 있습니다. (%.1f%%)", n * 100));
             }
 
             @Override
             public void onComplete() {
+                r.setMessage("게임에 필요한 자원을 불러오는중 입니다.");
+                
                 try {
                     loadResources();
                 }
@@ -152,22 +157,17 @@ public class Main {
                     e.printStackTrace();
                 }
                 
-                r.setMessage("리소스를 불러오는중 입니다.");
-                
                 r.stop();
                 
                 mLayer.remove(r.getCanvas());
                 
                 play(VideoResource.MOV_INTRO);
             }
-
-            @Override
-            public void onReady() {
-                r.setMessage("리소스를 받아오는 중입니다.");
-                
-                mLayer.add(r.getCanvas(), 0);
-            }
         });
+        
+        r.setMessage("게임에 필요한 자원을 검사합니다.");
+        
+        mLayer.add(r.getCanvas(), 0);
     }
     
     private static class ResourceDownload extends GraphicLooper {
@@ -184,17 +184,23 @@ public class Main {
         public void setMessage(String s) {
             mMessage = s;
         }
-
-        @Override
-        protected void draw(Graphics2D g2d) {
-            super.draw(g2d);
-            
+        
+        private void drawMessage(Graphics2D g2d) {
             Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 30);
             FontMetrics m = g2d.getFontMetrics(f);
             
             int w = getCanvas().getWidth();
             int h = getCanvas().getHeight();
-            String s = String.format("%s (%.1f%%)", mMessage, mProgress * 100);
+            
+            g2d.setFont(f);
+            g2d.drawString(mMessage, 
+                           w / 2 - m.stringWidth(mMessage) / 2, 
+                           h - PADDING - 50 - 10 - m.getHeight());
+        }
+        
+        private void drawProgress(Graphics2D g2d) {
+            int w = getCanvas().getWidth();
+            int h = getCanvas().getHeight();
             
             g2d.setColor(Color.red);
             g2d.fillRect(PADDING, 
@@ -202,10 +208,27 @@ public class Main {
                          (int) (w * mProgress) - PADDING * 2, 
                          50);
             
+        }
+
+        @Override
+        protected void draw(Graphics2D g2d) {
+            super.draw(g2d);
+            
+            Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 30);
+            FontMetrics m = g2d.getFontMetrics(f);
+            int n = (int) (getDelta() / 500 % 3);
+            String s = "Loading";
+            
+            while (n-- >= 0) {
+                s += ".";
+            }
+            
             g2d.setFont(f);
-            g2d.drawString(s, 
-                           w / 2 - m.stringWidth(s) / 2, 
-                           h - PADDING - 50 - 10 - m.getHeight());
+            g2d.setColor(Color.red);
+            g2d.drawString(s, PADDING, PADDING + m.getHeight());
+            
+            drawProgress(g2d);
+            drawMessage(g2d);
         }
     }
     

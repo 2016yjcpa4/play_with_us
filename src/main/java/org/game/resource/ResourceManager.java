@@ -37,7 +37,7 @@ public class ResourceManager {
     }
     
     private static final String DBX_CLIENT_ID = "play-with-us/v0.1";
-    private static final String DBX_ACCESS_TOKEN = "BG8Lirg0MOAAAAAAAAAAC0-b5uDsvabj82WaQjgu4sTvV6LOwKrt1l2_QCixyK2D";
+    private static final String DBX_ACCESS_TOKEN = "O6KQjX3-8tAAAAAAAAAAFX5otGZsbsLIHma4OwgDnc1TOqUtSfssR7azAy8O9Jfb";
     private static final String DBX_RESOURCE_DIR = "/resources";
     
     private static final String RESOURCE_CHECKSUM_FILE = "checksum.json";
@@ -96,10 +96,6 @@ public class ResourceManager {
             
             @Override
             public void run() {
-                if (l != null) {
-                    l.onReady();
-                }
-                
                 if (isValid()) {
                     if (l != null) {
                         l.onComplete();
@@ -116,8 +112,7 @@ public class ResourceManager {
                     return;
                 }
 
-                int success = 0;
-                int error = 0;
+                int progress = 0;
 
                 for(String s : m.keySet()) {
                     File res = new File(RESOURCE_DIR, s);
@@ -125,18 +120,18 @@ public class ResourceManager {
                     if ( ! res.exists()) { // 리소스가 이미 있고
                         try {
                             mDropbox.download(DBX_RESOURCE_DIR + "/" + s, res);
-                            success++;
+                            ++progress;
                         }
                         catch(Exception e) {
-                            error++;
+                            // TODO... 오류
                         }
                     } 
                     else {
-                        success++;
+                        ++progress;
                     }
 
                     if (l != null) {
-                        l.onProgress(success, error, m.size());
+                        l.onProgress(progress, m.size());
                     }
                 }
 
@@ -191,9 +186,7 @@ public class ResourceManager {
     
     public interface SetupListener {
         
-        void onReady();
-        
-        void onProgress(int success, int error, int total);
+        void onProgress(int progress, int total);
         
         void onComplete();
     }

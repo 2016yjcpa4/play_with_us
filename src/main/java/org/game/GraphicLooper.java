@@ -21,7 +21,7 @@ public class GraphicLooper implements Runnable {
     private Thread mThread;
     
     protected Canvas mCanvas = new Canvas() {
-        
+
         @Override
         public void paint(Graphics g) {
             super.paint(g);
