@@ -13,14 +13,14 @@
     <name>kr.ac.yeungjin.2cpa.java4</name>
     <dependencies>
         <dependency>
-            <groupId>com.github.axet</groupId>
-            <artifactId>play</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.dropbox.core</groupId>
             <artifactId>dropbox-core-sdk</artifactId>
             <version>2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.7</version>
         </dependency>
     </dependencies>
 </project>

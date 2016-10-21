@@ -14,6 +14,7 @@ import java.io.File;
 public class VideoResource {
     
     private VideoResource() {
+        // 외부에서 생성자 호출 방지
     }
 
     public static final File MOV_INTRO = new File("./res/mov_intro.mov");

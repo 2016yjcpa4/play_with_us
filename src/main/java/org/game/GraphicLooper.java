@@ -109,7 +109,7 @@ public class GraphicLooper implements Runnable {
             try {
                 Thread.sleep(Math.max(0, mDelta - System.currentTimeMillis()));
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
     }

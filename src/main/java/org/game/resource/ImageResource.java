@@ -9,6 +9,7 @@ import org.game.util.FileUtil;
 
 public class ImageResource implements ResourceManager.Resource {
 
+    private String mFileName;
     private String mAlias;
     private BufferedImage mImage;
 

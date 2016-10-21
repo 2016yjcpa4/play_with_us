@@ -26,25 +26,6 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
         mCanvas.addKeyListener(this);
         
         mMap = new Map();
-        
-        try {
-            loadResources();
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    private void loadResources() throws Exception {
-        mRes.load("./res/img_map.png",    "map");
-        mRes.load("./res/img_player.png", "player.walk.n");
-        mRes.load("./res/img_player.png", "player.walk.ne");
-        mRes.load("./res/img_player.png", "player.walk.e");
-        mRes.load("./res/img_player.png", "player.walk.se");
-        mRes.load("./res/img_player.png", "player.walk.s");
-        mRes.load("./res/img_player.png", "player.walk.sw");
-        mRes.load("./res/img_player.png", "player.walk.w");
-        mRes.load("./res/img_player.png", "player.walk.nw");
     }
     
     @Override
