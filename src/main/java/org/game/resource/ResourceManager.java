@@ -190,4 +190,16 @@ public class ResourceManager {
         
         void onComplete();
     }
+    
+    public static void main(String args[]) {
+        Map<String, String> m = new HashMap<>();
+        
+        for (File f : RESOURCE_DIR.listFiles()) {
+            if (f != null) {
+                m.put(f.getName(), FileUtil.getChecksum(f));
+            }
+        }
+        
+        System.out.println(new Gson().toJson(m));
+    }
 }

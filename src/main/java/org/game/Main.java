@@ -143,12 +143,13 @@ public class Main {
                 float n = (float) progress / total;
                 
                 r.setProgress(n);
-                r.setMessage(String.format("게임에 필요한 자원을 내려받고 있습니다. (%.1f%%)", n * 100));
+                r.setMessage(String.format("게임에 필요한 리소스를 내려받고 있습니다. (%.1f%%)", n * 100));
             }
 
             @Override
             public void onComplete() {
-                r.setMessage("게임에 필요한 자원을 불러오는중 입니다.");
+                r.setProgress(1.0f);
+                r.setMessage("게임에 필요한 리소스를 불러오는중 입니다.");
                 
                 try {
                     loadResources();
@@ -165,7 +166,7 @@ public class Main {
             }
         });
         
-        r.setMessage("게임에 필요한 자원을 검사합니다.");
+        r.setMessage("게임에 필요한 리소스를 검사합니다.");
         
         mLayer.add(r.getCanvas(), 0);
     }
@@ -199,27 +200,24 @@ public class Main {
         }
         
         private void drawProgress(Graphics2D g2d) {
-            int w = getCanvas().getWidth();
-            int h = getCanvas().getHeight();
+            int x = PADDING;
+            int y = getCanvas().getHeight() - PADDING - 50;            
             
-            g2d.setColor(Color.red);
-            g2d.fillRect(PADDING, 
-                         h - PADDING - 50, 
-                         (int) (w * mProgress) - PADDING * 2, 
-                         50);
-            
+            g2d.setColor(Color.RED);
+            g2d.drawRect(x, y, getCanvas().getWidth() - PADDING * 2, 50);
+            g2d.fillRect(x, y, (int) (getCanvas().getWidth() * mProgress) - PADDING * 2, 50);
         }
 
         @Override
         protected void draw(Graphics2D g2d) {
             super.draw(g2d);
             
-            Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 30);
+            Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 50);
             FontMetrics m = g2d.getFontMetrics(f);
-            int n = (int) (getDelta() / 500 % 3);
+            int n = (int) (getDelta() / 500 % 4);
             String s = "Loading";
             
-            while (n-- >= 0) {
+            for (int l = 0; l < n; ++l) {
                 s += ".";
             }
             

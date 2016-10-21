@@ -83,7 +83,7 @@ public class Map {
     }
     
     public float getDarkness() {
-        return 0.75f;
+        return 0.96f;
     }
     
     public int getTileWidth() {
