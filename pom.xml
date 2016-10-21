@@ -22,5 +22,10 @@
             <artifactId>gson</artifactId>
             <version>2.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>play</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 </project>

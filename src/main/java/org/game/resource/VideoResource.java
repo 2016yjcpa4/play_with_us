@@ -17,6 +17,6 @@ public class VideoResource {
         // 외부에서 생성자 호출 방지
     }
 
-    public static final File MOV_INTRO = new File("./res/mov_intro.mov");
-    public static final File MOV_0001 = new File("./res/mov_00001.mov");
+    public static final File MOV_INTRO = new File("./res/mov_intro.mp4");
+    public static final File MOV_0001 = new File("./res/mov_00001.mp4");
 }

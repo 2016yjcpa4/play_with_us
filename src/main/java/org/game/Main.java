@@ -1,5 +1,6 @@
 package org.game;
  
+import com.github.axet.play.VLC;
 import org.game.resource.VideoResource;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -45,10 +46,12 @@ public class Main {
     private Game mGame = new Game();
     private ResourceManager mRes = ResourceManager.getInstance();
     
+    private VLC mVLC = new VLC();
     private Canvas mVideoCanvas = new Canvas();
     
     private Main() {        
         mLayer.add(mGame.getCanvas(), 0);
+        mLayer.add(mVideoCanvas, 1);
         mLayer.setLayout(new OverlayLayout(mLayer));
         mLayer.setVisible(true);
         
@@ -57,6 +60,61 @@ public class Main {
         mWindow.setSize(1280, 800);
         
         mGame.pause();
+    }
+    
+    public void play(String f) {
+        play(new File(f));
+    }
+    
+    public void play(File f) {
+        mGame.pause();        
+        mLayer.moveToFront(mVideoCanvas);
+
+        mVLC.open(f);
+        mVLC.play();
+        
+        final KeyListener l = new KeyListener() {
+            
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    mWindow.removeKeyListener(this);
+
+                    mGame.resume();
+
+                    mLayer.moveToFront(mGame.getCanvas());
+                    mVLC.close();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        };
+        
+        mVLC.addListener(new VLC.Listener() {
+
+            @Override
+            public void stop() {
+                l.keyPressed(new KeyEvent(mWindow, 0, 0, 0, KeyEvent.VK_ESCAPE));
+            }
+            
+            @Override
+            public void start() {
+                if (DEBUG) {
+                    mWindow.addKeyListener(l);
+                }
+            }
+
+            @Override
+            public void position(float n) {
+                // 구현하지 않음
+            }
+        });
     }
     
     private void loadResources() throws Exception {
@@ -73,6 +131,8 @@ public class Main {
     
     public void launch() {
         mWindow.setVisible(true);
+        
+        mVLC.setVideoCanvas(mVideoCanvas);
         
         ResourceDownload r = new ResourceDownload();
         
@@ -98,7 +158,7 @@ public class Main {
                 
                 mLayer.remove(r.getCanvas());
                 
-                mGame.resume();
+                play(VideoResource.MOV_INTRO);
             }
 
             @Override
@@ -134,7 +194,7 @@ public class Main {
             
             int w = getCanvas().getWidth();
             int h = getCanvas().getHeight();
-            String s = String.format("%s (%.2f%%)", mMessage, mProgress * 100);
+            String s = String.format("%s (%.1f%%)", mMessage, mProgress * 100);
             
             g2d.setColor(Color.red);
             g2d.fillRect(PADDING, 
