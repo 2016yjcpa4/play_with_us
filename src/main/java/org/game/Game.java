@@ -18,7 +18,6 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
                
     private Map mMap;
     private InputManager mInput = InputManager.getInstance();
-    private ResourceManager mRes = ResourceManager.getInstance();
 
     public Game() { 
         mCanvas.addMouseListener(this);
@@ -41,11 +40,11 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
     }
     
     public BufferedImage getImage(String k) {
-        return ((ImageResource) mRes.getImage(k)).getImageData();
+        return ((ImageResource) ResourceManager.getInstance().getImage(k)).getImageData();
     }
     
     public SpriteImageResource getSprite(String s) {
-        return ((SpriteImageResource) mRes.getSprite(s));
+        return ((SpriteImageResource) ResourceManager.getInstance().getSprite(s));
     }
     
     @Override
