@@ -50,12 +50,11 @@ public class Main {
     private JLayeredPane mLayer = new JLayeredPane();
     private Game mGame = new Game();
     private ResourceManager mRes = ResourceManager.getInstance();
-    
     private VLC mVLC = new VLC();
     private Canvas mVideoCanvas = new Canvas();
     
     private Main() {
-        mLayer.add(new ResourceDownload().getComponent(), 0);
+        mLayer.add(new ResourceDownload().getComponent(), 0); // 리소스 다운로드는 초반에 리소스 체크만하고 바로 사라질 컴포넌트이므로 멤버변수로 등록하지 않음
         mLayer.add(mGame.getComponent(), -1);
         mLayer.add(mVideoCanvas, -1);
         mLayer.setLayout(new OverlayLayout(mLayer));
@@ -252,9 +251,10 @@ public class Main {
                 @Override
                 public void run() {
                     
+                    // 그냥 아래에 다 포함시켜야할듯...
                     if (isValid()) {
-                        //r.run();
-                        //return;
+                        r.run();
+                        return;
                     }
 
                     Map<String, String> m;
