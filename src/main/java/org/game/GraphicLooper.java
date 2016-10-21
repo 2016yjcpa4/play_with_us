@@ -40,7 +40,7 @@ public class GraphicLooper implements Runnable {
         mThread = new Thread(this);
     }
 
-    public Canvas getCanvas() {
+    public Canvas getComponent() {
         return mCanvas;
     }
     

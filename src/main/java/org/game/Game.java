@@ -20,6 +20,12 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
     private InputManager mInput = InputManager.getInstance();
 
     public Game() { 
+        super();
+        
+        // 게임은 생성시 바로 일시정지 상태.
+        
+        pause(); // 이 방법 말고 다른방법도 있을건데
+        
         mCanvas.addMouseListener(this);
         mCanvas.addMouseMotionListener(this);
         mCanvas.addKeyListener(this);
