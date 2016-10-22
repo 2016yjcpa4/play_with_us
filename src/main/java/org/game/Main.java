@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -146,6 +148,8 @@ public class Main {
     }
     
     public void launch() {
+        mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        mWindow.setUndecorated(true);
         mWindow.setLocationRelativeTo(null);
         mWindow.setVisible(true);
         
