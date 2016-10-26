@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.map;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import com.github.yjcpaj4.play_with_us.Game;
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Rect; 
@@ -25,11 +25,11 @@ public class Wall extends MapObject {
     }
 
     @Override
-    public void draw(Game g, Graphics2D g2d) {
+    public void draw(long delta, Graphics2D g2d) {
     }
 
     @Override
-    public void update(Game g) { 
+    public void update(long delta) { 
     }
     
 }

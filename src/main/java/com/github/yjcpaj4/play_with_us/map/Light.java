@@ -7,7 +7,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
-import com.github.yjcpaj4.play_with_us.Game;
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Raycast;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
@@ -82,12 +82,12 @@ public class Light extends MapObject {
     }
 
     @Override
-    public void update(Game g) {
+    public void update(long delta) {
         // 빛에서 업데이트 되는건 없을거같은데....???
     }
 
     @Override
-    public void draw(Game g, Graphics2D g2d) {
+    public void draw(long delta, Graphics2D g2d) {
         if (mTurnOff) {
             return;
         }

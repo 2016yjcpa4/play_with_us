@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import com.github.yjcpaj4.play_with_us.Game; 
+import com.github.yjcpaj4.play_with_us.Application; 
 import com.github.yjcpaj4.play_with_us.geom.BresenhamLine;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
@@ -151,14 +151,14 @@ public class Map {
         return l;
     }
     
-    public void draw(Game g, Graphics2D g2d) {
+    public void draw(long delta, Graphics2D g2d) {
         
-        g2d.drawImage(g.getImage("map"), 0, 0, null);
+        g2d.drawImage(ResourceManager.getInstance().getImage("map").getImageData(), 0, 0, null);
 
         for(MapObject o : mObject) {
             if ( ! (o instanceof Light) 
               && ! (o instanceof Player)) { // 빛 오브젝트와 플레이어는 아래에서 별도로 처리됩니다.
-                o.draw(g, g2d);
+                o.draw(delta, g2d);
             }
         }
         
@@ -170,7 +170,7 @@ public class Map {
 
         for(MapObject o : mObject) {
             if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
-                o.draw(null, t);
+                o.draw(delta, t);
             }
         }
 
@@ -178,12 +178,12 @@ public class Map {
         
         g2d.drawImage(b, 0, 0, null);
         
-        getPlayer().draw(g, g2d);
+        getPlayer().draw(delta, g2d);
     }
 
-    public void update(Game g) {
+    public void update(long delta) {
         for (MapObject o : mObject) {
-            o.update(g);
+            o.update(delta);
         }
     }
 }

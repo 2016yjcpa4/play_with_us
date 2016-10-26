@@ -1,7 +1,7 @@
 package com.github.yjcpaj4.play_with_us.map;
 
 import java.awt.Graphics2D;
-import com.github.yjcpaj4.play_with_us.Game;
+import com.github.yjcpaj4.play_with_us.Application;
 
 public abstract class MapObject {
     
@@ -15,7 +15,7 @@ public abstract class MapObject {
         return mMap;
     }
     
-    public abstract void update(Game g);
+    public abstract void update(long delta);
 
-    public abstract void draw(Game g, Graphics2D g2d);
+    public abstract void draw(long delta, Graphics2D g2d);
 }

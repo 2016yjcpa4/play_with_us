@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
-import com.github.yjcpaj4.play_with_us.Game;
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -61,8 +61,8 @@ public class Ghost extends MapObject {
     }
     
     @Override
-    public void draw(Game g, Graphics2D g2d) { 
-        SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(g.getDelta());
+    public void draw(long delta, Graphics2D g2d) { 
+        SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 
@@ -72,7 +72,7 @@ public class Ghost extends MapObject {
     }
     
     @Override
-    public void update(Game c) {
+    public void update(long delta) {
         double d = getDistanceToPlayer();
         boolean isNearPlayer = d < 200;
         boolean isLightProjected = false;

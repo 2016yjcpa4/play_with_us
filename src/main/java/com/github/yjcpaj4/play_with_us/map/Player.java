@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import com.github.yjcpaj4.play_with_us.Game;
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
@@ -81,8 +81,8 @@ public class Player extends MapObject {
     }
     
     @Override
-    public void update(Game g) { 
-        InputManager o = g.getInput();
+    public void update(long delta) { 
+        InputManager o = InputManager.getInstance();
         
         int n = 3;
         
@@ -140,8 +140,8 @@ public class Player extends MapObject {
     }
     
     @Override
-    public void draw(Game g, Graphics2D g2d) { 
-        SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(g.getDelta());
+    public void draw(long delta, Graphics2D g2d) { 
+        SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 
