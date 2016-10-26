@@ -19,6 +19,8 @@ import javax.swing.OverlayLayout;
 import com.github.yjcpaj4.play_with_us.resource.DropboxDownloader;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
  
 /**
  * 메인 클래스는 비디오와 게임 캔버스를 관리합니다.
@@ -45,6 +47,9 @@ public class Main {
     
     public static final boolean DEBUG = true;
     
+    private static final int WINDOW_WIDTH = 1280;
+    private static final int WINDOW_HEIGHT = 800;
+    
     private JFrame mWindow = new JFrame();
     private JLayeredPane mLayer = new JLayeredPane();
     private Game mGame = new Game();
@@ -59,12 +64,21 @@ public class Main {
         mLayer.setLayout(new OverlayLayout(mLayer));
         mLayer.setVisible(true);
         
+        mWindow.getContentPane().add(mLayer, BorderLayout.CENTER);
         mWindow.setTitle("PLAY with us");
-        mWindow.add(mLayer, BorderLayout.CENTER);
         mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mWindow.setSize(1280, 800);
-        //mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //mWindow.setUndecorated(true);
+        mWindow.setSize(1280, 800); 
+        mWindow.setUndecorated(true);
+        
+        /*
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                return false;
+            }
+        });
+        */
     }
     
     public void playVideo(String f) {
@@ -234,7 +248,7 @@ public class Main {
                         } 
                         
                         mProgress = ++n / m.size();
-                        mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%.1f%%)", mProgress * 100);
+                        mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
                     }
 
                     mProgress = 1.0f;
@@ -249,11 +263,11 @@ public class Main {
                         return;
                     }
 
+                    playVideo(VideoResource.MOV_INTRO);
+
                     ResourceDownload.this.stop();
                     
                     mLayer.remove(getComponent());
-
-                    playVideo(VideoResource.MOV_INTRO);
                 }
             }.start();
         }
