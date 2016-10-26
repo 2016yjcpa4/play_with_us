@@ -20,17 +20,7 @@ public class GraphicLooper implements Runnable {
     
     private Thread mThread;
     
-    protected Canvas mCanvas = new Canvas() {
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-        
-            if ( ! mRunning) {
-                start();
-            }
-        }
-    };
+    private Canvas mCanvas = new Canvas();
 
     public GraphicLooper() {
         /**

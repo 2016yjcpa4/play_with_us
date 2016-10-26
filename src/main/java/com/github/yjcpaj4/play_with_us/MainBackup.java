@@ -29,15 +29,15 @@ import java.awt.KeyboardFocusManager;
  * 비디오의 재생이 끝나면 게임스레드를 resume 시킵니다.
  * @author 차명도.
  */
-public class Main {
+public class MainBackup {
+    /*
+    private static MainBackup INSTANCE = null;
     
-    private static Main INSTANCE = null;
-    
-    public static Main getInstance() {
+    public static MainBackup getInstance() {
         if (INSTANCE == null) {
-            synchronized(Main.class) {
+            synchronized(MainBackup.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new Main();
+                    INSTANCE = new MainBackup();
                 }
             }
         }
@@ -57,7 +57,7 @@ public class Main {
     private VLC mVLC = new VLC();
     private Canvas mVideoCanvas = new Canvas();
     
-    private Main() {
+    private MainBackup() {
         mLayer.add(new ResourceDownload().getComponent(), 0); // 리소스 다운로드는 초반에 리소스 체크만하고 바로 사라질 컴포넌트이므로 멤버변수로 등록하지 않음
         mLayer.add(mGame.getComponent(), -1);
         mLayer.add(mVideoCanvas, -1);
@@ -78,7 +78,7 @@ public class Main {
                 return false;
             }
         });
-        */
+        *
     }
     
     public void playVideo(String f) {
@@ -100,7 +100,7 @@ public class Main {
      * 리스너를 등록하여 비디오가 끝나게될시 게임으로 되돌아오고(resume) VLC 를 닫습니다.
      * 
      * @param f 비디오 파일객체
-     */
+     *
     public void playVideo(File f) {
         mGame.pause();
         mLayer.moveToFront(mVideoCanvas);
@@ -321,6 +321,7 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        Main.getInstance().launch(); 
+        MainBackup.getInstance().launch(); 
     }
+    */
 }

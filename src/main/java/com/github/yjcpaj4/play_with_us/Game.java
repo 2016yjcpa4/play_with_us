@@ -1,45 +1,87 @@
 package com.github.yjcpaj4.play_with_us;
-
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
-import com.github.yjcpaj4.play_with_us.resource.ImageResource;
-import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
+ 
 import com.github.yjcpaj4.play_with_us.map.Map;
-
-public class Game extends GraphicLooper implements MouseMotionListener, MouseListener, KeyListener {
-
-    public static final boolean DEBUG = true;
-               
-    private Map mMap;
-    private InputManager mInput = InputManager.getInstance();
-
-    public Game() { 
-        super();
+import java.awt.BorderLayout;
+import java.awt.Graphics2D;
+import javax.swing.JFrame;
+import com.github.yjcpaj4.play_with_us.resource.ImageResource;
+import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
+import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
+import java.awt.image.BufferedImage;
+ 
+/**
+ * 메인 클래스는 비디오와 게임 캔버스를 관리합니다.
+ * 
+ * 외부에서 비디오를 재생시키면 게임스레드를 pause 하고
+ * 비디오의 재생이 끝나면 게임스레드를 resume 시킵니다.
+ * @author 차명도.
+ */
+public class Game extends GraphicLooper {
+    
+    private static Game INSTANCE = null;
+    
+    public static Game getInstance() {
+        if (INSTANCE == null) {
+            synchronized(Game.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new Game();
+                }
+            }
+        }
         
-        // 게임은 생성시 바로 일시정지 상태.
-        
-        pause(); // 이 방법 말고 다른방법도 있을건데
-        
-        mCanvas.addMouseListener(this);
-        mCanvas.addMouseMotionListener(this);
-        mCanvas.addKeyListener(this);
-        
-        mMap = new Map();
+        return INSTANCE;
     }
     
+    public static final boolean DEBUG = true;
+    
+    private Map mMap;
+    private JFrame mWindow = new JFrame();
+    private ResourceManager mRes = ResourceManager.getInstance();
+    private InputManager mInput = InputManager.getInstance();
+    
+    private Game() {
+        mMap = new Map();
+        
+        mWindow.setTitle("PLAY with us");
+        mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mWindow.setSize(1280, 800); 
+        mWindow.add(getComponent(), BorderLayout.CENTER);
+    }
+
     @Override
-    protected void draw(Graphics2D g2d) {  
+    protected void draw(Graphics2D g2d) {
         super.draw(g2d);
         
         mMap.update(this);
         mMap.draw(this, g2d);
     }
+    
+    @Override
+    public void start() {
+        try {
+            loadResources();
+
+            mWindow.setVisible(true);
+
+            super.start();
+        }
+        catch (Exception e) {
+            stop();
+        }
+    }
+    
+    private void loadResources() throws Exception {
+        mRes.load("res/img_map.png",    "map");
+        mRes.load("res/img_player.png", "player.walk.n");
+        mRes.load("res/img_player.png", "player.walk.ne");
+        mRes.load("res/img_player.png", "player.walk.e");
+        mRes.load("res/img_player.png", "player.walk.se");
+        mRes.load("res/img_player.png", "player.walk.s");
+        mRes.load("res/img_player.png", "player.walk.sw");
+        mRes.load("res/img_player.png", "player.walk.w");
+        mRes.load("res/img_player.png", "player.walk.nw");
+    }
+    
     
     public InputManager getInput() {
         return mInput;
@@ -53,49 +95,7 @@ public class Game extends GraphicLooper implements MouseMotionListener, MouseLis
         return ((SpriteImageResource) ResourceManager.getInstance().getSprite(s));
     }
     
-    @Override
-    public void keyTyped(KeyEvent e) {
+    public static void main(String[] args) throws Exception {
+        Game.getInstance().start();
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        mInput.setKeyPress(e.getKeyCode());
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        mInput.setKeyRelease(e.getKeyCode());
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mInput.setMousePosition(e.getX(), e.getY());
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        mInput.setMousePress(e.getButton());
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        mInput.setMouseRelease(e.getButton());
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-}  
+}
