@@ -9,12 +9,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -66,6 +63,8 @@ public class Main {
         mWindow.add(mLayer, BorderLayout.CENTER);
         mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mWindow.setSize(1280, 800);
+        //mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //mWindow.setUndecorated(true);
     }
     
     public void playVideo(String f) {
@@ -148,8 +147,6 @@ public class Main {
     }
     
     public void launch() {
-        //mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //mWindow.setUndecorated(true);
         mWindow.setLocationRelativeTo(null);
         mWindow.setVisible(true);
         
