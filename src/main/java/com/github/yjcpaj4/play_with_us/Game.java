@@ -82,7 +82,6 @@ public class Game extends GraphicLooper {
         mRes.load("res/img_player.png", "player.walk.nw");
     }
     
-    
     public InputManager getInput() {
         return mInput;
     }
