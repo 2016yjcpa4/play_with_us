@@ -1,20 +1,21 @@
 package com.github.yjcpaj4.play_with_us.activity;
 
 import java.awt.Graphics2D;
+import java.util.Map;
 
 public abstract class Activity {
     
-    public void finish() {
-        
+    private Map<String, Object> mDatas;
+    
+    public Map<String, Object> getData() {
+        return mDatas;
     }
     
-    public void startActivity() {
-        
-    }
+    public abstract void init();
     
-    public abstract void onStart(Param o);
-    
-    public abstract void onDraw(long delta, Graphics2D g2d);
+    public abstract void draw(long delta, Graphics2D g2d);
 
-    public abstract void onPause(); 
+    public abstract void pause(); 
+    
+    public abstract void resume();
 }
