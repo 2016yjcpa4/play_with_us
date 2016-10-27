@@ -16,7 +16,7 @@ public class GraphicLooper implements Runnable {
     private volatile boolean mPaused = false;
     private final Object mPauseLock = new Object();
     
-    private long mDelta;
+    protected long mDelta;
     
     private Thread mThread;
     
@@ -30,12 +30,8 @@ public class GraphicLooper implements Runnable {
         mThread = new Thread(this);
     }
 
-    public Canvas getComponent() {
+    public Canvas getCanvas() {
         return mCanvas;
-    }
-    
-    public long getDelta() {
-        return mDelta;
     }
  
     public void start() {
@@ -91,10 +87,10 @@ public class GraphicLooper implements Runnable {
                     }
                 }
             }
-            
-            update(bs);
 
             mDelta += FRAME_DELAY;
+            
+            update(mDelta, bs);
             
             try {
                 Thread.sleep(Math.max(0, mDelta - System.currentTimeMillis()));
@@ -104,21 +100,21 @@ public class GraphicLooper implements Runnable {
         }
     }
 
-    private void update(BufferStrategy bs) {
+    private void update(long delta, BufferStrategy bs) {
         do {
             do {
                 Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
-                draw(g2d);
+                draw(delta, g2d);
                 g2d.dispose();
             } 
             while (bs.contentsRestored());
 
             bs.show();
-        } 
+        }
         while (bs.contentsLost());
     }
     
-    protected void draw(Graphics2D g2d) {
+    protected void draw(long delta, Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // 안티앨리어싱
         
         g2d.clearRect(0, 0, mCanvas.getWidth(), mCanvas.getHeight());
