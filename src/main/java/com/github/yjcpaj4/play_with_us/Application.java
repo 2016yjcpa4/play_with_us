@@ -91,6 +91,8 @@ public class Application extends GraphicLooper
         }
         
         s.draw(delta, g2d); // 그리기
+        
+        mInput.clear();
     }
 
     @Override

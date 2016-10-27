@@ -3,6 +3,11 @@ package com.github.yjcpaj4.play_with_us;
 import java.util.HashMap; 
 import java.util.Map;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import java.awt.AWTEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Queue;
 
 /**
  * Input(키보드, 마우스) 를 관리하는 클래스.
@@ -28,46 +33,40 @@ public class InputManager {
         return INSTANCE;
     }
     
-    enum State {
-        
-        RELEASED,
-        PRESSED
-    }
-     
     private Point2D mMousePos = new Point2D();
-    private Map<Integer, State> mMouseStates = new HashMap<>();
-    private Map<Integer, State> mKeyStates = new HashMap<>();
-    
-    public boolean isKeyReleased(int k) {
-        return !mKeyStates.containsKey(k) || mKeyStates.get(k).equals(State.RELEASED);
-    }
+    private KeyBoardInput mMouseQueue = new KeyBoardInput();
+    private KeyBoardInput mKeyboardQueue = new KeyBoardInput();
     
     public boolean isKeyPressed(int k) {
-        return mKeyStates.containsKey(k) && mKeyStates.get(k).equals(State.PRESSED);
+        return mKeyboardQueue.isPressed(k);
     }
     
-    public boolean isMouseReleased(int k) {
-        return !mMouseStates.containsKey(k) || mMouseStates.get(k).equals(State.RELEASED);
+    public boolean isKeyReleased(int k) {
+        return mKeyboardQueue.isReleased(k);
     }
     
     public boolean isMousePressed(int k) {
-        return mMouseStates.containsKey(k) && mMouseStates.get(k).equals(State.PRESSED);
+        return mMouseQueue.isPressed(k);
     }
     
-    public void setMousePress(int k) {
-        mMouseStates.put(k, State.PRESSED);
-    }
-    
-    public void setMouseRelease(int k) {
-        mMouseStates.put(k, State.RELEASED);
+    public boolean isMouseReleased(int k) {
+        return mMouseQueue.isReleased(k);
     }
     
     public void setKeyPress(int k) {
-        mKeyStates.put(k, State.PRESSED);
+        mKeyboardQueue.push(k, InputEvent.PRESSED);
     }
     
     public void setKeyRelease(int k) {
-        mKeyStates.put(k, State.RELEASED);
+        mKeyboardQueue.push(k, InputEvent.RELEASED);
+    }
+    
+    public void setMousePress(int k) {
+        mMouseQueue.push(k, InputEvent.PRESSED);
+    }
+    
+    public void setMouseRelease(int k) {
+        mMouseQueue.push(k, InputEvent.RELEASED);
     }
     
     public void setMousePosition(int x, int y) {
@@ -76,5 +75,65 @@ public class InputManager {
     
     public Point2D getMousePosition() {
         return mMousePos;
+    }
+    
+    public void clear() {
+        mMouseQueue.clear();
+        mKeyboardQueue.clear();
+    }
+    
+    private static final int PRESSED = 0;
+    private static final int RELEASED = 1;
+    private static final int ONCE = 2;
+    
+    private static class KeyBoardInput {
+        
+        private Integer[] mEvents = new Integer[256];
+        private Queue<KeyEvent> mBuffer = new ArrayDeque<>();
+        
+        public KeyBoardInput() {
+            for (int n = 0; n < mEvents.length; ++n) {
+                mEvents[n] = -1;
+            }
+        }
+        
+        public void push(KeyEvent e) {
+            mBuffer.offer(e);
+        }
+        
+        public void update() {
+            while (mBuffer.isEmpty()) {
+                KeyEvent e = mBuffer.poll();
+                
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    mEvents[ e.getKeyCode() ] = PRESSED;
+                }
+                else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                    
+                    if (mEvents[ e.getKeyCode() ] == KeyEvent.KEY_RELEASED) {
+                        mEvents[ e.getKeyCode() ] = ONCE;
+                    }
+                    else {
+                        mEvents[ e.getKeyCode() ] = RELEASED;
+                    }
+                }
+            }
+        }
+        
+        public void clear() {
+            mBuffer.clear();
+            
+            for (int n = 0; n < mEvents.length; ++n) {
+                mEvents[n] = null;
+            }
+        }
+        
+        public boolean isPressed(int k) {
+            return mEvents[k] != null && mEvents[k].getType() == InputEvent.PRESSED;
+        }
+        
+        public boolean isReleased(int k) {   
+            return mEvents[k] == null || mEvents[k].getType() == InputEvent.RELEASED;
+        }
     }
 }
