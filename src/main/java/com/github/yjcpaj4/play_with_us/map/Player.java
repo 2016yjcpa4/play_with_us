@@ -98,6 +98,14 @@ public class Player extends MapObject {
         if (o.isMousePressed(MouseEvent.BUTTON3)) mLight.setTurnOn();
         if (o.isMouseReleased(MouseEvent.BUTTON3)) mLight.setTurnOff();
         
+        if (o.isKeyDown(KeyEvent.VK_F))  {
+            if (mLight.isTurnOn()) {
+                mLight.setTurnOff();
+            } else {
+                mLight.setTurnOn();
+            }
+        }
+        
         Vector2D d = mDir;
         Point2D p = getPosition();
         

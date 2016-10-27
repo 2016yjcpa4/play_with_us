@@ -6,7 +6,9 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -34,11 +36,15 @@ public class InputManager {
     }
     
     private Point2D mMousePos = new Point2D();
-    private KeyBoardInput mMouseQueue = new KeyBoardInput();
-    private KeyBoardInput mKeyboardQueue = new KeyBoardInput();
+    private InputQueue mMouseQueue = new InputQueue();
+    private InputQueue mKeyboardQueue = new InputQueue();
     
     public boolean isKeyPressed(int k) {
         return mKeyboardQueue.isPressed(k);
+    }
+    
+    public boolean isKeyDown(int k) {
+        return mKeyboardQueue.isDown(k);
     }
     
     public boolean isKeyReleased(int k) {
@@ -54,19 +60,19 @@ public class InputManager {
     }
     
     public void setKeyPress(int k) {
-        mKeyboardQueue.push(k, InputEvent.PRESSED);
+        mKeyboardQueue.add(k, InputEvent.PRESSED);
     }
     
     public void setKeyRelease(int k) {
-        mKeyboardQueue.push(k, InputEvent.RELEASED);
+        mKeyboardQueue.add(k, InputEvent.RELEASED);
     }
     
     public void setMousePress(int k) {
-        mMouseQueue.push(k, InputEvent.PRESSED);
+        mMouseQueue.add(k, InputEvent.PRESSED);
     }
     
     public void setMouseRelease(int k) {
-        mMouseQueue.push(k, InputEvent.RELEASED);
+        mMouseQueue.add(k, InputEvent.RELEASED);
     }
     
     public void setMousePosition(int x, int y) {
@@ -77,63 +83,79 @@ public class InputManager {
         return mMousePos;
     }
     
-    public void clear() {
-        mMouseQueue.clear();
-        mKeyboardQueue.clear();
+    public void poll() {
+        mMouseQueue.poll();
+        mKeyboardQueue.poll();
     }
     
-    private static final int PRESSED = 0;
-    private static final int RELEASED = 1;
-    private static final int ONCE = 2;
+    private static class InputEvent {
+        
+        public static final int PRESSED = 0;
+        public static final int RELEASED = 1;
+        public static final int ONCE = 2;
+        
+        private int mCode;
+        private int mType;
+        
+        public InputEvent(int c, int t) {
+            mCode = c;
+            mType = t;
+        }
+        
+        public int getCode() {
+            return mCode;
+        }
+        
+        public int getType() {
+            return mType;
+        }
+    }
     
-    private static class KeyBoardInput {
+    private static class InputQueue {
         
-        private Integer[] mEvents = new Integer[256];
-        private Queue<KeyEvent> mBuffer = new ArrayDeque<>();
+        private Map<Integer, Integer> mEvents = new HashMap<>();
+        private int[] mBuffer = new int[256];
         
-        public KeyBoardInput() {
-            for (int n = 0; n < mEvents.length; ++n) {
-                mEvents[n] = -1;
-            }
+        public InputQueue() {
         }
         
-        public void push(KeyEvent e) {
-            mBuffer.offer(e);
+        public void add(int c, int t) {
+            add(new InputEvent(c, t));
         }
         
-        public void update() {
-            while (mBuffer.isEmpty()) {
-                KeyEvent e = mBuffer.poll();
+        public void add(InputEvent e) {
+            mBuffer[ e.getCode() ] = e.getType();
+        }
+        
+        public void poll() {
+            for (int k = 0; k < mBuffer.length; ++k) {
+                int v = mBuffer[k];
                 
-                if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    mEvents[ e.getKeyCode() ] = PRESSED;
+                if (v == InputEvent.RELEASED) {
+                    mEvents.put(k, InputEvent.RELEASED);
                 }
-                else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                else if (v == InputEvent.PRESSED) {
                     
-                    if (mEvents[ e.getKeyCode() ] == KeyEvent.KEY_RELEASED) {
-                        mEvents[ e.getKeyCode() ] = ONCE;
+                    if ( ! mEvents.containsKey(k) || mEvents.get(k) == InputEvent.RELEASED) {
+                        mEvents.put(k, InputEvent.ONCE);
                     }
                     else {
-                        mEvents[ e.getKeyCode() ] = RELEASED;
+                        mEvents.put(k, InputEvent.PRESSED);
                     }
                 }
             }
         }
         
-        public void clear() {
-            mBuffer.clear();
-            
-            for (int n = 0; n < mEvents.length; ++n) {
-                mEvents[n] = null;
-            }
+        public boolean isDown(int k) {
+            return mEvents.containsKey(k) && mEvents.get(k) == InputEvent.ONCE;
         }
         
         public boolean isPressed(int k) {
-            return mEvents[k] != null && mEvents[k].getType() == InputEvent.PRESSED;
+            return mEvents.containsKey(k) && mEvents.get(k) == InputEvent.PRESSED;
         }
         
-        public boolean isReleased(int k) {   
-            return mEvents[k] == null || mEvents[k].getType() == InputEvent.RELEASED;
+        public boolean isReleased(int k) {
+            return ! mEvents.containsKey(k) || mEvents.get(k) == InputEvent.RELEASED;
         }
     }
 }
