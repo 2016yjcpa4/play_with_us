@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.stage.GameStage;
 import com.github.yjcpaj4.play_with_us.stage.ResourceLoaderStage;
 import com.github.yjcpaj4.play_with_us.stage.VideoStage;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
@@ -48,23 +49,24 @@ public class Application extends GraphicLooper {
     }
     
     public static final boolean DEBUG = true;
-
     private final Stack<Stage> mPool = new Stack<>();
     private final JFrame mWindow;
     private final ResourceManager mRes = ResourceManager.getInstance();
     private final InputManager mInput = InputManager.getInstance();
     
     private Application() {
-        mWindow = new JFrame();
-        mWindow.setTitle("PLAY with us");
-        mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mWindow.setSize(1280, 800); 
-        
         mCanvas.addMouseListener(mInput);
         mCanvas.addMouseMotionListener(mInput);
         mCanvas.addKeyListener(mInput);
         mCanvas.setFocusable(true);
         
+        mWindow = new JFrame();
+        mWindow.setTitle("PLAY with us");
+        mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mWindow.setResizable(false);
+        mWindow.setUndecorated(true);
+        mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mWindow.setLocationRelativeTo(null);        
         mWindow.add(mCanvas, BorderLayout.CENTER);
     }
     
@@ -73,6 +75,11 @@ public class Application extends GraphicLooper {
         super.draw(delta, g2d);
         
         mInput.update();
+        
+        if (mInput.isKeyDownOnce(KeyEvent.VK_ESCAPE)) {
+            stop();
+            return;
+        }
         
         final Stage s;
         

@@ -1,7 +1,6 @@
 package com.github.yjcpaj4.play_with_us.map;
 
 import java.awt.Graphics2D;
-import com.github.yjcpaj4.play_with_us.Application;
 
 public abstract class MapObject {
     

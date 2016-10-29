@@ -99,7 +99,7 @@ public class Player extends MapObject {
         if (o.isKeyReleased(KeyEvent.VK_W) && o.isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
         if (o.isKeyReleased(KeyEvent.VK_A) && o.isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
         
-        if (o.isKeyDown(KeyEvent.VK_F))  {
+        if (o.isKeyDownOnce(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {
                 mLight.setTurnOff();
             } else {
@@ -110,7 +110,7 @@ public class Player extends MapObject {
         }
         
         
-        if (o.isKeyDown(KeyEvent.VK_V))  {
+        if (o.isKeyDownOnce(KeyEvent.VK_V))  {
             VideoStage s = Application.getStage(VideoStage.class);
             s.load(VideoResource.MOV_INTRO);
             s.showStage(s);
