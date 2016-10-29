@@ -28,9 +28,3 @@
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
 
 ![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
-
-이 페이지는 마크다운 에디터 (MarkDown Editor) [hashify.me](http://hashify.me/) 로 제작 되었습니다.
-
-마크다운의 문법은 [여기](https://namu.wiki/w/%EB%A7%88%ED%81%AC%EB%8B%A4%EC%9A%B4#s-2)를 참조 하시기 바랍니다.
-
-
