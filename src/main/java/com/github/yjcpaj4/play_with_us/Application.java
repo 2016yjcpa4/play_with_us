@@ -98,20 +98,14 @@ public class Application extends GraphicLooper {
     public void start() {
         mWindow.setVisible(true);
         
-        showLoader();
+        showResourceLoader();
         
         super.start(); 
     }
     
-    private void showLoader() {
+    private void showResourceLoader() {
         ResourceLoaderStage s = getStage(ResourceLoaderStage.class);
         showStage(s);
-    }
-    
-    protected void stopFrontStage() {
-        synchronized(mPool) {
-            stopStage(mPool.peek());
-        }
     }
     
     /**
