@@ -174,7 +174,7 @@ public class Map {
             }
         }
 
-        t.dispose(); 
+        t.dispose();
         
         g2d.drawImage(b, 0, 0, null);
         

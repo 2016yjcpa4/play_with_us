@@ -19,6 +19,7 @@ public class Player extends MapObject {
     private static final int SPEED = 3;
     
     private Circle mCollider;
+    private boolean mIsFlashTurnOn;
     private Vector2D mDir = new Vector2D(0, 0);    
     private Vector2D mVel = new Vector2D();    
     
@@ -91,8 +92,10 @@ public class Player extends MapObject {
         if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(SPEED);
         if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-SPEED);
         if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(SPEED);
-        if ( ! (o.isKeyPressed(KeyEvent.VK_W) || o.isKeyPressed(KeyEvent.VK_S))) mVel.setY(0);
-        if ( ! (o.isKeyPressed(KeyEvent.VK_A) || o.isKeyPressed(KeyEvent.VK_D))) mVel.setX(0);
+        
+        // 상하 or 좌우 키값에 안눌러져있다면 따라 보정처리
+        if (o.isKeyReleased(KeyEvent.VK_W) && o.isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
+        if (o.isKeyReleased(KeyEvent.VK_A) && o.isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
         
         if (o.isKeyDown(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {
@@ -100,6 +103,13 @@ public class Player extends MapObject {
             } else {
                 mLight.setTurnOn();
             }
+            
+            mIsFlashTurnOn = mLight.isTurnOn();
+        }
+        
+        if ( ! mIsFlashTurnOn) {
+            if (o.isMousePressed(MouseEvent.BUTTON3)) { mLight.setTurnOn(); }
+            if (o.isMouseReleased(MouseEvent.BUTTON3)) { mLight.setTurnOff(); }
         }
         
         Vector2D d = mDir;
