@@ -104,8 +104,7 @@ public class Application extends GraphicLooper {
     }
     
     private void showResourceLoader() {
-        ResourceLoaderStage s = getStage(ResourceLoaderStage.class);
-        showStage(s);
+        showStage(ResourceLoaderStage.class);
     }
     
     /**
@@ -119,6 +118,10 @@ public class Application extends GraphicLooper {
                     
             mPool.remove(s);
         }
+    }
+    
+    protected void showStage(Class<? extends Stage> c) {
+        showStage(getStage(c));
     }
     
     /**

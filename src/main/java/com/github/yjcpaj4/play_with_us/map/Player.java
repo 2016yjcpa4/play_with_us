@@ -12,6 +12,8 @@ import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
+import com.github.yjcpaj4.play_with_us.resource.VideoResource;
+import com.github.yjcpaj4.play_with_us.stage.VideoStage;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
  
 public class Player extends MapObject {
@@ -105,6 +107,13 @@ public class Player extends MapObject {
             }
             
             mIsFlashTurnOn = mLight.isTurnOn();
+        }
+        
+        
+        if (o.isKeyDown(KeyEvent.VK_V))  {
+            VideoStage s = Application.getStage(VideoStage.class);
+            s.load(VideoResource.MOV_INTRO);
+            s.showStage(s);
         }
         
         if ( ! mIsFlashTurnOn) {
