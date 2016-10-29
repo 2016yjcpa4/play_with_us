@@ -76,11 +76,6 @@ public class Application extends GraphicLooper {
         
         mInput.update();
         
-        if (mInput.isKeyDownOnce(KeyEvent.VK_ESCAPE)) {
-            stop();
-            return;
-        }
-        
         final Stage s;
         
         try {
