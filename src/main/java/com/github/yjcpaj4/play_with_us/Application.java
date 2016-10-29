@@ -118,7 +118,7 @@ public class Application extends GraphicLooper {
      */
     protected void stopStage(Stage s) {
         synchronized(mPool) {
-            s.stop();
+            s.finish();
                     
             mPool.remove(s);
         }
@@ -140,7 +140,7 @@ public class Application extends GraphicLooper {
             if (mPool.size() > 1) {
                 Stage s2 = mPool.peek(); // 젤 위에있는 화면이
                 if (s2 != s) { // show 해야할 화면과 다르면
-                    s2.stop(); // 정지!
+                    s2.finish(); // 정지!
                 }
             }
             
@@ -150,9 +150,9 @@ public class Application extends GraphicLooper {
             
             mPool.push(s); // 마지막으로 이동
             
-            resume(); // GraphicLooper 는 다시 재생시키고
+            s.init(); // Stage 는 초기화작업
             
-            s.show(); // Stage 는 초기화작업
+            resume(); // GraphicLooper 는 다시 재생시키고
         }
     }
     

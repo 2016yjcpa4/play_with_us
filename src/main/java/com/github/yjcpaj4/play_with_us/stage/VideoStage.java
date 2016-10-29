@@ -31,14 +31,14 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected void stop() {
+    protected void finish() {
         mVLC.close();
         
         getCanvas().removeKeyListener(mKeyListener);
     }
 
     @Override
-    protected void show() {
+    protected void init() {
         getCanvas().addKeyListener(mKeyListener);
         
         mVLC.play();

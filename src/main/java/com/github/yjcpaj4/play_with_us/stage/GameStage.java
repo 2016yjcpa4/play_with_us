@@ -33,11 +33,11 @@ public class GameStage extends Stage {
     }
 
     @Override
-    protected void stop() {
+    protected void finish() {
         
     }
 
     @Override
-    protected void show() {
+    protected void init() {
     }
 }
