@@ -6,17 +6,10 @@ import javax.swing.JFrame;
 import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
-import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.stage.GameStage;
-import com.github.yjcpaj4.play_with_us.stage.LoaderStage;
+import com.github.yjcpaj4.play_with_us.stage.ResourceLoaderStage;
 import com.github.yjcpaj4.play_with_us.stage.VideoStage;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +30,7 @@ public class Application extends GraphicLooper {
     {
         mStages.add(new GameStage(this));
         mStages.add(new VideoStage(this));
-        mStages.add(new LoaderStage(this));
+        mStages.add(new ResourceLoaderStage(this));
     }
     
     public static <T extends Stage> T getStage(Class<T> c) {
@@ -111,7 +104,7 @@ public class Application extends GraphicLooper {
     }
     
     private void showLoader() {
-        LoaderStage s = getStage(LoaderStage.class);
+        ResourceLoaderStage s = getStage(ResourceLoaderStage.class);
         showStage(s);
     }
     
