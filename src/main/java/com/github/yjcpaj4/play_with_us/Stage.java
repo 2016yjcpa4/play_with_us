@@ -27,7 +27,7 @@ public abstract class Stage {
         return mCanvas;
     }
     
-    public void finish() {
+    public void stopStage() {
         mContext.stopStage(this);
     }
     
@@ -39,7 +39,7 @@ public abstract class Stage {
         mContext.showStage(s);
     }
     
-    protected abstract void init();
+    protected abstract void show();
     
     protected abstract void draw(long delta, Graphics2D g2d);
 

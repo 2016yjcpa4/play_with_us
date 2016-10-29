@@ -112,6 +112,8 @@ public class Application extends GraphicLooper {
     /**
      * 스테이지(무대) 를 정지시킵니다.
      * 
+     * 좀 고쳐야할듯... 젤 위에있는 화면만 스톱을 걸어야한다고 생각됨
+     * 
      * @param s 
      */
     protected void stopStage(Stage s) {
@@ -135,14 +137,14 @@ public class Application extends GraphicLooper {
         synchronized(mPool) {
             pause(); // 화면을 일시정지시키고
             
-            // 제일 위에있는 화면만 정지시켜야하는거 아닌가???
-            for (int n = 0; n < mPool.size(); ++n) {
-                if (mPool.get(n) != s) {
-                    mPool.get(n).stop();
+            if (mPool.size() > 1) {
+                Stage s2 = mPool.peek(); // 젤 위에있는 화면이
+                if (s2 != s) { // show 해야할 화면과 다르면
+                    s2.stop(); // 정지!
                 }
             }
             
-            if (mPool.contains(s)) { // 이미 있는 씬이 있다면
+            if (mPool.contains(s)) { // 이미 있는 화면이면
                 mPool.remove(s); // 지우고
             }
             
@@ -150,7 +152,7 @@ public class Application extends GraphicLooper {
             
             resume(); // GraphicLooper 는 다시 재생시키고
             
-            s.init(); // Stage 는 초기화작업
+            s.show(); // Stage 는 초기화작업
         }
     }
     

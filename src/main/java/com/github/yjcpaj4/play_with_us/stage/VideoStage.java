@@ -38,7 +38,7 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected void init() {
+    protected void show() {
         getCanvas().addKeyListener(mKeyListener);
         
         mVLC.play();
@@ -47,7 +47,7 @@ public class VideoStage extends Stage {
     private void showGame() {
         showStage(GameStage.class);
         
-        finish();
+        stopStage();
     }
     
     private class KeyListener implements java.awt.event.KeyListener {

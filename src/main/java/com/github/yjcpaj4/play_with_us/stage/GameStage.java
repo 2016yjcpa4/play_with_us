@@ -38,6 +38,6 @@ public class GameStage extends Stage {
     }
 
     @Override
-    protected void init() {
+    protected void show() {
     }
 }
