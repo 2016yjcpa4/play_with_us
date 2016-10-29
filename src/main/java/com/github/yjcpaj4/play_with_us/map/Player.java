@@ -16,6 +16,8 @@ import com.github.yjcpaj4.play_with_us.util.GameUtil;
  
 public class Player extends MapObject {
     
+    private static final int SPEED = 3;
+    
     private Circle mCollider;
     private Vector2D mDir = new Vector2D(0, 0);    
     private Vector2D mVel = new Vector2D();    
@@ -84,19 +86,13 @@ public class Player extends MapObject {
     public void update(long delta) { 
         InputManager o = InputManager.getInstance();
         
-        int n = 3;
-        
-        if (o.isKeyPressed(KeyEvent.VK_SHIFT)) n *= 2;
-        
         // 키를 눌렀을때 플레이어의 각종 처리들
-        if (o.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-n);
-        if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(n);
-        if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-n);
-        if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(n);
+        if (o.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-SPEED);
+        if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(SPEED);
+        if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-SPEED);
+        if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(SPEED);
         if ( ! (o.isKeyPressed(KeyEvent.VK_W) || o.isKeyPressed(KeyEvent.VK_S))) mVel.setY(0);
         if ( ! (o.isKeyPressed(KeyEvent.VK_A) || o.isKeyPressed(KeyEvent.VK_D))) mVel.setX(0);
-        if (o.isMousePressed(MouseEvent.BUTTON3)) mLight.setTurnOn();
-        if (o.isMouseReleased(MouseEvent.BUTTON3)) mLight.setTurnOff();
         
         if (o.isKeyDown(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {

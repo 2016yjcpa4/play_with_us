@@ -120,12 +120,24 @@ public class Application extends GraphicLooper {
         }
     }
     
+    /**
+     * 스테이지(무대) 를 정지시킵니다.
+     * 
+     * @param s 
+     */
     protected void stopStage(Stage s) {
         synchronized(mPool) {
+            s.stop();
+                    
             mPool.remove(s);
         }
     }
     
+    /**
+     * 스테이지(무대) 를 보여줍니다(시작합니다).
+     * 
+     * @param s 
+     */
     protected void showStage(Stage s) {
         synchronized(mPool) {
             pause(); // 화면을 일시정지시키고

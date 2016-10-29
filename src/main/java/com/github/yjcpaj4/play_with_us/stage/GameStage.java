@@ -5,8 +5,6 @@ import com.github.yjcpaj4.play_with_us.Stage;
 import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
 public class GameStage extends Stage {

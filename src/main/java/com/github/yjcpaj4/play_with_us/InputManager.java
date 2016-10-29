@@ -172,8 +172,8 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
             }
         }
         
-        public boolean isDown(int k) {
-            return mEvents.containsKey(k) && mEvents.get(k) == InputEvent.ONCE;
+        public boolean isDown(int k) { 
+            return mEvents.containsKey(k) &&  mEvents.get(k) == InputEvent.ONCE;
         }
         
         public boolean isPressed(int k) {
