@@ -2,8 +2,11 @@ package com.github.yjcpaj4.play_with_us.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.security.MessageDigest;
 
 public class FileUtil {
@@ -41,6 +44,12 @@ public class FileUtil {
         }
         
         return sb.toString();
+    }
+    
+    public static void setContents(File f, String v) throws IOException {
+        FileWriter fw = new FileWriter(f);
+        fw.write(v);
+        fw.flush();
     }
 
     private static byte[] getChecksumBytes(File f) throws Exception {
