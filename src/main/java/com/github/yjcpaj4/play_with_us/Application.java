@@ -8,6 +8,7 @@ import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.stage.GameStage;
+import com.github.yjcpaj4.play_with_us.stage.LoaderStage;
 import com.github.yjcpaj4.play_with_us.stage.VideoStage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -36,6 +37,7 @@ public class Application extends GraphicLooper {
     {
         mStages.add(new GameStage(this));
         mStages.add(new VideoStage(this));
+        mStages.add(new LoaderStage(this));
     }
     
     public static <T extends Stage> T getStage(Class<T> c) {
@@ -103,14 +105,13 @@ public class Application extends GraphicLooper {
     public void start() {
         mWindow.setVisible(true);
         
-        showIntro();
+        showLoader();
         
         super.start(); 
     }
     
-    private void showIntro() {
-        VideoStage s = getStage(VideoStage.class);
-        s.load(VideoResource.MOV_INTRO);
+    private void showLoader() {
+        LoaderStage s = getStage(LoaderStage.class);
         showStage(s);
     }
     

@@ -31,7 +31,7 @@ public abstract class Stage {
         mContext.stopStage(this);
     }
     
-    public void startScene(Stage s) {
+    public void showStage(Stage s) {
         mContext.showStage(s);
     }
     

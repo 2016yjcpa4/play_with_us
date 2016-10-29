@@ -48,10 +48,10 @@ public class VideoStage extends Stage {
         mVLC.play();
     }
     
-    private void startGame() {
+    private void showGame() {
         GameStage s = Application.getStage(GameStage.class);
         s.init();
-        startScene(s);
+        showStage(s);
         
         finish();
     }
@@ -65,7 +65,7 @@ public class VideoStage extends Stage {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                startGame();
+                showGame();
             }
         }
 
@@ -83,7 +83,7 @@ public class VideoStage extends Stage {
 
         @Override
         public void stop() {
-            startGame();
+            showGame();
         }
 
         @Override
