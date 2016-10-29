@@ -135,6 +135,7 @@ public class Application extends GraphicLooper {
         synchronized(mPool) {
             pause(); // 화면을 일시정지시키고
             
+            // 제일 위에있는 화면만 정지시켜야하는거 아닌가???
             for (int n = 0; n < mPool.size(); ++n) {
                 if (mPool.get(n) != s) {
                     mPool.get(n).stop();
