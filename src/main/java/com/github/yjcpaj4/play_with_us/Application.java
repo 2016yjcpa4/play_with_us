@@ -24,7 +24,7 @@ import java.util.Stack;
  * @author 차명도.
  */
 public class Application extends GraphicLooper {
-        
+    
     private static final List<Stage> mStages = new LinkedList<>();
     
     {
