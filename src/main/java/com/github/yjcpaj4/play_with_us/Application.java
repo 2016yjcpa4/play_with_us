@@ -29,10 +29,7 @@ import java.util.Stack;
  * 
  * @author 차명도.
  */
-public class Application extends GraphicLooper
-    implements MouseListener
-             , MouseMotionListener
-             , KeyListener {
+public class Application extends GraphicLooper {
         
     private static final List<Stage> mStages = new LinkedList<>();
     
@@ -68,9 +65,9 @@ public class Application extends GraphicLooper
         mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mWindow.setSize(1280, 800); 
         
-        mCanvas.addMouseListener(this);
-        mCanvas.addMouseMotionListener(this);
-        mCanvas.addKeyListener(this);
+        mCanvas.addMouseListener(mInput);
+        mCanvas.addMouseMotionListener(mInput);
+        mCanvas.addKeyListener(mInput);
         mCanvas.setFocusable(true);
         
         mWindow.add(mCanvas, BorderLayout.CENTER);
@@ -80,7 +77,7 @@ public class Application extends GraphicLooper
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
         
-        mInput.poll();
+        mInput.update();
         
         final Stage s;
         
@@ -149,52 +146,6 @@ public class Application extends GraphicLooper
             
             s.init(); // Stage 는 초기화작업
         }
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        mInput.setKeyPress(e.getKeyCode());
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        mInput.setKeyRelease(e.getKeyCode());
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mInput.setMousePosition(e.getX(), e.getY());
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        mInput.setMousePress(e.getButton());
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        mInput.setMouseRelease(e.getButton());
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
     }
     
     public InputManager getInput() {

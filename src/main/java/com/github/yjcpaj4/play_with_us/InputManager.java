@@ -3,20 +3,18 @@ package com.github.yjcpaj4.play_with_us;
 import java.util.HashMap; 
 import java.util.Map;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
-import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Input(키보드, 마우스) 를 관리하는 클래스.
  * 
  * @author 차명도.
  */
-public class InputManager {
+public class InputManager implements MouseMotionListener, MouseListener, KeyListener {
     
     private static InputManager INSTANCE;
     
@@ -59,33 +57,59 @@ public class InputManager {
         return mMouseQueue.isReleased(k);
     }
     
-    public void setKeyPress(int k) {
-        mKeyboardQueue.add(k, InputEvent.PRESSED);
-    }
-    
-    public void setKeyRelease(int k) {
-        mKeyboardQueue.add(k, InputEvent.RELEASED);
-    }
-    
-    public void setMousePress(int k) {
-        mMouseQueue.add(k, InputEvent.PRESSED);
-    }
-    
-    public void setMouseRelease(int k) {
-        mMouseQueue.add(k, InputEvent.RELEASED);
-    }
-    
-    public void setMousePosition(int x, int y) {
-        mMousePos.set(x, y);
-    }
-    
     public Point2D getMousePosition() {
         return mMousePos;
     }
     
-    public void poll() {
-        mMouseQueue.poll();
-        mKeyboardQueue.poll();
+    public void update() {
+        mMouseQueue.update();
+        mKeyboardQueue.update();
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        mKeyboardQueue.add(e.getKeyCode(), InputEvent.PRESSED);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        mKeyboardQueue.add(e.getKeyCode(), InputEvent.RELEASED);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        mouseMoved(e);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        mMousePos.set(e.getX(), e.getY());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        mMouseQueue.add(e.getButton(), InputEvent.PRESSED);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        mMouseQueue.add(e.getButton(), InputEvent.RELEASED);
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
     
     private static class InputEvent {
@@ -117,6 +141,9 @@ public class InputManager {
         private int[] mBuffer = new int[256];
         
         public InputQueue() {
+            for (int n = 0; n < mBuffer.length; ++n) {
+                mBuffer[n] = InputEvent.RELEASED;
+            }
         }
         
         public void add(int c, int t) {
@@ -127,21 +154,20 @@ public class InputManager {
             mBuffer[ e.getCode() ] = e.getType();
         }
         
-        public void poll() {
+        public void update() {
             for (int k = 0; k < mBuffer.length; ++k) {
                 int v = mBuffer[k];
                 
                 if (v == InputEvent.RELEASED) {
-                    mEvents.put(k, InputEvent.RELEASED);
-                }
-                else if (v == InputEvent.PRESSED) {
-                    
-                    if ( ! mEvents.containsKey(k) || mEvents.get(k) == InputEvent.RELEASED) {
+                    if (isPressed(k)) { // 이전값이 눌러져있엇다면
                         mEvents.put(k, InputEvent.ONCE);
                     }
                     else {
-                        mEvents.put(k, InputEvent.PRESSED);
+                        mEvents.put(k, InputEvent.RELEASED);
                     }
+                }
+                else if (v == InputEvent.PRESSED) {
+                    mEvents.put(k, InputEvent.PRESSED);
                 }
             }
         }
