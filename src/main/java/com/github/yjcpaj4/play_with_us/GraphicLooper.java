@@ -67,7 +67,7 @@ public class GraphicLooper implements Runnable {
         mCanvas.createBufferStrategy(2);
         BufferStrategy bs = mCanvas.getBufferStrategy();
 
-        OUTER : while (mRunning) {
+        LOOP : while (mRunning) {
             
             synchronized (mPauseLock) {
                 
@@ -78,12 +78,12 @@ public class GraphicLooper implements Runnable {
                         mPauseLock.wait();
                     } 
                     catch (InterruptedException e) {
-                        break OUTER;
+                        break LOOP;
                     }
                     
                     // 만약 현재 pause 걸려있는 상태에서 외부에서 stop 을 한경우 스레드를 종료시킵니다.
                     if ( ! mRunning) {
-                        break OUTER;
+                        break LOOP;
                     }
                 }
             }
