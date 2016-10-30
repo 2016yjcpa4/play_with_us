@@ -123,10 +123,8 @@ public class Application extends GraphicLooper {
         synchronized (mLayers) {
             pause(); // 스톱되는 순간 화면을 정지시키고
             
-            Stage s = mLayers.peek(); // 젤 위에있는 화면을 가져와
+            Stage s = mLayers.pop(); // 젤 위에있는 화면을 가져와
             s.finish(); // finish 호출시키고
-                    
-            mLayers.remove(s);
             
             resume(); // 다시 재생
         }
