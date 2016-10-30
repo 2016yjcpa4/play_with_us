@@ -2,6 +2,12 @@ package com.github.yjcpaj4.play_with_us;
 
 import java.awt.Canvas;
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  * Stage.
@@ -44,4 +50,5 @@ public abstract class Stage {
     protected abstract void draw(long delta, Graphics2D g2d);
 
     protected abstract void finish();
+    
 }

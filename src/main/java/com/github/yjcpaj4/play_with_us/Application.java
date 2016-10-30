@@ -11,6 +11,8 @@ import com.github.yjcpaj4.play_with_us.stage.ResourceLoaderStage;
 import com.github.yjcpaj4.play_with_us.stage.VideoStage;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;

@@ -53,6 +53,9 @@ public class ResourceManager {
         else if (ImageResource.canLoad(f)) {
             r = new ImageResource();
         }
+        else if (SoundResource.canLoad(f)) {
+            r = new SoundResource();
+        }
         
         r.load(f, k);
 
@@ -65,6 +68,10 @@ public class ResourceManager {
     
     public SpriteImageResource getSprite(String k) {
         return (SpriteImageResource) mResource.get(k);
+    }
+    
+    public SoundResource getSound(String k) {
+        return (SoundResource) mResource.get(k);
     }
     
     public void release(String k) {
