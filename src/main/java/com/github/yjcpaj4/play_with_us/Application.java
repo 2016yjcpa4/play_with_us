@@ -139,6 +139,8 @@ public class Application extends GraphicLooper {
     /**
      * 스테이지(무대) 를 보여줍니다(시작합니다).
      * 
+     * TODO 콜백개념을 넣어줘야함.
+     * 
      * @param s 
      */
     protected void showStage(Stage s) {
