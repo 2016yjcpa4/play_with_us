@@ -1,16 +1,10 @@
 package com.github.yjcpaj4.play_with_us.map;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List; 
 
-import com.github.yjcpaj4.play_with_us.map.Map;
-import com.github.yjcpaj4.play_with_us.GraphicLooper;
-import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
-import com.github.yjcpaj4.play_with_us.geom.Polygon;
-import com.github.yjcpaj4.play_with_us.geom.BresenhamLine;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
@@ -73,6 +67,11 @@ public class Ghost extends MapObject {
     
     @Override
     public void update(long delta) {
+        /**
+         * 플레이어와의 거리를 직선거리로 판정하고 있습니다
+         * 플레이어와의 직선거리가 아닌 걸음수로 판정해야 할것같습니다
+         * 걸음수는 AStar 알고리즘으로 나온 리스트 크기로 판별하면 될것입니다
+         */
         double d = getDistanceToPlayer();
         boolean isNearPlayer = d < 200;
         boolean isLightProjected = false;

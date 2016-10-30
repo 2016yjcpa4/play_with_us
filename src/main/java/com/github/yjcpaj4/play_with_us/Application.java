@@ -51,7 +51,8 @@ public class Application extends GraphicLooper {
     }
     
     public static final boolean DEBUG = true;
-    private final Stack<Stage> mPool = new Stack<>();
+    
+    private final Stack<Stage> mLayers = new Stack<>();
     private final JFrame mWindow;
     private final ResourceManager mRes = ResourceManager.getInstance();
     private final InputManager mInput = InputManager.getInstance();
@@ -81,21 +82,23 @@ public class Application extends GraphicLooper {
         final Stage s;
         
         try {
-            s = mPool.peek(); //  씬중에 제일 위에있는놈을 선택해서
+            s = mLayers.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
         }
-        catch(EmptyStackException e) { // 없으면 이건 프로그램 오류거나 혹은 자동으로 종료가 되야함
+        catch(EmptyStackException e) { // 스테이지가 없으면 자동으로 프로그램이 종료가 되야함
             stop();
             return;
         }
         
-        s.draw(delta, g2d); // 그리기
+        s.draw(delta, g2d); // 스테이지 그리기
     }
 
     @Override
     public void stop() {
         super.stop(); // 스레드 종료후
         
-        System.exit(0); // 프로세스 종료, 굳이 위에서 스레드 종료할것없이 프로세스만 종료 할수 있지만 걍 형식적인 흐름을 위해 호출
+        System.exit(0); // 프로세스 종료
+        
+        // 굳이 위에서 스레드 종료할것없이 프로세스만 종료 할수 있지만 걍 형식적인 흐름을 위해 호출
     }
     
     @Override
@@ -113,16 +116,19 @@ public class Application extends GraphicLooper {
     
     /**
      * 스테이지(무대) 를 정지시킵니다.
-     * 
-     * 좀 고쳐야할듯... 젤 위에있는 화면만 스톱을 걸어야한다고 생각됨
-     * 
+     *
      * @param s 
      */
-    protected void stopStage(Stage s) {
-        synchronized(mPool) {
-            s.finish();
+    protected void stopStage() {
+        synchronized (mLayers) {
+            pause(); // 스톱되는 순간 화면을 정지시키고
+            
+            Stage s = mLayers.peek(); // 젤 위에있는 화면을 가져와
+            s.finish(); // finish 호출시키고
                     
-            mPool.remove(s);
+            mLayers.remove(s);
+            
+            resume(); // 다시 재생
         }
     }
     
@@ -136,21 +142,14 @@ public class Application extends GraphicLooper {
      * @param s 
      */
     protected void showStage(Stage s) {
-        synchronized(mPool) {
+        synchronized (mLayers) {
+            if (mLayers.size() > 1) { // 이미 화면이 있는경우
+                stopStage(); // 스톱걸고
+            }
+            
             pause(); // 화면을 일시정지시키고
             
-            if (mPool.size() > 1) {
-                Stage s2 = mPool.peek(); // 젤 위에있는 화면이
-                if (s2 != s) { // show 해야할 화면과 다르면
-                    s2.finish(); // 정지!
-                }
-            }
-            
-            if (mPool.contains(s)) { // 이미 있는 화면이면
-                mPool.remove(s); // 지우고
-            }
-            
-            mPool.push(s); // 마지막으로 이동
+            mLayers.push(s); // 마지막으로 이동
             
             s.init(); // Stage 는 초기화작업
             

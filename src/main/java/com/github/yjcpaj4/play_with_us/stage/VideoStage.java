@@ -46,8 +46,6 @@ public class VideoStage extends Stage {
     
     private void showGame() {
         showStage(GameStage.class);
-        
-        stopStage();
     }
     
     private class KeyListener implements java.awt.event.KeyListener {

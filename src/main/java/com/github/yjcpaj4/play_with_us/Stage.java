@@ -34,7 +34,7 @@ public abstract class Stage {
     }
     
     public void stopStage() {
-        mContext.stopStage(this);
+        mContext.stopStage();
     }
     
     public void showStage(Class<? extends Stage> s) {
