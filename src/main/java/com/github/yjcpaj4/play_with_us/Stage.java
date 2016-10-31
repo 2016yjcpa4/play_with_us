@@ -34,7 +34,7 @@ public abstract class Stage {
     }
     
     public void stopStage() {
-        mContext.stopStage();
+        mContext.stopStage(this);
     }
     
     public void showStage(Class<? extends Stage> s) {
@@ -45,7 +45,7 @@ public abstract class Stage {
         mContext.showStage(s);
     }
     
-    protected void init(Object o) {
+    protected void init() {
         // TODO
     }
     
@@ -53,9 +53,8 @@ public abstract class Stage {
         // TODO
     }
 
-    protected Object finish() {
+    protected void finish() {
         // TODO
-        return null;
     }
     
 }

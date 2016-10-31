@@ -17,15 +17,12 @@ public class GameStage extends Stage {
         super(c);
         mMap = new Map();
     }
-    
-    public void setGameOver() {
-        mIsGameOver = true;
+
+    @Override
+    protected void init() {
+        super.init(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public boolean isGameOver() {
-        return mIsGameOver;
-    }
-    
+
     @Override
     protected void draw(long delta, Graphics2D g2d) {
         mMap.update(delta);

@@ -21,7 +21,6 @@ public class VideoStage extends Stage {
     public void load(File f) {
         mVLC = new VLC();
         mVLC.setVideoCanvas(getCanvas());
-        mVLC.addListener(mVideoListener);
         mVLC.open(f);
     }
 
@@ -31,22 +30,18 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected Object finish() {
+    protected void finish() {
         mVLC.close();
         
         getCanvas().removeKeyListener(mKeyListener);
-        return null;
     }
 
     @Override
-    protected void init(Object o) {
-        getCanvas().addKeyListener(mKeyListener);
-        
+    protected void init() {        
+        mVLC.addListener(mVideoListener);
         mVLC.play();
-    }
-    
-    private void showGame() {
-        showStage(GameStage.class);
+        
+        getCanvas().addKeyListener(mKeyListener);
     }
     
     private class KeyListener implements java.awt.event.KeyListener {
@@ -58,7 +53,7 @@ public class VideoStage extends Stage {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                showGame();
+                showStage(GameStage.class);
             }
         }
 
@@ -71,14 +66,11 @@ public class VideoStage extends Stage {
 
         @Override
         public void start() {
-            getContext().pause();
-            
         }
 
         @Override
         public void stop() {
-            getContext().resume();
-            showGame();
+            showStage(GameStage.class);
         }
 
         @Override

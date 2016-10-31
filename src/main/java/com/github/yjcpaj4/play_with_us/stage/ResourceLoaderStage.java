@@ -50,7 +50,7 @@ public class ResourceLoaderStage extends Stage {
     }
 
     @Override
-    protected void init(Object o) {
+    protected void init() {
         if ( ! RESOURCE_DIR.exists()) {
             RESOURCE_DIR.mkdirs();
         }
@@ -121,9 +121,11 @@ public class ResourceLoaderStage extends Stage {
                     return;
                 }
 
-                VideoStage s = Application.getStage(VideoStage.class);
+                VideoStage s = Application.getStageByClass(VideoStage.class);
                 s.load(VideoResource.MOV_INTRO);
                 showStage(s); 
+                
+                stopStage();
             }
         }.start();
     }

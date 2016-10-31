@@ -111,7 +111,7 @@ public class Player extends MapObject {
         
         
         if (o.isKeyDownOnce(KeyEvent.VK_V))  {
-            VideoStage s = Application.getStage(VideoStage.class);
+            VideoStage s = Application.getStageByClass(VideoStage.class);
             s.load(VideoResource.MOV_INTRO);
             s.showStage(s);
         }
