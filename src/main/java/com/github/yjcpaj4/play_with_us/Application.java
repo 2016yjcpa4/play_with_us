@@ -78,7 +78,7 @@ public class Application extends GraphicLooper {
         super.draw(delta, g2d);
         
         mInput.update();
-        
+          
         final Stage s;
         
         try {
