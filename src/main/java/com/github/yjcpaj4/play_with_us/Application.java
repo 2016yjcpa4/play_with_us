@@ -150,8 +150,7 @@ public class Application extends GraphicLooper {
      * 
      * TODO 콜백개념을 넣어줘야함.
      * 
-     * 스테이지 전환은 별도의 스레드에서 처리됩니다.
-     * (왠만하면 스레드큐를 하나 만들어 관리하고싶지만... 걍 안할거임
+     * showStage 는 GraphicLooper 를 제어해야 하는데 외부스레드에서 제어를 걸어줘야 하므로 EventQueue 를 이용하여 제어합니다.
      * 
      * @param s 
      */

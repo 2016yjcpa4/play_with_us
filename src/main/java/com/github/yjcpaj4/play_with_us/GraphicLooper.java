@@ -20,7 +20,7 @@ public class GraphicLooper implements Runnable {
     
     private Thread mThread;
     
-    private Canvas mCanvas = new Canvas();
+    protected Canvas mCanvas = new Canvas();
 
     public GraphicLooper() {
         /**
