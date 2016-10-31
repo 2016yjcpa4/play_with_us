@@ -50,7 +50,7 @@ public class ResourceLoaderStage extends Stage {
     }
 
     @Override
-    protected void init() {
+    protected void init(Object o) {
         if ( ! RESOURCE_DIR.exists()) {
             RESOURCE_DIR.mkdirs();
         }
@@ -171,9 +171,5 @@ public class ResourceLoaderStage extends Stage {
 
         drawProgress(g2d);
         drawMessage(g2d);
-    }
-
-    @Override
-    protected void finish() {
     }
 }

@@ -143,16 +143,19 @@ public class Application extends GraphicLooper {
      */
     protected void showStage(Stage s) {
         synchronized (mLayers) {
-            if (mLayers.size() > 1) { // 이미 화면이 있는경우
-                stopStage(); // 스톱걸고
-            }
-            
             pause(); // 화면을 일시정지시키고
             
+            Object o = null;
+            if (mLayers.size() > 1) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
+                o = mLayers.peek().finish();
+            }
+            
+            if (mLayers.contains(s)) { // 이미 있는놈이면
+                mLayers.remove(s); // 지우고
+            }
             mLayers.push(s); // 마지막으로 이동
             
-            s.init(); // Stage 는 초기화작업
-            
+            s.init(o); // Stage 는 초기화작업
             resume(); // GraphicLooper 는 다시 재생시키고
         }
     }

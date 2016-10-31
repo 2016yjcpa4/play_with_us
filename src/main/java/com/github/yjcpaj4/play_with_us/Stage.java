@@ -45,10 +45,17 @@ public abstract class Stage {
         mContext.showStage(s);
     }
     
-    protected abstract void init();
+    protected void init(Object o) {
+        // TODO
+    }
     
-    protected abstract void draw(long delta, Graphics2D g2d);
+    protected void draw(long delta, Graphics2D g2d) {
+        // TODO
+    }
 
-    protected abstract void finish();
+    protected Object finish() {
+        // TODO
+        return null;
+    }
     
 }

@@ -14,14 +14,14 @@ public class VideoStage extends Stage {
     private final KeyListener mKeyListener = new KeyListener();
     private final VideoListener mVideoListener = new VideoListener();
     
-    public VideoStage(Application ctx) {
-        super(ctx);
+    public VideoStage(Application c) {
+        super(c);
     }
     
     public void load(File f) {
         mVLC = new VLC();
-        mVLC.addListener(mVideoListener);
         mVLC.setVideoCanvas(getCanvas());
+        mVLC.addListener(mVideoListener);
         mVLC.open(f);
     }
 
@@ -31,14 +31,15 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected void finish() {
+    protected Object finish() {
         mVLC.close();
         
         getCanvas().removeKeyListener(mKeyListener);
+        return null;
     }
 
     @Override
-    protected void init() {
+    protected void init(Object o) {
         getCanvas().addKeyListener(mKeyListener);
         
         mVLC.play();
@@ -70,11 +71,13 @@ public class VideoStage extends Stage {
 
         @Override
         public void start() {
+            getContext().pause();
             
         }
 
         @Override
         public void stop() {
+            getContext().resume();
             showGame();
         }
 

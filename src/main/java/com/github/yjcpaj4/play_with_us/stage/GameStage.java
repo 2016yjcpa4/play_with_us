@@ -31,13 +31,4 @@ public class GameStage extends Stage {
         mMap.update(delta);
         mMap.draw(delta, g2d);
     }
-
-    @Override
-    protected void finish() {
-        
-    }
-
-    @Override
-    protected void init() {
-    }
 }
