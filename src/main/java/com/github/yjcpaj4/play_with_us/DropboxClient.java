@@ -9,11 +9,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class DropboxDownloader {
+public class DropboxClient {
     
     private final DbxClientV2 mClient;
     
-    public DropboxDownloader(String clientId, String accessToken) {
+    public DropboxClient(String clientId, String accessToken) {
         mClient = new DbxClientV2(new DbxRequestConfig(clientId), accessToken);
     }
     

@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.stage;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Stage;
-import com.github.yjcpaj4.play_with_us.DropboxDownloader;
+import com.github.yjcpaj4.play_with_us.DropboxClient;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
@@ -25,7 +25,7 @@ public class ResourceLoaderStage extends Stage {
 
     private final String RESOURCE_CHECKSUM_FILE = "checksum.json";
     private final File RESOURCE_DIR = new File("res");
-    private DropboxDownloader mDropbox;
+    private DropboxClient mDropbox;
     private float mProgress;
     private String mMessage;
 
@@ -34,7 +34,7 @@ public class ResourceLoaderStage extends Stage {
     public ResourceLoaderStage(Application c) {
         super(c);
         
-        mDropbox = new DropboxDownloader(DBX_CLIENT_ID, DBX_ACCESS_TOKEN);
+        mDropbox = new DropboxClient(DBX_CLIENT_ID, DBX_ACCESS_TOKEN);
     }
     
     private void loadResources() throws IOException {
