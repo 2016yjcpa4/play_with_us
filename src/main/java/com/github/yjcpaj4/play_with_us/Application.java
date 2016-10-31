@@ -79,11 +79,6 @@ public class Application extends GraphicLooper {
         
         mInput.update();
         
-        System.out.println();
-        for(Stage s : mLayers) {
-            System.out.println(s.getClass());
-        }
-        
         final Stage s;
         
         try {
@@ -127,6 +122,9 @@ public class Application extends GraphicLooper {
     
     /**
      * 스테이지(무대) 를 정지시킵니다.
+     * 
+     * 스테이지 전환은 별도의 스레드에서 처리됩니다.
+     * (왠만하면 스레드큐를 하나 만들어 관리하고싶지만... 걍 안할거임
      *
      * @param s 
      */    
@@ -158,7 +156,9 @@ public class Application extends GraphicLooper {
      * 스테이지(무대) 를 보여줍니다(시작합니다).
      * 
      * TODO 콜백개념을 넣어줘야함.
+     * 
      * 스테이지 전환은 별도의 스레드에서 처리됩니다.
+     * (왠만하면 스레드큐를 하나 만들어 관리하고싶지만... 걍 안할거임
      * 
      * @param s 
      */
