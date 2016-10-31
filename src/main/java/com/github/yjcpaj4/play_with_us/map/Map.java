@@ -43,8 +43,6 @@ public class Map {
         
         addObject(new Ghost(80, 450));
         addObject(new Ghost(1000, 450));
-         
-        addObject(new Player());
         
         for(Line2D l : getAllLine()) {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());

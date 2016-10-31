@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.stage.GameStage;
 import com.github.yjcpaj4.play_with_us.stage.ResourceLoaderStage;
 import com.github.yjcpaj4.play_with_us.stage.VideoStage;
+import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -104,48 +105,40 @@ public class Application extends GraphicLooper {
     @Override
     public void start() {
         mWindow.setVisible(true);
-        
+
         showResourceLoader();
-        
-        super.start(); 
+
+        super.start();
     }
     
     private void showResourceLoader() {
         showStage(ResourceLoaderStage.class);
     }
     
-    protected void stopStage() {
-        synchronized (mLayers) {
-            stopStage(mLayers.peek());
-        }
+    protected void stopStage() { 
+        stopStage(mLayers.peek()); 
     }
     
     /**
      * 스테이지(무대) 를 정지시킵니다.
      * 
      * 스테이지 전환은 별도의 스레드에서 처리됩니다.
-     * (왠만하면 스레드큐를 하나 만들어 관리하고싶지만... 걍 안할거임
      *
      * @param s 
      */    
-    protected void stopStage(Stage s) {
-        final Runnable r = new Runnable() {
-            
+    protected void stopStage(Stage s) { 
+        EventQueue.invokeLater(new Runnable() {
+
             @Override
             public void run() {
-                
-                synchronized (mLayers) {
-                    pause(); // 스톱되는 순간 화면을 정지시키고
+                pause(); // 스톱되는 순간 화면을 정지시키고
 
-                    mLayers.remove(s); // 젤 위에있는 화면을 가져와
-                    s.finish(); // finish 호출시키고
+                mLayers.remove(s); // 젤 위에있는 화면을 가져와
+                s.finish(); // finish 호출시키고
 
-                    resume(); // GraphicLooper 는 다시 재생
-                }
+                resume(); // GraphicLooper 는 다시 재생 
             }
-        };
-        
-        new Thread(r).start();
+        });
     }
     
     protected void showStage(Class<? extends Stage> c) {
@@ -163,30 +156,26 @@ public class Application extends GraphicLooper {
      * @param s 
      */
     protected void showStage(Stage s) {
-        final Runnable r = new Runnable() {
-            
+        EventQueue.invokeLater(new Runnable() {
+
             @Override
             public void run() {
-                synchronized (mLayers) {
-                    pause(); // 화면을 일시정지시키고
+                pause(); // 화면을 일시정지시키고
 
-                    if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
-                        mLayers.peek().finish();
-                    }
-
-                    if (mLayers.contains(s)) { // 이미 있는놈이면
-                        mLayers.remove(s); // 지우고
-                    }
-
-                    mLayers.push(s); // 마지막으로 이동
-
-                    s.init(); // Stage 는 초기화작업
-                    resume(); // GraphicLooper 는 다시 재생
+                if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
+                    mLayers.peek().finish();
                 }
+
+                if (mLayers.contains(s)) { // 이미 있는놈이면
+                    mLayers.remove(s); // 지우고
+                }
+
+                mLayers.push(s); // 마지막으로 이동
+
+                s.init(); // Stage 는 초기화작업
+                resume(); // GraphicLooper 는 다시 재생
             }
-        };
-        
-        new Thread(r).start();
+        });
     }
     
     public InputManager getInput() {
