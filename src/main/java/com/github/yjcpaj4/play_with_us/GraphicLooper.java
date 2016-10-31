@@ -16,11 +16,11 @@ public class GraphicLooper implements Runnable {
     private volatile boolean mPaused = false;
     private final Object mPauseLock = new Object();
     
-    protected long mDelta;
+    private long mClock;
     
     private Thread mThread;
     
-    protected Canvas mCanvas = new Canvas();
+    private Canvas mCanvas = new Canvas();
 
     public GraphicLooper() {
         /**
@@ -28,6 +28,7 @@ public class GraphicLooper implements Runnable {
          * 상속이아닌 멤버변수로 할당함
          */
         mThread = new Thread(this);
+        mThread.setName(getClass().getSimpleName());
     }
 
     public Canvas getCanvas() {
@@ -52,7 +53,7 @@ public class GraphicLooper implements Runnable {
 
     public void resume() {
         synchronized (mPauseLock) {
-            mDelta = System.currentTimeMillis();
+            mClock = System.currentTimeMillis();
         
             mPaused = false;
             mPauseLock.notifyAll();
@@ -62,7 +63,7 @@ public class GraphicLooper implements Runnable {
 
     @Override
     public void run() {
-        mDelta = System.currentTimeMillis();
+        mClock = System.currentTimeMillis();
 
         mCanvas.createBufferStrategy(2);
         BufferStrategy bs = mCanvas.getBufferStrategy();
@@ -88,12 +89,12 @@ public class GraphicLooper implements Runnable {
                 }
             }
 
-            mDelta += FRAME_DELAY;
+            mClock += FRAME_DELAY;
             
-            update(mDelta, bs);
+            update(mClock, bs);
             
             try {
-                Thread.sleep(Math.max(0, mDelta - System.currentTimeMillis()));
+                Thread.sleep(Math.max(0, mClock - System.currentTimeMillis()));
             } catch (InterruptedException e) {
                 break;
             }

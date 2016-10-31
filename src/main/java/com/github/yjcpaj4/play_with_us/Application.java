@@ -126,9 +126,9 @@ public class Application extends GraphicLooper {
      *
      * @param s 
      */    
-    protected void stopStage(Stage s) { 
+    protected void stopStage(Stage s) {  
         EventQueue.invokeLater(new Runnable() {
-
+            
             @Override
             public void run() {
                 pause(); // 스톱되는 순간 화면을 정지시키고
@@ -136,7 +136,7 @@ public class Application extends GraphicLooper {
                 mLayers.remove(s); // 젤 위에있는 화면을 가져와
                 s.finish(); // finish 호출시키고
 
-                resume(); // GraphicLooper 는 다시 재생 
+                resume(); // GraphicLooper 는 다시 재생  
             }
         });
     }
@@ -155,9 +155,9 @@ public class Application extends GraphicLooper {
      * 
      * @param s 
      */
-    protected void showStage(Stage s) {
+    protected void showStage(Stage s) { 
         EventQueue.invokeLater(new Runnable() {
-
+            
             @Override
             public void run() {
                 pause(); // 화면을 일시정지시키고
