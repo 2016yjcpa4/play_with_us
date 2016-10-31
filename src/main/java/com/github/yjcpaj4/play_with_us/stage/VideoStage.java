@@ -54,6 +54,8 @@ public class VideoStage extends Stage {
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 showStage(GameStage.class);
+                
+                stopStage();
             }
         }
 
@@ -71,6 +73,8 @@ public class VideoStage extends Stage {
         @Override
         public void stop() {
             showStage(GameStage.class);
+            
+            stopStage();
         }
 
         @Override

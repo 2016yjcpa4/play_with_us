@@ -131,7 +131,7 @@ public class Application extends GraphicLooper {
      * @param s 
      */    
     protected void stopStage(Stage s) {
-        new Thread() {
+        final Runnable r = new Runnable() {
             
             @Override
             public void run() {
@@ -142,10 +142,12 @@ public class Application extends GraphicLooper {
                     mLayers.remove(s); // 젤 위에있는 화면을 가져와
                     s.finish(); // finish 호출시키고
 
-                    Application.this.resume(); // GraphicLooper 는 다시 재생
+                    resume(); // GraphicLooper 는 다시 재생
                 }
             }
-        }.start();
+        };
+        
+        new Thread(r).start();
     }
     
     protected void showStage(Class<? extends Stage> c) {
@@ -156,15 +158,15 @@ public class Application extends GraphicLooper {
      * 스테이지(무대) 를 보여줍니다(시작합니다).
      * 
      * TODO 콜백개념을 넣어줘야함.
+     * 스테이지 전환은 별도의 스레드에서 처리됩니다.
      * 
      * @param s 
      */
     protected void showStage(Stage s) {
-        new Thread() {
+        final Runnable r = new Runnable() {
             
             @Override
             public void run() {
-                
                 synchronized (mLayers) {
                     pause(); // 화면을 일시정지시키고
 
@@ -179,10 +181,12 @@ public class Application extends GraphicLooper {
                     mLayers.push(s); // 마지막으로 이동
 
                     s.init(); // Stage 는 초기화작업
-                    Application.this.resume(); // GraphicLooper 는 다시 재생
+                    resume(); // GraphicLooper 는 다시 재생
                 }
             }
-        }.start();
+        };
+        
+        new Thread(r).start();
     }
     
     public InputManager getInput() {
