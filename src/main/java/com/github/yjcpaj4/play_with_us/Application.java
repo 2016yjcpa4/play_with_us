@@ -131,12 +131,14 @@ public class Application extends GraphicLooper {
             
             @Override
             public void run() {
-                pause(); // 스톱되는 순간 화면을 정지시키고
+                synchronized (mLayers) {
+                    pause(); // 스톱되는 순간 화면을 정지시키고
 
-                mLayers.remove(s); // 젤 위에있는 화면을 가져와
-                s.finish(); // finish 호출시키고
+                    mLayers.remove(s); // 젤 위에있는 화면을 가져와
+                    s.finish(); // finish 호출시키고
 
-                resume(); // GraphicLooper 는 다시 재생  
+                    resume(); // GraphicLooper 는 다시 재생  
+                }
             }
         });
     }
@@ -159,20 +161,22 @@ public class Application extends GraphicLooper {
             
             @Override
             public void run() {
-                pause(); // 화면을 일시정지시키고
+                synchronized (mLayers) {
+                    pause(); // 화면을 일시정지시키고
 
-                if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
-                    mLayers.peek().finish();
+                    if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
+                        mLayers.peek().finish();
+                    }
+
+                    if (mLayers.contains(s)) { // 이미 있는놈이면
+                        mLayers.remove(s); // 지우고
+                    }
+
+                    mLayers.push(s); // 마지막으로 이동
+
+                    s.init(); // Stage 는 초기화작업
+                    resume(); // GraphicLooper 는 다시 재생
                 }
-
-                if (mLayers.contains(s)) { // 이미 있는놈이면
-                    mLayers.remove(s); // 지우고
-                }
-
-                mLayers.push(s); // 마지막으로 이동
-
-                s.init(); // Stage 는 초기화작업
-                resume(); // GraphicLooper 는 다시 재생
             }
         });
     }
