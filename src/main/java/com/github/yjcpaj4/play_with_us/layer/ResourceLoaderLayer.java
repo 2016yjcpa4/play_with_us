@@ -1,7 +1,7 @@
-package com.github.yjcpaj4.play_with_us.stage;
+package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
-import com.github.yjcpaj4.play_with_us.Stage;
+import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.DropboxClient;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-public class ResourceLoaderStage extends Stage {
+public class ResourceLoaderLayer extends Layer {
     
     private final String DBX_CLIENT_ID = "play_with_us/v0.1";
     private final String DBX_ACCESS_TOKEN = "BG8Lirg0MOAAAAAAAAAAG2rc4quBs-xL2yoFBPxrUdyembJNsZyBrrZ6v8JlmSg5";
@@ -32,7 +32,7 @@ public class ResourceLoaderStage extends Stage {
 
     private ResourceManager mRes = ResourceManager.getInstance();
     
-    public ResourceLoaderStage(Application c) {
+    public ResourceLoaderLayer(Application c) {
         super(c);
         
         mDropbox = new DropboxClient(DBX_CLIENT_ID, DBX_ACCESS_TOKEN);
@@ -122,7 +122,7 @@ public class ResourceLoaderStage extends Stage {
                     return;
                 }
                 
-                VideoStage s = Application.getStageByClass(VideoStage.class);
+                VideoLayer s = Application.getStageByClass(VideoLayer.class);
                 s.load(VideoResource.MOV_INTRO);
                 showStage(s); 
 

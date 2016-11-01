@@ -6,15 +6,11 @@ import javax.swing.JFrame;
 import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
-import com.github.yjcpaj4.play_with_us.stage.GameStage;
-import com.github.yjcpaj4.play_with_us.stage.ResourceLoaderStage;
-import com.github.yjcpaj4.play_with_us.stage.VideoStage;
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
+import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
+import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,20 +27,20 @@ import java.util.Stack;
 public class Application extends GraphicLooper {
     
     // 이부분을 좀더 정리할수 있을거같은데 방법을 모르겠다
-    private static final List<Stage> mStages = new LinkedList<>();
+    private static final List<Layer> mStages = new LinkedList<>();
     
     {
-        mStages.add(new GameStage(this));
-        mStages.add(new VideoStage(this));
-        mStages.add(new ResourceLoaderStage(this));
+        mStages.add(new GameLayer(this));
+        mStages.add(new VideoLayer(this));
+        mStages.add(new ResourceLoaderLayer(this));
     }
     
-    public static <T extends Stage> T getStageByClass(Class<T> c) {
+    public static <T extends Layer> T getStageByClass(Class<T> c) {
         if (mStages.isEmpty()) {
             return null;
         }
         
-        for(Stage s : mStages) {
+        for(Layer s : mStages) {
             if (s.getClass() == c) {
                 return (T) s;
             }
@@ -55,7 +51,7 @@ public class Application extends GraphicLooper {
     
     public static final boolean DEBUG = true;
     
-    private Stack<Stage> mLayers = new Stack<>();
+    private Stack<Layer> mLayers = new Stack<>();
     private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
     private InputManager mInput = InputManager.getInstance();
     
@@ -68,7 +64,7 @@ public class Application extends GraphicLooper {
         
         mInput.update();
           
-        final Stage s;
+        final Layer s;
         
         try {
             s = mLayers.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
@@ -141,11 +137,11 @@ public class Application extends GraphicLooper {
     }
     
     private void showResourceLoader() {
-        showStage(ResourceLoaderStage.class);
+        showLayer(ResourceLoaderLayer.class);
     }
     
-    protected void finishStage() { 
-        finishStage(mLayers.peek()); 
+    protected void finishLayer() { 
+        finishLayer(mLayers.peek()); 
     }
     
     /**
@@ -155,18 +151,21 @@ public class Application extends GraphicLooper {
      * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
      * 반드시 외부 스레드에서 호출되게 해야합니다.
      *
-     * @param s 
+     * @param l 
      */    
-    protected void finishStage(Stage s) {  
+    protected void finishLayer(Layer l) {  
         final Runnable r = new Runnable() {
 
             @Override
             public void run() { 
-                pause(); // 스톱되는 순간 화면을 정지시키고
+                pause(); // 스톱되는 순간 화면을 정지시킵니다.
+                
+                l.pause(); // 스테이지도 화면을 일시정지 시키고
 
-                mLayers.remove(s); // 젤 위에있는 화면을 가져와
-                s.finish(); // finish 호출시키고
-
+                if (mLayers.remove(l)) { // 스택에서 화면 없애고
+                    l.finish(); // finish 호출시키고
+                }
+                
                 resume(); // GraphicLooper 는 다시 재생
             }
         };
@@ -184,8 +183,8 @@ public class Application extends GraphicLooper {
         }
     }
     
-    protected void showStage(Class<? extends Stage> c) {
-        showStage(getStageByClass(c));
+    protected void showLayer(Class<? extends Layer> l) {
+        showStage(getStageByClass(l));
     }
     
     /**
@@ -195,28 +194,29 @@ public class Application extends GraphicLooper {
      * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
      * 반드시 외부 스레드에서 호출되게 해야합니다.
      * 
-     * @param s 
+     * @param l 
      */
-    protected void showStage(Stage s) { 
+    protected void showStage(Layer l) { 
         final Runnable r = new Runnable() {
 
             @Override
             public void run() {
                 pause(); // 화면을 일시정지시키고
 
-                if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
-                    Stage s1 = mLayers.peek();
-                    s1.pause();
+                if (mLayers.size() > 0) { // 쌓여있는것중 제일 위에있는걸 일시정지 이벤트 호출
+                    mLayers.peek().pause();
                 }
 
-                if (mLayers.contains(s)) { // 이미 있는놈이면
-                    mLayers.remove(s); // 지우고
+                if (mLayers.contains(l)) { // 이미 있는놈이면
+                    mLayers.remove(l); // 지우고
                 }
 
-                mLayers.push(s); // 마지막으로 이동
+                mLayers.push(l); // 마지막으로 이동
 
-                s.init(); // Stage 는 초기화작업
-                resume(); // GraphicLooper 는 다시 재생
+                l.init(); // 초기화 이벤트
+                
+                resume(); // GraphicLooper 는 다시 재생 
+                l.resume();
             }
         };
         

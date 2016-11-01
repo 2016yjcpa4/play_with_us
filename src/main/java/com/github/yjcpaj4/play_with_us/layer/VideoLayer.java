@@ -1,24 +1,30 @@
-package com.github.yjcpaj4.play_with_us.stage;
+package com.github.yjcpaj4.play_with_us.layer;
 
-import com.github.yjcpaj4.play_with_us.Stage;
+import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.axet.play.VLC;
 import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent; 
 import java.io.File;
 
-public class VideoStage extends Stage {
+public class VideoLayer extends Layer {
     
+    private File mFile;
     private VLC mVLC;
     
     private final KeyListener mKeyListener = new KeyListener();
     private final VideoListener mVideoListener = new VideoListener();
     
-    public VideoStage(Application c) {
+    public VideoLayer(Application c) {
         super(c);
     }
     
     public void load(File f) {
+        mFile = f;
+    }
+
+    @Override
+    protected void init() {
         if (mVLC != null) {
             mVLC.close();
             mVLC = null;
@@ -26,7 +32,15 @@ public class VideoStage extends Stage {
 
         mVLC = new VLC();
         mVLC.setVideoCanvas(getCanvas());
-        mVLC.open(f);
+        mVLC.open(mFile);
+    }
+
+    @Override
+    protected void resume() {
+        mVLC.addListener(mVideoListener);
+        mVLC.play();
+        
+        getCanvas().addKeyListener(mKeyListener);
     }
 
     @Override
@@ -35,19 +49,11 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected void finish() {
+    protected void pause() {
         mVLC.close();
         mVLC = null;
         
         getCanvas().removeKeyListener(mKeyListener);
-    }
-
-    @Override
-    protected void init() {
-        mVLC.addListener(mVideoListener);
-        mVLC.play();
-        
-        getCanvas().addKeyListener(mKeyListener);
     }
     
     private class KeyListener implements java.awt.event.KeyListener {
@@ -59,7 +65,7 @@ public class VideoStage extends Stage {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                showStage(GameStage.class);
+                showStage(GameLayer.class);
                 
                 finishStage();
             }
@@ -78,7 +84,7 @@ public class VideoStage extends Stage {
 
         @Override
         public void stop() {
-            showStage(GameStage.class);
+            showStage(GameLayer.class);
             
             finishStage();
         }

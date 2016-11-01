@@ -13,7 +13,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
-import com.github.yjcpaj4.play_with_us.stage.VideoStage;
+import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
  
 public class Player extends MapObject {
@@ -111,7 +111,7 @@ public class Player extends MapObject {
         
         
         if (o.isKeyDownOnce(KeyEvent.VK_V))  {
-            VideoStage s = Application.getStageByClass(VideoStage.class);
+            VideoLayer s = Application.getStageByClass(VideoLayer.class);
             s.load(VideoResource.MOV_INTRO);
             s.showStage(s);
         }
