@@ -29,7 +29,11 @@ public abstract class Layer {
         return mContext;
     }
     
-    public Canvas getCanvas() {
+    public Layer getApplicationLayer(Class<? extends Layer> c) {
+        return mContext.getLayer(c);
+    }
+    
+    public Canvas getApplicationCanvas() {
         return mCanvas;
     }
     
@@ -38,11 +42,11 @@ public abstract class Layer {
     }
     
     public void showStage(Class<? extends Layer> s) {
-        mContext.showLayer(s);
+        mContext.showLayer(getApplicationLayer(s));
     }
     
     public void showStage(Layer s) {
-        mContext.showStage(s);
+        mContext.showLayer(s);
     }
     
     protected void init() {

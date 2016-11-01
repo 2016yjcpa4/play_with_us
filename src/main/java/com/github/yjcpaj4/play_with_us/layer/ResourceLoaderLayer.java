@@ -122,9 +122,9 @@ public class ResourceLoaderLayer extends Layer {
                     return;
                 }
                 
-                VideoLayer s = Application.getStageByClass(VideoLayer.class);
-                s.load(VideoResource.MOV_INTRO);
-                showStage(s); 
+                VideoLayer l = getContext().getLayer(VideoLayer.class);
+                l.load(VideoResource.MOV_INTRO);
+                showStage(l); 
 
                 finishStage();  
             }
@@ -136,11 +136,11 @@ public class ResourceLoaderLayer extends Layer {
             return;
         }
 
-        Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 30);
+        Font f = new Font(getApplicationCanvas().getFont().getName(), Font.PLAIN, 30);
         FontMetrics m = g2d.getFontMetrics(f);
 
-        int w = getCanvas().getWidth();
-        int h = getCanvas().getHeight();
+        int w = getApplicationCanvas().getWidth();
+        int h = getApplicationCanvas().getHeight();
 
         g2d.setFont(f);
         g2d.drawString(mMessage, 
@@ -150,16 +150,16 @@ public class ResourceLoaderLayer extends Layer {
 
     private void drawProgress(Graphics2D g2d) {
         int x = PADDING;
-        int y = getCanvas().getHeight() - PADDING - 50;            
+        int y = getApplicationCanvas().getHeight() - PADDING - 50;            
 
         g2d.setColor(Color.RED);
-        g2d.drawRect(x, y, getCanvas().getWidth() - PADDING * 2, 50);
-        g2d.fillRect(x, y, (int) (getCanvas().getWidth() * mProgress) - PADDING * 2, 50);
+        g2d.drawRect(x, y, getApplicationCanvas().getWidth() - PADDING * 2, 50);
+        g2d.fillRect(x, y, (int) (getApplicationCanvas().getWidth() * mProgress) - PADDING * 2, 50);
     }
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
-        Font f = new Font(getCanvas().getFont().getName(), Font.PLAIN, 50);
+        Font f = new Font(getApplicationCanvas().getFont().getName(), Font.PLAIN, 50);
         FontMetrics m = g2d.getFontMetrics(f);
         int n = (int) (delta / 500 % 4);
         String s = "Loading";

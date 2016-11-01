@@ -109,13 +109,6 @@ public class Player extends MapObject {
             mIsFlashTurnOn = mLight.isTurnOn();
         }
         
-        
-        if (o.isKeyDownOnce(KeyEvent.VK_V))  {
-            VideoLayer s = Application.getStageByClass(VideoLayer.class);
-            s.load(VideoResource.MOV_INTRO);
-            s.showStage(s);
-        }
-        
         if ( ! mIsFlashTurnOn) {
             if (o.isMousePressed(MouseEvent.BUTTON3)) { mLight.setTurnOn(); }
             if (o.isMouseReleased(MouseEvent.BUTTON3)) { mLight.setTurnOff(); }

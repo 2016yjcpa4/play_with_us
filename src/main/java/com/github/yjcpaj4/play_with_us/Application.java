@@ -6,14 +6,10 @@ import javax.swing.JFrame;
 import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
-import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
-import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.util.EmptyStackException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
  
 /**
@@ -25,29 +21,6 @@ import java.util.Stack;
  * @author 차명도.
  */
 public class Application extends GraphicLooper {
-    
-    // 이부분을 좀더 정리할수 있을거같은데 방법을 모르겠다
-    private static final List<Layer> mStages = new LinkedList<>();
-    
-    {
-        mStages.add(new GameLayer(this));
-        mStages.add(new VideoLayer(this));
-        mStages.add(new ResourceLoaderLayer(this));
-    }
-    
-    public static <T extends Layer> T getStageByClass(Class<T> c) {
-        if (mStages.isEmpty()) {
-            return null;
-        }
-        
-        for(Layer s : mStages) {
-            if (s.getClass() == c) {
-                return (T) s;
-            }
-        }
-        
-        return null;
-    }
     
     public static final boolean DEBUG = true;
     
@@ -136,8 +109,30 @@ public class Application extends GraphicLooper {
         }
     }
     
+    public <T extends Layer> T getLayer(Class<T> c) {
+        if ( ! mLayers.isEmpty()) {
+            for(Layer l : mLayers) {
+                if (c == l.getClass()) {
+                    return (T) l;
+                }
+            }
+        }
+        
+        final Layer l;
+        
+        try {
+            l = c.getConstructor(Application.class).newInstance(this);
+        }
+        catch(Exception e) {
+            return null;
+        }
+        
+        mLayers.push(l);
+        return (T) l;
+    }
+    
     private void showResourceLoader() {
-        showLayer(ResourceLoaderLayer.class);
+        showLayer(getLayer(ResourceLoaderLayer.class));
     }
     
     protected void finishLayer() { 
@@ -183,10 +178,6 @@ public class Application extends GraphicLooper {
         }
     }
     
-    protected void showLayer(Class<? extends Layer> l) {
-        showStage(getStageByClass(l));
-    }
-    
     /**
      * 스테이지(무대) 를 보여줍니다(시작합니다).
      * 
@@ -196,7 +187,7 @@ public class Application extends GraphicLooper {
      * 
      * @param l 
      */
-    protected void showStage(Layer l) { 
+    protected void showLayer(Layer l) { 
         final Runnable r = new Runnable() {
 
             @Override

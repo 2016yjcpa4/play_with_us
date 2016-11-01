@@ -31,7 +31,7 @@ public class VideoLayer extends Layer {
         }
 
         mVLC = new VLC();
-        mVLC.setVideoCanvas(getCanvas());
+        mVLC.setVideoCanvas(getApplicationCanvas());
         mVLC.open(mFile);
     }
 
@@ -40,7 +40,7 @@ public class VideoLayer extends Layer {
         mVLC.addListener(mVideoListener);
         mVLC.play();
         
-        getCanvas().addKeyListener(mKeyListener);
+        getApplicationCanvas().addKeyListener(mKeyListener);
     }
 
     @Override
@@ -50,10 +50,12 @@ public class VideoLayer extends Layer {
 
     @Override
     protected void pause() {
-        mVLC.close();
-        mVLC = null;
+        if (mVLC != null) {
+            mVLC.close();
+            mVLC = null;
+        }
         
-        getCanvas().removeKeyListener(mKeyListener);
+        getApplicationCanvas().removeKeyListener(mKeyListener);
     }
     
     private class KeyListener implements java.awt.event.KeyListener {
