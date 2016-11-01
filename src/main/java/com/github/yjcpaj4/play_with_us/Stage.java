@@ -52,6 +52,10 @@ public abstract class Stage {
     protected void draw(long delta, Graphics2D g2d) {
         // TODO
     }
+    
+    protected void pause() {
+        
+    }
 
     protected void finish() {
         // TODO

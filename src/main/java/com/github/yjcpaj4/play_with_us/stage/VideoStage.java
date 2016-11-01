@@ -23,7 +23,8 @@ public class VideoStage extends Stage {
             mVLC.close();
             mVLC = null;
         }
-        
+
+        // 간혹 생성시 오류가 발생합니다.
         mVLC = new VLC();
         mVLC.setVideoCanvas(getCanvas());
         mVLC.open(f);

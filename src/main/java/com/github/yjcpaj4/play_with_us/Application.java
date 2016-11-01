@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,6 +87,7 @@ public class Application extends GraphicLooper {
             s = mLayers.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
         }
         catch(EmptyStackException e) { // 스테이지가 없으면 자동으로 프로그램이 종료가 되야함
+            e.printStackTrace();
             stop();
             return;
         }
@@ -119,16 +121,6 @@ public class Application extends GraphicLooper {
         stopStage(mLayers.peek()); 
     }
     
-    private void invokeAndWait(Runnable r) {
-        try {
-            EventQueue.invokeAndWait(r);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            stop();
-        }
-    }
-    
     /**
      * 스테이지(무대) 를 정지시킵니다.
      * 
@@ -137,7 +129,7 @@ public class Application extends GraphicLooper {
      * @param s 
      */    
     protected void stopStage(Stage s) {  
-        invokeAndWait(new Runnable() {
+        final Runnable r = new Runnable() {
 
             @Override
             public void run() {
@@ -150,7 +142,19 @@ public class Application extends GraphicLooper {
                     resume(); // GraphicLooper 는 다시 재생  
                 }
             }
-        });
+        };
+        
+        if (EventQueue.isDispatchThread()) {
+            r.run();
+        } 
+        else {
+            try {
+                EventQueue.invokeAndWait(r);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     protected void showStage(Class<? extends Stage> c) {
@@ -167,16 +171,16 @@ public class Application extends GraphicLooper {
      * @param s 
      */
     protected void showStage(Stage s) { 
-        invokeAndWait(new Runnable() {
+        final Runnable r = new Runnable() {
 
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName());
                 synchronized (mLayers) {
                     pause(); // 화면을 일시정지시키고
 
                     if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
-                        mLayers.peek().finish();
+                        Stage o = mLayers.peek();
+                        o.pause();
                     }
 
                     if (mLayers.contains(s)) { // 이미 있는놈이면
@@ -189,7 +193,19 @@ public class Application extends GraphicLooper {
                     resume(); // GraphicLooper 는 다시 재생
                 }
             }
-        });
+        };
+        
+        if (EventQueue.isDispatchThread()) {
+            r.run();
+        }
+        else {
+            try {
+                EventQueue.invokeAndWait(r);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     public InputManager getInput() {

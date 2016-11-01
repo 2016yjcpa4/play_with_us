@@ -8,6 +8,7 @@ import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -120,12 +121,12 @@ public class ResourceLoaderStage extends Stage {
                     mMessage = "불러오는 도중 알수없는 오류가 발생하였습니다.";
                     return;
                 }
-
+                
                 VideoStage s = Application.getStageByClass(VideoStage.class);
                 s.load(VideoResource.MOV_INTRO);
                 showStage(s); 
-                
-                stopStage();
+
+                stopStage();  
             }
         }.start();
     }
