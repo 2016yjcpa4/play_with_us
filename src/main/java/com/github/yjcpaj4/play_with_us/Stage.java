@@ -33,8 +33,8 @@ public abstract class Stage {
         return mCanvas;
     }
     
-    public void stopStage() {
-        mContext.stopStage(this);
+    public void finishStage() {
+        mContext.finishStage(this);
     }
     
     public void showStage(Class<? extends Stage> s) {
@@ -54,7 +54,7 @@ public abstract class Stage {
     }
     
     protected void pause() {
-        
+        // TODO 끝난건 아니지만 다른화면이 위에 올라온경우...
     }
 
     protected void finish() {

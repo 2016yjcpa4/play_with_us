@@ -24,7 +24,6 @@ public class VideoStage extends Stage {
             mVLC = null;
         }
 
-        // 간혹 생성시 오류가 발생합니다.
         mVLC = new VLC();
         mVLC.setVideoCanvas(getCanvas());
         mVLC.open(f);
@@ -44,7 +43,7 @@ public class VideoStage extends Stage {
     }
 
     @Override
-    protected void init() {        
+    protected void init() {
         mVLC.addListener(mVideoListener);
         mVLC.play();
         
@@ -62,7 +61,7 @@ public class VideoStage extends Stage {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 showStage(GameStage.class);
                 
-                stopStage();
+                finishStage();
             }
         }
 
@@ -81,7 +80,7 @@ public class VideoStage extends Stage {
         public void stop() {
             showStage(GameStage.class);
             
-            stopStage();
+            finishStage();
         }
 
         @Override

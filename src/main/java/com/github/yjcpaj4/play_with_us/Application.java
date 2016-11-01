@@ -117,8 +117,8 @@ public class Application extends GraphicLooper {
         showStage(ResourceLoaderStage.class);
     }
     
-    protected void stopStage() { 
-        stopStage(mLayers.peek()); 
+    protected void finishStage() { 
+        finishStage(mLayers.peek()); 
     }
     
     /**
@@ -128,19 +128,17 @@ public class Application extends GraphicLooper {
      *
      * @param s 
      */    
-    protected void stopStage(Stage s) {  
+    protected void finishStage(Stage s) {  
         final Runnable r = new Runnable() {
 
             @Override
-            public void run() {
-                synchronized (mLayers) {
-                    pause(); // 스톱되는 순간 화면을 정지시키고
+            public void run() { 
+                pause(); // 스톱되는 순간 화면을 정지시키고
 
-                    mLayers.remove(s); // 젤 위에있는 화면을 가져와
-                    s.finish(); // finish 호출시키고
+                mLayers.remove(s); // 젤 위에있는 화면을 가져와
+                s.finish(); // finish 호출시키고
 
-                    resume(); // GraphicLooper 는 다시 재생  
-                }
+                resume(); // GraphicLooper 는 다시 재생
             }
         };
         
@@ -175,23 +173,21 @@ public class Application extends GraphicLooper {
 
             @Override
             public void run() {
-                synchronized (mLayers) {
-                    pause(); // 화면을 일시정지시키고
+                pause(); // 화면을 일시정지시키고
 
-                    if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
-                        Stage o = mLayers.peek();
-                        o.pause();
-                    }
-
-                    if (mLayers.contains(s)) { // 이미 있는놈이면
-                        mLayers.remove(s); // 지우고
-                    }
-
-                    mLayers.push(s); // 마지막으로 이동
-
-                    s.init(); // Stage 는 초기화작업
-                    resume(); // GraphicLooper 는 다시 재생
+                if (mLayers.size() > 0) { // 쌓여있는 스테이지중 제일 위에있는걸 피니쉬
+                    Stage s1 = mLayers.peek();
+                    s1.pause();
                 }
+
+                if (mLayers.contains(s)) { // 이미 있는놈이면
+                    mLayers.remove(s); // 지우고
+                }
+
+                mLayers.push(s); // 마지막으로 이동
+
+                s.init(); // Stage 는 초기화작업
+                resume(); // GraphicLooper 는 다시 재생
             }
         };
         

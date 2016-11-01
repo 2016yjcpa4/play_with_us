@@ -126,7 +126,7 @@ public class ResourceLoaderStage extends Stage {
                 s.load(VideoResource.MOV_INTRO);
                 showStage(s); 
 
-                stopStage();  
+                finishStage();  
             }
         }.start();
     }
