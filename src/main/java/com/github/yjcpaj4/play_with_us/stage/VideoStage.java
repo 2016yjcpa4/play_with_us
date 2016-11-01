@@ -19,6 +19,11 @@ public class VideoStage extends Stage {
     }
     
     public void load(File f) {
+        if (mVLC != null) {
+            mVLC.close();
+            mVLC = null;
+        }
+        
         mVLC = new VLC();
         mVLC.setVideoCanvas(getCanvas());
         mVLC.open(f);
@@ -32,6 +37,7 @@ public class VideoStage extends Stage {
     @Override
     protected void finish() {
         mVLC.close();
+        mVLC = null;
         
         getCanvas().removeKeyListener(mKeyListener);
     }

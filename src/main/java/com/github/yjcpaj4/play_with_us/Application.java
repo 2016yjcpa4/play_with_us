@@ -105,10 +105,10 @@ public class Application extends GraphicLooper {
     @Override
     public void start() {
         mWindow.setVisible(true);
-
+        
         showResourceLoader();
 
-        super.start();
+        super.start(); 
     }
     
     private void showResourceLoader() {
@@ -119,6 +119,16 @@ public class Application extends GraphicLooper {
         stopStage(mLayers.peek()); 
     }
     
+    private void invokeAndWait(Runnable r) {
+        try {
+            EventQueue.invokeAndWait(r);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            stop();
+        }
+    }
+    
     /**
      * 스테이지(무대) 를 정지시킵니다.
      * 
@@ -127,8 +137,8 @@ public class Application extends GraphicLooper {
      * @param s 
      */    
     protected void stopStage(Stage s) {  
-        EventQueue.invokeLater(new Runnable() {
-            
+        invokeAndWait(new Runnable() {
+
             @Override
             public void run() {
                 synchronized (mLayers) {
@@ -157,10 +167,11 @@ public class Application extends GraphicLooper {
      * @param s 
      */
     protected void showStage(Stage s) { 
-        EventQueue.invokeLater(new Runnable() {
-            
+        invokeAndWait(new Runnable() {
+
             @Override
             public void run() {
+                System.out.println(Thread.currentThread().getName());
                 synchronized (mLayers) {
                     pause(); // 화면을 일시정지시키고
 
