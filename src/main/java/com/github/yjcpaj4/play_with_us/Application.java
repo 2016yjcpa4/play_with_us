@@ -106,11 +106,33 @@ public class Application extends GraphicLooper {
     
     @Override
     public void start() {
-        mWindow.setVisible(true);
-        
-        showResourceLoader();
+        final Runnable r = new Runnable() {
 
-        super.start(); 
+            @Override
+            public void run() {
+                mWindow.setVisible(true);
+        
+                showResourceLoader();
+            }
+        };
+        
+        try {
+            /*
+             * Event Dispatch Thread 안에서 실행시키도록 합니다.
+             * 하지만 thread 이므로 비동기로 일어날수 있어 
+             * invokeAndWait 을 사용하여 동기적인 스레드를 요청합니다.
+             */
+            EventQueue.invokeAndWait(r);
+            
+            super.start();
+        }
+        catch (Exception e) {
+            /*
+             * 그럴일이 없겟지만 예외가 발생하여 최악의 경우
+             * 프로그램은 비정상적으로 돌아가므로 그냥 종료 시킵니다.
+             */
+            stop();
+        }
     }
     
     private void showResourceLoader() {
@@ -124,7 +146,9 @@ public class Application extends GraphicLooper {
     /**
      * 스테이지(무대) 를 정지시킵니다.
      * 
-     * 스테이지 전환은 별도의 스레드에서 처리됩니다.
+     * 스테이지 전환은 Event Dispatch Thread 에서 처리됩니다.
+     * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
+     * 반드시 외부 스레드에서 호출되게 해야합니다.
      *
      * @param s 
      */    
@@ -162,9 +186,9 @@ public class Application extends GraphicLooper {
     /**
      * 스테이지(무대) 를 보여줍니다(시작합니다).
      * 
-     * TODO 콜백개념을 넣어줘야함.
-     * 
-     * showStage 는 GraphicLooper 를 제어해야 하는데 외부스레드에서 제어를 걸어줘야 하므로 EventQueue 를 이용하여 제어합니다.
+     * 스테이지 전환은 Event Dispatch Thread 에서 처리됩니다.
+     * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
+     * 반드시 외부 스레드에서 호출되게 해야합니다.
      * 
      * @param s 
      */

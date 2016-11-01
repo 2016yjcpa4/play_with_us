@@ -12,10 +12,14 @@ public class GameStage extends Stage {
     private Player mPlayer;
     private ResourceManager mRes = ResourceManager.getInstance(); 
     
-    public GameStage(Application c) {
+    public GameStage(Application c) { 
         super(c);
-        
-        mPlayer = new Player();
+
+        /*
+         * 게임은 플레이어의 중심으로 돌아가기때문에
+         * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
+         */
+        mPlayer = new Player(); 
         
         Map m = new Map();
         m.addObject(mPlayer);
