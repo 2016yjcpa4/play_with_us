@@ -30,6 +30,7 @@ import java.util.Stack;
  */
 public class Application extends GraphicLooper {
     
+    // 이부분을 좀더 정리할수 있을거같은데 방법을 모르겠다
     private static final List<Stage> mStages = new LinkedList<>();
     
     {
@@ -54,25 +55,11 @@ public class Application extends GraphicLooper {
     
     public static final boolean DEBUG = true;
     
-    private final Stack<Stage> mLayers = new Stack<>();
-    private final JFrame mWindow;
-    private final ResourceManager mRes = ResourceManager.getInstance();
-    private final InputManager mInput = InputManager.getInstance();
+    private Stack<Stage> mLayers = new Stack<>();
+    private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
+    private InputManager mInput = InputManager.getInstance();
     
     private Application() {
-        mCanvas.addMouseListener(mInput);
-        mCanvas.addMouseMotionListener(mInput);
-        mCanvas.addKeyListener(mInput);
-        mCanvas.setFocusable(true);
-        
-        mWindow = new JFrame();
-        mWindow.setTitle("PLAY with us");
-        mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mWindow.setResizable(false);
-        mWindow.setUndecorated(true);
-        mWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mWindow.setLocationRelativeTo(null);        
-        mWindow.add(mCanvas, BorderLayout.CENTER);
     }
     
     @Override
@@ -104,13 +91,31 @@ public class Application extends GraphicLooper {
         // 굳이 위에서 스레드 종료할것없이 프로세스만 종료 할수 있지만 걍 형식적인 흐름을 위해 호출
     }
     
+    /*
+     * 스타트를 한순간 프레임이 만들어지고 캔버스를 생성합니다.
+     * 생성된 캔버스는 외부스레드인 GraphicLooper 스레드 에서 
+     * 계속적으로 draw 하는작업이 시작됩니다.
+     */
     @Override
     public void start() {
         final Runnable r = new Runnable() {
 
             @Override
-            public void run() {
-                mWindow.setVisible(true);
+            public void run() { 
+                mCanvas.addMouseListener(mInput);
+                mCanvas.addMouseMotionListener(mInput);
+                mCanvas.addKeyListener(mInput);
+                mCanvas.setFocusable(true);
+
+                JFrame f = new JFrame();
+                f.setTitle("PLAY with us");
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.setResizable(false);
+                f.setUndecorated(true);
+                f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                f.setLocationRelativeTo(null);        
+                f.add(mCanvas, BorderLayout.CENTER);
+                f.setVisible(true);
         
                 showResourceLoader();
             }
