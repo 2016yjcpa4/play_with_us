@@ -36,6 +36,10 @@ public class ResourceLoaderLayer extends Layer {
         super(c);
         
         mDropbox = new DropboxClient(DBX_CLIENT_ID, DBX_ACCESS_TOKEN);
+        
+        if ( ! RESOURCE_DIR.exists()) {
+            RESOURCE_DIR.mkdirs();
+        }
     }
     
     private void loadResources() throws IOException {
@@ -51,10 +55,8 @@ public class ResourceLoaderLayer extends Layer {
     }
 
     @Override
-    protected void init() {
-        if ( ! RESOURCE_DIR.exists()) {
-            RESOURCE_DIR.mkdirs();
-        }
+    protected void resume() {
+        super.resume();
         
         mProgress = 0f;
         mMessage = "게임에 필요한 리소스를 검사합니다.";

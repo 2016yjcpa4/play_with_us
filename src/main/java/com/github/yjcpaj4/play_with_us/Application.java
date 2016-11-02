@@ -154,16 +154,20 @@ public class Application extends GraphicLooper {
         final Runnable r = new Runnable() {
 
             @Override
-            public void run() { 
-                pause(); // 스톱되는 순간 화면을 정지시킵니다.
-                
-                l.pause(); // 스테이지도 화면을 일시정지 시키고
-
-                if (mLayers.remove(l)) { // 스택에서 화면 없애고
-                    l.finish(); // finish 호출시키고
+            public void run() {
+                pause();
+                if (l.isRunning()) {
+                    l.pause();
                 }
                 
-                resume(); // GraphicLooper 는 다시 재생
+                mLayers.remove(l);
+                
+                l.finish();
+                
+                resume();
+                if ( ! mLayers.peek().isRunning()) {
+                    mLayers.peek().resume();
+                }
             }
         };
         
@@ -189,26 +193,34 @@ public class Application extends GraphicLooper {
      * 
      * @param l 
      */
-    protected void showLayer(Layer l) { 
+    protected void showLayer(Layer l) {
         final Runnable r = new Runnable() {
 
             @Override
             public void run() {
-                pause(); // 화면을 일시정지시키고
-
-                if (mLayers.size() > 0) { // 쌓여있는것중 제일 위에있는걸 일시정지 이벤트 호출
+                /*
+                 * 화면에 레이어를 추가하기전 GraphicLooper 상태를 일시정지 시킵니다.
+                 * 동시에 레이어 스택에 있는것중 제일 위에있는 레이어만 일시정지 이벤트를 호출합니다.
+                 */
+                pause();
+                if ( ! mLayers.isEmpty()) {
                     mLayers.peek().pause();
                 }
 
-                if (mLayers.contains(l)) { // 이미 있는놈이면
-                    mLayers.remove(l); // 지우고
+                /*
+                 * 스택에 쌓여잇는것중에 동일한 인스턴스가 존재한다면 삭제합니다.
+                 * 삭제 처리후 push 를 하게되면 밑에있던 레이어는 위로 올라오게 될것입니다.
+                 */
+                if (mLayers.contains(l)) {
+                    mLayers.remove(l);
                 }
-
-                mLayers.push(l); // 마지막으로 이동
-
-                l.init(); // 초기화 이벤트
-                
-                resume(); // GraphicLooper 는 다시 재생 
+                mLayers.push(l);
+ 
+                /*
+                 * 위 작업이 모두 끝나면 일시정지 상태에 있던 GraphicLooper 와 Layer 의 
+                 * 상태를 이어서 재생시킵니다.
+                 */
+                resume();
                 l.resume();
             }
         };

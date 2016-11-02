@@ -24,7 +24,9 @@ public class VideoLayer extends Layer {
     }
 
     @Override
-    protected void init() {
+    protected void resume() {
+        super.resume();
+        
         if (mVLC != null) {
             mVLC.close();
             mVLC = null;
@@ -32,12 +34,8 @@ public class VideoLayer extends Layer {
 
         mVLC = new VLC();
         mVLC.setVideoCanvas(getApplicationCanvas());
-        mVLC.open(mFile);
-    }
-
-    @Override
-    protected void resume() {
         mVLC.addListener(mVideoListener);
+        mVLC.open(mFile);
         mVLC.play();
         
         getApplicationCanvas().addKeyListener(mKeyListener);
@@ -50,6 +48,8 @@ public class VideoLayer extends Layer {
 
     @Override
     protected void pause() {
+        super.pause();
+        
         if (mVLC != null) {
             mVLC.close();
             mVLC = null;
