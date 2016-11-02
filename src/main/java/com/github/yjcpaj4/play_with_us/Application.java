@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
 import java.util.EmptyStackException;
 import java.util.Stack;
  
@@ -109,10 +110,10 @@ public class Application extends GraphicLooper {
         }
     }
     
-    public <T extends Layer> T getLayer(Class<T> c) {
+    public <T extends Layer> T getLayer(Class<T> cls) {
         if ( ! mLayers.isEmpty()) {
-            for(Layer l : mLayers) {
-                if (c == l.getClass()) {
+            for (Layer l : mLayers) {
+                if (cls == l.getClass()) {
                     return (T) l;
                 }
             }
@@ -121,10 +122,11 @@ public class Application extends GraphicLooper {
         final Layer l;
         
         try {
-            l = c.getConstructor(Application.class).newInstance(this);
+            Constructor con = cls.getConstructor(Application.class);
+            l = (Layer) con.newInstance(this);
         }
         catch(Exception e) {
-            return null;
+            throw new RuntimeException("읍읍!!");
         }
         
         mLayers.push(l);
