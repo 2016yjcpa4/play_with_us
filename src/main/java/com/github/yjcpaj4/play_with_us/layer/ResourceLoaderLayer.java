@@ -126,9 +126,9 @@ public class ResourceLoaderLayer extends Layer {
                 
                 VideoLayer l = getContext().getLayer(VideoLayer.class);
                 l.load(VideoResource.MOV_INTRO);
-                showStage(l); 
+                showLayer(l); 
 
-                finishStage();  
+                finishLayer();  
             }
         }.start();
     }

@@ -33,16 +33,16 @@ public abstract class Layer {
         return mCanvas;
     }
     
-    public void finishStage() {
+    public void finishLayer() {
         mContext.finishLayer(this);
     }
     
-    public void showStage(Class<? extends Layer> cls) {
-        mContext.showLayer(getApplicationLayer(cls));
+    public void showLayer(Class<? extends Layer> cls) {
+        mContext.showLayer(cls);
     }
     
-    public void showStage(Layer s) {
-        mContext.showLayer(s);
+    public void showLayer(Layer l) {
+        mContext.showLayer(l);
     }
     
     protected void draw(long delta, Graphics2D g2d) {

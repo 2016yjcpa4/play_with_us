@@ -201,6 +201,10 @@ public class CanvasApplication extends GraphicLooper {
         }
     }
     
+    protected void showLayer(Class<? extends Layer> cls) {
+        showLayer(getLayer(cls));
+    }
+    
     /**
      * 레이어 를 보여줍니다(시작합니다).
      *

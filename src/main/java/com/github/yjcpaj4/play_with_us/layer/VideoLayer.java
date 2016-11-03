@@ -65,9 +65,9 @@ public class VideoLayer extends Layer {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                showStage(GameLayer.class);
+                showLayer(GameLayer.class);
                 
-                finishStage();
+                finishLayer();
             }
         }
 
@@ -84,9 +84,9 @@ public class VideoLayer extends Layer {
 
         @Override
         public void stop() {
-            showStage(GameLayer.class);
+            showLayer(GameLayer.class);
             
-            finishStage();
+            finishLayer();
         }
 
         @Override
