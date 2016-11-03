@@ -181,6 +181,11 @@ public class CanvasApplication extends GraphicLooper {
             }
         };
         
+        /*
+         * 현재 스레드가 Event Dispatch Thread 내에서 동작한다면
+         * Runnable 을 그냥 run 호출로 끝냅니다.
+         * 하지만 그렇지 않다면 Event Dispatch Thread 에 동기적으로 호출합니다.
+         */
         if (EventQueue.isDispatchThread()) {
             r.run();
         } 
@@ -236,6 +241,11 @@ public class CanvasApplication extends GraphicLooper {
             }
         };
         
+        /*
+         * 현재 스레드가 Event Dispatch Thread 내에서 동작한다면
+         * Runnable 을 그냥 run 호출로 끝냅니다.
+         * 하지만 그렇지 않다면 Event Dispatch Thread 에 동기적으로 호출합니다.
+         */
         if (EventQueue.isDispatchThread()) {
             r.run();
         }
