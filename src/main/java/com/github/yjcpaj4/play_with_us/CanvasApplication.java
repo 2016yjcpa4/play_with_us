@@ -143,14 +143,13 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     /**
-     * 스테이지(무대) 를 정지시킵니다.
-     * 
-     * 스테이지 전환은 Event Dispatch Thread 에서 처리됩니다.
-     * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
-     * 반드시 외부 스레드에서 호출되게 해야합니다.
+     * 레이어  를 정지시킵니다. 
      *
+     * finishLayer, showLayer 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
+     * 반드시 외부 스레드인 Event Dispatch Thread 에서 호출되게 해야합니다.
+     * 
      * @param l 
-     */    
+     */
     protected void finishLayer(Layer l) {  
         final Runnable r = new Runnable() {
 
@@ -186,11 +185,10 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     /**
-     * 스테이지(무대) 를 보여줍니다(시작합니다).
-     * 
-     * 스테이지 전환은 Event Dispatch Thread 에서 처리됩니다.
-     * finishStage, showStage 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
-     * 반드시 외부 스레드에서 호출되게 해야합니다.
+     * 레이어 를 보여줍니다(시작합니다).
+     *
+     * finishLayer, showLayer 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
+     * 반드시 외부 스레드인 Event Dispatch Thread 에서 호출되게 해야합니다.
      * 
      * @param l 
      */
