@@ -26,7 +26,7 @@ public class CanvasApplication extends GraphicLooper {
     
     public static final boolean DEBUG = true;
     
-    private Stack<Layer> mLayers = new Stack<>();
+    private Stack<Layer> mLayerStack = new Stack<>();
     private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
     private InputManager mInput = InputManager.getInstance();
     
@@ -42,7 +42,7 @@ public class CanvasApplication extends GraphicLooper {
         final Layer s;
         
         try {
-            s = mLayers.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
+            s = mLayerStack.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
         }
         catch (EmptyStackException e) { // 스테이지가 없으면 자동으로 프로그램이 종료가 되야함
             throw new RuntimeException(e);
@@ -111,8 +111,8 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     public <T extends Layer> T getLayer(Class<T> cls) {
-        if ( ! mLayers.isEmpty()) {
-            for (Layer l : mLayers) {
+        if ( ! mLayerStack.isEmpty()) {
+            for (Layer l : mLayerStack) {
                 if (cls == l.getClass()) {
                     return (T) l;
                 }
@@ -137,7 +137,7 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     protected void finishLayer() { 
-        finishLayer(mLayers.peek()); 
+        finishLayer(mLayerStack.peek()); 
     }
     
     /**
@@ -153,18 +153,30 @@ public class CanvasApplication extends GraphicLooper {
 
             @Override
             public void run() {
+                /*
+                 * 화면을 정지한순간 GraphicLooper 는 일시정지상태로 돌아갑니다.
+                 * 동시에 finish 하려는 레이어의 상태가 Running 상태라면 pause 이벤트를 호출합니다.
+                 */
                 pause();
                 if (l.isRunning()) {
                     l.pause();
                 }
                 
-                mLayers.remove(l);
-                
+                /*
+                 * 그래픽과 레이어를 일시정지상태로 만든후 
+                 * 레이어를 finish 하기위해 레이어 스택에서 제외시키고
+                 * finish 를 이벤트를 호출합니다.
+                 */
+                mLayerStack.remove(l);
                 l.finish();
                 
+                /*
+                 * 위 작업이 완료되면 그래픽을 이어서 재생시키고
+                 * 쌓여있는 레이어중 제일 위에 있는 레이어를 호출시킵니다.
+                 */
                 resume();
-                if ( ! mLayers.peek().isRunning()) {
-                    mLayers.peek().resume();
+                if ( ! mLayerStack.peek().isRunning()) {
+                    mLayerStack.peek().resume();
                 }
             }
         };
@@ -200,25 +212,27 @@ public class CanvasApplication extends GraphicLooper {
                  * 동시에 레이어 스택에 있는것중 제일 위에있는 레이어만 일시정지 이벤트를 호출합니다.
                  */
                 pause();
-                if ( ! mLayers.isEmpty()) {
-                    mLayers.peek().pause();
+                if ( ! mLayerStack.isEmpty()) {
+                    mLayerStack.peek().pause();
                 }
 
                 /*
                  * 스택에 쌓여잇는것중에 동일한 인스턴스가 존재한다면 삭제합니다.
                  * 삭제 처리후 push 를 하게되면 밑에있던 레이어는 위로 올라오게 될것입니다.
                  */
-                if (mLayers.contains(l)) {
-                    mLayers.remove(l);
+                if (mLayerStack.contains(l)) {
+                    mLayerStack.remove(l);
                 }
-                mLayers.push(l);
+                mLayerStack.push(l);
  
                 /*
                  * 위 작업이 모두 끝나면 일시정지 상태에 있던 GraphicLooper 와 Layer 의 
                  * 상태를 이어서 재생시킵니다.
                  */
                 resume();
-                l.resume();
+                if ( ! l.isRunning()) {
+                    l.resume();
+                }
             }
         };
         
