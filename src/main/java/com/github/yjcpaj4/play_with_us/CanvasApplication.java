@@ -14,14 +14,15 @@ import java.util.EmptyStackException;
 import java.util.Stack;
  
 /**
- * 메인 클래스는 비디오와 게임 캔버스를 관리합니다.
+ * 캔버스 어플리케이션.
  * 
- * 외부에서 비디오를 재생시키면 게임스레드를 pause 하고
- * 비디오의 재생이 끝나면 게임스레드를 resume 시킵니다.
+ * 캔버스 어플리케이션 클래스는 프레임내에 한개의 캔버스만 존재하며 
+ * 캔버스 내에서는 여러개의 레이어를 이용해 UI 를 제공하며
+ * 동시에 레이어의 생명주기를 관리합니다.
  * 
  * @author 차명도.
  */
-public class Application extends GraphicLooper {
+public class CanvasApplication extends GraphicLooper {
     
     public static final boolean DEBUG = true;
     
@@ -29,7 +30,7 @@ public class Application extends GraphicLooper {
     private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
     private InputManager mInput = InputManager.getInstance();
     
-    private Application() {
+    private CanvasApplication() {
     }
     
     @Override
@@ -122,7 +123,7 @@ public class Application extends GraphicLooper {
         final Layer l;
         
         try {
-            Constructor con = cls.getConstructor(Application.class);
+            Constructor con = cls.getConstructor(CanvasApplication.class);
             l = (Layer) con.newInstance(this);
         }
         catch(Exception e) {
@@ -251,6 +252,6 @@ public class Application extends GraphicLooper {
     }
     
     public static void main(String[] args) throws Exception {
-        new Application().start(); // 생성하고 시작!
+        new CanvasApplication().start(); // 생성하고 시작!
     }
 }

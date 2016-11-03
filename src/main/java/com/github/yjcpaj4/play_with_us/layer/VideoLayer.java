@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.axet.play.VLC;
-import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.CanvasApplication;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent; 
 import java.io.File;
@@ -15,7 +15,7 @@ public class VideoLayer extends Layer {
     private final KeyListener mKeyListener = new KeyListener();
     private final VideoListener mVideoListener = new VideoListener();
     
-    public VideoLayer(Application c) {
+    public VideoLayer(CanvasApplication c) {
         super(c);
     }
     

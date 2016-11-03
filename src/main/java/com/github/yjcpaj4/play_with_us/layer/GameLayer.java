@@ -1,6 +1,6 @@
 package com.github.yjcpaj4.play_with_us.layer;
 
-import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.CanvasApplication;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.map.Player;
@@ -12,7 +12,7 @@ public class GameLayer extends Layer {
     private Player mPlayer;
     private ResourceManager mRes = ResourceManager.getInstance(); 
     
-    public GameLayer(Application c) { 
+    public GameLayer(CanvasApplication c) { 
         super(c);
 
         /*

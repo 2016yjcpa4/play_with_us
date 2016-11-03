@@ -1,6 +1,6 @@
 package com.github.yjcpaj4.play_with_us.layer;
 
-import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.CanvasApplication;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.DropboxClient;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
@@ -32,7 +32,7 @@ public class ResourceLoaderLayer extends Layer {
 
     private ResourceManager mRes = ResourceManager.getInstance();
     
-    public ResourceLoaderLayer(Application c) {
+    public ResourceLoaderLayer(CanvasApplication c) {
         super(c);
         
         mDropbox = new DropboxClient(DBX_CLIENT_ID, DBX_ACCESS_TOKEN);

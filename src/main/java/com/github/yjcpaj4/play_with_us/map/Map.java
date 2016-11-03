@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import com.github.yjcpaj4.play_with_us.Application; 
+import com.github.yjcpaj4.play_with_us.CanvasApplication; 
 import com.github.yjcpaj4.play_with_us.geom.BresenhamLine;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.math.Line2D;

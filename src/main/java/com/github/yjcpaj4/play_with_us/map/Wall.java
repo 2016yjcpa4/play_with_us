@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.map;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.CanvasApplication;
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Rect; 

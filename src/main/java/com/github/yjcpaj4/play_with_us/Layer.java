@@ -19,15 +19,15 @@ public abstract class Layer {
     
     private boolean mRunning = false;
     
-    private final Application mContext;
+    private final CanvasApplication mContext;
     private final Canvas mCanvas;
     
-    protected Layer(Application c) {
+    protected Layer(CanvasApplication c) {
         mContext = c;
         mCanvas = c.getCanvas();
     }
     
-    public Application getContext() {
+    public CanvasApplication getContext() {
         return mContext;
     }
     
