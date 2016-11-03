@@ -112,6 +112,16 @@ public class CanvasApplication extends GraphicLooper {
         }
     }
     
+    /**
+     * 클래스 값을 레이어 인스턴스로 가져옵니다.
+     * 
+     * 인스턴스의 생성빈도를 낮추기위해 레이어스택에 있는 인스턴스가 존재하면
+     * 리턴 시키거나 없으면 새로 인스턴스를 생성하는 방식
+     * 
+     * @param <T>
+     * @param cls
+     * @return 
+     */
     public <T extends Layer> T getLayer(Class<T> cls) {
         if ( ! mLayerStack.isEmpty()) {
             for (Layer l : mLayerStack) {

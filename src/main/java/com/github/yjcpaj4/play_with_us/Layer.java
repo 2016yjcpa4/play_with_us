@@ -4,10 +4,14 @@ import java.awt.Canvas;
 import java.awt.Graphics2D;
 
 /**
- * Stage.
+ * Layer.
  * 
- * 프로그램의 화면단위를 Stage 라고 합니다.
- * Stage 에서는 init, draw, finish 라는 생명주기를 가지고있습니다.
+ * CanvasApplication 에서 화면단위를 Layer 라고 합니다.
+ * Layer 에서는 resume, draw, pause, finish 라는 생명주기를 가지고있습니다.
+ * 이 생명주기는 CanvasApplication 에서 관리되고 있습니다.
+ * 
+ * @see CanvasApplication
+ * @author 차명도.
  */
 public abstract class Layer {
     
