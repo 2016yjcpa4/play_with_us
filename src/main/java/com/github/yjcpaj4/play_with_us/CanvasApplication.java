@@ -19,7 +19,9 @@ import java.util.Stack;
  * 캔버스 어플리케이션 클래스는 프레임내에 한개의 캔버스만 존재하며 
  * 캔버스 내에서는 여러개의 레이어를 이용해 UI 를 제공하며
  * 동시에 레이어의 생명주기를 관리합니다.
+ * 생명주기는 안드로이드 액티비티의 생명주기를 참고하여 제작되었습니다.
  * 
+ * @see https://kairo96.gitbooks.io/android/content/pic2/2-4-1-1.jpg
  * @author 차명도.
  */
 public class CanvasApplication extends GraphicLooper {
