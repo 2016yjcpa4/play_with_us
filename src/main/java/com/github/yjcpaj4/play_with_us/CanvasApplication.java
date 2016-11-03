@@ -44,10 +44,8 @@ public class CanvasApplication extends GraphicLooper {
         try {
             s = mLayers.peek(); //  스테이지 중에 제일 위에있는놈을 선택해서
         }
-        catch(EmptyStackException e) { // 스테이지가 없으면 자동으로 프로그램이 종료가 되야함
-            e.printStackTrace();
-            stop();
-            return;
+        catch (EmptyStackException e) { // 스테이지가 없으면 자동으로 프로그램이 종료가 되야함
+            throw new RuntimeException(e);
         }
         
         s.draw(delta, g2d); // 스테이지 그리기
@@ -107,7 +105,8 @@ public class CanvasApplication extends GraphicLooper {
              * 그럴일이 없겟지만 예외가 발생하여 최악의 경우
              * 프로그램은 비정상적으로 돌아가므로 그냥 종료 시킵니다.
              */
-            stop();
+            //stop();
+            throw new RuntimeException(e);
         }
     }
     
@@ -123,11 +122,11 @@ public class CanvasApplication extends GraphicLooper {
         final Layer l;
         
         try {
-            Constructor con = cls.getConstructor(CanvasApplication.class);
-            l = (Layer) con.newInstance(this);
+            final Constructor c = cls.getConstructor(CanvasApplication.class);
+            l = (Layer) c.newInstance(this);
         }
         catch(Exception e) {
-            throw new RuntimeException("읍읍!!");
+            throw new RuntimeException(e);
         }
         
         return (T) l;
@@ -178,7 +177,7 @@ public class CanvasApplication extends GraphicLooper {
                 EventQueue.invokeAndWait(r);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }
@@ -231,7 +230,7 @@ public class CanvasApplication extends GraphicLooper {
                 EventQueue.invokeAndWait(r);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }
