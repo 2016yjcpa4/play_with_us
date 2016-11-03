@@ -143,7 +143,7 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     /**
-     * 레이어  를 정지시킵니다. 
+     * 레이어를 정지시킵니다. 
      *
      * finishLayer, showLayer 를 하는순간 어떠한 인터렉티브(상호작용)에 의해 일어난것이므로
      * 반드시 외부 스레드인 Event Dispatch Thread 에서 호출되게 해야합니다.

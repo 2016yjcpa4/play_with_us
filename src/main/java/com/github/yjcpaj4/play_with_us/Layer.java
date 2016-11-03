@@ -2,12 +2,6 @@ package com.github.yjcpaj4.play_with_us;
 
 import java.awt.Canvas;
 import java.awt.Graphics2D;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
 
 /**
  * Stage.
@@ -31,8 +25,8 @@ public abstract class Layer {
         return mContext;
     }
     
-    public Layer getApplicationLayer(Class<? extends Layer> c) {
-        return mContext.getLayer(c);
+    public Layer getApplicationLayer(Class<? extends Layer> cls) {
+        return mContext.getLayer(cls);
     }
     
     public Canvas getApplicationCanvas() {
@@ -43,8 +37,8 @@ public abstract class Layer {
         mContext.finishLayer(this);
     }
     
-    public void showStage(Class<? extends Layer> s) {
-        mContext.showLayer(getApplicationLayer(s));
+    public void showStage(Class<? extends Layer> cls) {
+        mContext.showLayer(getApplicationLayer(cls));
     }
     
     public void showStage(Layer s) {
