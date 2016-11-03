@@ -50,10 +50,8 @@ public class VideoLayer extends Layer {
     protected void pause() {
         super.pause();
         
-        if (mVLC != null) {
-            mVLC.close();
-            mVLC = null;
-        }
+        mVLC.close();
+        mVLC = null;
         
         getApplicationCanvas().removeKeyListener(mKeyListener);
     }

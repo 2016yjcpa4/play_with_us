@@ -130,7 +130,6 @@ public class CanvasApplication extends GraphicLooper {
             throw new RuntimeException("읍읍!!");
         }
         
-        mLayers.push(l);
         return (T) l;
     }
     
