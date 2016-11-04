@@ -34,8 +34,8 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
     }
     
     private Point2D mMousePos = new Point2D();
-    private InputQueue mMouseQueue = new InputQueue();
-    private InputQueue mKeyboardQueue = new InputQueue();
+    private InputQueue mMouseQueue = new InputQueue(4);
+    private InputQueue mKeyboardQueue = new InputQueue(512);
     
     public boolean isKeyPressed(int k) {
         return mKeyboardQueue.isPressed(k);
@@ -138,9 +138,10 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
     private static class InputQueue {
         
         private Map<Integer, Integer> mEvents = new HashMap<>();
-        private int[] mBuffer = new int[256];
+        private int[] mBuffer;
         
-        public InputQueue() {
+        public InputQueue(int c) {
+            mBuffer = new int[c];
             for (int n = 0; n < mBuffer.length; ++n) {
                 mBuffer[n] = InputEvent.RELEASED;
             }

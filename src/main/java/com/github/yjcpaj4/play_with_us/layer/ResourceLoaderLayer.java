@@ -159,6 +159,8 @@ public class ResourceLoaderLayer extends Layer {
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
+        super.draw(delta, g2d);
+        
         Font f = new Font(getApplicationCanvas().getFont().getName(), Font.PLAIN, 50);
         FontMetrics m = g2d.getFontMetrics(f);
         int n = (int) (delta / 500 % 4);

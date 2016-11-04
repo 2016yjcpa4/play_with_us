@@ -27,6 +27,8 @@ public class GameLayer extends Layer {
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
+        super.draw(delta, g2d);
+        
         Map m = mPlayer.getMap();
         m.update(delta);
         m.draw(delta, g2d);

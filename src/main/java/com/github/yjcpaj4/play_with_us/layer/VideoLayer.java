@@ -43,6 +43,7 @@ public class VideoLayer extends Layer {
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
+        super.draw(delta, g2d);
         // 여기는 구현하면 안됨.
     }
 
