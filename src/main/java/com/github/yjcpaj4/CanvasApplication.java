@@ -273,18 +273,6 @@ public class CanvasApplication extends GraphicLooper {
         }
     }
     
-    public InputManager getInput() {
-        return mInput;
-    }
-    
-    public BufferedImage getImage(String k) {
-        return ((ImageResource) mRes.getImage(k)).getImageData();
-    }
-    
-    public SpriteImageResource getSprite(String s) {
-        return ((SpriteImageResource) mRes.getSprite(s));
-    }
-    
     public static void main(String[] args) throws Exception {
         new CanvasApplication().start(); // 생성하고 시작!
     }
