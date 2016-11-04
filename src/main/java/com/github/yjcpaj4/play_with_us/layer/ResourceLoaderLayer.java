@@ -1,14 +1,13 @@
 package com.github.yjcpaj4.play_with_us.layer;
 
-import com.github.yjcpaj4.play_with_us.CanvasApplication;
-import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.yjcpaj4.play_with_us.DropboxClient;
+import com.github.yjcpaj4.CanvasApplication;
+import com.github.yjcpaj4.Layer;
+import com.github.yjcpaj4.DropboxClient;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -80,8 +79,7 @@ public class ResourceLoaderLayer extends Layer {
                     m = new Gson().fromJson(FileUtil.getContents(f), Map.class);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
-                    return;
+                    throw new RuntimeException(e);
                 }
 
                 float n = 0;
@@ -121,7 +119,7 @@ public class ResourceLoaderLayer extends Layer {
                 catch (Exception e) {
                     mProgress = 0;
                     mMessage = "불러오는 도중 알수없는 오류가 발생하였습니다.";
-                    return;
+                    throw new RuntimeException(e);
                 }
                 
                 VideoLayer l = getContext().getLayer(VideoLayer.class);

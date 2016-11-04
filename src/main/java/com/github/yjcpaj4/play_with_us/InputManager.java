@@ -41,8 +41,8 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
         return mKeyboardQueue.isPressed(k);
     }
     
-    public boolean isKeyDownOnce(int k) {
-        return mKeyboardQueue.isDownOnce(k);
+    public boolean isKeyOnce(int k) {
+        return mKeyboardQueue.isOnce(k);
     }
     
     public boolean isKeyReleased(int k) {
@@ -172,7 +172,7 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
             }
         }
         
-        public boolean isDownOnce(int k) { 
+        public boolean isOnce(int k) { 
             return mEvents.containsKey(k) &&  mEvents.get(k) == InputEvent.ONCE;
         }
         

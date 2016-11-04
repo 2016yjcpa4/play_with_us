@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us;
+package com.github.yjcpaj4;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;

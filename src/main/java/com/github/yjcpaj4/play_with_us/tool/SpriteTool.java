@@ -42,7 +42,7 @@ import javax.swing.OverlayLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import com.github.yjcpaj4.play_with_us.GraphicLooper; 
+import com.github.yjcpaj4.GraphicLooper; 
 import com.github.yjcpaj4.play_with_us.util.ImageUtil;
 
 public class SpriteTool {

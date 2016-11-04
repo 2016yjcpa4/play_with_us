@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import com.github.yjcpaj4.play_with_us.CanvasApplication;
+import com.github.yjcpaj4.CanvasApplication;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
@@ -99,7 +99,7 @@ public class Player extends MapObject {
         if (o.isKeyReleased(KeyEvent.VK_W) && o.isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
         if (o.isKeyReleased(KeyEvent.VK_A) && o.isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
         
-        if (o.isKeyDownOnce(KeyEvent.VK_F))  {
+        if (o.isKeyOnce(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {
                 mLight.setTurnOff();
             } else {
