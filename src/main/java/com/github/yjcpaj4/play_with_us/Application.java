@@ -1,4 +1,4 @@
-package com.github.yjcpaj4;
+package com.github.yjcpaj4.play_with_us;
  
 import com.github.yjcpaj4.play_with_us.InputManager;
 import java.awt.BorderLayout;
@@ -25,7 +25,7 @@ import java.util.Stack;
  * @see https://kairo96.gitbooks.io/android/content/pic2/2-4-1-1.jpg
  * @author 차명도.
  */
-public class CanvasApplication extends GraphicLooper {
+public class Application extends GraphicLooper {
     
     public static final boolean DEBUG = true;
     
@@ -132,7 +132,7 @@ public class CanvasApplication extends GraphicLooper {
         final Layer l;
         
         try {
-            final Constructor c = cls.getConstructor(CanvasApplication.class);
+            final Constructor c = cls.getConstructor(Application.class);
             l = (Layer) c.newInstance(this);
         }
         catch(Exception e) {
@@ -274,6 +274,6 @@ public class CanvasApplication extends GraphicLooper {
     }
     
     public static void main(String[] args) throws Exception {
-        new CanvasApplication().start(); // 생성하고 시작!
+        new Application().start(); // 생성하고 시작!
     }
 }

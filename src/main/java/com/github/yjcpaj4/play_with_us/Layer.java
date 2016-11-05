@@ -1,4 +1,4 @@
-package com.github.yjcpaj4;
+package com.github.yjcpaj4.play_with_us;
 
 import java.awt.Canvas;
 import java.awt.Graphics2D;
@@ -10,22 +10,22 @@ import java.awt.Graphics2D;
  * Layer 에서는 resume, draw, pause, finish 라는 생명주기를 가지고있습니다.
  * 이 생명주기는 CanvasApplication 에서 관리되고 있습니다.
  * 
- * @see CanvasApplication
+ * @see Application
  * @author 차명도.
  */
 public abstract class Layer {
     
     private boolean mRunning = false;
     
-    private final CanvasApplication mContext;
+    private final Application mContext;
     private final Canvas mCanvas;
     
-    protected Layer(CanvasApplication c) {
+    protected Layer(Application c) {
         mContext = c;
         mCanvas = c.getCanvas();
     }
     
-    public CanvasApplication getContext() {
+    public Application getContext() {
         return mContext;
     }
     

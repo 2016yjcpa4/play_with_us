@@ -7,7 +7,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
-import com.github.yjcpaj4.CanvasApplication;
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Raycast;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
