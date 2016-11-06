@@ -15,7 +15,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
+import com.github.yjcpaj4.play_with_us.ResourceManager;
 
 public class Map {
 

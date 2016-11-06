@@ -4,7 +4,6 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import javax.swing.JFrame;
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
 import java.awt.EventQueue;
 import java.lang.reflect.Constructor;

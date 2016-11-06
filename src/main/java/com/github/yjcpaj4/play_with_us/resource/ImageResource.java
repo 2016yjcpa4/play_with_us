@@ -7,7 +7,7 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 
-public class ImageResource implements ResourceManager.Resource {
+public class ImageResource implements Resource {
  
     private BufferedImage mImage;
 

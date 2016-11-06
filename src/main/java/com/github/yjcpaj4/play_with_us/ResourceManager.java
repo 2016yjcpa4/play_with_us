@@ -1,8 +1,12 @@
-package com.github.yjcpaj4.play_with_us.resource;
+package com.github.yjcpaj4.play_with_us;
 
 import com.google.gson.Gson;
 import com.github.yjcpaj4.play_with_us.resource.ImageResource;
-import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
+import com.github.yjcpaj4.play_with_us.resource.ImageResource;
+import com.github.yjcpaj4.play_with_us.resource.Resource;
+import com.github.yjcpaj4.play_with_us.resource.SoundResource;
+import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
+import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,7 +37,7 @@ public class ResourceManager {
     
     private Map<String, Resource> mResource = new HashMap<>(); 
     
-    private ResourceManager() {
+    protected ResourceManager() {
     }
     
     public void load(File f) throws IOException {
@@ -42,13 +46,13 @@ public class ResourceManager {
     
     public void load(String f, String s) throws IOException {
         load(new File(f), s);
-    }
+    } 
     
     public void load(File f, String k) throws IOException {
         Resource r = null;
         
-        if (SpriteImageResource.canLoad(f, k)) {
-            r = new SpriteImageResource();
+        if (SpriteResource.canLoad(f, k)) {
+            r = new SpriteResource();
         }
         else if (ImageResource.canLoad(f)) {
             r = new ImageResource();
@@ -66,8 +70,8 @@ public class ResourceManager {
         return (ImageResource) mResource.get(k);
     }
     
-    public SpriteImageResource getSprite(String k) {
-        return (SpriteImageResource) mResource.get(k);
+    public SpriteResource getSprite(String k) {
+        return (SpriteResource) mResource.get(k);
     }
     
     public SoundResource getSound(String k) {
@@ -77,25 +81,4 @@ public class ResourceManager {
     public void release(String k) {
         mResource.get(k).release();
     }
-    
-    public interface Resource {
-        
-        void load(File f, String s) throws IOException;
-
-        void release();
-    }
-    
-    /*
-    public static void main(String args[]) {
-        Map<String, String> m = new HashMap<>();
-        
-        for (File f : RESOURCE_DIR.listFiles()) {
-            if (f != null) {
-                m.put(f.getName(), FileUtil.getChecksum(f));
-            }
-        }
-        
-        System.out.println(new Gson().toJson(m));
-    }
-    */
 }

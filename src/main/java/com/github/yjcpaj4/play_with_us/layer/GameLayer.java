@@ -4,7 +4,7 @@ import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.map.Player;
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
+import com.github.yjcpaj4.play_with_us.ResourceManager;
 import java.awt.Graphics2D;
 
 public class GameLayer extends Layer {

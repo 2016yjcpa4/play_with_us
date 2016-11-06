@@ -3,7 +3,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.DropboxClient;
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
+import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;

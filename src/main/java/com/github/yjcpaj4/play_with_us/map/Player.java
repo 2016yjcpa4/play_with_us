@@ -6,13 +6,13 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
-import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
+import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
-import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
+import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
@@ -140,11 +140,11 @@ public class Player extends GameObject {
      * 
      * @return 프레임을 반환합니다.
      */
-    private SpriteImageResource.SpriteImage.Frame getCurrentSpriteFrame(long d) {
+    private SpriteResource.SpriteImage.Frame getCurrentSpriteFrame(long d) {
         String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
-        SpriteImageResource r = ResourceManager.getInstance().getSprite(k);
+        SpriteResource r = ResourceManager.getInstance().getSprite(k);
         
-        SpriteImageResource.SpriteImage.Frame f = r.getFrame(2); // 기본 상태
+        SpriteResource.SpriteImage.Frame f = r.getFrame(2); // 기본 상태
         
         if (mVel.getX() != 0 || mVel.getY() != 0) { // 움직임이 발생하면
             f = r.getCurrentFrame(d); // 델타값을 넣어 현재 프레임을 뽑아옴
@@ -157,7 +157,7 @@ public class Player extends GameObject {
     
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) { 
-        SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
+        SpriteResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 

@@ -13,7 +13,7 @@ import java.util.Map;
  * 
  * @author 차명도.
  */
-public class SpriteImageResource extends ImageResource {
+public class SpriteResource extends ImageResource {
 
     private static Map<String, SpriteImage> mSprites = new HashMap<>();
     

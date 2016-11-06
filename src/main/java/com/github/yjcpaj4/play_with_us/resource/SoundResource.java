@@ -10,7 +10,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
-public class SoundResource implements ResourceManager.Resource {
+public class SoundResource implements Resource {
 
     public static final int PLAY_ONCE = 1;
     public static final int PLAY_INFINITY = -1;
