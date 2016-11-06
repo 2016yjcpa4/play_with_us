@@ -54,11 +54,23 @@ public class ResourceManager {
         if (SpriteResource.canLoad(f, k)) {
             r = new SpriteResource();
         }
-        else if (ImageResource.canLoad(f)) {
-            r = new ImageResource();
-        }
-        else if (SoundResource.canLoad(f)) {
-            r = new SoundResource();
+        
+        switch(FileUtil.getExtension(f)) {
+            case "jpg":
+            case "jpeg":
+            case "bmp": 
+            case "gif":
+            case "png": 
+            case "tiff":
+            case "tif":
+                r = new ImageResource();
+                break;
+            case "mp3":
+            case "ogg":
+            case "wma":
+            case "wav":
+                r = new SoundResource();
+                break;
         }
         
         r.load(f, k);
