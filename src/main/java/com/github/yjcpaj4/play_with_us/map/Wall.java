@@ -6,9 +6,10 @@ import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Rect; 
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 
-public class Wall extends MapObject {
+public class Wall extends GameObject {
     
     private Polygon mCollider;
     
@@ -25,11 +26,11 @@ public class Wall extends MapObject {
     }
 
     @Override
-    public void draw(long delta, Graphics2D g2d) {
+    public void draw(GameLayer g, long delta, Graphics2D g2d) {
     }
 
     @Override
-    public void update(long delta) { 
+    public void update(GameLayer g, long delta) { 
     }
     
 }

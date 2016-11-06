@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import com.github.yjcpaj4.play_with_us.Application; 
 import com.github.yjcpaj4.play_with_us.geom.BresenhamLine;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
@@ -27,7 +28,7 @@ public class Map {
     
     private TileMap mTiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
     
-    private List<MapObject> mObject = new ArrayList<>();
+    private List<GameObject> mObject = new ArrayList<>();
     
     public Map() {
         addObject(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
@@ -61,7 +62,7 @@ public class Map {
     }
     
     public Player getPlayer() {
-        for(MapObject o : getAllObject()) {
+        for(GameObject o : getAllObject()) {
             if (o instanceof Player) {
                 return (Player) o;
             }
@@ -70,11 +71,11 @@ public class Map {
         return null;
     }
     
-    public List<MapObject> getAllObject() {
+    public List<GameObject> getAllObject() {
         return mObject;
     }
     
-    public void addObject(MapObject o) {
+    public void addObject(GameObject o) {
         o.setMap(this);
         
         mObject.add(o);
@@ -108,7 +109,7 @@ public class Map {
     public List<Wall> getAllWall() {
         List<Wall> l = new ArrayList<>();
         
-        for(MapObject o : getAllObject()) {
+        for(GameObject o : getAllObject()) {
             if (o instanceof Wall) {
                 l.add((Wall) o);
             }
@@ -153,14 +154,14 @@ public class Map {
         return l;
     }
     
-    public void draw(long delta, Graphics2D g2d) {
+    public void draw(GameLayer g, long delta, Graphics2D g2d) {
         
         g2d.drawImage(ResourceManager.getInstance().getImage("map").getImageData(), 0, 0, null);
 
-        for(MapObject o : mObject) {
+        for(GameObject o : mObject) {
             if ( ! (o instanceof Light) 
               && ! (o instanceof Player)) { // 빛 오브젝트와 플레이어는 아래에서 별도로 처리됩니다.
-                o.draw(delta, g2d);
+                o.draw(g, delta, g2d);
             }
         }
         
@@ -170,9 +171,9 @@ public class Map {
         t.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
-        for(MapObject o : mObject) {
+        for(GameObject o : mObject) {
             if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
-                o.draw(delta, t);
+                o.draw(g, delta, t);
             }
         }
 
@@ -180,12 +181,12 @@ public class Map {
         
         g2d.drawImage(b, 0, 0, null);
         
-        getPlayer().draw(delta, g2d);
+        getPlayer().draw(g, delta, g2d);
     }
 
-    public void update(long delta) {
-        for (MapObject o : mObject) {
-            o.update(delta);
+    public void update(GameLayer g, long delta) {
+        for (GameObject o : mObject) {
+            o.update(g, delta);
         }
     }
 }

@@ -16,26 +16,12 @@ import java.awt.event.MouseMotionListener;
  */
 public class InputManager implements MouseMotionListener, MouseListener, KeyListener {
     
-    private static InputManager INSTANCE;
-    
-    private InputManager() {
-    }
-    
-    public static InputManager getInstance() {
-        if (INSTANCE == null) {
-            synchronized(InputManager.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new InputManager();
-                }
-            }  
-        }
-        
-        return INSTANCE;
-    }
-    
     private Point2D mMousePos = new Point2D();
     private InputQueue mMouseQueue = new InputQueue(4);
     private InputQueue mKeyboardQueue = new InputQueue(512);
+    
+    protected InputManager() {
+    }
     
     public boolean isKeyPressed(int k) {
         return mKeyboardQueue.isPressed(k);

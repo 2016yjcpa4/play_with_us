@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
@@ -16,7 +17,7 @@ import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
  
-public class Player extends MapObject {
+public class Player extends GameObject {
     
     private static final int SPEED = 3;
     
@@ -86,20 +87,19 @@ public class Player extends MapObject {
     }
     
     @Override
-    public void update(long delta) { 
-        InputManager o = InputManager.getInstance();
+    public void update(GameLayer g, long delta) {
         
         // 키를 눌렀을때 플레이어의 각종 처리들
-        if (o.isKeyPressed(KeyEvent.VK_W)) mVel.setY(-SPEED);
-        if (o.isKeyPressed(KeyEvent.VK_S)) mVel.setY(SPEED);
-        if (o.isKeyPressed(KeyEvent.VK_A)) mVel.setX(-SPEED);
-        if (o.isKeyPressed(KeyEvent.VK_D)) mVel.setX(SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_W)) mVel.setY(-SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_S)) mVel.setY(SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_A)) mVel.setX(-SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_D)) mVel.setX(SPEED);
         
         // 상하 or 좌우 키값에 안눌러져있다면 따라 보정처리
-        if (o.isKeyReleased(KeyEvent.VK_W) && o.isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
-        if (o.isKeyReleased(KeyEvent.VK_A) && o.isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
+        if (g.getInput().isKeyReleased(KeyEvent.VK_W) && g.getInput().isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
+        if (g.getInput().isKeyReleased(KeyEvent.VK_A) && g.getInput().isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
         
-        if (o.isKeyOnce(KeyEvent.VK_F))  {
+        if (g.getInput().isKeyOnce(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {
                 mLight.setTurnOff();
             } else {
@@ -110,15 +110,15 @@ public class Player extends MapObject {
         }
         
         if ( ! mIsFlashTurnOn) {
-            if (o.isMousePressed(MouseEvent.BUTTON3)) { mLight.setTurnOn(); }
-            if (o.isMouseReleased(MouseEvent.BUTTON3)) { mLight.setTurnOff(); }
+            if (g.getInput().isMousePressed(MouseEvent.BUTTON3)) { mLight.setTurnOn(); }
+            if (g.getInput().isMouseReleased(MouseEvent.BUTTON3)) { mLight.setTurnOff(); }
         }
         
         Vector2D d = mDir;
         Point2D p = getPosition();
         
         // 현재 바라보는 방향, 위치를 업데이트
-        d.set(o.getMousePosition());
+        d.set(g.getInput().getMousePosition());
         p.set((int) (p.getX() + mVel.getX()), 
               (int) (p.getY() + mVel.getY()));
         
@@ -156,7 +156,7 @@ public class Player extends MapObject {
     }
     
     @Override
-    public void draw(long delta, Graphics2D g2d) { 
+    public void draw(GameLayer g, long delta, Graphics2D g2d) { 
         SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
         Point2D p = getPosition();
         

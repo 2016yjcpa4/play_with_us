@@ -10,9 +10,10 @@ import java.util.List;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Raycast;
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 
-public class Light extends MapObject {
+public class Light extends GameObject {
 
     private Point2D mPos = new Point2D();
     private double mAngle; // 각도
@@ -82,12 +83,12 @@ public class Light extends MapObject {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(GameLayer g, long delta) {
         // 빛에서 업데이트 되는건 없을거같은데....???
     }
 
     @Override
-    public void draw(long delta, Graphics2D g2d) {
+    public void draw(GameLayer g, long delta, Graphics2D g2d) {
         if (mTurnOff) {
             return;
         }

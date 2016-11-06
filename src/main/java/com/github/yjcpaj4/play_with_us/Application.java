@@ -4,12 +4,9 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import javax.swing.JFrame;
-import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.ResourceManager;
-import com.github.yjcpaj4.play_with_us.resource.SpriteImageResource;
 import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
 import java.awt.EventQueue;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.util.EmptyStackException;
 import java.util.Stack;
@@ -31,7 +28,7 @@ public class Application extends GraphicLooper {
     
     private Stack<Layer> mLayerStack = new Stack<>();
     private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
-    private InputManager mInput = InputManager.getInstance();
+    private InputManager mInput = new InputManager();
     
     @Override
     protected void draw(long delta, Graphics2D g2d) {
@@ -271,6 +268,10 @@ public class Application extends GraphicLooper {
                 throw new RuntimeException(e);
             }
         }
+    }
+    
+    public InputManager getInput() {
+        return mInput;
     }
     
     public static void main(String[] args) throws Exception {

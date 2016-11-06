@@ -10,7 +10,6 @@ import java.awt.Graphics2D;
 public class GameLayer extends Layer {
     
     private Player mPlayer;
-    private ResourceManager mRes = ResourceManager.getInstance(); 
     
     public GameLayer(Application c) { 
         super(c);
@@ -30,7 +29,7 @@ public class GameLayer extends Layer {
         super.draw(delta, g2d);
         
         Map m = mPlayer.getMap();
-        m.update(delta);
-        m.draw(delta, g2d);
+        m.update(this, delta);
+        m.draw(this, delta, g2d);
     }
 }

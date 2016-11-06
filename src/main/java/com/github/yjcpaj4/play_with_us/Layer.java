@@ -18,15 +18,17 @@ public abstract class Layer {
     private boolean mRunning = false;
     
     private final Application mContext;
-    private final Canvas mCanvas;
     
     protected Layer(Application c) {
-        mContext = c;
-        mCanvas = c.getCanvas();
+        mContext = c; 
     }
     
     public Application getContext() {
         return mContext;
+    }
+    
+    public InputManager getInput() {
+        return mContext.getInput();
     }
     
     public Layer getApplicationLayer(Class<? extends Layer> cls) {
@@ -34,7 +36,7 @@ public abstract class Layer {
     }
     
     public Canvas getApplicationCanvas() {
-        return mCanvas;
+        return mContext.getCanvas();
     }
     
     public void finishLayer() {

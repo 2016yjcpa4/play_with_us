@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.map;
 
+import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import java.awt.Graphics2D;
 import java.util.List; 
 
@@ -9,7 +10,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
 
-public class Ghost extends MapObject {
+public class Ghost extends GameObject {
     
     private Vector2D mDir = new Vector2D();
     private Point2D mPos = new Point2D(50, 50); 
@@ -55,7 +56,7 @@ public class Ghost extends MapObject {
     }
     
     @Override
-    public void draw(long delta, Graphics2D g2d) { 
+    public void draw(GameLayer g, long delta, Graphics2D g2d) { 
         SpriteImageResource.SpriteImage.Frame f = getCurrentSpriteFrame(delta);
         Point2D p = getPosition();
         
@@ -66,7 +67,7 @@ public class Ghost extends MapObject {
     }
     
     @Override
-    public void update(long delta) {
+    public void update(GameLayer g, long delta) {
         /**
          * 플레이어와의 거리를 직선거리로 판정하고 있습니다
          * 플레이어와의 직선거리가 아닌 걸음수로 판정해야 할것같습니다
