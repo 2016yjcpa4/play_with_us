@@ -49,26 +49,24 @@ public abstract class Layer {
         mContext.showLayer(l);
     }
     
-    protected void draw(long delta, Graphics2D g2d) {
-        // TODO
-    }
-    
     protected boolean isRunning() {
         return mRunning;
     }
     
-    protected void pause() {
-        mRunning = false;
-        // TODO 끝난건 아니지만 다른화면이 위에 올라온경우...
-    }
-    
     protected void resume() {
         mRunning = true;
-        // TODO 초기화 진행후 GraphicLooper 에서 resume 을 호출한뒤 스테이지의 resume 도 호출
+        // 초기화 진행후 GraphicLooper 에서 resume 을 호출한뒤 스테이지의 resume 도 호출
+    }
+    
+    protected void draw(long delta, Graphics2D g2d) {
+    }
+    
+    protected void pause() {
+        mRunning = false;
+        // 끝난건 아니지만 다른화면이 위에 올라온경우...
     }
 
     protected void finish() {
-        // TODO
     }
     
 }
