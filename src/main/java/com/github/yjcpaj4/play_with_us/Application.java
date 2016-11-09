@@ -26,7 +26,7 @@ public class Application extends GraphicLooper {
     public static final boolean DEBUG = true;
     
     private Stack<Layer> mLayerStack = new Stack<>();
-    private ResourceManager mRes = ResourceManager.getInstance(); // 싱글톤으로 만들필요는 없을거같음...
+    private ResourceManager mRes = new ResourceManager(); // 싱글톤으로 만들필요는 없을거같음...
     private InputManager mInput = new InputManager();
     
     @Override
@@ -271,6 +271,10 @@ public class Application extends GraphicLooper {
     
     public InputManager getInput() {
         return mInput;
+    }
+    
+    public ResourceManager getResource() {
+        return mRes;
     }
     
     public static void main(String[] args) throws Exception {

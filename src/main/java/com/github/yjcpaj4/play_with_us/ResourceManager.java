@@ -21,20 +21,6 @@ import com.github.yjcpaj4.play_with_us.util.FileUtil;
  */
 public class ResourceManager {
     
-    private static ResourceManager INSTANCE;
-    
-    public static ResourceManager getInstance() {
-        if (INSTANCE == null) {
-            synchronized(ResourceManager.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new ResourceManager();
-                }
-            }  
-        }
-        
-        return INSTANCE;
-    }
-    
     private Map<String, Resource> mResource = new HashMap<>(); 
     
     protected ResourceManager() {

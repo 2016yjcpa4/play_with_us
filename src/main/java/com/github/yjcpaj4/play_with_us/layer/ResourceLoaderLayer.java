@@ -29,8 +29,6 @@ public class ResourceLoaderLayer extends Layer {
     private float mProgress;
     private String mMessage;
 
-    private ResourceManager mRes = ResourceManager.getInstance();
-    
     public ResourceLoaderLayer(Application c) {
         super(c);
         
@@ -42,15 +40,17 @@ public class ResourceLoaderLayer extends Layer {
     }
     
     private void loadResources() throws IOException {
-        mRes.load("res/img_map.png",    "map");
-        mRes.load("res/img_player.png", "player.walk.n");
-        mRes.load("res/img_player.png", "player.walk.ne");
-        mRes.load("res/img_player.png", "player.walk.e");
-        mRes.load("res/img_player.png", "player.walk.se");
-        mRes.load("res/img_player.png", "player.walk.s");
-        mRes.load("res/img_player.png", "player.walk.sw");
-        mRes.load("res/img_player.png", "player.walk.w");
-        mRes.load("res/img_player.png", "player.walk.nw");
+        ResourceManager r = getResource();
+        
+        r.load("res/img_map.png",    "map");
+        r.load("res/img_player.png", "player.walk.n");
+        r.load("res/img_player.png", "player.walk.ne");
+        r.load("res/img_player.png", "player.walk.e");
+        r.load("res/img_player.png", "player.walk.se");
+        r.load("res/img_player.png", "player.walk.s");
+        r.load("res/img_player.png", "player.walk.sw");
+        r.load("res/img_player.png", "player.walk.w");
+        r.load("res/img_player.png", "player.walk.nw");
     }
 
     @Override

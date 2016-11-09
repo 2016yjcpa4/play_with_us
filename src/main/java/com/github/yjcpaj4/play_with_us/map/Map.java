@@ -156,7 +156,7 @@ public class Map {
     
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         
-        g2d.drawImage(ResourceManager.getInstance().getImage("map").getImageData(), 0, 0, null);
+        g2d.drawImage(g.getResource().getImage("map").getImageData(), 0, 0, null);
 
         for(GameObject o : mObject) {
             if ( ! (o instanceof Light) 

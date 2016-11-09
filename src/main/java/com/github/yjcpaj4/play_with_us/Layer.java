@@ -31,6 +31,10 @@ public abstract class Layer {
         return mContext.getInput();
     }
     
+    public ResourceManager getResource() {
+        return mContext.getResource();
+    }
+    
     public Layer getApplicationLayer(Class<? extends Layer> cls) {
         return mContext.getLayer(cls);
     }
