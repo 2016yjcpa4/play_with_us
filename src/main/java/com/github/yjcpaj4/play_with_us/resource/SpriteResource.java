@@ -33,7 +33,7 @@ public class SpriteResource implements Serializable {
     
     protected transient int mSteps;
     
-    @SerializedName("src")
+    @SerializedName("img")
     protected String mImage;
     
     @SerializedName("frames")
