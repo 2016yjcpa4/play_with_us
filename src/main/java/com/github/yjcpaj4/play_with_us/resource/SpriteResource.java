@@ -29,9 +29,7 @@ public class SpriteResource implements Serializable {
     protected int mHeight;
     
     @SerializedName("fps")
-    protected int mFramePerSecond;
-    
-    protected transient int mSteps;
+    protected int mFPS;
     
     @SerializedName("img")
     protected String mImage;
@@ -75,7 +73,7 @@ public class SpriteResource implements Serializable {
 
     public Frame getCurrentFrame(long delta) {
         int n[] = { 2, 3, 4, 3, 2, 1, 0, 1 };
-        return getFrame(n[(int) (delta / mFramePerSecond % n.length)]);
+        return getFrame(n[(int) (delta / mFPS % n.length)]);
     }
 
     public static class Frame implements Serializable {
