@@ -1,10 +1,6 @@
 package com.github.yjcpaj4.play_with_us.resource;
 
-import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -23,7 +19,7 @@ public class SoundResource implements Resource {
             mStream = AudioSystem.getAudioInputStream(f);
             mDataLine = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, mStream.getFormat()));
         }
-        catch(Exception e) {
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

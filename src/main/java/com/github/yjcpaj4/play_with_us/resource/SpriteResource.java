@@ -68,18 +68,18 @@ public class SpriteResource implements Resource {
     public static class Frame {
 
         @SerializedName("x")
-        protected int mX;
+        private int mX;
         
         @SerializedName("y")
-        protected int mY;
+        private int mY;
         
         @SerializedName("w")
-        protected int mWidth;
+        private int mWidth;
         
         @SerializedName("h")
-        protected int mHeight;
+        private int mHeight;
         
-        protected transient BufferedImage mImage;
+        private transient BufferedImage mImage;
 
         public BufferedImage getImage() {
             return mImage;
