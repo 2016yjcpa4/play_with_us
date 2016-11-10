@@ -1,10 +1,6 @@
 package com.github.yjcpaj4.play_with_us.resource;
 
-import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -18,14 +14,13 @@ public class SoundResource implements Resource {
     private AudioInputStream mStream;
     private SourceDataLine mDataLine;
     
-    @Override
-    public void load(File f, String k) throws IOException {
+    public SoundResource(File f) {
         try {
             mStream = AudioSystem.getAudioInputStream(f);
             mDataLine = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, mStream.getFormat()));
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
     
@@ -62,13 +57,5 @@ public class SoundResource implements Resource {
     
     public void stop() {
         mDataLine.stop();
-    }
-
-    @Override
-    public void release() {
-    }
-    
-    public static boolean canLoad(File f) {
-        return Arrays.asList("mp3", "ogg", "wma", "wav").contains(FileUtil.getExtension(f));
     }
 }
