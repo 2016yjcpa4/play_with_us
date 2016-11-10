@@ -54,13 +54,9 @@ public class ResourceManager {
                 mResource.put(k, new SoundResource(f));
                 break;
                 
-            case "json":
-                try {
-                    mResource.put(k, SpriteResource.loadFromJSON(f));
-                }
-                catch(Exception e) {
-                    throw new RuntimeException(e);
-                } 
+            case "json": // map.json, sprite.json
+                mResource.put(k, SpriteResource.loadFromJSON(f)); 
+                break;
         }
     }
     

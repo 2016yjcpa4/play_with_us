@@ -42,12 +42,20 @@ public class SpriteResource implements Serializable {
     private SpriteResource() {
     }
     
-    public static SpriteResource loadFromJSON(File f) throws Exception {
-        SpriteResource r = new Gson().fromJson(FileUtil.getContents(f), SpriteResource.class);
-        BufferedImage b = ImageIO.read(new File(r.mImage));
+    public static SpriteResource loadFromJSON(File f)  {
+        SpriteResource r;
+        BufferedImage b;
         
-        for (Frame e : r.mFrames) {
-            e.mImage = b.getSubimage(e.mX, e.mY, e.mWidth, e.mHeight);
+        try {
+            r = new Gson().fromJson(FileUtil.getContents(f), SpriteResource.class);
+            b = ImageIO.read(new File(r.mImage));
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Frame o : r.mFrames) {
+            o.mImage = b.getSubimage(o.mX, o.mY, o.mWidth, o.mHeight);
         }
         
         return r;
