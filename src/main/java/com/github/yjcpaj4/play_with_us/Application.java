@@ -67,9 +67,9 @@ public class Application extends GraphicLooper {
 
             @Override
             public void run() { 
-                mCanvas.addMouseListener(mInput);
-                mCanvas.addMouseMotionListener(mInput);
-                mCanvas.addKeyListener(mInput);
+                mCanvas.addMouseListener(mInput.getMouseListener());
+                mCanvas.addMouseMotionListener(mInput.getMouseMotionListener());
+                mCanvas.addKeyListener(mInput.getKeyListener());
                 mCanvas.setFocusable(true);
 
                 JFrame f = new JFrame();

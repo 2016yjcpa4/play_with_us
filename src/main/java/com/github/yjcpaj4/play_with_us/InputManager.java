@@ -14,11 +14,66 @@ import java.awt.event.MouseMotionListener;
  * 
  * @author 차명도.
  */
-public class InputManager implements MouseMotionListener, MouseListener, KeyListener {
+public class InputManager {
     
     private Point2D mMousePos = new Point2D();
     private InputQueue mMouseQueue = new InputQueue(4);
     private InputQueue mKeyboardQueue = new InputQueue(512);
+    
+    private MouseMotionListener mMouseMotionListener = new MouseMotionListener() {
+        
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            mouseMoved(e);
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            mMousePos.set(e.getX(), e.getY());
+        }
+    };
+    
+    private MouseListener mMouseListener = new MouseListener() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            mMouseQueue.add(e.getButton(), InputEvent.PRESSED);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            mMouseQueue.add(e.getButton(), InputEvent.RELEASED);
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+    };
+    
+    private KeyListener mKeyListener = new KeyListener() {
+        
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            mKeyboardQueue.add(e.getKeyCode(), InputEvent.PRESSED);
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            mKeyboardQueue.add(e.getKeyCode(), InputEvent.RELEASED);
+        }
+    };
     
     protected InputManager() {
     }
@@ -47,55 +102,21 @@ public class InputManager implements MouseMotionListener, MouseListener, KeyList
         return mMousePos;
     }
     
+    public MouseMotionListener getMouseMotionListener() {
+        return mMouseMotionListener;
+    }
+    
+    public MouseListener getMouseListener() {
+        return mMouseListener;
+    }
+    
+    public KeyListener getKeyListener() {
+        return mKeyListener;
+    }
+    
     public void update() {
         mMouseQueue.update();
         mKeyboardQueue.update();
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        mKeyboardQueue.add(e.getKeyCode(), InputEvent.PRESSED);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        mKeyboardQueue.add(e.getKeyCode(), InputEvent.RELEASED);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mMousePos.set(e.getX(), e.getY());
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        mMouseQueue.add(e.getButton(), InputEvent.PRESSED);
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        mMouseQueue.add(e.getButton(), InputEvent.RELEASED);
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
     }
     
     private static class InputEvent {
