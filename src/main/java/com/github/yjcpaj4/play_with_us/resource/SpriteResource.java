@@ -1,8 +1,12 @@
 package com.github.yjcpaj4.play_with_us.resource;
 
+import com.github.yjcpaj4.play_with_us.util.FileUtil;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 /**
  * 리팩토링이 필요합니다.
@@ -26,10 +30,22 @@ public class SpriteResource implements Resource {
     @SerializedName("fps")
     private int mFPS;
     
-    private transient BufferedImage mImage;
+    @SerializedName("src")
+    private String mImage;
     private transient List<Frame> mFrames;
     
     private SpriteResource() {
+    }
+    
+    public static SpriteResource loadFromJSON(File f) throws Exception {
+        SpriteResource r = new Gson().fromJson(FileUtil.getContents(f), SpriteResource.class);
+        BufferedImage b = ImageIO.read(new File(r.mImage));
+        
+        for(Frame e : r.mFrames) {
+            e.mImage = b.getSubimage(e.mX, e.mY, e.mWidth, e.mHeight);
+        }
+        
+        return r;
     }
     
     public int getWidth() {
@@ -51,12 +67,19 @@ public class SpriteResource implements Resource {
 
     public static class Frame {
 
+        @SerializedName("x")
         protected int mX;
+        
+        @SerializedName("y")
         protected int mY;
+        
+        @SerializedName("w")
         protected int mWidth;
+        
+        @SerializedName("h")
         protected int mHeight;
-        protected int mIndex;
-        protected BufferedImage mImage;
+        
+        protected transient BufferedImage mImage;
 
         public BufferedImage getImage() {
             return mImage;
