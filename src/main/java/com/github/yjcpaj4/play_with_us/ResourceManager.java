@@ -35,12 +35,8 @@ public class ResourceManager {
     } 
     
     public void load(File f, String k) throws IOException {
-        Resource r = null;
-        
-        if (SpriteResource.canLoad(f, k)) {
-            r = new SpriteResource();
-        }
-        
+        Resource r = null; 
+
         switch(FileUtil.getExtension(f)) {
             case "jpg":
             case "jpeg":
@@ -49,17 +45,17 @@ public class ResourceManager {
             case "png": 
             case "tiff":
             case "tif":
-                r = new ImageResource();
+                r = new ImageResource(f);
                 break;
             case "mp3":
             case "ogg":
             case "wma":
             case "wav":
-                r = new SoundResource();
+                r = new SoundResource(f);
+                break;
+            case "json":
                 break;
         }
-        
-        r.load(f, k);
 
         mResource.put(k, r);
     }
@@ -74,9 +70,5 @@ public class ResourceManager {
     
     public SoundResource getSound(String k) {
         return (SoundResource) mResource.get(k);
-    }
-    
-    public void release(String k) {
-        mResource.get(k).release();
     }
 }

@@ -18,14 +18,13 @@ public class SoundResource implements Resource {
     private AudioInputStream mStream;
     private SourceDataLine mDataLine;
     
-    @Override
-    public void load(File f, String k) throws IOException {
+    public SoundResource(File f) {
         try {
             mStream = AudioSystem.getAudioInputStream(f);
             mDataLine = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, mStream.getFormat()));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
     
@@ -62,13 +61,5 @@ public class SoundResource implements Resource {
     
     public void stop() {
         mDataLine.stop();
-    }
-
-    @Override
-    public void release() {
-    }
-    
-    public static boolean canLoad(File f) {
-        return Arrays.asList("mp3", "ogg", "wma", "wav").contains(FileUtil.getExtension(f));
     }
 }

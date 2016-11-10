@@ -40,10 +40,10 @@ public class Ghost extends GameObject {
      * 
      * @return 프레임을 반환합니다.
      */
-    private SpriteResource.SpriteImage.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
+    private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
         String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
         
-        SpriteResource.SpriteImage.Frame f = r.getSprite(k).getFrame(2); // 기본 상태
+        SpriteResource.Frame f = r.getSprite(k).getFrame(2); // 기본 상태
         
         if (mVel.getX() != 0 || mVel.getY() != 0) { // 움직임이 발생하면
             f = r.getSprite(k).getCurrentFrame(d); // 델타값을 넣어 현재 프레임을 뽑아옴
@@ -56,7 +56,7 @@ public class Ghost extends GameObject {
     
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) { 
-        SpriteResource.SpriteImage.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
+        SpriteResource.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 

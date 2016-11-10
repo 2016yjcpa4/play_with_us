@@ -156,7 +156,7 @@ public class Map {
     
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         
-        g2d.drawImage(g.getResource().getImage("map").getImageData(), 0, 0, null);
+        g2d.drawImage(g.getResource().getImage("map").getData(), 0, 0, null);
 
         for(GameObject o : mObject) {
             if ( ! (o instanceof Light) 
@@ -172,7 +172,7 @@ public class Map {
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
         for(GameObject o : mObject) {
-            if (o instanceof Light) { // 빛 오브젝트는 아래에서 별도로 처리됩니다.
+            if (o instanceof Light) {
                 o.draw(g, delta, t);
             }
         }

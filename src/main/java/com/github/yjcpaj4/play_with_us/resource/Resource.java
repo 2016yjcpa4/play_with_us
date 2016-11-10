@@ -5,7 +5,4 @@ import java.io.IOException;
 
 public interface Resource {
 
-    void load(File f, String s) throws IOException;
-
-    void release();
 }
