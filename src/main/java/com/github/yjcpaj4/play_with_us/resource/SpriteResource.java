@@ -3,14 +3,10 @@ package com.github.yjcpaj4.play_with_us.resource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
@@ -18,7 +14,7 @@ import javax.imageio.ImageIO;
  * 
  * @author 차명도.
  */
-public class SpriteResource implements Resource, Serializable {
+public class SpriteResource implements Serializable {
     
     @SerializedName("x")
     protected int mX;
@@ -50,7 +46,7 @@ public class SpriteResource implements Resource, Serializable {
         SpriteResource r = new Gson().fromJson(FileUtil.getContents(f), SpriteResource.class);
         BufferedImage b = ImageIO.read(new File(r.mImage));
         
-        for(Frame e : r.mFrames) {
+        for (Frame e : r.mFrames) {
             e.mImage = b.getSubimage(e.mX, e.mY, e.mWidth, e.mHeight);
         }
         
