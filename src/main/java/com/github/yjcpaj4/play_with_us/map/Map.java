@@ -42,8 +42,8 @@ public class Map {
         addObject(new Wall(30, 535, 550, 385));
         addObject(new Wall(660, 490, 600, 385));
         
-        addObject(new Ghost(80, 450));
-        addObject(new Ghost(1000, 450));
+        addObject(new Mob(80, 450));
+        addObject(new Mob(1000, 450));
         
         init();
     }

@@ -10,14 +10,14 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
 
-public class Ghost extends GameObject {
+public class Mob extends GameObject {
     
     private Vector2D mDir = new Vector2D();
     private Point2D mPos = new Point2D(50, 50); 
     private Vector2D mVel = new Vector2D(0, 0);
     private int mSpeed = 3;
     
-    public Ghost(int x, int y) {
+    public Mob(int x, int y) {
         mPos.set(x, y);
     }
     
