@@ -47,6 +47,10 @@ public class FileUtil {
     }
     
     public static void setContents(File f, String v) throws IOException {
+        if ( ! f.exists()) {
+            f.createNewFile();
+        }
+        
         FileWriter fw = new FileWriter(f);
         fw.write(v);
         fw.flush();

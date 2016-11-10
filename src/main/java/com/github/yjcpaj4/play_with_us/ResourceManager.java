@@ -1,11 +1,8 @@
 package com.github.yjcpaj4.play_with_us;
 
-import com.google.gson.Gson;
-import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.ImageResource;
 import com.github.yjcpaj4.play_with_us.resource.Resource;
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
-import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +23,10 @@ public class ResourceManager {
     protected ResourceManager() {
     }
     
+    public void load(String f) throws IOException {
+        load(new File(f));
+    }
+    
     public void load(File f) throws IOException {
         load(f, FileUtil.getNameWithoutExtension(f));
     }
@@ -37,7 +38,8 @@ public class ResourceManager {
     public void load(File f, String k) throws IOException {
         Resource r = null; 
 
-        switch(FileUtil.getExtension(f)) {
+        switch (FileUtil.getExtension(f)) {
+            
             case "jpg":
             case "jpeg":
             case "bmp": 
@@ -47,14 +49,21 @@ public class ResourceManager {
             case "tif":
                 r = new ImageResource(f);
                 break;
+                
             case "mp3":
             case "ogg":
             case "wma":
             case "wav":
                 r = new SoundResource(f);
                 break;
+                
             case "json":
-                break;
+                try {
+                    r = SpriteResource.loadFromJSON(f);
+                }
+                catch(Exception e) {
+                    throw new RuntimeException(e);
+                } 
         }
 
         mResource.put(k, r);

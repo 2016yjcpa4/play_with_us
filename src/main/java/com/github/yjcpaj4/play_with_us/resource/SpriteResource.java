@@ -3,9 +3,14 @@ package com.github.yjcpaj4.play_with_us.resource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
@@ -13,26 +18,30 @@ import javax.imageio.ImageIO;
  * 
  * @author 차명도.
  */
-public class SpriteResource implements Resource {
+public class SpriteResource implements Resource, Serializable {
     
     @SerializedName("x")
-    private int mX;
+    protected int mX;
     
     @SerializedName("y")
-    private int mY;
+    protected int mY;
     
     @SerializedName("w")
-    private int mWidth;
+    protected int mWidth;
     
     @SerializedName("h")
-    private int mHeight;
+    protected int mHeight;
     
     @SerializedName("fps")
-    private int mFPS;
+    protected int mFramePerSecond;
+    
+    protected transient int mSteps;
     
     @SerializedName("src")
-    private String mImage;
-    private transient List<Frame> mFrames;
+    protected String mImage;
+    
+    @SerializedName("frames")
+    protected List<Frame> mFrames;
     
     private SpriteResource() {
     }
@@ -62,10 +71,10 @@ public class SpriteResource implements Resource {
 
     public Frame getCurrentFrame(long delta) {
         int n[] = { 2, 3, 4, 3, 2, 1, 0, 1 };
-        return getFrame(n[(int) (delta / mFPS % n.length)]);
+        return getFrame(n[(int) (delta / mFramePerSecond % n.length)]);
     }
 
-    public static class Frame {
+    public static class Frame implements Serializable {
 
         @SerializedName("x")
         private int mX;

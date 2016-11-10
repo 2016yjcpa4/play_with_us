@@ -42,15 +42,15 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
-        r.load("res/img_map.png",    "map");
-        r.load("res/img_player.png", "player.walk.n");
-        r.load("res/img_player.png", "player.walk.ne");
-        r.load("res/img_player.png", "player.walk.e");
-        r.load("res/img_player.png", "player.walk.se");
-        r.load("res/img_player.png", "player.walk.s");
-        r.load("res/img_player.png", "player.walk.sw");
-        r.load("res/img_player.png", "player.walk.w");
-        r.load("res/img_player.png", "player.walk.nw");
+        r.load("res/img_map.png", "map");
+        r.load("res/player.walk.n.json");
+        r.load("res/player.walk.ne.json");
+        r.load("res/player.walk.e.json");
+        r.load("res/player.walk.se.json");
+        r.load("res/player.walk.s.json");
+        r.load("res/player.walk.sw.json");
+        r.load("res/player.walk.w.json");
+        r.load("res/player.walk.nw.json");
     }
 
     @Override
