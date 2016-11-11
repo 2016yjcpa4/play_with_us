@@ -91,11 +91,11 @@ public class CollisionDetection {
         if (isCollides(p, c, r)) {
             
             if (r != null) {
-                final Shape s = r.getA();
+                final Shape a = r.getA();
                 final boolean b = r.isAInB();
 
                 r.mA            = r.mB;
-                r.mB            = s;
+                r.mB            = a;
                 r.mAInB         = r.isAInB();
                 r.mBInA         = b;
                 r.mOverlapVec   = r.mOverlapVec.neg();
