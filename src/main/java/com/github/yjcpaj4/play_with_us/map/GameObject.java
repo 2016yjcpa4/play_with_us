@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public abstract class GameObject {
     
-    private Map mMap;
+    protected Map mMap;
     
     public void setMap(Map m) {
         mMap = m;
