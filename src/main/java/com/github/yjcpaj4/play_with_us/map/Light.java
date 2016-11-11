@@ -77,7 +77,7 @@ public class Light extends GameObject {
                                            getExtent(), 
                                            Arc2D.PIE));
         
-        a.intersect(new Area(getRaycast().toPolygon()));
+        a.intersect(new Area(getRaycast().toAWTPolygon()));
         
         return a;
     }

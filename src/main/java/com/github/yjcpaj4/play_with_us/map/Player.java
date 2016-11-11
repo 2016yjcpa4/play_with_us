@@ -46,6 +46,10 @@ public class Player extends GameObject {
         mCollider = new Circle(620, 700, 32);
     }
     
+    public Circle getCollider() {
+        return mCollider;
+    }
+    
     /**
      * 플레이어가 가지고있는 손전등.
      * 

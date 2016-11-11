@@ -108,6 +108,32 @@ public class CollisionDetection {
         return false;
     }
     
+    public static boolean isCollides(Circle a, Circle b) {
+        return isCollides(a, b, null);
+    }
+    
+    public static boolean isCollides(Circle a, Circle b, Response r) {
+        Vector2D v = new Vector2D(a.getPosition()).sub(b.getPosition());
+        float f = a.getRadius() + b.getRadius();
+        
+        if (v.lengthSquared() > (f * f)) {
+            return false;
+        }
+        
+        if (r != null) {
+            double d = v.length();
+            r.mA = a;
+            r.mB = b;
+            r.mOverlap = (float) (f - d);
+            r.mOverlapNorm.set(v.norm());
+            r.mOverlapVec.set(v.mult(r.mOverlap));
+            r.mAInB = a.getRadius() <= b.getRadius() && d <= b.getRadius() - a.getRadius();
+            r.mBInA = b.getRadius() <= a.getRadius() && d <= a.getRadius() - b.getRadius();
+        }
+        
+        return true;
+    }
+    
     public static boolean isCollides(Polygon p, Circle c) {
         return isCollides(p, c, null);
     }

@@ -23,6 +23,10 @@ public class GameLayer extends Layer {
         Map m = new Map();
         m.addObject(mPlayer);
     }
+    
+    public Player getPlayer() {
+        return mPlayer;
+    }
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {

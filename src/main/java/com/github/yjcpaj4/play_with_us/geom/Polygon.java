@@ -130,7 +130,7 @@ public class Polygon implements Shape {
         return EarCutTriangulator.getTriangulate(this);
     }
     
-    public java.awt.Polygon toPolygon() {
+    public java.awt.Polygon toAWTPolygon() {
         return new java.awt.Polygon(getXPoints(), getYPoints(), getPoints().size());
     }
 }
