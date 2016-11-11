@@ -11,23 +11,33 @@ import java.awt.event.KeyEvent;
  * 
  * @author 차명도.
  */
-public class Door extends GameObject {
+public class Portal extends GameObject {
+    
+    private final String mID;
+    private final String mLinkID;
+    private final String mMapID;
+    
+    private Circle mCollider;
     
     private boolean mLocked = false;
-    private Circle mCollider;
+    
+    public Portal(String s1, String s2, String s3) {
+        mID = s1;
+        
+        mMapID = s2;
+        mLinkID = s3;
+    }
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (CollisionDetection.isCollides(g.getPlayer().getCollider(), mCollider)) {
-            //g.getInput().isKeyOnce(KeyEvent.VK_F)
+        
+        if (CollisionDetection.isCollides(g.getPlayer().getCollider(), mCollider)) { 
+            
+            
         }
     }
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-    }
-    
-    public static class LockedException extends Exception {
-        
     }
 }
