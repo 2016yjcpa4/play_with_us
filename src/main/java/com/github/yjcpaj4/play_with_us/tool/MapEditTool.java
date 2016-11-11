@@ -64,7 +64,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         
         g2d.drawImage(mImage, 0, 0, null);
         
-        g2d.setColor(Color.RED);
+        g2d.setColor(new Color(255, 0,0, (int) (255 * 0.5)));
         g2d.setStroke(new BasicStroke(3));
         
         for(int n = 0; n < mPoint.size(); ++n) {
@@ -80,7 +80,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         if (mReversed) {
             g2d.fillPolygon(new Polygon(mPoint).toAWTPolygon());
         } else {
-            Area a = new Area(new Rectangle2D.Float(0, 0, mImage.getWidth(), mImage.getHeight()));
+            Area a = new Area();
+            a.add(new Area(new Rectangle2D.Float(0, 0, mImage.getWidth(), mImage.getHeight())));
             a.subtract(new Area(new Polygon(mPoint).toAWTPolygon()));
             
             g2d.fillPolygon(AWTUtil.toPolygon(a).toAWTPolygon());
