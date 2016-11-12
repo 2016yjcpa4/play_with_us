@@ -5,6 +5,7 @@ import java.util.List;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
+import com.github.yjcpaj4.play_with_us.util.ArrayUtil;
 
 public class Polygon implements Shape {
 
@@ -82,23 +83,11 @@ public class Polygon implements Shape {
     }
 
     public Point2D getPoint(int n) {
-        return mPoints.get(getFixedArrayIndex(n, mPoints.size()));
+        return mPoints.get(ArrayUtil.getFixedArrayIndex(n, mPoints.size()));
     }
     
     public Vector2D getEdge(int n) {
-        return new Vector2D(mEdges.get(getFixedArrayIndex(n, mEdges.size())));
-    }
-    
-    /**
-     * 
-     * 배열 인덱스가 음수값 혹은 범위 밖의 인덱스일경우 보정시켜줍니다.
-     * 
-     * @param n 배열의 인덱스
-     * @param c 배열의 크기
-     * @return 보정된 인덱스값
-     */
-    private static int getFixedArrayIndex(int n, int c) {
-        return n < 0 ? n % c + c : n % c;
+        return new Vector2D(mEdges.get(ArrayUtil.getFixedArrayIndex(n, mEdges.size())));
     }
     
     public void addPoint(Point2D p) {
