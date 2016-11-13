@@ -152,8 +152,8 @@ public class CollisionDetection {
             int n = getVoronoiRegion(v2, v3);
             if (n == LEFT_VORONOI_REGION) {
                 v2 = p.getEdge(l - 1);
-                Vector2D point2 = new Vector2D(c.getPosition()).sub(p.getPoint(l - 1));
-                if (getVoronoiRegion(v2, point2) == RIGHT_VORONOI_REGION) {
+                Vector2D p2 = new Vector2D(c.getPosition()).sub(p.getPoint(l - 1));
+                if (getVoronoiRegion(v2, p2) == RIGHT_VORONOI_REGION) {
                     double d = v3.length();
                     if (d > c.getRadius()) {
                         return false;
