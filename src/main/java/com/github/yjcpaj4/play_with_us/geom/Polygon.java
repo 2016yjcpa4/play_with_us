@@ -6,6 +6,8 @@ import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.util.ArrayUtil;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Polygon implements Shape {
 
@@ -19,14 +21,14 @@ public class Polygon implements Shape {
     public Polygon(List<Point2D> p) {
         mPoints.addAll(p);
         
-        calc();
+        init();
     }
     
-    private void calc() {
+    private void init() {
         mEdges.clear();
         mNormals.clear();
         
-        for (int n = 0; n < getPoints().size(); n++) {
+        for (int n = 0; n < mPoints.size(); n++) {
             Point2D p1 = getPoint(n);
             Point2D p2 = getPoint(n + 1);
             
@@ -46,7 +48,7 @@ public class Polygon implements Shape {
     }
 
     public List<Point2D> getPoints() {
-        return mPoints;
+        return Collections.unmodifiableList(mPoints);
     }
 
     public void transform(Matrix2D m) {
@@ -90,10 +92,14 @@ public class Polygon implements Shape {
         return new Vector2D(mEdges.get(ArrayUtil.getFixedArrayIndex(n, mEdges.size())));
     }
     
+    public Vector2D getNorm(int n) {
+        return new Vector2D(mNormals.get(ArrayUtil.getFixedArrayIndex(n, mNormals.size())));
+    }
+    
     public void addPoint(Point2D p) {
         mPoints.add(p);
         
-        calc();
+        init();
     }
     
     public List<Vector2D> getVectors() {

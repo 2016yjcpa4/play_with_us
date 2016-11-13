@@ -55,46 +55,35 @@ public class Vector2D {
         return Math.atan2(getY(), getX());
     }
     
-    public double lengthSquared() {
+    public float lengthSq() {
         return dot(this);
     }
     
     public double length() {
-        return Math.sqrt(lengthSquared());
+        return Math.sqrt(lengthSq());
     }
     
     public Vector2D norm() {
-        float n = (float) length();
-        
+        float n = (float) length(); 
         if (n > 0) {
-            setX(getX() / n);
-            setY(getY() / n);
+            return new Vector2D(getX() / n, getY() / n);
         }
         
-        return this;
+        return new Vector2D(getX(), getY());
     }
     
     public Vector2D neg() {
-        setX(-getX());
-        setY(-getY());
-        
-        return this;
+        return new Vector2D(-getX(), -getY());
     }
     
     public Vector2D perp() {
-        float x = getX(); 
-        float y = getY();
-        
-        setX(y);
-        setY(-x);
-        
-        return this;
+        return new Vector2D(getY(), -getX());
     }
     
-    public double dot(float x, float y)         { return getX() * x + getY() * y; }
-    public double dot(float n)                  { return dot(n, n); }
-    public double dot(Vector2D v)               { return dot(v.getX(), v.getY()); }
-    public double dot(Point2D p)                { return dot(p.getX(), p.getY()); }
+    public float dot(float x, float y)         { return getX() * x + getY() * y; }
+    public float dot(float n)                  { return dot(n, n); }
+    public float dot(Vector2D v)               { return dot(v.getX(), v.getY()); }
+    public float dot(Point2D p)                { return dot(p.getX(), p.getY()); }
     
     public Vector2D add(float x, float y)       { return new Vector2D(getX() + x, getY() + y); }
     public Vector2D add(float n)                { return add(n, n); }

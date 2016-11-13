@@ -39,9 +39,9 @@ public class GameMap {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
             Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
 
-            for (Point2D p : BresenhamLine.getBresenhamLine(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
-                if (mTiles.isWithin(p.getX(), p.getY())) {
-                    mTiles.getNode(p.getX(), p.getY()).setNotWalkable();
+            for (Point2D p : BresenhamLine.getBresenhamLine((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY())) {
+                if (mTiles.isWithin((int)p.getX(), (int)p.getY())) {
+                    mTiles.getNode((int)p.getX(), (int)p.getY()).setNotWalkable();
                 }
             }
         }
@@ -84,7 +84,7 @@ public class GameMap {
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return GameMap.this.getTileIndex(p.getX(), p.getY());
+        return GameMap.this.getTileIndex((int)p.getX(), (int)p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {
@@ -153,7 +153,7 @@ public class GameMap {
     }
     
     public List<Point2D> getPath(Point2D p1, Point2D p2) {
-        return getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        return getPath((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
     }
     
     public List<Point2D> getPath(int x1, int y1, int x2, int y2) {
@@ -162,7 +162,7 @@ public class GameMap {
         
         List<Point2D> l = new ArrayList<>();
         
-        for (TileNode t : mTiles.getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY())) { 
+        for (TileNode t : mTiles.getPath((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY())) { 
             l.add(new  Point2D(t.getX() * getTileWidth()  + (getTileWidth() / 2),
                                t.getY() * getTileHeight() + (getTileHeight() / 2)));
         }
@@ -180,7 +180,7 @@ public class GameMap {
                 o.draw(g, delta, g2d);
             }
         }
-        
+        /*
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D t = b.createGraphics();
         t.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
@@ -196,7 +196,7 @@ public class GameMap {
         t.dispose();
         
         g2d.drawImage(b, 0, 0, null);
-        
+        */
         getPlayer().draw(g, delta, g2d);
     }
 

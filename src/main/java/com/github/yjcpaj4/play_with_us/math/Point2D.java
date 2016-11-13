@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Point2D {
     
-    private int mX;
-    private int mY;
+    private float mX;
+    private float mY;
     
     public Point2D() {
         this(0, 0);
     }
     
-    public Point2D(int x, int y) {
+    public Point2D(float x, float y) {
         mX = x;
         mY = y;
     }
@@ -21,24 +21,24 @@ public class Point2D {
         mY = p.getY();
     }
     
-    public void setX(int x) {
+    public void setX(float x) {
         mX = x;
     }
     
-    public void setY(int y) {
+    public void setY(float y) {
         mY = y;
     }
     
-    public void set(int x, int y) {
+    public void set(float x, float y) {
         mX = x;
         mY = y;
     }
     
-    public int getX() {
+    public float getX() {
         return mX;
     }
     
-    public int getY() {
+    public float getY() {
         return mY;
     }
     
@@ -64,6 +64,6 @@ public class Point2D {
     
     @Override
     public String toString() {
-        return String.format("[ %d, %d ]", mX, mY);
+        return String.format("[ %d, %d ]", (int) mX, (int) mY);
     }
 }

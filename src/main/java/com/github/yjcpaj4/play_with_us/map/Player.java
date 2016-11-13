@@ -16,6 +16,7 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
+import java.awt.Color;
  
 public class Player extends GameObject {
     
@@ -43,7 +44,7 @@ public class Player extends GameObject {
     };
     
     public Player() {
-        mCollider = new Circle(620, 400, 32);
+        mCollider = new Circle(620, 700, 32);
     }
     
     public Circle getCollider() {
@@ -90,6 +91,8 @@ public class Player extends GameObject {
         return mCollider.getPosition();
     }
     
+    private int DEBUG = 0;
+    
     @Override
     public void update(GameLayer g, long delta) {
         
@@ -123,16 +126,17 @@ public class Player extends GameObject {
         
         // 현재 바라보는 방향, 위치를 업데이트
         d.set(g.getInput().getMousePosition());
-        p.set((int) (p.getX() + mVel.getX()), 
-              (int) (p.getY() + mVel.getY()));
+        p.set(p.getX() + mVel.getX(), 
+              p.getY() + mVel.getY());
         
         // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
             CollisionDetection.Response r = new CollisionDetection.Response();
-            if (CollisionDetection.isCollides(o.getCollider(), mCollider, r)) {
+            if (CollisionDetection.isCollides2(o.getCollider(), mCollider, r)) {
+                System.out.println("충돌" + (DEBUG++));
                 Vector2D v = new Vector2D(p).add(r.getOverlapVector());
 
-                p.set((int) v.getX(), (int) v.getY());
+                p.set(v.getX(), v.getY());
             }
         }
     }
@@ -164,8 +168,15 @@ public class Player extends GameObject {
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 
-                      p.getX() - f.getWidth() / 2, 
-                      p.getY() - f.getHeight() / 2, 
+                      (int)p.getX() - f.getWidth() / 2, 
+                      (int)p.getY() - f.getHeight() / 2, 
                       null);
+        
+        
+        g2d.setColor(Color.RED);
+        g2d.drawOval((int)p.getX() - mCollider.getRadius(),
+                     (int)p.getY() - mCollider.getRadius(), 
+                     mCollider.getRadius() * 2,
+                     mCollider.getRadius() * 2);
     }
 }

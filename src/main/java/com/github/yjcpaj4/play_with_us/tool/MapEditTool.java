@@ -87,14 +87,14 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                     Map<String, Object> m = new HashMap<>();
                     
                     
-                    m.put("img", new File("res/img_map.png"));
+                    m.put("img", new File("res/img_map.png").getName());
                     m.put("lightless", new ArrayList());
                     m.put("not_walkable", new ArrayList());
                     
                     for(Polygon o : mLightless) {
                         List<Integer[]> lightless = new ArrayList<>();
                         for (Point2D p : o.getPoints()) {
-                            lightless.add(new Integer[]{ p.getX(), p.getY() });
+                            lightless.add(new Integer[]{ (int)p.getX(), (int)p.getY() });
                         }
                         ((ArrayList) m.get("lightless")).add(lightless);
                     }
@@ -102,7 +102,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                     for(Polygon o : mNotWalkable) {
                         List<Integer[]> notWalkable = new ArrayList<>();
                         for (Point2D p : o.getPoints()) {
-                            notWalkable.add(new Integer[]{ p.getX(), p.getY() });
+                            notWalkable.add(new Integer[]{ (int)p.getX(), (int)p.getY() });
                         }
                         ((ArrayList) m.get("not_walkable")).add(notWalkable);
                     }
@@ -151,7 +151,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     
     private List<Polygon> getCurrentPoint() {
         if ( ! mReversed) {
-            return new Polygon(mCurrentPoint).getTriangulate();
+            
+            List<Polygon> l = new ArrayList();
+            l.add(new Polygon(mCurrentPoint));
+            return l;
+            //return new Polygon(mCurrentPoint).getTriangulate();
         }
         
         Area a1 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
@@ -215,7 +219,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
             for(int n = 0; n < mCurrentPoint.size(); ++n) { 
                 Point2D p = mCurrentPoint.get(n);
 
-                g2d.fillOval(p.getX() - (10 / 2), p.getY() - (10 / 2), 10, 10);
+                g2d.fillOval((int)p.getX() - (10 / 2), (int)p.getY() - (10 / 2), 10, 10);
             }
         }
         

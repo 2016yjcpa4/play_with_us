@@ -60,8 +60,8 @@ public class Mob extends GameObject {
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 
-                      p.getX() - f.getWidth() / 2, 
-                      p.getY() - f.getHeight() / 2, 
+                      (int)p.getX() - f.getWidth() / 2, 
+                      (int)p.getY() - f.getHeight() / 2, 
                       null);
     }
     

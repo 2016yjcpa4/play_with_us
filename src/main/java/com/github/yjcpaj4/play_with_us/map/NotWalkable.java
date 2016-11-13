@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Rect; 
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,21 @@ public class NotWalkable extends GameObject {
         //g2d.setColor(new Color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
         g2d.setColor(Color.RED);
         g2d.fillPolygon(mCollider.toAWTPolygon());
+        
+        g2d.setColor(Color.YELLOW);
+        for (int n = 500; n < mCollider.getPoints().size(); ++n) {
+            Vector2D v = mCollider.getEdge(n);
+            g2d.drawOval((int) (v.getX() - 5), 
+                         (int) (v.getY() - 5), 
+                         10, 10);
+        }
+        g2d.setColor(Color.GREEN);
+        for (int n = 0; n < mCollider.getPoints().size(); ++n) {
+            Vector2D v = mCollider.getNorm(n);
+            g2d.drawOval((int) (v.getX() - 5), 
+                         (int) (v.getY() - 5), 
+                         10, 10);
+        }
     }
 
     @Override
