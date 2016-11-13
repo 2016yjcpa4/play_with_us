@@ -24,7 +24,7 @@ public class Polygon implements Shape {
     
     private void calc() {
         mEdges.clear();
-        mNormals.clear();;
+        mNormals.clear();
         
         for (int n = 0; n < getPoints().size(); n++) {
             Point2D p1 = getPoint(n);
@@ -83,7 +83,7 @@ public class Polygon implements Shape {
     }
 
     public Point2D getPoint(int n) {
-        return mPoints.get(ArrayUtil.getFixedArrayIndex(n, mPoints.size()));
+        return new Point2D(mPoints.get(ArrayUtil.getFixedArrayIndex(n, mPoints.size())));
     }
     
     public Vector2D getEdge(int n) {

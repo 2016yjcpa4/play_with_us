@@ -16,6 +16,11 @@ public class Point2D {
         mY = y;
     }
     
+    public Point2D(Point2D p) {
+        mX = p.getX();
+        mY = p.getY();
+    }
+    
     public void setX(int x) {
         mX = x;
     }
