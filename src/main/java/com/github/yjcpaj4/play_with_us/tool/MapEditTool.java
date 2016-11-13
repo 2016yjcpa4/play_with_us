@@ -1,8 +1,11 @@
 package com.github.yjcpaj4.play_with_us.tool;
 
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
+import com.github.yjcpaj4.play_with_us.geom.EarCutTriangulator;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.util.FileUtil;
+import com.google.gson.Gson;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -13,11 +16,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Area;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,6 +37,16 @@ import javax.swing.UIManager;
 
 public class MapEditTool extends GraphicLooper implements MouseListener, KeyListener {
     
+    static {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private File mImageFile;
     private BufferedImage mImage;
     
     private boolean mReversed = false;
@@ -43,14 +62,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     
     public MapEditTool() throws Exception {
         
-        JFileChooser fc = new JFileChooser();
-        int n = fc.showOpenDialog(null);
-
-        if (n == JFileChooser.APPROVE_OPTION) {
-            mImage = ImageIO.read(fc.getSelectedFile());
-        } else {
-            System.exit(0);
-        }
+        mImage = ImageIO.read(new File("res/img_map.png"));
         
         mCanvas.addMouseListener(this);
         mCanvas.addKeyListener(this);
@@ -70,8 +82,37 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
             m3.addActionListener(new ActionListener() {
 
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(ActionEvent evt) {
                     
+                    Map<String, Object> m = new HashMap<>();
+                    
+                    
+                    m.put("img", new File("res/img_map.png"));
+                    m.put("lightless", new ArrayList());
+                    m.put("not_walkable", new ArrayList());
+                    
+                    for(Polygon o : mLightless) {
+                        List<Integer[]> lightless = new ArrayList<>();
+                        for (Point2D p : o.getPoints()) {
+                            lightless.add(new Integer[]{ p.getX(), p.getY() });
+                        }
+                        ((ArrayList) m.get("lightless")).add(lightless);
+                    }
+                    
+                    for(Polygon o : mNotWalkable) {
+                        List<Integer[]> notWalkable = new ArrayList<>();
+                        for (Point2D p : o.getPoints()) {
+                            notWalkable.add(new Integer[]{ p.getX(), p.getY() });
+                        }
+                        ((ArrayList) m.get("not_walkable")).add(notWalkable);
+                    }
+                    
+                    try {
+                        FileUtil.setContents(new File("res/map.json"), new Gson().toJson(m));
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -80,43 +121,74 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         }
 
 
-        f.setJMenuBar(mb); 
-        
         f.setTitle("PLAY with us - Map Edit Tool");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setJMenuBar(mb);
         f.setResizable(false);
         f.setSize(1280, 800);
         f.setLocationRelativeTo(null);        
         f.getContentPane().add(mCanvas);
         f.setVisible(true);
         
-        
         start();
     }
     
-    private List<Point2D> getPoints() {
-        if ( ! mReversed) {
-            return mCurrentPoint;
+    private static List<Point2D> getPoints(Area a) {
+        List<Point2D> l = new ArrayList<>();
+        PathIterator p = a.getPathIterator(null);
+        
+        while ( ! p.isDone()) {
+            float[] s = new float[6];
+            if (p.currentSegment(s) != PathIterator.SEG_CLOSE) {
+                l.add(new Point2D((int) s[0], (int) s[1]));
+            }
+            
+            p.next();
         }
         
-        Point2D p = mCurrentPoint.get(0); // 첫번째껄 가져와서
-
-        // 시계방향으로 사각형 포인팅을 추가하면 폴리곤이 반대로 먹게됨.
-        List<Point2D> l = new ArrayList(mCurrentPoint);
-        l.add(p);
-        l.add(new Point2D(p.getX(),          0));
-        l.add(new Point2D(mImage.getWidth(), 0));
-        l.add(new Point2D(mImage.getWidth(), mImage.getHeight()));
-        l.add(new Point2D(0,                 mImage.getHeight()));
-        l.add(new Point2D(0,                 0));
-        l.add(new Point2D(p.getX(),          0));
-        
         return l;
+    }
+    
+    private List<Polygon> getCurrentPoint() {
+        if ( ! mReversed) {
+            return new Polygon(mCurrentPoint).getTriangulate();
+        }
+        
+        Area a1 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
+        Area a2 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
+        
+        a1.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
+        a2.subtract(new Area(new Polygon(getPoints(a1)).toAWTPolygon()));
+        a2.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
+        
+        List<Polygon> l = new Polygon(getPoints(a1)).getTriangulate();
+        l.addAll(new Polygon(getPoints(a2)).getTriangulate());
+        return l;
+    }
+    
+    public static Color randomColor() {
+        return new Color((int) (Math.random() * 256),
+                         (int) (Math.random() * 256),
+                         (int) (Math.random() * 256),
+                         (int) (255 * 0.5));
     }
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
+        
+        if (mImage == null) {
+            Font f = new Font("돋움", Font.BOLD, 40);
+            g2d.setFont(f);
+            FontMetrics fm = g2d.getFontMetrics(f);
+
+            String s = "여기를 클릭하여 맵 이미지를 불러옵니다.";
+            fm.stringWidth(s);
+            
+            g2d.setColor(Color.RED);
+            g2d.drawString(s, 1280 / 2 - fm.stringWidth(s) / 2, 800 / 2 - fm.getHeight() / 2);
+            return;
+        }
         
         g2d.drawImage(mImage, 0, 0, null);
         
@@ -132,7 +204,12 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         
         if ( ! mCurrentPoint.isEmpty()) {
             g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
-            g2d.fillPolygon(new Polygon(getPoints()).toAWTPolygon()); 
+            for (Polygon p : getCurrentPoint()) {
+                g2d.setColor(randomColor());
+                g2d.fillPolygon(p.toAWTPolygon()); 
+            }
+            //g2d.fillPolygon(new Polygon(getCurrentPoint()).toAWTPolygon()); 
+            //g2d.drawPolygon(new Polygon(getCurrentPoint()).toAWTPolygon()); 
 
             g2d.setColor(new Color(34, 181, 0));
             for(int n = 0; n < mCurrentPoint.size(); ++n) { 
@@ -151,6 +228,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         String s1 = "숫자 키 1 => 비출수 없는 영역";
         String s2 = "숫자 키 2 => 걸어갈 수 없는 영역";
         String s3 = "Ctrl + Z => 한칸 되돌리기";
+        String s4 = "마우스 오른쪽 => 선택 영역 반전";
         
         if (mPointingMode == LIGHTLESS_POINTING) s1 += " [편집중]";
         if (mPointingMode == NOT_WALKABLE_POINTING) s2 += " [편집중]";
@@ -158,15 +236,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         g2d.drawString(s1, 10, fm.getHeight() * 1);
         g2d.drawString(s2, 10, fm.getHeight() * 2);
         g2d.drawString(s3, 10, fm.getHeight() * 3);
-    }
-    
-    static {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+        g2d.drawString(s4, 10, fm.getHeight() * 4);
     }
     
     public static void main(String args[]) throws Exception {
@@ -182,12 +252,28 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) { 
+    public void mouseReleased(MouseEvent evt) { 
+        if(mImage == null) {
+            JFileChooser fc = new JFileChooser();
+            int n = fc.showOpenDialog(null);
+
+            if (n == JFileChooser.APPROVE_OPTION) {
+                try {
+                    mImageFile = fc.getSelectedFile();
+                    mImage = ImageIO.read(mImageFile);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return;
+        }
+
         if (mPointingMode >= 0) {
             
-            switch (e.getButton()) {
+            switch (evt.getButton()) {
                 case MouseEvent.BUTTON1:
-                    mCurrentPoint.add(new Point2D(e.getX(), e.getY()));
+                    mCurrentPoint.add(new Point2D(evt.getX(), evt.getY()));
                     break;
                     
                 case MouseEvent.BUTTON3:
@@ -229,10 +315,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                 break;
             case KeyEvent.VK_ENTER:
                 if (mPointingMode == NOT_WALKABLE_POINTING) {
-                    mNotWalkable.add(new Polygon(getPoints()));
+                    mNotWalkable.addAll(getCurrentPoint());
+                    //mNotWalkable.add(new Polygon(getCurrentPoint()));
                 }
                 else if (mPointingMode == LIGHTLESS_POINTING) {
-                    mLightless.add(new Polygon(getPoints()));
+                    //mLightless.add(new Polygon(getCurrentPoint()));
                 }
                 
                 mCurrentPoint.clear();

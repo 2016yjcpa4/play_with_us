@@ -58,7 +58,7 @@ public class Light extends GameObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllLine())) {  
+        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllLine2DByLightless())) {  
             l.add(p);    
         }
         

@@ -8,13 +8,14 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Rect; 
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import java.util.List;
 
-public class Wall extends GameObject {
+public class Lightless extends GameObject {
     
     private Polygon mCollider;
     
-    public Wall(int x, int y, int w, int h) {
-        mCollider = new Rect(x, y, w, h);
+    public Lightless(List<Point2D> l) {
+        mCollider = new Polygon(l);
     }
     
     public Polygon getCollider() {

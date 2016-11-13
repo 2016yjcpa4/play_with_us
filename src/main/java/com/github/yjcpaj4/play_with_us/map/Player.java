@@ -43,7 +43,7 @@ public class Player extends GameObject {
     };
     
     public Player() {
-        mCollider = new Circle(620, 700, 32);
+        mCollider = new Circle(620, 400, 32);
     }
     
     public Circle getCollider() {
@@ -127,9 +127,9 @@ public class Player extends GameObject {
               (int) (p.getY() + mVel.getY()));
         
         // 충돌에 대하여 처리를 합니다.
-        for (Wall w : getMap().getAllWall()) {
+        for (NotWalkable o : getMap().getAllNotWalkable()) {
             CollisionDetection.Response r = new CollisionDetection.Response();
-            if (CollisionDetection.isCollides(w.getCollider(), mCollider, r)) {
+            if (CollisionDetection.isCollides(o.getCollider(), mCollider, r)) {
                 Vector2D v = new Vector2D(p).add(r.getOverlapVector());
 
                 p.set((int) v.getX(), (int) v.getY());

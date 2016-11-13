@@ -17,9 +17,10 @@ import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 
-public class Map {
+public class GameMap {
 
     public static final boolean DEBUG = false;
+    
     public static final int MAP_WIDTH = 1280;
     public static final int MAP_HEIGHT = 800;
     
@@ -28,28 +29,13 @@ public class Map {
     
     private TileMap mTiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
     
+    private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Map() {
-        addObject(new Wall(0, 0, MAP_WIDTH - 10, 10));// 북쪽
-        addObject(new Wall(MAP_WIDTH - 30, 0, 10, MAP_HEIGHT));// 동쪽
-        addObject(new Wall(0, MAP_HEIGHT - 10, MAP_WIDTH, 10));// 남쪽
-        addObject(new Wall(20, 0, 10, MAP_HEIGHT - 10));// 서쪽
+    public GameMap(BufferedImage b) {
+        mBackground = b;
         
-        // 장애물 1
-        addObject(new Wall(10, 10, 480, 305));
-        addObject(new Wall(750, 10, 500, 305));
-        addObject(new Wall(30, 535, 550, 385));
-        addObject(new Wall(660, 490, 600, 385));
-        
-        addObject(new Mob(80, 450));
-        addObject(new Mob(1000, 450));
-        
-        init();
-    }
-    
-    private void init() {
-        for(Line2D l : getAllLine()) {
+        for(Line2D l : getAllLine2DByNotWalkable()) {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
             Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
 
@@ -86,7 +72,7 @@ public class Map {
     }
     
     public float getDarkness() {
-        return 0.96f;
+        return 0;//0.96f;
     }
     
     public int getTileWidth() {
@@ -98,7 +84,7 @@ public class Map {
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return Map.this.getTileIndex(p.getX(), p.getY());
+        return GameMap.this.getTileIndex(p.getX(), p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {
@@ -106,24 +92,54 @@ public class Map {
                          , (int) (y / getTileHeight()));
     }
 
-    public List<Wall> getAllWall() {
-        List<Wall> l = new ArrayList<>();
+    public List<Lightless> getAllLightless() {
+        List<Lightless> l = new ArrayList<>();
         
         for(GameObject o : getAllObject()) {
-            if (o instanceof Wall) {
-                l.add((Wall) o);
+            if (o instanceof Lightless) {
+                l.add((Lightless) o);
             }
         }
         
         return l;
     }
     
-    public List<Line2D> getAllLine() {
+    public List<NotWalkable> getAllNotWalkable() {
+        List<NotWalkable> l = new ArrayList<>();
+        
+        for(GameObject o : getAllObject()) {
+            if (o instanceof NotWalkable) {
+                l.add((NotWalkable) o);
+            }
+        }
+        
+        return l;
+    }
+    
+    public List<Line2D> getAllLine2DByNotWalkable() {
         List<Line2D> l = new ArrayList<>();
         
-        for (Wall w : getAllWall()) {
+        for (NotWalkable o : getAllNotWalkable()) {
             
-            Polygon p = w.getCollider();
+            Polygon p = o.getCollider();
+            
+            for(int n = 0; n < p.getPoints().size(); ++n) {
+                Point2D p1 = p.getPoint(n);
+                Point2D p2 = p.getPoint(n + 1);
+
+                l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
+            }
+        }
+        
+        return l;
+    }
+    
+    public List<Line2D> getAllLine2DByLightless() {
+        List<Line2D> l = new ArrayList<>();
+        
+        for (Lightless o : getAllLightless()) {
+            
+            Polygon p = o.getCollider();
             
             for(int n = 0; n < p.getPoints().size(); ++n) {
                 Point2D p1 = p.getPoint(n);
@@ -156,7 +172,7 @@ public class Map {
     
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         
-        g2d.drawImage(g.getResource().getImage("map"), 0, 0, null);
+        g2d.drawImage(mBackground, 0, 0, null);
 
         for(GameObject o : mObject) {
             if ( ! (o instanceof Light) 

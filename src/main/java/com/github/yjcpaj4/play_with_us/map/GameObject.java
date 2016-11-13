@@ -5,13 +5,13 @@ import java.awt.Graphics2D;
 
 public abstract class GameObject {
     
-    private Map mMap;
+    private GameMap mMap;
     
-    public void setMap(Map m) {
+    public void setMap(GameMap m) {
         mMap = m;
     }
     
-    public Map getMap() {
+    public GameMap getMap() {
         return mMap;
     }
     

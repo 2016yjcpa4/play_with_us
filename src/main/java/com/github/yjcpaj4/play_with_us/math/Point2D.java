@@ -56,4 +56,9 @@ public class Point2D {
         
         return r;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("[ %d, %d ]", mX, mY);
+    }
 }
