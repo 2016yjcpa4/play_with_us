@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -19,6 +21,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.UIManager;
 
 public class MapEditTool extends GraphicLooper implements MouseListener, KeyListener {
     
@@ -52,6 +58,30 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         mCanvas.setFocusable(true);
         
         JFrame f = new JFrame();
+        
+        
+        
+        
+        JMenuBar mb = new JMenuBar(); 
+        {
+            JMenu m = new JMenu("파일");
+            
+            JMenuItem m3 = new JMenuItem("저장");
+            m3.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                }
+            });
+
+            m.add(m3);
+            mb.add(m);
+        }
+
+
+        f.setJMenuBar(mb); 
+        
         f.setTitle("PLAY with us - Map Edit Tool");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
@@ -59,6 +89,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         f.setLocationRelativeTo(null);        
         f.getContentPane().add(mCanvas);
         f.setVisible(true);
+        
         
         start();
     }
@@ -119,12 +150,23 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         
         String s1 = "숫자 키 1 => 비출수 없는 영역";
         String s2 = "숫자 키 2 => 걸어갈 수 없는 영역";
+        String s3 = "Ctrl + Z => 한칸 되돌리기";
         
         if (mPointingMode == LIGHTLESS_POINTING) s1 += " [편집중]";
         if (mPointingMode == NOT_WALKABLE_POINTING) s2 += " [편집중]";
         
         g2d.drawString(s1, 10, fm.getHeight() * 1);
         g2d.drawString(s2, 10, fm.getHeight() * 2);
+        g2d.drawString(s3, 10, fm.getHeight() * 3);
+    }
+    
+    static {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public static void main(String args[]) throws Exception {
