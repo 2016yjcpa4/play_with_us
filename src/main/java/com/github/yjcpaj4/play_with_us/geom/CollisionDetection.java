@@ -2,6 +2,7 @@ package com.github.yjcpaj4.play_with_us.geom;
 
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,15 +69,13 @@ public class CollisionDetection {
         int edgeCountB = polygonB.getEdges().size();
         float minIntervalDistance = Float.POSITIVE_INFINITY;
         Vector2D translationAxis = new Vector2D();
-        Vector2D edge;
+        
+        List<Vector2D> l = new ArrayList<>();
+        l.addAll(polygonA.getEdges());
+        l.addAll(polygonB.getEdges());
 
         // Loop through all the edges of both polygons
-        for (int edgeIndex = 0; edgeIndex < edgeCountA + edgeCountB; edgeIndex++) {
-            if (edgeIndex < edgeCountA) {
-                edge = polygonA.getEdge(edgeIndex);
-            } else {
-                edge = polygonB.getEdge(edgeIndex - edgeCountA);
-            }
+        for (Vector2D edge : l) {
 
             // ===== 1. Find if the polygons are currently intersecting =====
             // Find the axis perpendicular to the current edge
