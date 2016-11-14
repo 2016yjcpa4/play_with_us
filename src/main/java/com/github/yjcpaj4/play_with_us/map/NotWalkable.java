@@ -31,15 +31,11 @@ public class NotWalkable extends PhysicsObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
+        g2d.setColor(Color.RED);
+        g2d.fillPolygon(mCollider.toAWTPolygon());
     }
 
     @Override
     public void update(GameLayer g, long delta) { 
-    }
-    
-    public static List<NotWalkable> newInstances(List<Point2D> l) {
-        List<NotWalkable> r = new ArrayList<>();
-        r.add(new NotWalkable(l));
-        return r;
     }
 }
