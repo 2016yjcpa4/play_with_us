@@ -20,54 +20,41 @@ public class CollisionDetection {
     // Structure that stores the results of the PolygonCollision function
     public static class ProjectPolygon {
 
-        public float min; // Are the polygons going to intersect forward in time?
-        public float max; // Are the polygons currently intersecting
-    }
-
-    // Structure that stores the results of the PolygonCollision function
-    public static class PolygonCollisionResult {
-
-        public boolean Intersect; // Are the polygons currently intersecting
-        public Vector2D MinimumTranslationVector; // The translation to apply to polygon A to push the polygons appart.
+        public float mMin = Float.MAX_VALUE; // Are the polygons going to intersect forward in time?
+        public float mMax = Float.MIN_VALUE; // Are the polygons currently intersecting
     }
 
     // Calculate the distance between [minA, maxA] and [minB, maxB]
     // The distance will be negative if the intervals overlap
-    public static float IntervalDistance(float minA, float maxA, float minB, float maxB) {
-        if (minA < minB) {
-            return minB - maxA;
+    public static float IntervalDistance(ProjectPolygon a, ProjectPolygon b) {
+        if (a.mMin < b.mMin) {
+            return b.mMin - a.mMax;
         } else {
-            return minA - maxB;
+            return a.mMin - b.mMax;
         }
     }
 
     // Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
-    public static ProjectPolygon ProjectPolygon(Vector2D axis, Polygon polygon) {
-        // To project a point on an axis use the dot product
-        float d = axis.dot(polygon.getPoint(0));
+    public static ProjectPolygon ProjectPolygon(Vector2D v, Polygon p) {
         ProjectPolygon o = new ProjectPolygon();
-        o.min = d;
-        o.max = d;
-        for (int i = 0; i < polygon.getPoints().size(); i++) {
-            d = new Vector2D(polygon.getPoint(i)).dot(axis);
-            if (d < o.min) {
-                o.min = d;
-            } else if (d > o.max) {
-                o.max = d;
-            }
+        for (int i = 0; i < p.getPoints().size(); i++) {
+            float d = new Vector2D(p.getPoint(i)).dot(v);
+            o.mMax = Math.max(o.mMax, d);
+            o.mMin = Math.min(o.mMin, d);
         }
 
         return o;
     }
 
     // Check if polygon A is going to collide with polygon B for the given velocity
-    public static Vector2D PolygonCollision(Polygon polygonA, Polygon polygonB) {
-        float minIntervalDistance = Float.POSITIVE_INFINITY;
-        Vector2D translationAxis = new Vector2D();
-        
+    public static Vector2D PolygonCollision(Polygon a, Polygon b) {
+        float n = Float.POSITIVE_INFINITY;
+        Vector2D v = new Vector2D();
+        Vector2D v2 = new Vector2D(a.getPosition()).sub(b.getPosition());
+
         List<Vector2D> l = new ArrayList<>();
-        l.addAll(polygonA.getEdges());
-        l.addAll(polygonB.getEdges());
+        l.addAll(a.getEdges());
+        l.addAll(b.getEdges());
 
         // Loop through all the edges of both polygons
         for (Vector2D edge : l) {
@@ -77,27 +64,26 @@ public class CollisionDetection {
             Vector2D axis = new Vector2D(-edge.getY(), edge.getX()).norm();
 
             // Find the projection of the polygon on the current axis 
-            ProjectPolygon A = ProjectPolygon(axis, polygonA);
-            ProjectPolygon B = ProjectPolygon(axis, polygonB);
+            ProjectPolygon A = ProjectPolygon(axis, a);
+            ProjectPolygon B = ProjectPolygon(axis, b);
 
             // Check if the polygon projections are currentlty intersecting
-            if (IntervalDistance(A.min, A.max, B.min, B.max) > 0) {
+            if (IntervalDistance(A, B) > 0) {
                 return null;
             }
 
-            float intervalDistance = Math.abs(IntervalDistance(A.min, A.max, B.min, B.max));
-            if (intervalDistance < minIntervalDistance) {
-                minIntervalDistance = intervalDistance;
-                translationAxis = axis;
+            float intervalDistance = Math.abs(IntervalDistance(A, B));
+            if (intervalDistance < n) {
+                n = intervalDistance;
+                v = axis;
 
-                Vector2D d = new Vector2D(polygonA.getPosition()).sub(polygonB.getPosition());
-                if (d.dot(translationAxis) < 0) {
-                    translationAxis = translationAxis.neg();
+                if (v2.dot(v) < 0) {
+                    v = v.neg();
                 }
             }
         }
 
-        return translationAxis.mult(minIntervalDistance);
+        return v.mult(n);
     }
 
 }
