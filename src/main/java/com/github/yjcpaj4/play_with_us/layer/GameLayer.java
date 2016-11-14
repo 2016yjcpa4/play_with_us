@@ -52,12 +52,10 @@ public class GameLayer extends Layer {
             for(List e : (List<List>) not_walkable) {
                 l.add(new Point2D((int) Double.parseDouble(e.get(0).toString()), (int) Double.parseDouble(e.get(1).toString())));
             }
-            
-            for(NotWalkable e : NotWalkable.newInstances(l)) {
-                m.addObject(e);
-            }
+            m.addObject(new NotWalkable(l));
         }
-        
+         ;
+            
         m.addObject(mPlayer);
     }
     

@@ -51,25 +51,20 @@ public class Vector2D {
         mY = p.getY();
     }
     
-    public double angle() {
-        return Math.atan2(getY(), getX());
+    public float angle() {
+        return (float) Math.atan2(getY(), getX());
     }
     
     public float lengthSq() {
         return dot(this);
     }
     
-    public double length() {
-        return Math.sqrt(lengthSq());
+    public float length() {
+        return (float) Math.sqrt(lengthSq());
     }
     
     public Vector2D norm() {
-        float n = (float) length(); 
-        if (n > 0) {
-            return new Vector2D(getX() / n, getY() / n);
-        }
-        
-        return new Vector2D(getX(), getY());
+        return new Vector2D(getX() / length(), getY() / length());
     }
     
     public Vector2D neg() {
@@ -78,6 +73,10 @@ public class Vector2D {
     
     public Vector2D perp() {
         return new Vector2D(getY(), -getX());
+    }
+    
+    public Point2D toPoint2D() {
+        return new Point2D(mX, mY);
     }
     
     public float dot(float x, float y)         { return getX() * x + getY() * y; }
@@ -99,4 +98,9 @@ public class Vector2D {
     public Vector2D mult(float n)               { return mult(n, n); }
     public Vector2D mult(Point2D p)             { return mult(p.getX(), p.getY()); }
     public Vector2D mult(Vector2D v)            { return mult(v.getX(), v.getY()); }
+    
+    @Override
+    public String toString() {
+        return String.format("[ %d, %d ]", (int) mX, (int) mY);
+    }
 }

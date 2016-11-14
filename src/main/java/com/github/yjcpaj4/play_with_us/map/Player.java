@@ -9,12 +9,14 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
+import com.github.yjcpaj4.play_with_us.geom.PCircle;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
+import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
 import java.awt.Color;
  
@@ -22,7 +24,7 @@ public class Player extends GameObject {
     
     private static final int SPEED = 3;
     
-    private Circle mCollider;
+    private PCircle mCollider;
     private boolean mIsFlashTurnOn;
     private Vector2D mDir = new Vector2D(0, 0);    
     private Vector2D mVel = new Vector2D();    
@@ -44,10 +46,10 @@ public class Player extends GameObject {
     };
     
     public Player() {
-        mCollider = new Circle(620, 700, 32);
+        mCollider = new PCircle(620, 700, 32);
     }
     
-    public Circle getCollider() {
+    public PCircle getCollider() {
         return mCollider;
     }
     
@@ -126,17 +128,18 @@ public class Player extends GameObject {
         
         // 현재 바라보는 방향, 위치를 업데이트
         d.set(g.getInput().getMousePosition());
-        p.set(p.getX() + mVel.getX(), 
-              p.getY() + mVel.getY());
+        //p.set(p.getX() + mVel.getX(), 
+        //      p.getY() + mVel.getY());
+        
+        mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
         // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
-            CollisionDetection.Response r = new CollisionDetection.Response();
-            if (CollisionDetection.isCollides2(o.getCollider(), mCollider, r)) {
-                System.out.println("충돌" + (DEBUG++));
-                Vector2D v = new Vector2D(p).add(r.getOverlapVector());
-
-                p.set(v.getX(), v.getY());
+            CollisionDetection.PolygonCollisionResult r = CollisionDetection.PolygonCollision(o.getCollider(), mCollider);
+            if (r.WillIntersect) {
+                Vector2D v = r.MinimumTranslationVector.neg();
+ 
+                mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
             }
         }
     }
@@ -174,9 +177,6 @@ public class Player extends GameObject {
         
         
         g2d.setColor(Color.RED);
-        g2d.drawOval((int)p.getX() - mCollider.getRadius(),
-                     (int)p.getY() - mCollider.getRadius(), 
-                     mCollider.getRadius() * 2,
-                     mCollider.getRadius() * 2);
+        g2d.drawPolygon(mCollider.toAWTPolygon());
     }
 }

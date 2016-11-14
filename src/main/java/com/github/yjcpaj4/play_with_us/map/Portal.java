@@ -29,12 +29,7 @@ public class Portal extends GameObject {
     }
     
     @Override
-    public void update(GameLayer g, long delta) {
-        
-        if (CollisionDetection.isCollides(g.getPlayer().getCollider(), mCollider)) { 
-            
-            
-        }
+    public void update(GameLayer g, long delta) {   
     }
 
     @Override

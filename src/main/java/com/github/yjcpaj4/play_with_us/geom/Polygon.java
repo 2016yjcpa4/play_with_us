@@ -24,7 +24,7 @@ public class Polygon implements Shape {
         init();
     }
     
-    private void init() {
+    protected void init() {
         mEdges.clear();
         mNormals.clear();
         
@@ -51,6 +51,10 @@ public class Polygon implements Shape {
         return Collections.unmodifiableList(mPoints);
     }
 
+    public List<Vector2D> getEdges() {
+        return Collections.unmodifiableList(mEdges);
+    }
+
     public void transform(Matrix2D m) {
         transform(m, getPosition());
     }
@@ -67,6 +71,8 @@ public class Polygon implements Shape {
             p.setX((int) (x * m.getA() + y * m.getC() + m.getE()));
             p.setY((int) (x * m.getB() + y * m.getD() + m.getF()));
         }
+        
+        init();
     }
 
     public Point2D getPosition() {

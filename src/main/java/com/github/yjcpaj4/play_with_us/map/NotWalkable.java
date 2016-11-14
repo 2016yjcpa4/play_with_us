@@ -17,7 +17,7 @@ public class NotWalkable extends GameObject {
     
     private Polygon mCollider;
     
-    private NotWalkable(List<Point2D> l) {
+    public NotWalkable(List<Point2D> l) {
         mCollider = new Polygon(l);
     }
     
@@ -38,13 +38,6 @@ public class NotWalkable extends GameObject {
         g2d.setColor(Color.YELLOW);
         for (int n = 500; n < mCollider.getPoints().size(); ++n) {
             Vector2D v = mCollider.getEdge(n);
-            g2d.drawOval((int) (v.getX() - 5), 
-                         (int) (v.getY() - 5), 
-                         10, 10);
-        }
-        g2d.setColor(Color.GREEN);
-        for (int n = 0; n < mCollider.getPoints().size(); ++n) {
-            Vector2D v = mCollider.getNorm(n);
             g2d.drawOval((int) (v.getX() - 5), 
                          (int) (v.getY() - 5), 
                          10, 10);
