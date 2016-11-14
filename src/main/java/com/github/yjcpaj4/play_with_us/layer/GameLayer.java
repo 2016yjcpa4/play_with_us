@@ -5,6 +5,7 @@ import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.map.GameMap;
 import com.github.yjcpaj4.play_with_us.map.Player;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
+import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
@@ -54,7 +55,15 @@ public class GameLayer extends Layer {
             }
             m.addObject(new NotWalkable(l));
         }
-         ;
+            
+        
+        for(List not_walkable : (List<List>) o.get("lightless")) {
+            List<Point2D> l = new ArrayList<Point2D>();
+            for(List e : (List<List>) not_walkable) {
+                l.add(new Point2D((int) Double.parseDouble(e.get(0).toString()), (int) Double.parseDouble(e.get(1).toString())));
+            }
+            m.addObject(new Lightless(l));
+        }
             
         m.addObject(mPlayer);
     }

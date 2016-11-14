@@ -151,10 +151,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     
     private List<Polygon> getCurrentPoint() {
         if ( ! mReversed) {
-            
-            List<Polygon> l = new ArrayList();
-            l.add(new Polygon(mCurrentPoint));
-            return l;
+            return new Polygon(mCurrentPoint).getTriangulate();
             //return new Polygon(mCurrentPoint).getTriangulate();
         }
         
@@ -319,11 +316,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                 break;
             case KeyEvent.VK_ENTER:
                 if (mPointingMode == NOT_WALKABLE_POINTING) {
-                    mNotWalkable.addAll(getCurrentPoint());
-                    //mNotWalkable.add(new Polygon(getCurrentPoint()));
+                    mNotWalkable.addAll(getCurrentPoint()); 
                 }
                 else if (mPointingMode == LIGHTLESS_POINTING) {
-                    //mLightless.add(new Polygon(getCurrentPoint()));
+                    mLightless.addAll(getCurrentPoint());
                 }
                 
                 mCurrentPoint.clear();

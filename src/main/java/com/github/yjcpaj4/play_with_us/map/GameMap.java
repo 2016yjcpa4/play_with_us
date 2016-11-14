@@ -72,7 +72,7 @@ public class GameMap {
     }
     
     public float getDarkness() {
-        return 0;//0.96f;
+        return 0.96f;
     }
     
     public int getTileWidth() {
@@ -180,7 +180,7 @@ public class GameMap {
                 o.draw(g, delta, g2d);
             }
         }
-        /*
+        
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D t = b.createGraphics();
         t.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
@@ -196,7 +196,7 @@ public class GameMap {
         t.dispose();
         
         g2d.drawImage(b, 0, 0, null);
-        */
+        
         getPlayer().draw(g, delta, g2d);
     }
 
