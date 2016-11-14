@@ -1,6 +1,6 @@
 package com.github.yjcpaj4.play_with_us.resource;
 
-import com.github.yjcpaj4.play_with_us.map.GameMap;
+import com.github.yjcpaj4.play_with_us.map.Stage;
 
 public class MapResource {
 
@@ -8,7 +8,7 @@ public class MapResource {
     private MapResource() { 
     }
     
-    public static GameMap loadFromJSON() {
+    public static Stage loadFromJSON() {
         return null;
     }
 }

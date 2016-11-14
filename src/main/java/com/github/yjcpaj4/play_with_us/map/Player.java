@@ -46,7 +46,7 @@ public class Player extends GameObject {
     };
     
     public Player() {
-        mCollider = new PCircle(620, 700, 32);
+        mCollider = new PCircle(400, 400, 32);
     }
     
     public PCircle getCollider() {

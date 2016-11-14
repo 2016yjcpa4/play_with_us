@@ -17,7 +17,7 @@ import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 
-public class GameMap {
+public class Stage {
 
     public static final boolean DEBUG = false;
     
@@ -32,7 +32,7 @@ public class GameMap {
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public GameMap(BufferedImage b) {
+    public Stage(BufferedImage b) {
         mBackground = b;
         
         for(Line2D l : getAllLine2DByNotWalkable()) {
@@ -84,7 +84,7 @@ public class GameMap {
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return GameMap.this.getTileIndex((int)p.getX(), (int)p.getY());
+        return Stage.this.getTileIndex((int)p.getX(), (int)p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {

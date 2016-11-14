@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.yjcpaj4.play_with_us.map.GameMap;
+import com.github.yjcpaj4.play_with_us.map.Stage;
 import com.github.yjcpaj4.play_with_us.map.Player;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.map.Lightless;
@@ -46,7 +46,7 @@ public class GameLayer extends Layer {
             e.printStackTrace();
         }
         
-        GameMap m = new GameMap(b);
+        Stage m = new Stage(b);
         
         for(List not_walkable : (List<List>) o.get("not_walkable")) {
             List<Point2D> l = new ArrayList<Point2D>();
@@ -76,7 +76,7 @@ public class GameLayer extends Layer {
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
         
-        GameMap m = mPlayer.getMap();
+        Stage m = mPlayer.getMap();
         m.update(this, delta);
         m.draw(this, delta, g2d);
     }

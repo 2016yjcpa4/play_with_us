@@ -62,7 +62,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     
     public MapEditTool() throws Exception {
         
-        mImage = ImageIO.read(new File("res/img_map.png"));
+        mImage = ImageIO.read(new File("res/img_map_2.png"));
         
         mCanvas.addMouseListener(this);
         mCanvas.addKeyListener(this);
@@ -87,7 +87,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                     Map<String, Object> m = new HashMap<>();
                     
                     
-                    m.put("img", new File("res/img_map.png").getName());
+                    m.put("img", new File("res/img_map_2.png").getName());
                     m.put("lightless", new ArrayList());
                     m.put("not_walkable", new ArrayList());
                     
