@@ -23,8 +23,7 @@ public class CollisionDetection {
     }
 
     // Structure that stores the results of the PolygonCollision function
-    public static class PolygonCollisionResult {
-            public boolean WillIntersect; // Are the polygons going to intersect forward in time?
+    public static class PolygonCollisionResult { 
             public boolean Intersect; // Are the polygons currently intersecting
             public Vector2D MinimumTranslationVector; // The translation to apply to polygon A to push the polygons appart.
     }
@@ -64,8 +63,7 @@ public class CollisionDetection {
     // Check if polygon A is going to collide with polygon B for the given velocity
     public static PolygonCollisionResult PolygonCollision(Polygon polygonA, Polygon polygonB) {
             PolygonCollisionResult result = new PolygonCollisionResult();
-            result.Intersect = true;
-            result.WillIntersect = true;
+            result.Intersect = true; 
 
             int edgeCountA = polygonA.getEdges().size();
             int edgeCountB = polygonB.getEdges().size();
@@ -109,10 +107,9 @@ public class CollisionDetection {
                     
                     // Do the same test as above for the new projection
                     float intervalDistance = IntervalDistance(A.min, A.max, B.min, B.max);
-                    if (intervalDistance > 0) result.WillIntersect = false;
 
                     // If the polygons are not intersecting and won't intersect, exit the loop
-                    if (!result.Intersect && !result.WillIntersect) break;
+                    if (!result.Intersect) break;
 
                     // Check if the current interval distance is the minimum one. If so store
                     // the interval distance and the current distance.
@@ -130,7 +127,7 @@ public class CollisionDetection {
             // The minimum translation vector can be used to push the polygons appart.
             // First moves the polygons by their velocity
             // then move polygonA by MinimumTranslationVector.
-            if (result.WillIntersect) result.MinimumTranslationVector = translationAxis.mult(minIntervalDistance);
+            if (result.Intersect) result.MinimumTranslationVector = translationAxis.mult(minIntervalDistance);
 
             return result;
     }

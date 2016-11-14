@@ -46,7 +46,7 @@ public class Player extends GameObject {
     };
     
     public Player() {
-        mCollider = new PCircle(400, 400, 32);
+        mCollider = new PCircle(400, 400, 20);
     }
     
     public PCircle getCollider() {
@@ -136,7 +136,7 @@ public class Player extends GameObject {
         // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
             CollisionDetection.PolygonCollisionResult r = CollisionDetection.PolygonCollision(o.getCollider(), mCollider);
-            if (r.WillIntersect) {
+            if (r.Intersect) {
                 Vector2D v = r.MinimumTranslationVector.neg();
  
                 mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
