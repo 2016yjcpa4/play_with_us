@@ -61,12 +61,7 @@ public class CollisionDetection {
     }
 
     // Check if polygon A is going to collide with polygon B for the given velocity
-    public static PolygonCollisionResult PolygonCollision(Polygon polygonA, Polygon polygonB) {
-        PolygonCollisionResult result = new PolygonCollisionResult();
-        result.Intersect = true;
-
-        int edgeCountA = polygonA.getEdges().size();
-        int edgeCountB = polygonB.getEdges().size();
+    public static Vector2D PolygonCollision(Polygon polygonA, Polygon polygonB) {
         float minIntervalDistance = Float.POSITIVE_INFINITY;
         Vector2D translationAxis = new Vector2D();
         
@@ -87,11 +82,7 @@ public class CollisionDetection {
 
             // Check if the polygon projections are currentlty intersecting
             if (IntervalDistance(A.min, A.max, B.min, B.max) > 0) {
-                result.Intersect = false;
-            }
- 
-            if (!result.Intersect) {
-                break;
+                return null;
             }
 
             float intervalDistance = Math.abs(IntervalDistance(A.min, A.max, B.min, B.max));
@@ -106,11 +97,7 @@ public class CollisionDetection {
             }
         }
 
-        if (result.Intersect) {
-            result.MinimumTranslationVector = translationAxis.mult(minIntervalDistance);
-        }
-
-        return result;
+        return translationAxis.mult(minIntervalDistance);
     }
 
 }
