@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
-import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.PCircle;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
@@ -20,7 +19,7 @@ import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
 import java.awt.Color;
  
-public class Player extends GameObject {
+public class Player extends PhysicsObject {
     
     private static final int SPEED = 3;
     

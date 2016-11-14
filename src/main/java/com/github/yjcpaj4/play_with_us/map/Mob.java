@@ -10,7 +10,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.util.GameUtil;
 
-public class Mob extends GameObject {
+public class Mob extends PhysicsObject {
     
     private Vector2D mDir = new Vector2D();
     private Point2D mPos = new Point2D(50, 50); 

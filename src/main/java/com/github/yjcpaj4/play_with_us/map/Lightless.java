@@ -10,7 +10,7 @@ import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import java.util.List;
 
-public class Lightless extends GameObject {
+public class Lightless extends PhysicsObject {
     
     private Polygon mCollider;
     
