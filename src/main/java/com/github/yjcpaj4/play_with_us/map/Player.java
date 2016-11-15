@@ -89,7 +89,7 @@ public class Player extends PhysicsObject {
      * @return 
      */
     public Point2D getPosition() {
-        return mCollider.getPosition();
+        return mCollider.getCenterPosition();
     }
     
     private int DEBUG = 0;

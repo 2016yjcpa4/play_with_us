@@ -25,7 +25,7 @@ public class NotWalkable extends PhysicsObject {
     }
     
     public Point2D getPosition () {
-        return mCollider.getPosition();
+        return mCollider.getCenterPosition();
     }
 
     @Override

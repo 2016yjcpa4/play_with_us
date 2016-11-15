@@ -9,11 +9,10 @@ import com.github.yjcpaj4.play_with_us.util.ArrayUtil;
 import java.util.Collection;
 import java.util.Collections;
 
-public class Polygon implements Shape {
+public class Polygon {
 
     protected List<Point2D> mPoints = new ArrayList<>();
-    protected List<Vector2D> mEdges = new ArrayList<>();
-    protected List<Vector2D> mNormals = new ArrayList<>();
+    private List<Vector2D> mEdges = new ArrayList<>();
 
     public Polygon() {
     }
@@ -26,25 +25,13 @@ public class Polygon implements Shape {
     
     protected void init() {
         mEdges.clear();
-        mNormals.clear();
         
         for (int n = 0; n < mPoints.size(); n++) {
             Point2D p1 = getPoint(n);
             Point2D p2 = getPoint(n + 1);
             
-            Vector2D v = new Vector2D(p2).sub(p1);
-            
-            mEdges.add(v);
-            mNormals.add(new Vector2D(v).perp().norm());
+            mEdges.add(new Vector2D(p2).sub(p1));
         }
-    }
-
-    public int[] getXPoints() {
-        return Point2D.getXPoints(mPoints);
-    }
-
-    public int[] getYPoints() {
-        return Point2D.getYPoints(mPoints);
     }
 
     public List<Point2D> getPoints() {
@@ -56,7 +43,7 @@ public class Polygon implements Shape {
     }
 
     public void transform(Matrix2D m) {
-        transform(m, getPosition());
+        transform(m, getCenterPosition());
     }
 
     public void transform(Matrix2D m, Point2D c) {
@@ -75,7 +62,7 @@ public class Polygon implements Shape {
         init();
     }
 
-    public Point2D getPosition() {
+    public Point2D getCenterPosition() {
         int len = mPoints.size();
 
         Vector2D v = new Vector2D();
@@ -98,24 +85,10 @@ public class Polygon implements Shape {
         return new Vector2D(mEdges.get(ArrayUtil.getFixedArrayIndex(n, mEdges.size())));
     }
     
-    public Vector2D getNorm(int n) {
-        return new Vector2D(mNormals.get(ArrayUtil.getFixedArrayIndex(n, mNormals.size())));
-    }
-    
     public void addPoint(Point2D p) {
         mPoints.add(p);
         
         init();
-    }
-    
-    public List<Vector2D> getVectors() {
-        List<Vector2D> l = new ArrayList<>();
-        
-        for(Point2D p : mPoints) {
-            l.add(new Vector2D(p));
-        }
-        
-        return l;
     }
     
     /**
@@ -132,6 +105,6 @@ public class Polygon implements Shape {
     }
     
     public java.awt.Polygon toAWTPolygon() {
-        return new java.awt.Polygon(getXPoints(), getYPoints(), getPoints().size());
+        return new java.awt.Polygon(Point2D.getXPoints(mPoints), Point2D.getYPoints(mPoints), mPoints.size());
     }
 }

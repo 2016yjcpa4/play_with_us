@@ -18,7 +18,7 @@ public final class EarCutTriangulator {
 
     public static List<Polygon> getTriangulate(Polygon p) {
         EarCutTriangulator t = new EarCutTriangulator();
-        List<Vector2D> l = t.getTriangulate(p.getVectors());
+        List<Point2D> l = t.getTriangulate(p.getPoints());
         
         List<Polygon> r = new ArrayList<>();
 
@@ -41,8 +41,8 @@ public final class EarCutTriangulator {
     private EarCutTriangulator() {
     }
 
-    private List<Vector2D> getTriangulate(List<Vector2D> l) {
-        List<Vector2D> r = new ArrayList<Vector2D>();
+    private List<Point2D> getTriangulate(List<Point2D> l) {
+        List<Point2D> r = new ArrayList();
 
         if (l.size() == 3) {
             r.addAll(l);
@@ -72,23 +72,23 @@ public final class EarCutTriangulator {
         return r;
     }
 
-    public boolean isPolygonClockwise(List<Vector2D> v) {
-        float n = 0;
+    public boolean isPolygonClockwise(List<Point2D> l) {
+        float f = 0;
         
-        for (int l = 0; l < v.size(); l++) {
-            Vector2D p1 = v.get(l);
-            Vector2D p2 = v.get(l == v.size() - 1 ? 0 : l + 1);
-            n += p1.getX() * p2.getY() - p2.getX() * p1.getY();
+        for (int n = 0; n < l.size(); n++) {
+            Point2D p1 = l.get(n);
+            Point2D p2 = l.get(n == l.size() - 1 ? 0 : n + 1);
+            f += p1.getX() * p2.getY() - p2.getX() * p1.getY();
         }
 
-        if (n < 0) {
+        if (f < 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    private int[] getClassifyPoints(List<Vector2D> l) {
+    private int[] getClassifyPoints(List<Point2D> l) {
         int[] p = new int[l.size()];
         mConcaveCount = 0;
 
@@ -122,8 +122,8 @@ public final class EarCutTriangulator {
         return p;
     }
 
-    private boolean isConvex(Vector2D v1, Vector2D v2, Vector2D v3) {
-        return isConvex(v1.getX(), v1.getY(), v2.getX(), v2.getY(), v3.getX(), v3.getY());
+    private boolean isConvex(Point2D p1, Point2D p2, Point2D p3) {
+        return isConvex(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
     }
     
     private boolean isConvex(float x1, float y1, float x2, float y2, float x3, float y3) {
@@ -140,7 +140,7 @@ public final class EarCutTriangulator {
              + x3 * (y2 - y1);
     }
 
-    private boolean isTriangleContainsPoint(List<Vector2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
+    private boolean isTriangleContainsPoint(List<Point2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
         int n = 0;
         boolean r = true;
 
@@ -167,7 +167,7 @@ public final class EarCutTriangulator {
         return !r;
     }
 
-    private boolean isEar(List<Vector2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
+    private boolean isEar(List<Point2D> l, int[] p, float x1, float y1, float x2, float y2, float x3, float y3) {
         if (mConcaveCount != 0) {
             if (isTriangleContainsPoint(l, p, x1, y1, x2, y2, x3, y3)) {
                 return false;
@@ -179,21 +179,21 @@ public final class EarCutTriangulator {
         }
     }
 
-    private void setCutEar(List<Vector2D> v, List<Vector2D> l, int n) {
+    private void setCutEar(List<Point2D> l1, List<Point2D> l2, int n) {
         if (n == 0) {
-            l.add(new Vector2D(v.get(v.size() - 1)));
-            l.add(new Vector2D(v.get(n)));
-            l.add(new Vector2D(v.get(n + 1)));
+            l2.add(new Point2D(l1.get(l1.size() - 1)));
+            l2.add(new Point2D(l1.get(n)));
+            l2.add(new Point2D(l1.get(n + 1)));
         } 
-        else if ((n > 0) && (n < v.size() - 1)) {
-            l.add(new Vector2D(v.get(n - 1)));
-            l.add(new Vector2D(v.get(n)));
-            l.add(new Vector2D(v.get(n + 1)));
+        else if ((n > 0) && (n < l1.size() - 1)) {
+            l2.add(new Point2D(l1.get(n - 1)));
+            l2.add(new Point2D(l1.get(n)));
+            l2.add(new Point2D(l1.get(n + 1)));
         } 
-        else if (n == v.size() - 1) {
-            l.add(new Vector2D(v.get(n - 1)));
-            l.add(new Vector2D(v.get(n)));
-            l.add(new Vector2D(v.get(0)));
+        else if (n == l1.size() - 1) {
+            l2.add(new Point2D(l1.get(n - 1)));
+            l2.add(new Point2D(l1.get(n)));
+            l2.add(new Point2D(l1.get(0)));
         }
     } 
 
