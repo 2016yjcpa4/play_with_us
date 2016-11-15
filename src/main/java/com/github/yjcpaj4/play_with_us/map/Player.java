@@ -8,7 +8,7 @@ import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
-import com.github.yjcpaj4.play_with_us.geom.PCircle;
+import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
@@ -23,7 +23,7 @@ public class Player extends PhysicsObject {
     
     private static final int SPEED = 3;
     
-    private PCircle mCollider;
+    private Circle mCollider;
     private boolean mIsFlashTurnOn;
     private Vector2D mDir = new Vector2D(0, 0);    
     private Vector2D mVel = new Vector2D();    
@@ -45,10 +45,10 @@ public class Player extends PhysicsObject {
     };
     
     public Player() {
-        mCollider = new PCircle(400, 400, 20);
+        mCollider = new Circle(400, 400, 20);
     }
     
-    public PCircle getCollider() {
+    public Circle getCollider() {
         return mCollider;
     }
     

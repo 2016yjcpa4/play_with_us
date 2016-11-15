@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
-import com.github.yjcpaj4.play_with_us.geom.Rect; 
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import java.util.List;

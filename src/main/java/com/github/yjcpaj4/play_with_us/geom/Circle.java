@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Administrator
  */
-public class PCircle extends Polygon {
+public class Circle extends Polygon {
     
     private static final int EDGES = 32;
     
@@ -24,7 +24,7 @@ public class PCircle extends Polygon {
         return mRadius;
     }
     
-    public PCircle(int x, int y, int r) {
+    public Circle(int x, int y, int r) {
         
         mRadius = r;
          
