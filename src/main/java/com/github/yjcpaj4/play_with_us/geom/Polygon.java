@@ -32,7 +32,7 @@ public class Polygon {
             Point2D p1 = getPoint(n);
             Point2D p2 = getPoint(n + 1);
             
-            mEdges.add(new Vector2D(p2).sub(p1));
+            mEdges.add(new Vector2D(p2).subtract(p1));
         }
     }
 

@@ -50,14 +50,14 @@ public class Vector2D {
     }
     
     public float length() {
-        return (float) Math.sqrt(Vector2D.this.dot(this));
+        return (float) Math.sqrt(Vector2D.this.dotProduct(this));
     }
     
-    public Vector2D norm() {
+    public Vector2D normalize() {
         return new Vector2D(getX() / length(), getY() / length());
     }
     
-    public Vector2D neg() {
+    public Vector2D negative() {
         return new Vector2D(-getX(), -getY());
     }
     
@@ -69,23 +69,23 @@ public class Vector2D {
         return new Point2D(mX, mY);
     }
     
-    public float dot(float x, float y)           { return getX() * x + getY() * y; }
-    public float dot(float n)                    { return dot(n, n); }
-    public float dot(Vector2D v)                 { return dot(v.getX(), v.getY()); }
-    public float dot(Point2D p)                  { return dot(p.getX(), p.getY()); }
+    public float dotProduct(float x, float y)   { return getX() * x + getY() * y; }
+    public float dotProduct(float n)            { return dotProduct(n, n); }
+    public float dotProduct(Vector2D v)         { return dotProduct(v.getX(), v.getY()); }
+    public float dotProduct(Point2D p)          { return dotProduct(p.getX(), p.getY()); }
     
     public Vector2D add(float x, float y)        { return new Vector2D(getX() + x, getY() + y); }
     public Vector2D add(float n)                 { return add(n, n); }
     public Vector2D add(Vector2D v)              { return add(v.getX(), v.getY()); }
     public Vector2D add(Point2D p)               { return add(p.getX(), p.getY()); }
     
-    public Vector2D sub(float x, float y)        { return new Vector2D(getX() - x, getY() - y); }
-    public Vector2D sub(float n)                 { return sub(n, n); }
-    public Vector2D sub(Vector2D v)              { return sub(v.getX(), v.getY()); }
-    public Vector2D sub(Point2D p)               { return sub(p.getX(), p.getY()); }
+    public Vector2D subtract(float x, float y)  { return new Vector2D(getX() - x, getY() - y); }
+    public Vector2D subtract(float n)           { return Vector2D.this.subtract(n, n); }
+    public Vector2D subtract(Vector2D v)        { return Vector2D.this.subtract(v.getX(), v.getY()); }
+    public Vector2D subtract(Point2D p)         { return Vector2D.this.subtract(p.getX(), p.getY()); }
     
-    public Vector2D mul(float x, float y)        { return new Vector2D(getX() * x, getY() * y); }
-    public Vector2D mul(float n)                 { return mul(n, n); }
-    public Vector2D mul(Point2D p)               { return mul(p.getX(), p.getY()); }
-    public Vector2D mul(Vector2D v)              { return mul(v.getX(), v.getY()); }
+    public Vector2D multiply(float x, float y)  { return new Vector2D(getX() * x, getY() * y); }
+    public Vector2D multiply(float n)           { return multiply(n, n); }
+    public Vector2D multiply(Point2D p)         { return multiply(p.getX(), p.getY()); }
+    public Vector2D multiply(Vector2D v)        { return multiply(v.getX(), v.getY()); }
 }

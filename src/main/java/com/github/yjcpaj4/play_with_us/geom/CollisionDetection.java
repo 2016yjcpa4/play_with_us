@@ -22,7 +22,7 @@ public class CollisionDetection {
 
         public ProjectPolygon(Vector2D v, Polygon o) {
             for (Point2D p : o.getPoints()) {
-                float n = v.dot(p);
+                float n = v.dotProduct(p);
 
                 mMin = Math.min(mMin, n);
                 mMax = Math.max(mMax, n);
@@ -48,11 +48,11 @@ public class CollisionDetection {
 
     public static Vector2D getCollision(Polygon p1, Polygon p2) {
         float n1 = Float.POSITIVE_INFINITY;
-        Vector2D v1 = new Vector2D(p1.getPosition()).sub(p2.getPosition());
+        Vector2D v1 = new Vector2D(p1.getPosition()).subtract(p2.getPosition());
         Vector2D v2 = new Vector2D();
 
         for (Vector2D v3 : getEdges(p1, p2)) {
-            Vector2D v4 = v3.perp().norm();
+            Vector2D v4 = v3.perp().normalize();
 
             ProjectPolygon o1 = new ProjectPolygon(v4, p1);
             ProjectPolygon o2 = new ProjectPolygon(v4, p2);
@@ -65,13 +65,13 @@ public class CollisionDetection {
                 n1 = Math.abs(n2);
                 v2 = v4;
 
-                if (v1.dot(v2) < 0) {
-                    v2 = v2.neg();
+                if (v1.dotProduct(v2) < 0) {
+                    v2 = v2.negative();
                 }
             }
         }
 
-        return v2.mul(n1);
+        return v2.multiply(n1);
     }
 
 }

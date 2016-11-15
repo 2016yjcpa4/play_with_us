@@ -32,10 +32,14 @@ public class Stage {
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Stage(BufferedImage b) {
+    public Stage(BufferedImage b, List<GameObject> o) {
         mBackground = b;
         
-        for(Line2D l : getAllLine2DByNotWalkable()) {
+        setTiles();
+    }
+    
+    private void setTiles() {
+        for (Line2D l : getAllSideByNotWalkable()) {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
             Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
 
@@ -94,61 +98,47 @@ public class Stage {
 
     public List<Lightless> getAllLightless() {
         List<Lightless> l = new ArrayList<>();
-        
         for(GameObject o : getAllObject()) {
             if (o instanceof Lightless) {
                 l.add((Lightless) o);
             }
         }
-        
         return l;
     }
     
     public List<NotWalkable> getAllNotWalkable() {
         List<NotWalkable> l = new ArrayList<>();
-        
         for(GameObject o : getAllObject()) {
             if (o instanceof NotWalkable) {
                 l.add((NotWalkable) o);
             }
         }
-        
         return l;
     }
     
-    public List<Line2D> getAllLine2DByNotWalkable() {
+    public List<Line2D> getAllSideByNotWalkable() {
         List<Line2D> l = new ArrayList<>();
-        
         for (NotWalkable o : getAllNotWalkable()) {
-            
-            Polygon p = o.getCollider();
-            
-            for(int n = 0; n < p.getPoints().size(); ++n) {
-                Point2D p1 = p.getPoint(n);
-                Point2D p2 = p.getPoint(n + 1);
-
-                l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
-            }
+            l.addAll(o.getAllSide());
         }
-        
         return l;
     }
     
-    public List<Line2D> getAllLine2DByLightless() {
+    public List<Line2D> getAllSideByLightless() {
         List<Line2D> l = new ArrayList<>();
-        
         for (Lightless o : getAllLightless()) {
-            
-            Polygon p = o.getCollider();
-            
-            for(int n = 0; n < p.getPoints().size(); ++n) {
-                Point2D p1 = p.getPoint(n);
-                Point2D p2 = p.getPoint(n + 1);
-
-                l.add(new Line2D(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
+            l.addAll(o.getAllSide());
+        }
+        return l;
+    }
+    
+    public List<Light> getAllLight() {
+        List<Light> l = new ArrayList<>();
+        for(GameObject o : getAllObject()) {
+            if (o instanceof Light) {
+                l.add((Light) o);
             }
         }
-        
         return l;
     }
     
@@ -162,23 +152,31 @@ public class Stage {
         
         List<Point2D> l = new ArrayList<>();
         
-        for (TileNode t : mTiles.getPath((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY())) { 
-            l.add(new  Point2D(t.getX() * getTileWidth()  + (getTileWidth() / 2),
-                               t.getY() * getTileHeight() + (getTileHeight() / 2)));
+        for (TileNode n : mTiles.getPath((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY())) { 
+            l.add(new  Point2D(n.getX() * getTileWidth()  + (getTileWidth() / 2),
+                               n.getY() * getTileHeight() + (getTileHeight() / 2)));
         }
         
         return l;
     }
+
+    private List<GameObject> getAllObjectWithoutLightAndPlayer() {
+        List<GameObject> l = new ArrayList<>();
+        for(GameObject o : getAllObject()) {
+            if (o instanceof Light || o instanceof Player) {
+                continue;
+            }
+            
+            l.add(o);
+        }
+        return l;
+    }
     
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-        
         g2d.drawImage(mBackground, 0, 0, null);
 
-        for(GameObject o : mObject) {
-            if ( ! (o instanceof Light) 
-              && ! (o instanceof Player)) { // 빛 오브젝트와 플레이어는 아래에서 별도로 처리됩니다.
-                o.draw(g, delta, g2d);
-            }
+        for (GameObject o : getAllObjectWithoutLightAndPlayer()) {
+            o.draw(g, delta, g2d);
         }
         
         BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -187,10 +185,8 @@ public class Stage {
         t.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
-        for(GameObject o : mObject) {
-            if (o instanceof Light) {
-                o.draw(g, delta, t);
-            }
+        for (GameObject o : getAllLight()) {
+            o.draw(g, delta, t);
         }
 
         t.dispose();
@@ -201,7 +197,7 @@ public class Stage {
     }
 
     public void update(GameLayer g, long delta) {
-        for (GameObject o : mObject) {
+        for (GameObject o : getAllObject()) {
             o.update(g, delta);
         }
     }

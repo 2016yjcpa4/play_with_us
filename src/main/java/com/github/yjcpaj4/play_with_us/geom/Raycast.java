@@ -46,8 +46,8 @@ public class Raycast {
      * @return 
      */
     private static IntersectionResult getIntersection(Line2D l1, Line2D l2) {
-        final Vector2D v1 = new Vector2D(l1.getX2(), l1.getY2()).sub(l1.getX1(), l1.getY1());
-        final Vector2D v2 = new Vector2D(l2.getX2(), l2.getY2()).sub(l2.getX1(), l2.getY1());
+        final Vector2D v1 = new Vector2D(l1.getX2(), l1.getY2()).subtract(l1.getX1(), l1.getY1());
+        final Vector2D v2 = new Vector2D(l2.getX2(), l2.getY2()).subtract(l2.getX1(), l2.getY1());
         
         if (v1.getX() / v1.length() == v2.getX() / v2.length() && v1.getY() / v1.length() == v2.getY() / v2.length()) {
             return null;

@@ -26,11 +26,11 @@ public class Mob extends PhysicsObject {
     }
     
     public double getAngle() {
-        return mDir.sub(getPosition()).toAngle();
+        return mDir.subtract(getPosition()).toAngle();
     }
     
     public double getDistanceToPlayer() {
-        return new Vector2D(mPos).sub(getMap().getPlayer().getPosition()).length();
+        return new Vector2D(mPos).subtract(getMap().getPlayer().getPosition()).length();
     }
     
     /**

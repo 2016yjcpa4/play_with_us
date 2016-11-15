@@ -46,7 +46,7 @@ public class GameLayer extends Layer {
             e.printStackTrace();
         }
         
-        Stage m = new Stage(b);
+        Stage m = new Stage(b, null);
         
         for(List not_walkable : (List<List>) o.get("not_walkable")) {
             List<Point2D> l = new ArrayList<Point2D>();

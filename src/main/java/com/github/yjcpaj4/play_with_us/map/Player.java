@@ -63,7 +63,7 @@ public class Player extends PhysicsObject {
      * @return 
      */
     public double getAngle() {
-        return mDir.sub(getPosition()).toAngle();
+        return mDir.subtract(getPosition()).toAngle();
     }
     
     public boolean isTurnOnLight() {
@@ -114,18 +114,19 @@ public class Player extends PhysicsObject {
     public void update(GameLayer g, long delta) {
         InputManager m = g.getInput();
         
-        setLightByInput(m);
-        setVelocityByInput(m);
-        setDirectionByInput(m);
+        // 인풋 들어온걸 토대로 캐릭터의 속성 변화를 줍니다.
+        setLightByInput(m); // 손전등의 상태
+        setVelocityByInput(m); // 플레이어의 속도
+        setDirectionByInput(m); // 플레이어가 바라보는 방향
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
         for (NotWalkable o : getMap().getAllNotWalkable()) {
-            Vector2D r = CollisionDetection.getCollision(o.getCollider(), mCollider);
-            if (r != null) {
-                Vector2D v = r.neg();
+            Vector2D v1;
+            if ((v1 = getCollisionWith(o)) != null) {
+                Vector2D v2 = v1.negative();
  
-                mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
+                mCollider.transform(Matrix2D.translate(v2.getX(), v2.getY()));
             }
         }
     }
@@ -137,6 +138,7 @@ public class Player extends PhysicsObject {
      * 
      * @return 프레임을 반환합니다.
      */
+    @Deprecated
     private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
         String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
         
