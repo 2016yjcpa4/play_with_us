@@ -46,7 +46,7 @@ public class CollisionDetection {
         return l;
     }
 
-    public static Vector2D isCollide(Polygon p1, Polygon p2) {
+    public static Vector2D getCollision(Polygon p1, Polygon p2) {
         float n1 = Float.POSITIVE_INFINITY;
         Vector2D v1 = new Vector2D(p1.getPosition()).sub(p2.getPosition());
         Vector2D v2 = new Vector2D();
@@ -69,7 +69,7 @@ public class CollisionDetection {
             }
         }
 
-        return v2.mult(n1);
+        return v2.mul(n1);
     }
 
 }
