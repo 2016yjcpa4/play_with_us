@@ -14,10 +14,6 @@ public class Lightless extends PhysicsObject {
     public Lightless(List<Point2D> l) {
         mCollider = new Polygon(l);
     }
-    
-    public Point2D getPosition () {
-        return mCollider.getCenterPosition();
-    }
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {

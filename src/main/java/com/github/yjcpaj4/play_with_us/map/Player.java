@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
+import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
@@ -23,10 +24,9 @@ public class Player extends PhysicsObject {
     
     private static final int SPEED = 3;
     
-    private Circle mCollider;
     private boolean mIsFlashTurnOn;
-    private Vector2D mDir = new Vector2D(0, 0);    
-    private Vector2D mVel = new Vector2D();    
+    private Vector2D mVel = new Vector2D();
+    private Vector2D mDir = new Vector2D(); 
     
     /**
      * 플레이어의 손전등을 커스터마이징. 
@@ -48,27 +48,14 @@ public class Player extends PhysicsObject {
         mCollider = new Circle(400, 400, 20);
     }
     
-    public Circle getCollider() {
-        return mCollider;
-    }
-    
     /**
      * 플레이어가 가지고있는 손전등.
      * 
      * @return 
      */
-    public Light getLight() {
+    public Light getOwnedLight() {
         return mLight;
     }
-    
-    /**
-     * 플레이어의 속도.
-     * 
-     * @return 
-     */
-    public Vector2D getVelocity() {
-        return mVel;
-    }     
     
     /**
      * 플레이어가 현재 바라보는 방향을 앵글값으로 나타냄.
@@ -83,60 +70,56 @@ public class Player extends PhysicsObject {
         return mLight.isTurnOn();
     }
     
-    /**
-     * 플레이어의 현재위치.
-     * 
-     * @return 
-     */
-    public Point2D getPosition() {
-        return mCollider.getCenterPosition();
+    private void setDirectionByInput(InputManager m) {
+        mDir.set(m.getMousePosition());
     }
     
-    private int DEBUG = 0;
+    private void setLightByInput(InputManager m) {
+        if (m.isMousePressed(MouseEvent.BUTTON3)) { 
+            mLight.setTurnOn(); 
+        }
+        else {
+            mLight.setTurnOff();
+        }
+    }
     
-    @Override
-    public void update(GameLayer g, long delta) {
-        
+    private void setVelocityByInput(InputManager m) {
         int x = 0;
         int y = 0;
         
-        // 키를 눌렀을때 플레이어의 각종 처리들
-        if (g.getInput().isKeyPressed(KeyEvent.VK_W)) y = (-SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_S)) y = (SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_A)) x = (-SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_D)) x = (SPEED);
+        if (m.isKeyPressed(KeyEvent.VK_W)) {
+            y = -SPEED;
+        }
+        else if (m.isKeyPressed(KeyEvent.VK_S)) {
+            y = SPEED;
+        }
+        else {
+            y = 0;
+        }
         
-        // 상하 or 좌우 키값에 안눌러져있다면 따라 보정처리
-        if (g.getInput().isKeyReleased(KeyEvent.VK_W) && g.getInput().isKeyReleased(KeyEvent.VK_S)) y = (0);
-        if (g.getInput().isKeyReleased(KeyEvent.VK_A) && g.getInput().isKeyReleased(KeyEvent.VK_D)) x = (0);
+        if (m.isKeyPressed(KeyEvent.VK_A)) {
+            x = -SPEED;
+        } 
+        else if (m.isKeyPressed(KeyEvent.VK_D)) {
+            x = SPEED;
+        }
+        else {
+            x = 0;
+        }
         
         mVel.set(x, y);
+    }
+    
+    @Override
+    public void update(GameLayer g, long delta) {
+        InputManager m = g.getInput();
         
-        if (g.getInput().isKeyOnce(KeyEvent.VK_F))  {
-            if (mLight.isTurnOn()) {
-                mLight.setTurnOff();
-            } else {
-                mLight.setTurnOn();
-            }
-            
-            mIsFlashTurnOn = mLight.isTurnOn();
-        }
-        
-        if ( ! mIsFlashTurnOn) {
-            if (g.getInput().isMousePressed(MouseEvent.BUTTON3)) { mLight.setTurnOn(); }
-            if (g.getInput().isMouseReleased(MouseEvent.BUTTON3)) { mLight.setTurnOff(); }
-        }
-        
-        Vector2D d = mDir;
-        
-        // 현재 바라보는 방향, 위치를 업데이트
-        d.set(g.getInput().getMousePosition());
-        //p.set(p.getX() + mVel.getX(), 
-        //      p.getY() + mVel.getY());
+        setLightByInput(m);
+        setVelocityByInput(m);
+        setDirectionByInput(m);
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
-        // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
             Vector2D r = CollisionDetection.getCollision(o.getCollider(), mCollider);
             if (r != null) {

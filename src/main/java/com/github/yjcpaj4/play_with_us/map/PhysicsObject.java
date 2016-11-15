@@ -14,6 +14,6 @@ public abstract class PhysicsObject extends GameObject {
     }
     
     public Point2D getPosition() {
-        return mCollider.getCenterPosition();
+        return mCollider.getPosition();
     }
 }

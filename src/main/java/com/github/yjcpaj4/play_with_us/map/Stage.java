@@ -67,7 +67,7 @@ public class Stage {
         mObject.add(o);
         
         if (o instanceof Player) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
-            addObject(((Player) o).getLight());
+            addObject(((Player) o).getOwnedLight());
         }
     }
     

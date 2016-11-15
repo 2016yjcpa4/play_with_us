@@ -48,7 +48,7 @@ public class CollisionDetection {
 
     public static Vector2D getCollision(Polygon p1, Polygon p2) {
         float n1 = Float.POSITIVE_INFINITY;
-        Vector2D v1 = new Vector2D(p1.getCenterPosition()).sub(p2.getCenterPosition());
+        Vector2D v1 = new Vector2D(p1.getPosition()).sub(p2.getPosition());
         Vector2D v2 = new Vector2D();
 
         for (Vector2D v3 : getEdges(p1, p2)) {

@@ -45,7 +45,7 @@ public class Polygon {
     }
 
     public final void transform(Matrix2D m) {
-        transform(m, getCenterPosition());
+        transform(m, getPosition());
     }
 
     public final void transform(Matrix2D m, Point2D c) {
@@ -64,7 +64,7 @@ public class Polygon {
         setEdges();
     }
 
-    public final Point2D getCenterPosition() {
+    public final Point2D getPosition() {
         int n = mPoints.size();
 
         Vector2D v = new Vector2D();
