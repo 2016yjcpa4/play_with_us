@@ -54,7 +54,9 @@ public class CollisionDetection {
         for (Vector2D v3 : getEdges(p1, p2)) {
             Vector2D v4 = v3.perp().norm();
 
-            float n2 = new ProjectPolygon(v4, p1).getIntervalDistance(new ProjectPolygon(v4, p2));
+            ProjectPolygon o1 = new ProjectPolygon(v4, p1);
+            ProjectPolygon o2 = new ProjectPolygon(v4, p2);
+            float n2 = o1.getIntervalDistance(o2);
             if (n2 > 0) {
                 return null;
             }

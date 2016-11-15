@@ -26,7 +26,7 @@ public class Mob extends PhysicsObject {
     }
     
     public double getAngle() {
-        return mDir.sub(getPosition()).angle();
+        return mDir.sub(getPosition()).toAngle();
     }
     
     public double getDistanceToPlayer() {
@@ -72,6 +72,8 @@ public class Mob extends PhysicsObject {
          * 플레이어와의 직선거리가 아닌 걸음수로 판정해야 할것같습니다
          * 걸음수는 AStar 알고리즘으로 나온 리스트 크기로 판별하면 될것입니다
          */
+        
+        /*
         boolean isNearPlayer = getDistanceToPlayer() < 200;
         boolean isLightProjected = false;
         
@@ -103,6 +105,6 @@ public class Mob extends PhysicsObject {
                 mPos.setX(x);
                 mPos.setY(y);
             }
-        }
+        }*/
     }
 }

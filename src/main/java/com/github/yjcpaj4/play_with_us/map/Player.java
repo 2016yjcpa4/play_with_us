@@ -76,7 +76,7 @@ public class Player extends PhysicsObject {
      * @return 
      */
     public double getAngle() {
-        return mDir.sub(getPosition()).angle();
+        return mDir.sub(getPosition()).toAngle();
     }
     
     public boolean isTurnOnLight() {
@@ -97,15 +97,20 @@ public class Player extends PhysicsObject {
     @Override
     public void update(GameLayer g, long delta) {
         
+        int x = 0;
+        int y = 0;
+        
         // 키를 눌렀을때 플레이어의 각종 처리들
-        if (g.getInput().isKeyPressed(KeyEvent.VK_W)) mVel.setY(-SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_S)) mVel.setY(SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_A)) mVel.setX(-SPEED);
-        if (g.getInput().isKeyPressed(KeyEvent.VK_D)) mVel.setX(SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_W)) y = (-SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_S)) y = (SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_A)) x = (-SPEED);
+        if (g.getInput().isKeyPressed(KeyEvent.VK_D)) x = (SPEED);
         
         // 상하 or 좌우 키값에 안눌러져있다면 따라 보정처리
-        if (g.getInput().isKeyReleased(KeyEvent.VK_W) && g.getInput().isKeyReleased(KeyEvent.VK_S)) mVel.setY(0);
-        if (g.getInput().isKeyReleased(KeyEvent.VK_A) && g.getInput().isKeyReleased(KeyEvent.VK_D)) mVel.setX(0);
+        if (g.getInput().isKeyReleased(KeyEvent.VK_W) && g.getInput().isKeyReleased(KeyEvent.VK_S)) y = (0);
+        if (g.getInput().isKeyReleased(KeyEvent.VK_A) && g.getInput().isKeyReleased(KeyEvent.VK_D)) x = (0);
+        
+        mVel.set(x, y);
         
         if (g.getInput().isKeyOnce(KeyEvent.VK_F))  {
             if (mLight.isTurnOn()) {
@@ -123,7 +128,6 @@ public class Player extends PhysicsObject {
         }
         
         Vector2D d = mDir;
-        Point2D p = getPosition();
         
         // 현재 바라보는 방향, 위치를 업데이트
         d.set(g.getInput().getMousePosition());
@@ -134,8 +138,8 @@ public class Player extends PhysicsObject {
         
         // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
-            Vector2D r;
-            if ((r = CollisionDetection.isCollide(o.getCollider(), mCollider)) != null) {
+            Vector2D r = CollisionDetection.getCollision(o.getCollider(), mCollider);
+            if (r != null) {
                 Vector2D v = r.neg();
  
                 mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
