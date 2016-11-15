@@ -4,6 +4,7 @@ import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.EarCutTriangulator;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.util.AWTUtil;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import java.awt.Color;
@@ -61,9 +62,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     private List<Polygon> mLightless = new ArrayList<>();
     
     public MapEditTool() throws Exception {
-        
-        mImage = ImageIO.read(new File("res/img_map.png"));
-        
         mCanvas.addMouseListener(this);
         mCanvas.addKeyListener(this);
         mCanvas.setBackground(Color.BLACK);
@@ -78,16 +76,13 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         {
             JMenu m = new JMenu("파일");
             
-            JMenuItem m3 = new JMenuItem("저장");
+            JMenuItem m3 = new JMenuItem("맵 저장");
             m3.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent evt) {
-                    
                     Map<String, Object> m = new HashMap<>();
-                    
-                    
-                    m.put("img", new File("res/img_map.png").getName());
+                    m.put("img", mImageFile.getName());
                     m.put("lightless", new ArrayList());
                     m.put("not_walkable", new ArrayList());
                     
@@ -133,47 +128,41 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         start();
     }
     
-    private static List<Point2D> getPoints(Area a) {
-        List<Point2D> l = new ArrayList<>();
-        PathIterator p = a.getPathIterator(null);
+    private Polygon get() {
+        Area a = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
+        a.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
         
-        while ( ! p.isDone()) {
-            float[] s = new float[6];
-            if (p.currentSegment(s) != PathIterator.SEG_CLOSE) {
-                l.add(new Point2D((int) s[0], (int) s[1]));
-            }
-            
-            p.next();
-        }
-        
-        return l;
+        return new Polygon(AWTUtil.getPoints(a));
     }
     
-    private List<Polygon> getCurrentPoint() {
+    private List<Polygon> getSelection() {
         if ( ! mReversed) {
             return new Polygon(mCurrentPoint).getTriangulate();
-            //return new Polygon(mCurrentPoint).getTriangulate();
         }
         
-        Area a1 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
-        Area a2 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
+        Area a1;
+        Area a2;
         
+        Polygon p1;
+        Polygon p2; 
+        
+        a1 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
         a1.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
-        a2.subtract(new Area(new Polygon(getPoints(a1)).toAWTPolygon()));
+        
+        p1 = new Polygon(AWTUtil.getPoints(a1));
+        
+        a2 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
+        a2.subtract(new Area(p1.toAWTPolygon()));
         a2.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
         
-        List<Polygon> l = new Polygon(getPoints(a1)).getTriangulate();
-        l.addAll(new Polygon(getPoints(a2)).getTriangulate());
+        p2 = new Polygon(AWTUtil.getPoints(a2));
+        
+        List<Polygon> l = new ArrayList();
+        l.addAll(p1.getTriangulate());
+        l.addAll(p2.getTriangulate());
         return l;
     }
     
-    public static Color randomColor() {
-        return new Color((int) (Math.random() * 256),
-                         (int) (Math.random() * 256),
-                         (int) (Math.random() * 256),
-                         (int) (255 * 0.5));
-    }
-
     @Override
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
@@ -205,13 +194,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
         
         if ( ! mCurrentPoint.isEmpty()) {
             g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
-            for (Polygon p : getCurrentPoint()) {
-                g2d.setColor(randomColor());
+            for (Polygon p : getSelection()) {
                 g2d.fillPolygon(p.toAWTPolygon()); 
             }
-            //g2d.fillPolygon(new Polygon(getCurrentPoint()).toAWTPolygon()); 
-            //g2d.drawPolygon(new Polygon(getCurrentPoint()).toAWTPolygon()); 
-
+            
             g2d.setColor(new Color(34, 181, 0));
             for(int n = 0; n < mCurrentPoint.size(); ++n) { 
                 Point2D p = mCurrentPoint.get(n);
@@ -316,10 +302,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
                 break;
             case KeyEvent.VK_ENTER:
                 if (mPointingMode == NOT_WALKABLE_POINTING) {
-                    mNotWalkable.addAll(getCurrentPoint()); 
+                    mNotWalkable.addAll(getSelection()); 
                 }
                 else if (mPointingMode == LIGHTLESS_POINTING) {
-                    mLightless.addAll(getCurrentPoint());
+                    mLightless.addAll(getSelection());
                 }
                 
                 mCurrentPoint.clear();
