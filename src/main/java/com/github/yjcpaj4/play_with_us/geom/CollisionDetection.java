@@ -2,6 +2,8 @@ package com.github.yjcpaj4.play_with_us.geom;
 
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,16 +34,16 @@ public class CollisionDetection {
 
     // Calculate the distance between [minA, maxA] and [minB, maxB]
     // The distance will be negative if the intervals overlap
-    public static float IntervalDistance(float minA, float maxA, float minB, float maxB) {
-        if (minA < minB) {
-            return minB - maxA;
+    public static float IntervalDistance(ProjectPolygon a, ProjectPolygon b) {
+        if (a.min < b.min) {
+            return b.min - a.max;
         } else {
-            return minA - maxB;
+            return a.min - b.max;
         }
     }
 
     // Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
-    public static ProjectPolygon ProjectPolygon(Vector2D axis, Polygon polygon) {
+    public static ProjectPolygon getProjectPolygon(Vector2D axis, Polygon polygon) {
         // To project a point on an axis use the dot product
         float d = axis.dot(polygon.getPoint(0));
         ProjectPolygon o = new ProjectPolygon();
@@ -58,39 +60,40 @@ public class CollisionDetection {
 
         return o;
     }
-
+    
+    
+    private static List<Vector2D> getEdges(Polygon ... p) {
+        List l = new LinkedList();
+        for(int n = 0; n < p.length; ++n) {
+            l.addAll(p[n].getEdges());
+        }
+        return l;
+    }
+    
     // Check if polygon A is going to collide with polygon B for the given velocity
     public static PolygonCollisionResult PolygonCollision(Polygon polygonA, Polygon polygonB) {
         Vector2D d = new Vector2D(polygonA.getPosition()).sub(polygonB.getPosition());
         PolygonCollisionResult result = new PolygonCollisionResult();
         result.Intersect = true; 
 
-        int edgeCountA = polygonA.getEdges().size();
-        int edgeCountB = polygonB.getEdges().size();
         float minIntervalDistance = Float.MAX_VALUE;
         Vector2D translationAxis = new Vector2D();
-        Vector2D edge;
  
-        for (int edgeIndex = 0; edgeIndex < edgeCountA + edgeCountB; edgeIndex++) {
-            if (edgeIndex < edgeCountA) {
-                edge = polygonA.getEdge(edgeIndex);
-            } else {
-                edge = polygonB.getEdge(edgeIndex - edgeCountA);
-            }
- 
+        for (Vector2D edge : getEdges(polygonA, polygonB)) {
+            
             Vector2D axis = edge.perp().norm();
  
-            ProjectPolygon A = ProjectPolygon(axis, polygonA);
-            ProjectPolygon B = ProjectPolygon(axis, polygonB);
+            ProjectPolygon A = getProjectPolygon(axis, polygonA);
+            ProjectPolygon B = getProjectPolygon(axis, polygonB);
+            float intervalDistance = IntervalDistance(A, B);
  
-            if (IntervalDistance(A.min, A.max, B.min, B.max) > 0) {
+            if (intervalDistance > 0) {
                 result.Intersect = false; 
                 break;
             }
  
-            float intervalDistance = Math.abs(IntervalDistance(A.min, A.max, B.min, B.max));
-            if (intervalDistance < minIntervalDistance) {
-                minIntervalDistance = intervalDistance;
+            if (Math.abs(intervalDistance) < minIntervalDistance) {
+                minIntervalDistance = Math.abs(intervalDistance);
                 translationAxis = axis;
 
                 if (d.dot(translationAxis) < 0) {
