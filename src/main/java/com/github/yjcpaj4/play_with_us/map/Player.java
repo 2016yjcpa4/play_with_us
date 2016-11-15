@@ -134,9 +134,9 @@ public class Player extends PhysicsObject {
         
         // 충돌에 대하여 처리를 합니다.
         for (NotWalkable o : getMap().getAllNotWalkable()) {
-            CollisionDetection.PolygonCollisionResult r = CollisionDetection.PolygonCollision(o.getCollider(), mCollider);
-            if (r.Intersect) {
-                Vector2D v = r.MinimumTranslationVector.neg();
+            Vector2D r;
+            if ((r = CollisionDetection.isCollide(o.getCollider(), mCollider)) != null) {
+                Vector2D v = r.neg();
  
                 mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
             }
