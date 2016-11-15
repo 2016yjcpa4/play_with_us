@@ -14,8 +14,6 @@ import java.util.List;
 
 public class NotWalkable extends PhysicsObject {
     
-    private Polygon mCollider;
-    
     public NotWalkable(List<Point2D> l) {
         mCollider = new Polygon(l);
     }

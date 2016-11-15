@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 
 public abstract class PhysicsObject extends GameObject {
     
-    private Polygon mCollider;
+    protected Polygon mCollider;
     
     public Polygon getCollider() {
         return mCollider;

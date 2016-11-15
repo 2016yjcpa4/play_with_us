@@ -17,17 +17,16 @@ import com.github.yjcpaj4.play_with_us.math.Vector2D;
 public final class EarCutTriangulator {
 
     public static List<Polygon> getTriangulate(Polygon p) {
-        EarCutTriangulator t = new EarCutTriangulator();
-        List<Point2D> l = t.getTriangulate(p.getPoints());
+        List<Point2D> l1 = new EarCutTriangulator().getTriangulate(p.getPoints());
         
         List<Polygon> r = new ArrayList<>();
 
-        for (int n = 0; n < l.size(); n += 3) {
-            Polygon o = new Polygon();
-            o.addPoint(new Point2D((int) l.get(n).getX(), (int) l.get(n).getY()));
-            o.addPoint(new Point2D((int) l.get(n + 1).getX(), (int) l.get(n + 1).getY()));
-            o.addPoint(new Point2D((int) l.get(n + 2).getX(), (int) l.get(n + 2).getY()));
-            r.add(o);
+        for (int n = 0; n < l1.size(); n += 3) {
+            List<Point2D> l2 = new ArrayList();
+            l2.add(new Point2D(l1.get(n).getX(), l1.get(n).getY()));
+            l2.add(new Point2D(l1.get(n + 1).getX(), l1.get(n + 1).getY()));
+            l2.add(new Point2D(l1.get(n + 2).getX(), l1.get(n + 2).getY()));
+            r.add(new Polygon(l2));
         }
 
         return r;

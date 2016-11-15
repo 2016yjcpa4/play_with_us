@@ -11,14 +11,8 @@ import java.util.List;
 
 public class Lightless extends PhysicsObject {
     
-    private Polygon mCollider;
-    
     public Lightless(List<Point2D> l) {
         mCollider = new Polygon(l);
-    }
-    
-    public Polygon getCollider() {
-        return mCollider;
     }
     
     public Point2D getPosition () {

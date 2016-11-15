@@ -11,19 +11,21 @@ import java.util.Collections;
 
 public class Polygon {
 
-    protected List<Point2D> mPoints = new ArrayList<>();
+    private List<Point2D> mPoints = new ArrayList<>();
     private List<Vector2D> mEdges = new ArrayList<>();
 
-    public Polygon() {
-    }
-
-    public Polygon(List<Point2D> p) {
-        mPoints.addAll(p);
-        
-        init();
+    public Polygon(List<Point2D> l) {
+        setPoints(l);
     }
     
-    protected void init() {
+    protected void setPoints(List<Point2D> l) {
+        mPoints.clear();
+        mPoints.addAll(l);
+        
+        setEdges();
+    }
+    
+    private final void setEdges() {
         mEdges.clear();
         
         for (int n = 0; n < mPoints.size(); n++) {
@@ -34,19 +36,19 @@ public class Polygon {
         }
     }
 
-    public List<Point2D> getPoints() {
+    public final List<Point2D> getPoints() {
         return Collections.unmodifiableList(mPoints);
     }
 
-    public List<Vector2D> getEdges() {
+    public final List<Vector2D> getEdges() {
         return Collections.unmodifiableList(mEdges);
     }
 
-    public void transform(Matrix2D m) {
+    public final void transform(Matrix2D m) {
         transform(m, getCenterPosition());
     }
 
-    public void transform(Matrix2D m, Point2D c) {
+    public final void transform(Matrix2D m, Point2D c) {
         m = Matrix2D.translate(c.getX(), c.getY())
                     .concat(m)
                     .concat(Matrix2D.translate(-c.getX(), -c.getY()));
@@ -59,36 +61,24 @@ public class Polygon {
             p.setY((int) (x * m.getB() + y * m.getD() + m.getF()));
         }
         
-        init();
+        setEdges();
     }
 
-    public Point2D getCenterPosition() {
-        int len = mPoints.size();
+    public final Point2D getCenterPosition() {
+        int n = mPoints.size();
 
         Vector2D v = new Vector2D();
-
-        for (int n = 0; n < len; ++n) {
-            v = v.add(new Vector2D(mPoints.get(n).getX(), mPoints.get(n).getY()));
+        for (Point2D p : mPoints) {
+            v = v.add(new Vector2D(p.getX(), p.getY()));
         }
 
-        int x = (int) (v.getX() / len);
-        int y = (int) (v.getY() / len);
-
+        int x = (int) (v.getX() / n);
+        int y = (int) (v.getY() / n);
         return new Point2D(x, y);
     }
 
-    public Point2D getPoint(int n) {
+    public final Point2D getPoint(int n) {
         return new Point2D(mPoints.get(ArrayUtil.getFixedArrayIndex(n, mPoints.size())));
-    }
-    
-    public Vector2D getEdge(int n) {
-        return new Vector2D(mEdges.get(ArrayUtil.getFixedArrayIndex(n, mEdges.size())));
-    }
-    
-    public void addPoint(Point2D p) {
-        mPoints.add(p);
-        
-        init();
     }
     
     /**
@@ -100,11 +90,11 @@ public class Polygon {
      * 
      * @return 
      */
-    public List<Polygon> getTriangulate() {
+    public final List<Polygon> getTriangulate() {
         return EarCutTriangulator.getTriangulate(this);
     }
     
-    public java.awt.Polygon toAWTPolygon() {
+    public final java.awt.Polygon toAWTPolygon() {
         return new java.awt.Polygon(Point2D.getXPoints(mPoints), Point2D.getYPoints(mPoints), mPoints.size());
     }
 }

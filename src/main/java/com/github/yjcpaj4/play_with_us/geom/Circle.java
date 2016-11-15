@@ -10,39 +10,47 @@ import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Administrator
- */
 public class Circle extends Polygon {
     
-    private static final int EDGES = 32;
+    private static final int DEFAULT_SEGMENTS = 32;
     
-    private int mRadius;
+    private float mRadius;
     
-    public int getRadius() {
+    public Circle(float x, float y, float r) {
+        super(getCirclePoints(x, y, r, DEFAULT_SEGMENTS));
+        
+        mRadius = r;
+    }
+    
+    public float getRadius() {
         return mRadius;
     }
     
-    public Circle(int x, int y, int r) {
+    /**
+     * 원을 다각형으로 만들때 사용하는 함수.
+     * 
+     * @param x
+     * @param y
+     * @param r
+     * @return 
+     */
+    private static List<Point2D> getCirclePoints(float x, float y, float r, int s) {
+        List<Point2D> l = new ArrayList();
         
-        mRadius = r;
-         
-        List<Point2D> vertex = new ArrayList();
-        float theta = 0.0f;
+        float f = 0.0f;
         
-        vertex.add(new Point2D(x + r, y));
-        for (int next = 0; next < EDGES; ++next) {
+        for (int n = 0; n < s; ++n) {
+            float dx = r * (float) Math.cos(f);
+            float dy = r * (float) Math.sin(f);
             
-            Vector2D v = new Vector2D(x, y).add(new Vector2D(r * (float) Math.cos(theta), r * (float) Math.sin(theta)));
+            Vector2D v1 = new Vector2D(x, y);
+            Vector2D v2 = new Vector2D(dx, dy);
             
-            vertex.add(v.toPoint2D());
-            theta += 2.0 * Math.PI / EDGES;
+            l.add(v1.add(v2).toPoint2D());
+            
+            f += 2.0 * Math.PI / s;
         }
-        vertex.add(new Point2D(x + r, y));
         
-        this.mPoints.addAll(vertex);
-        
-        init();
+        return l;
     }
 }
