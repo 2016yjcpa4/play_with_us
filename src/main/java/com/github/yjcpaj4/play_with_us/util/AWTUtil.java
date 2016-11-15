@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.util;
 
+import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -9,6 +10,10 @@ import java.util.List;
 public class AWTUtil {
 
     private AWTUtil() {
+    }
+    
+    public static Polygon getPolygon(Area a) {
+        return new Polygon(getPoints(a));
     }
     
     public static List<Point2D> getPoints(Area a) {

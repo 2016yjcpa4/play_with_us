@@ -37,11 +37,11 @@ public class Polygon {
     }
 
     public final List<Point2D> getPoints() {
-        return Collections.unmodifiableList(mPoints);
+        return new ArrayList<>(mPoints);
     }
 
     public final List<Vector2D> getEdges() {
-        return Collections.unmodifiableList(mEdges);
+        return new ArrayList<>(mEdges);
     }
 
     public final void transform(Matrix2D m) {

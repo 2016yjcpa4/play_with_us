@@ -136,30 +136,24 @@ public class MapEditTool extends GraphicLooper implements MouseListener, KeyList
     }
     
     private List<Polygon> getSelection() {
+        Polygon p1 = new Polygon(mCurrentPoint);
+        
         if ( ! mReversed) {
-            return new Polygon(mCurrentPoint).getTriangulate();
+            return p1.getTriangulate();
         }
         
-        Area a1;
-        Area a2;
+        Rectangle2D.Float r = new Rectangle2D.Float(0, 0, mImage.getWidth(), mImage.getHeight());
         
-        Polygon p1;
-        Polygon p2; 
+        Area a1 = new Area(r);
+        a1.subtract(new Area(p1.toAWTPolygon()));
         
-        a1 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
-        a1.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
-        
-        p1 = new Polygon(AWTUtil.getPoints(a1));
-        
-        a2 = new Area(new Rectangle2D.Double(0, 0, mImage.getWidth(), mImage.getHeight()));
-        a2.subtract(new Area(p1.toAWTPolygon()));
-        a2.subtract(new Area(new Polygon(mCurrentPoint).toAWTPolygon()));
-        
-        p2 = new Polygon(AWTUtil.getPoints(a2));
+        Polygon p2 = AWTUtil.getPolygon(a1);
+         
+        a1.subtract(new Area(p2.toAWTPolygon()));
         
         List<Polygon> l = new ArrayList();
-        l.addAll(p1.getTriangulate());
         l.addAll(p2.getTriangulate());
+        l.addAll(AWTUtil.getPolygon(a1).getTriangulate());
         return l;
     }
     
