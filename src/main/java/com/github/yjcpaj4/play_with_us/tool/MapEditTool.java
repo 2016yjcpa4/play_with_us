@@ -128,10 +128,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             }
         }
     }
-    
-    public static void main(String args[]) throws Exception {
-        new MapEditTool();
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -182,5 +178,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
         }
+    }
+    
+    public static void main(String args[]) throws Exception {
+        new MapEditTool();
     }
 }
