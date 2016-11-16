@@ -19,6 +19,10 @@ public class Polygon {
     }
     
     protected void setPoints(List<Point2D> l) {
+        if (l.isEmpty()) {
+            throw new RuntimeException("빼애액 오류에욧!");
+        }
+        
         mPoints.clear();
         mPoints.addAll(l);
         
@@ -85,7 +89,7 @@ public class Polygon {
      * 폴리곤 객체를 삼각형으로 쪼갭니다.
      * 
      * 폴리곤 객체를 만들때 볼록한 폴리곤이 만들어질수도 있고 오목한 폴리곤이 만들어질수도 있습니다.
-     * 볼록한(convex) 폴리곤이 만들어진경우 SAT(Seprating Axis Theorem) 충돌 검사를 하여도 오류가 납니다. 
+     * 볼록한(convex) 폴리곤이 만들어진경우 SAT(Seprating Axis Theorem) 충돌 검사를 하여도 버그가 발생합니다.
      * 이때 이 함수를 호출하여 삼각형으로 쪼개고 검사를 할경우 충돌 검사가 잘될것입니다.
      * 
      * @return 
