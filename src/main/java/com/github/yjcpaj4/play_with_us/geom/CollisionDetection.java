@@ -38,11 +38,10 @@ public class CollisionDetection {
         }
     }
 
-    private static List<Vector2D> getEdges(Polygon... p) {
+    private static List<Vector2D> getEdges(Polygon p1, Polygon p2) {
         List l = new LinkedList();
-        for (int n = 0; n < p.length; ++n) {
-            l.addAll(p[n].getEdges());
-        }
+        l.addAll(p1.getEdges());
+        l.addAll(p2.getEdges());
         return l;
     }
 

@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.github.yjcpaj4.play_with_us.map;
 
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import java.awt.Graphics2D;
 
-/**
- *
- * @author Administrator
- */
 public abstract class GameObject {
 
     private Stage mMap;

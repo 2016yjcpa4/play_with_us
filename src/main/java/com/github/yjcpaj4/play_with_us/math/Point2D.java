@@ -1,10 +1,14 @@
 package com.github.yjcpaj4.play_with_us.math;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Point2D {
     
+    @SerializedName("x")
     private float mX;
+    
+    @SerializedName("y")
     private float mY;
     
     public Point2D() {
