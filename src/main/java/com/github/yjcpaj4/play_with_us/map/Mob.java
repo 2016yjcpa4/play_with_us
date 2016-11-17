@@ -8,7 +8,7 @@ import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
-import com.github.yjcpaj4.play_with_us.util.GameUtil;
+import com.github.yjcpaj4.play_with_us.util.MathUtil;
 
 public class Mob extends PhysicsObject {
     
@@ -41,7 +41,7 @@ public class Mob extends PhysicsObject {
      * @return 프레임을 반환합니다.
      */
     private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
-        String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
+        String k = String.join(".", "player", "walk", MathUtil.getDirectionByRadian(getAngle()));
         
         SpriteResource.Frame f = r.getSprite(k).getFrame(2); // 기본 상태
         

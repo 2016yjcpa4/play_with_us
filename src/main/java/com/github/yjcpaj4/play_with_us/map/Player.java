@@ -17,14 +17,13 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.VideoResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
-import com.github.yjcpaj4.play_with_us.util.GameUtil;
+import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
  
 public class Player extends PhysicsObject {
     
     private static final int SPEED = 3;
     
-    private boolean mIsFlashTurnOn;
     private Vector2D mVel = new Vector2D();
     private Vector2D mDir = new Vector2D(); 
     
@@ -140,7 +139,7 @@ public class Player extends PhysicsObject {
      */
     @Deprecated
     private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
-        String k = String.join(".", "player", "walk", GameUtil.getDirectionByRadian(getAngle()));
+        String k = String.join(".", "player", "walk", MathUtil.getDirectionByRadian(getAngle()));
         
         SpriteResource.Frame f = r.getSprite(k).getFrame(2); // 기본 상태
         

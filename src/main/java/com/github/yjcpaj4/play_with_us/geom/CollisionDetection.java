@@ -15,7 +15,7 @@ public class CollisionDetection {
     private CollisionDetection() {
     }
 
-    public static class ProjectPolygon {
+    private static class ProjectPolygon {
 
         private float mMin = Float.POSITIVE_INFINITY;
         private float mMax = Float.NEGATIVE_INFINITY;

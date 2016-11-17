@@ -6,7 +6,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.StageResource;
 import com.github.yjcpaj4.play_with_us.util.AWTUtil;
-import com.github.yjcpaj4.play_with_us.util.GameUtil;
+import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -18,11 +18,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -100,7 +97,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         
         public void addPoint(int x, int y) {
-            mPoints.add(new Point2D(x, y));
+            addPoint(new Point2D(x, y));
+        }
+        
+        public void addPoint(Point2D p) {
+            mPoints.add(p);
         }
         
         public void setReverse() {
@@ -153,7 +154,16 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     @Override
     public void mouseMoved(MouseEvent e) {
         if (e.isShiftDown() && mSelection.getPoints().size() > 1) {
-            // TODO...
+            List<Point2D> l = mSelection.getPoints();
+            Vector2D v = new Vector2D(l.get(l.size() - 2));
+            String s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
+            
+            if (s.equals("n") || s.equals("s")) {
+                mMousePos.set(v.getX(), e.getY());
+            } 
+            else {
+                mMousePos.set(e.getX(), v.getY());
+            }
         }
         else {
             mMousePos.set(e.getX(), e.getY());
@@ -172,7 +182,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                 return;
             }
             
-            mSelection.addPoint(e.getX(), e.getY());
+            mSelection.addPoint(mMousePos);
         }
         else if (e.getButton() == MouseEvent.BUTTON3) {
             mSelection.setReverse();
