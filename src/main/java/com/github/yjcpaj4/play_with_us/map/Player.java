@@ -121,11 +121,10 @@ public class Player extends PhysicsObject {
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
         for (NotWalkable o : getMap().getAllNotWalkable()) {
-            Vector2D v1;
-            if ((v1 = getCollisionWith(o)) != null) {
-                Vector2D v2 = v1.negative();
+            Vector2D v;
+            if ((v = getCollisionWith(o)) != null) { 
  
-                mCollider.transform(Matrix2D.translate(v2.getX(), v2.getY()));
+                mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
             }
         }
     }
