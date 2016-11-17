@@ -50,11 +50,23 @@ public class StageResource {
         mImagePath = f.getName();
             
         try {
-            mImage = ImageIO.read(new File(mImagePath));
+            mImage = ImageIO.read(f);
         }
         catch(IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public BufferedImage getImage() {
+        return mImage;
+    }
+    
+    public int getWidth() {
+        return mImage.getWidth();
+    }
+    
+    public int getHeight() {
+        return mImage.getHeight();
     }
     
     public Stage toStage() {

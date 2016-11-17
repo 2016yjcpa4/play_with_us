@@ -33,6 +33,14 @@ public class GraphicLooper implements Runnable {
     public Canvas getCanvas() {
         return mCanvas;
     }
+    
+    public int getWidth() {
+        return mCanvas.getWidth();
+    }
+    
+    public int getHeight() {
+        return mCanvas.getHeight();
+    }
  
     public void start() {
         mRunning = true;
@@ -58,8 +66,7 @@ public class GraphicLooper implements Runnable {
             mPauseLock.notifyAll();
         }
     }
-
-
+    
     @Override
     public void run() {
         mClock = System.currentTimeMillis();
