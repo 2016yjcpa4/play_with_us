@@ -156,9 +156,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         if (e.isShiftDown() && mSelection.getPoints().size() > 1) {
             List<Point2D> l = mSelection.getPoints();
             Vector2D v = new Vector2D(l.get(l.size() - 2));
-            String s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
+            char s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
-            if (s.equals("n") || s.equals("s")) {
+            if (s == 'n' || s == 's') {
                 mMousePos.set(v.getX(), e.getY());
             } 
             else {
