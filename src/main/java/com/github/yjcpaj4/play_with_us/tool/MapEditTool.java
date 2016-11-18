@@ -20,6 +20,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -65,10 +66,20 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     private class Selection {
         
         private boolean mReversed;
-        private List<Point2D> mPoints = new ArrayList<>();
+        private Stack<Point2D> mPoints = new Stack<>();
+        
+        public void undo() {
+            if ( ! mPoints.isEmpty()) {
+                mPoints.pop();
+            }
+        }
         
         public Polygon toPolygon() {
             return new Polygon(getPoints());
+        }
+        
+        public List<Point2D> getRaw() {
+            return mPoints;
         }
         
         public List<Point2D> getPoints() {
@@ -159,9 +170,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (e.isShiftDown() && mSelection.getPoints().size() > 1) {
-            List<Point2D> l = mSelection.getPoints();
-            Vector2D v = new Vector2D(l.get(l.size() - 2));
+        if (e.isShiftDown() && mSelection.getRaw().size() > 0) {
+            List<Point2D> l = mSelection.getRaw();
+            Vector2D v = new Vector2D(l.get(l.size() - 1));
             char s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
             if (s == 'n' || s == 's') {
@@ -213,8 +224,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            
+        if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
+            mSelection.undo();
         }
     }
     
