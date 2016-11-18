@@ -35,12 +35,15 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
     }
     
+    private static final int WINDOW_WIDTH = 1280;
+    private static final int WINDOW_HEIGHT = 800;
+    
     private Selection mSelection = new Selection();
     private Point2D mMousePos = new Point2D();
 
     private StageResource mResource;
     
-    public MapEditTool() {        
+    public MapEditTool() {
         mCanvas.addMouseMotionListener(this);
         mCanvas.addMouseListener(this);
         mCanvas.addKeyListener(this);
@@ -51,8 +54,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         f.setTitle("PLAY with us - Map Edit Tool");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
-        f.setSize(1280, 800);
-        f.setLocationRelativeTo(null);        
+        f.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        f.setLocationRelativeTo(null);       
         f.getContentPane().add(mCanvas);
         f.setVisible(true);
         
@@ -127,9 +130,12 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         
         g2d.drawImage(mResource.getImage(), 0, 0, null);
          
-        g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
         for (Polygon p : mSelection.toPolygon().getTriangulate()) {
+            g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
             g2d.fillPolygon(p.toAWTPolygon()); 
+            
+            g2d.setColor(new Color(34, 181, 0)); 
+            g2d.drawPolygon(p.toAWTPolygon()); 
         }
 
         g2d.setColor(new Color(34, 181, 0));
@@ -182,7 +188,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                 return;
             }
             
-            mSelection.addPoint(mMousePos);
+            mSelection.addPoint(new Point2D(mMousePos));
         }
         else if (e.getButton() == MouseEvent.BUTTON3) {
             mSelection.setReverse();

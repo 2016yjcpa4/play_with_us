@@ -1,7 +1,7 @@
 package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.axet.play.VLC;
+//import com.github.axet.play.VLC;
 import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent; 
@@ -10,10 +10,10 @@ import java.io.File;
 public class VideoLayer extends Layer {
     
     private File mFile;
-    private VLC mVLC;
+    //private VLC mVLC;
     
     private final KeyListener mKeyListener = new KeyListener();
-    private final VideoListener mVideoListener = new VideoListener();
+    //private final VideoListener mVideoListener = new VideoListener();
     
     public VideoLayer(Application c) {
         super(c);
@@ -27,7 +27,11 @@ public class VideoLayer extends Layer {
     protected void resume() {
         super.resume();
         
-        if (mVLC != null) {
+        showLayer(GameLayer.class);
+
+        finishLayer();
+        
+        /*if (mVLC != null) {
             mVLC.close();
             mVLC = null;
         }
@@ -36,7 +40,7 @@ public class VideoLayer extends Layer {
         mVLC.setVideoCanvas(getApplicationCanvas());
         mVLC.addListener(mVideoListener);
         mVLC.open(mFile);
-        mVLC.play();
+        mVLC.play();*/
         
         getApplicationCanvas().addKeyListener(mKeyListener);
     }
@@ -51,8 +55,8 @@ public class VideoLayer extends Layer {
     protected void pause() {
         super.pause();
         
-        mVLC.close();
-        mVLC = null;
+        //mVLC.close();
+        //mVLC = null;
         
         getApplicationCanvas().removeKeyListener(mKeyListener);
     }
@@ -76,7 +80,7 @@ public class VideoLayer extends Layer {
         public void keyReleased(KeyEvent e) {
         } 
     }
-    
+    /*
     private class VideoListener implements VLC.Listener {
 
         @Override
@@ -94,5 +98,5 @@ public class VideoLayer extends Layer {
         public void position(float n) {
             
         }
-    }
+    }*/
 }
