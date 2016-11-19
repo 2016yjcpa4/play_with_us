@@ -38,4 +38,8 @@ public class NotWalkable extends PhysicsObject {
     @Override
     public void update(GameLayer g, long delta) { 
     }
+
+    public java.awt.Polygon toAWTPolygon() {
+        return mCollider.toAWTPolygon();
+    }
 }

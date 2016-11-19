@@ -2,6 +2,8 @@ package com.github.yjcpaj4.play_with_us.tool;
 
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
+import com.github.yjcpaj4.play_with_us.map.Lightless;
+import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.StageResource;
@@ -19,6 +21,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import javax.swing.JFileChooser;
@@ -36,9 +39,15 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
     }
     
+    private static final String WINDOW_TITLE = "PLAY with us - Map Edit Tool";
     private static final int WINDOW_WIDTH = 1280;
     private static final int WINDOW_HEIGHT = 800;
     
+    private static final int SELECT_LIGHTLESS = 1;
+    private static final int SELECT_NOT_WALKABLE = 2;
+    
+    private JFrame mFrame = new JFrame();
+    private int mSelectMode = -1;
     private Selection mSelection = new Selection();
     private Point2D mMousePos = new Point2D();
 
@@ -51,22 +60,25 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         mCanvas.setBackground(Color.BLACK);
         mCanvas.setFocusable(true);
         
-        JFrame f = new JFrame();
-        f.setTitle("PLAY with us - Map Edit Tool");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setResizable(false);
-        f.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        f.setLocationRelativeTo(null);       
-        f.getContentPane().add(mCanvas);
-        f.setVisible(true);
+        mFrame.setTitle(WINDOW_TITLE);
+        mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mFrame.setResizable(false);
+        mFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        mFrame.setLocationRelativeTo(null);       
+        mFrame.getContentPane().add(mCanvas);
+        mFrame.setVisible(true);
         
         start();
     }
     
     private class Selection {
         
-        private boolean mReversed;
+        private boolean mReversed = false;
         private Stack<Point2D> mPoints = new Stack<>();
+        
+        public Selection() {
+            reset();
+        }
         
         public void undo() {
             if ( ! mPoints.isEmpty()) {
@@ -74,8 +86,13 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             }
         }
         
+        public void reset() {
+            mPoints.clear();
+            mReversed = false;
+        }
+        
         public Polygon toPolygon() {
-            return new Polygon(getPoints());
+            return new Polygon(getPoints(true));
         }
         
         public List<Point2D> getRaw() {
@@ -83,8 +100,14 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         
         public List<Point2D> getPoints() {
+            return getPoints(true);
+        }
+        
+        public List<Point2D> getPoints(boolean withCurrentMousePosition) {
             final List<Point2D> l = new ArrayList(mPoints);
-            l.add(mMousePos);
+            if (withCurrentMousePosition) {
+                l.add(mMousePos);
+            }
             
             /**
              * 선택 영역을 반전시킵니다.
@@ -128,7 +151,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         super.draw(delta, g2d);
         
         if (mResource == null) {
-            Font f = new Font("돋움", Font.BOLD, 40);            
+            Font f = new Font("돋움", Font.BOLD, 40);
             g2d.setColor(Color.RED);
             g2d.setFont(f);
             
@@ -140,18 +163,34 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         
         g2d.drawImage(mResource.getImage(), 0, 0, null);
+        
+        for (Lightless o : mResource.getLightless()) {
+            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.5))); 
+            g2d.fillPolygon(o.toAWTPolygon());
+            
+            g2d.setColor(new Color(255, 255, 0)); 
+            g2d.drawPolygon(o.toAWTPolygon());
+        }
+        
+        for (NotWalkable o : mResource.getNotWalkable()) {
+            g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.5))); 
+            g2d.fillPolygon(o.toAWTPolygon());
+            
+            g2d.setColor(new Color(255, 0, 0)); 
+            g2d.drawPolygon(o.toAWTPolygon());
+        }
          
-        for (Polygon p : mSelection.toPolygon().getTriangulate()) {
+        for (Polygon o : mSelection.toPolygon().getTriangulate()) {
             g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
-            g2d.fillPolygon(p.toAWTPolygon()); 
+            g2d.fillPolygon(o.toAWTPolygon()); 
             
             g2d.setColor(new Color(34, 181, 0)); 
-            g2d.drawPolygon(p.toAWTPolygon()); 
+            g2d.drawPolygon(o.toAWTPolygon()); 
         }
 
         g2d.setColor(new Color(34, 181, 0));
-        for (Point2D p : mSelection.getPoints()) {
-            g2d.fillOval((int) p.getX() - (10 / 2), (int) p.getY() - (10 / 2), 10, 10);
+        for (Point2D o : mSelection.getPoints()) {
+            g2d.fillOval((int) o.getX() - (10 / 2), (int) o.getY() - (10 / 2), 10, 10);
         }
     }
 
@@ -175,11 +214,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             Vector2D v = new Vector2D(l.get(l.size() - 1));
             char s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
-            if (s == 'n' || s == 's') {
-                mMousePos.set(v.getX(), e.getY());
+            if (s == 'n' || s == 's') { // 북쪽 혹은 남쪽 방향이면
+                mMousePos.set(v.getX(), e.getY()); // 수직으로 
             } 
-            else {
-                mMousePos.set(e.getX(), v.getY());
+            else { // 그외 동쪽 혹은 서쪽방향이면
+                mMousePos.set(e.getX(), v.getY()); // 수평으로
             }
         }
         else {
@@ -226,6 +265,29 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     public void keyReleased(KeyEvent e) {
         if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
             mSelection.undo();
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_1) {
+            mFrame.setTitle(WINDOW_TITLE + " [선따기 : 빛]");
+            mSelectMode = SELECT_LIGHTLESS;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_2) {
+            mFrame.setTitle(WINDOW_TITLE + " [선따기 : 벽]");
+            mSelectMode = SELECT_NOT_WALKABLE;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            
+            if ( ! Arrays.asList(SELECT_LIGHTLESS, SELECT_NOT_WALKABLE).contains(mSelectMode)) {
+                return;
+            }
+            
+            if (mSelectMode == SELECT_LIGHTLESS) {
+                mResource.addLightless(mSelection.getPoints(false));
+            }
+            else {
+                mResource.addNotWalkable(mSelection.getPoints(false));
+            }
+            
+            mSelection.reset();
         }
     }
     

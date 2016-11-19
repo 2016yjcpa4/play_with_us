@@ -69,17 +69,34 @@ public class StageResource {
         return mImage.getHeight();
     }
     
-    public Stage toStage() {
-        List<GameObject> l = new ArrayList();
-        
+    public void addNotWalkable(List<Point2D> l) {
+        mNotWalkable.add(l);
+    }
+    
+    public void addLightless(List<Point2D> l) {
+        mLightless.add(l);
+    }
+    
+    public List<NotWalkable> getNotWalkable() {
+        List<NotWalkable> l = new ArrayList<>();
         for (List<Point2D> o : mNotWalkable) {
             l.add(new NotWalkable(o));
         }
-        
+        return l;
+    }
+    
+    public List<Lightless> getLightless() {
+        List<Lightless> l = new ArrayList<>();
         for (List<Point2D> o : mLightless) {
             l.add(new Lightless(o));
         }
-        
+        return l;
+    }
+    
+    public Stage toStage() {
+        List<GameObject> l = new ArrayList();
+        l.addAll(getNotWalkable());
+        l.addAll(getLightless());
         return new Stage(mImage, l);
     }
 }
