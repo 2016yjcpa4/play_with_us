@@ -17,6 +17,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 public class StageResource {
+    
+    public static StageResource loadFromJSON(String s) {
+        return loadFromJSON(new File(s));
+    }
 
     public static StageResource loadFromJSON(File f) {
         StageResource r;
@@ -26,7 +30,7 @@ public class StageResource {
             r = new Gson().fromJson(FileUtil.getContents(f), StageResource.class);
             b = ImageIO.read(new File(r.mImagePath));
         }
-        catch(Exception e) {
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
         
@@ -55,6 +59,10 @@ public class StageResource {
         catch(IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public File getImageFile() {
+        return new File(mImagePath);
     }
     
     public BufferedImage getImage() {

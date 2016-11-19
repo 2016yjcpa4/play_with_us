@@ -2,6 +2,7 @@ package com.github.yjcpaj4.play_with_us.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,28 +33,45 @@ public class FileUtil {
         }
     }
     
-    public static String getContents(File f) throws IOException {
-        FileInputStream s = new FileInputStream(f);
+    public static String getContents(File f) {
+        FileInputStream s;
         
-        StringBuilder sb = new StringBuilder();
-        
-        byte[] b = new byte[1024 * 4];
-        int n = -1;
-        while ((n = s.read(b)) != -1) {
-            sb.append(new String(b, 0, n));
+        try {
+            s = new FileInputStream(f);
+        }
+        catch(FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
         
-        return sb.toString();
+        try {
+            StringBuilder sb = new StringBuilder();
+        
+            byte[] b = new byte[1024 * 4];
+            int n = -1;
+            while ((n = s.read(b)) != -1) {
+                sb.append(new String(b, 0, n));
+            }
+
+            return sb.toString();
+        }
+        catch(IOException e) {
+            return null;
+        }
     }
     
-    public static void setContents(File f, String v) throws IOException {
-        if ( ! f.exists()) {
-            f.createNewFile();
+    public static void setContents(File f, String v) {
+        try {
+            if ( ! f.exists()) {
+                f.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(f);
+            fw.write(v);
+            fw.flush();
         }
-        
-        FileWriter fw = new FileWriter(f);
-        fw.write(v);
-        fw.flush();
+        catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static byte[] getChecksumBytes(File f) throws Exception {

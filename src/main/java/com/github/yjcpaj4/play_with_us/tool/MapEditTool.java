@@ -8,11 +8,15 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.StageResource;
 import com.github.yjcpaj4.play_with_us.util.AWTUtil;
+import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
+import com.google.gson.Gson;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -20,12 +24,18 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class MapEditTool extends GraphicLooper implements MouseListener, MouseMotionListener, KeyListener {
@@ -60,15 +70,80 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         mCanvas.setBackground(Color.BLACK);
         mCanvas.setFocusable(true);
         
+        
+        JMenuBar m = new JMenuBar();
+        m.add(new JMenu("파일") {
+            {
+                add(new JMenuItem("새로 만들기") {
+                    {
+                        addActionListener(new ActionListener() {
+                            
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                mResource = newStageResource();
+                            }
+                        });
+                    }
+                });
+                
+                add(new JMenuItem("저장하기") {
+                    {
+                        addActionListener(new ActionListener() {
+                            
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String s = new Gson().toJson(mResource);
+                                
+                                // 리소스 폴더로 옮겨집니다.
+                                File f = new File("res");
+                                mResource.getImageFile().renameTo(new File(f, mResource.getImageFile().getName()));
+                                FileUtil.setContents(new File(f, "map.json"), s);
+                            }
+                        });
+                    }
+                });
+                
+                add(new JMenuItem("불러오기") {
+                    {
+                        addActionListener(new ActionListener() {
+                            
+                            @Override
+                            public void actionPerformed(ActionEvent evt) {
+                                
+                                JFileChooser fc = new JFileChooser();
+                                if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                                    try {
+                                        mResource = new Gson().fromJson(FileUtil.getContents(fc.getSelectedFile()), StageResource.class);
+                                    }
+                                    catch(Exception e) {
+                                        JOptionPane.showMessageDialog(mFrame, "맵 파일을 불러오라고욧!");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+        mFrame.setJMenuBar(m);
         mFrame.setTitle(WINDOW_TITLE);
         mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mFrame.setResizable(false);
         mFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         mFrame.setLocationRelativeTo(null);       
         mFrame.getContentPane().add(mCanvas);
         mFrame.setVisible(true);
         
         start();
+    }
+    
+    private StageResource newStageResource() {
+        JFileChooser fc = new JFileChooser();
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            return new StageResource(fc.getSelectedFile());
+        }
+        
+        return null;
     }
     
     private class Selection {
@@ -95,7 +170,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             return new Polygon(getPoints(true));
         }
         
-        public List<Point2D> getRaw() {
+        public List<Point2D> getOriginPoints() {
             return mPoints;
         }
         
@@ -209,8 +284,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (e.isShiftDown() && mSelection.getRaw().size() > 0) {
-            List<Point2D> l = mSelection.getRaw();
+        if (e.isShiftDown() && mSelection.getOriginPoints().size() > 0) {
+            List<Point2D> l = mSelection.getOriginPoints();
             Vector2D v = new Vector2D(l.get(l.size() - 1));
             char s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
@@ -231,10 +306,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         if (e.getButton() == MouseEvent.BUTTON1) {
             
             if (mResource == null) {
-                JFileChooser fc = new JFileChooser();
-                if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    mResource = new StageResource(fc.getSelectedFile());
-                }
+                mResource = newStageResource();
                 return;
             }
             

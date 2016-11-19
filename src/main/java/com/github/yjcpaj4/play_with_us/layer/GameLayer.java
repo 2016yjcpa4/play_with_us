@@ -8,6 +8,7 @@ import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.resource.StageResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import java.awt.Graphics2D;
@@ -32,40 +33,15 @@ public class GameLayer extends Layer {
          */
         mPlayer = new Player();
         
-        BufferedImage b = null;
-        Map<String, Object> o = null;
-        
         try {
-            File f = new File("res/map.json");
-            
-            o = new Gson().fromJson(FileUtil.getContents(f), Map.class);
-            
-            b = ImageIO.read(new File(f.getParentFile(), (String) o.get("img")));
+            StageResource r = StageResource.loadFromJSON("res/map2.json");
+            Stage m = r.toStage();
+            m.addObject(mPlayer);
         }
         catch(Exception e) {
             e.printStackTrace();
+            finishLayer();
         }
-        
-        Stage m = new Stage(b, null);
-        
-        for(List not_walkable : (List<List>) o.get("not_walkable")) {
-            List<Point2D> l = new ArrayList<Point2D>();
-            for(List e : (List<List>) not_walkable) {
-                l.add(new Point2D((int) Double.parseDouble(e.get(0).toString()), (int) Double.parseDouble(e.get(1).toString())));
-            }
-            m.addObject(new NotWalkable(l));
-        }
-            
-        
-        for(List not_walkable : (List<List>) o.get("lightless")) {
-            List<Point2D> l = new ArrayList<Point2D>();
-            for(List e : (List<List>) not_walkable) {
-                l.add(new Point2D((int) Double.parseDouble(e.get(0).toString()), (int) Double.parseDouble(e.get(1).toString())));
-            }
-            m.addObject(new Lightless(l));
-        }
-            
-        m.addObject(mPlayer);
     }
     
     public Player getPlayer() {
