@@ -54,12 +54,7 @@ public class Vector2D {
     }
     
     public Vector2D normalize() {
-        float n = length();
-        if (n > 0) {
-            return divide(length());
-        }
-        
-        return new Vector2D(this);
+        return divide(length());
     }
     
     public Vector2D negative() {

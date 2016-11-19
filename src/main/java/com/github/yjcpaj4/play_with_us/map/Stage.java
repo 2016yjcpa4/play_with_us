@@ -34,6 +34,7 @@ public class Stage {
     
     public Stage(BufferedImage b, List<GameObject> o) {
         mBackground = b;
+        mObject.addAll(o);
         
         setTiles();
     }

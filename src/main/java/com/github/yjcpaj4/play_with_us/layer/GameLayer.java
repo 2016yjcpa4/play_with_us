@@ -11,6 +11,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.resource.StageResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,16 +32,12 @@ public class GameLayer extends Layer {
          * 게임은 플레이어의 중심으로 돌아가기때문에
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
-        mPlayer = new Player();
         
-        try {
-            StageResource r = StageResource.loadFromJSON("res/map2.json");
-            Stage m = r.toStage();
+        StageResource r = StageResource.loadFromJSON("res/map.json");
+        Stage m = r.toStage();
+        if (r.hasPlayerSpawn()) {
+            mPlayer = new Player(r.getPlayerSpwan());
             m.addObject(mPlayer);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            finishLayer();
         }
     }
     
@@ -55,5 +52,6 @@ public class GameLayer extends Layer {
         Stage m = mPlayer.getMap();
         m.update(this, delta);
         m.draw(this, delta, g2d);
+        
     }
 }

@@ -51,6 +51,8 @@ public class FileUtil {
             while ((n = s.read(b)) != -1) {
                 sb.append(new String(b, 0, n));
             }
+            
+            s.close();
 
             return sb.toString();
         }
@@ -68,6 +70,7 @@ public class FileUtil {
             FileWriter fw = new FileWriter(f);
             fw.write(v);
             fw.flush();
+            fw.close();
         }
         catch(IOException e) {
             throw new RuntimeException(e);

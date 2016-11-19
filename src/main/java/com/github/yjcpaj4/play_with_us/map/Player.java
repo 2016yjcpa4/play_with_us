@@ -43,8 +43,12 @@ public class Player extends PhysicsObject {
         }
     };
     
-    public Player() {
-        mCollider = new Circle(400, 400, 20);
+    public Player(Point2D p) {
+        this(p.getX(), p.getY());
+    }
+    
+    public Player(float x, float y) {
+        mCollider = new Circle(x, y, 20);
     }
     
     /**

@@ -4,6 +4,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.map.GameObject;
 import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
+import com.github.yjcpaj4.play_with_us.map.Player;
 import com.github.yjcpaj4.play_with_us.map.Stage;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
@@ -28,7 +29,7 @@ public class StageResource {
         
         try {
             r = new Gson().fromJson(FileUtil.getContents(f), StageResource.class);
-            b = ImageIO.read(new File(r.mImagePath));
+            b = ImageIO.read(new File(f.getParentFile(), r.mImagePath));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -47,6 +48,9 @@ public class StageResource {
     
     @SerializedName("lightless")
     protected List<List<Point2D>> mLightless = new ArrayList();
+    
+    @SerializedName("player_spawn")
+    protected Point2D mPlayerSpawn = new Point2D(-1, -1);
 
     protected transient BufferedImage mImage;
     
@@ -91,6 +95,18 @@ public class StageResource {
             l.add(new NotWalkable(o));
         }
         return l;
+    }
+    
+    public void setPlayerSpawn(Point2D p) {
+        mPlayerSpawn.set(p.getX(), p.getY());
+    }
+    
+    public Point2D getPlayerSpwan() {
+        return mPlayerSpawn;
+    }
+    
+    public boolean hasPlayerSpawn() {
+        return mPlayerSpawn != null && mPlayerSpawn.getX() != -1 && mPlayerSpawn.getY() != -1;
     }
     
     public List<Lightless> getLightless() {

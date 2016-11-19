@@ -70,7 +70,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         mCanvas.setBackground(Color.BLACK);
         mCanvas.setFocusable(true);
         
-        
         JMenuBar m = new JMenuBar();
         m.add(new JMenu("파일") {
             {
@@ -113,9 +112,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                                 JFileChooser fc = new JFileChooser();
                                 if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                                     try {
-                                        mResource = new Gson().fromJson(FileUtil.getContents(fc.getSelectedFile()), StageResource.class);
+                                        mResource = StageResource.loadFromJSON(fc.getSelectedFile());
                                     }
                                     catch(Exception e) {
+                                        e.printStackTrace();
                                         JOptionPane.showMessageDialog(mFrame, "맵 파일을 불러오라고욧!");
                                     }
                                 }
@@ -254,6 +254,15 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             g2d.setColor(new Color(255, 0, 0)); 
             g2d.drawPolygon(o.toAWTPolygon());
         }
+        
+        if (mResource.hasPlayerSpawn()) {
+            Point2D p = mResource.getPlayerSpwan();
+            g2d.setColor(new Color(0, 0, 255, (int) (255 * 0.5))); 
+            g2d.fillOval((int) p.getX(), (int) p.getY(), 40, 40);
+            
+            g2d.setColor(new Color(0, 0, 255)); 
+            g2d.drawOval((int) p.getX(), (int) p.getY(), 40, 40);
+        }
          
         for (Polygon o : mSelection.toPolygon().getTriangulate()) {
             g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
@@ -346,6 +355,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             mFrame.setTitle(WINDOW_TITLE + " [선따기 : 벽]");
             mSelectMode = SELECT_NOT_WALKABLE;
         }
+        else if (e.getKeyCode() == KeyEvent.VK_3) {
+            mResource.setPlayerSpawn(new Point2D(mMousePos.getX() - 20, mMousePos.getY() - 20));
+        }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
             if ( ! Arrays.asList(SELECT_LIGHTLESS, SELECT_NOT_WALKABLE).contains(mSelectMode)) {
@@ -353,10 +365,14 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             }
             
             if (mSelectMode == SELECT_LIGHTLESS) {
-                mResource.addLightless(mSelection.getPoints(false));
+                for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
+                    mResource.addLightless(o.getPoints());
+                }
             }
             else {
-                mResource.addNotWalkable(mSelection.getPoints(false));
+                for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
+                    mResource.addNotWalkable(o.getPoints());
+                }
             }
             
             mSelection.reset();
