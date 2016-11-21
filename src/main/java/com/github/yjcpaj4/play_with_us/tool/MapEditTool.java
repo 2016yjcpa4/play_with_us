@@ -55,6 +55,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     
     private static final int SELECT_LIGHTLESS = 1;
     private static final int SELECT_NOT_WALKABLE = 2;
+    private static final int SELECT_PORTAL = 3;
     
     private JFrame mFrame = new JFrame();
     private int mSelectMode = -1;
@@ -358,6 +359,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             mSelectMode = SELECT_NOT_WALKABLE;
         }
         else if (e.getKeyCode() == KeyEvent.VK_3) {
+            mFrame.setTitle(WINDOW_TITLE + " [선따기 : 포탈]");
+            mSelectMode = SELECT_PORTAL;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_4) {
             mResource.setPlayerSpawn(new Point2D(mMousePos));
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -367,14 +372,17 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             }
             
             if (mSelectMode == SELECT_LIGHTLESS) {
-                for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
+                for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) {
                     mResource.addLightless(o.getPoints());
                 }
             }
-            else {
+            else if (mSelectMode == SELECT_PORTAL) {
                 for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
                     mResource.addNotWalkable(o.getPoints());
                 }
+            }
+            else if (mSelectMode == SELECT_PORTAL) {
+                
             }
             
             mSelection.reset();
@@ -382,6 +390,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     }
     
     public static void main(String args[]) {
-        new MapEditTool();
+        new MapEditTool().start();
     }
 }
