@@ -58,7 +58,7 @@ public class Light extends GameObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllSideByLightless())) {  
+        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getStage().getAllSideByLightless())) {  
             l.add(p);    
         }
         
@@ -102,7 +102,7 @@ public class Light extends GameObject {
                                              getLength(),
                                              new float[] { 0.5f, 1f },
                                              new Color[] {
-                                                 new Color(0, 0, 0, (int) (255 * getMap().getDarkness())),
+                                                 new Color(0, 0, 0, (int) (255 * getStage().getDarkness())),
                                                  new Color(0, 0, 0, (int) (255 * 0))
                                              })); // 그라데이션 삽입 
         g2d.fill(a);
