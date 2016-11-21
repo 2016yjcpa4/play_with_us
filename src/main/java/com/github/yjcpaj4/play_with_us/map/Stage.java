@@ -32,9 +32,12 @@ public class Stage {
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Stage(BufferedImage b, List<GameObject> o) {
+    public Stage(BufferedImage b, List<GameObject> l) {
         mBackground = b;
-        mObject.addAll(o);
+        
+        for (GameObject o : l) {
+            addObject(o);
+        }
         
         setTiles();
     }
@@ -67,7 +70,7 @@ public class Stage {
     }
     
     public void addObject(GameObject o) {
-        o.setMap(this);
+        o.setStage(this);
         
         mObject.add(o);
         
@@ -102,6 +105,16 @@ public class Stage {
         for(GameObject o : getAllObject()) {
             if (o instanceof Lightless) {
                 l.add((Lightless) o);
+            }
+        }
+        return l;
+    }
+    
+    public List<PhysicsObject> getAllPhysicsObject() {
+        List<PhysicsObject> l = new ArrayList<>();
+        for(GameObject o : getAllObject()) {
+            if (o instanceof PhysicsObject) {
+                l.add((PhysicsObject) o);
             }
         }
         return l;

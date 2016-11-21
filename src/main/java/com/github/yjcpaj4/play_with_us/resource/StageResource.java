@@ -50,7 +50,7 @@ public class StageResource {
     protected List<List<Point2D>> mLightless = new ArrayList();
     
     @SerializedName("player_spawn")
-    protected Point2D mPlayerSpawn = new Point2D(-1, -1);
+    protected Point2D mPlayerSpawn;
 
     protected transient BufferedImage mImage;
     
@@ -98,7 +98,7 @@ public class StageResource {
     }
     
     public void setPlayerSpawn(Point2D p) {
-        mPlayerSpawn.set(p.getX(), p.getY());
+        mPlayerSpawn = p;
     }
     
     public Point2D getPlayerSpwan() {
@@ -106,7 +106,7 @@ public class StageResource {
     }
     
     public boolean hasPlayerSpawn() {
-        return mPlayerSpawn != null && mPlayerSpawn.getX() != -1 && mPlayerSpawn.getY() != -1;
+        return mPlayerSpawn != null;
     }
     
     public List<Lightless> getLightless() {

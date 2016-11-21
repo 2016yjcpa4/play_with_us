@@ -123,14 +123,6 @@ public class Player extends PhysicsObject {
         setDirectionByInput(m); // 플레이어가 바라보는 방향
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
-        
-        for (NotWalkable o : getMap().getAllNotWalkable()) {
-            Vector2D v;
-            if ((v = getCollisionWith(o)) != null) { 
- 
-                mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
-            }
-        }
     }
     
     /**

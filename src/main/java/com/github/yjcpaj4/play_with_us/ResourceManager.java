@@ -2,11 +2,13 @@ package com.github.yjcpaj4.play_with_us;
 
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
+import com.github.yjcpaj4.play_with_us.resource.StageResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
+import com.google.gson.JsonSyntaxException;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -55,7 +57,17 @@ public class ResourceManager {
                 break;
                 
             case "json": // map.json, sprite.json
-                mResource.put(k, SpriteResource.loadFromJSON(f)); 
+                try {
+                    mResource.put(k, SpriteResource.loadFromJSON(f)); 
+                }
+                catch(JsonSyntaxException e1) {
+                    try {
+                        mResource.put(k, StageResource.loadFromJSON(f));    
+                    }
+                    catch(JsonSyntaxException e2) {
+                        throw new RuntimeException(e2);
+                    }
+                }
                 break;
         }
     }

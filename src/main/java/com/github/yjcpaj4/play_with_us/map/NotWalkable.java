@@ -5,7 +5,9 @@ import java.awt.Graphics2D;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
+import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,13 @@ public class NotWalkable extends PhysicsObject {
     }
 
     @Override
-    public void update(GameLayer g, long delta) { 
+    public void update(GameLayer g, long delta) {
+        for (PhysicsObject o : getStage().getAllPhysicsObject()) {
+            Vector2D v;
+            if ((v = getCollisionWith(o)) != null) {
+                //o.mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
+            }
+        }
     }
 
     public java.awt.Polygon toAWTPolygon() {

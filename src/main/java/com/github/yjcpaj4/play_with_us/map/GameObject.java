@@ -5,14 +5,14 @@ import java.awt.Graphics2D;
 
 public abstract class GameObject {
 
-    private Stage mMap;
+    private transient Stage mStage;
     
-    public void setMap(Stage m) {
-        mMap = m;
+    public void setStage(Stage s) {
+        mStage = s;
     }
     
-    public Stage getMap() {
-        return mMap;
+    public Stage getStage() {
+        return mStage;
     }
     
     public abstract void update(GameLayer g, long delta);

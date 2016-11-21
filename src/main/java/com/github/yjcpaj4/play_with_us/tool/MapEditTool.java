@@ -96,7 +96,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                                 // 리소스 폴더로 옮겨집니다.
                                 File f = new File("res");
                                 mResource.getImageFile().renameTo(new File(f, mResource.getImageFile().getName()));
-                                FileUtil.setContents(new File(f, "map.json"), s);
+                                FileUtil.setContents(new File(f, "map.debug.json"), s);
                             }
                         });
                     }
@@ -256,12 +256,14 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         
         if (mResource.hasPlayerSpawn()) {
+            final int SIZE = 40;
+            
             Point2D p = mResource.getPlayerSpwan();
             g2d.setColor(new Color(0, 0, 255, (int) (255 * 0.5))); 
-            g2d.fillOval((int) p.getX(), (int) p.getY(), 40, 40);
+            g2d.fillOval((int) p.getX() - (SIZE / 2), (int) p.getY() - (SIZE / 2), SIZE, SIZE);
             
             g2d.setColor(new Color(0, 0, 255)); 
-            g2d.drawOval((int) p.getX(), (int) p.getY(), 40, 40);
+            g2d.drawOval((int) p.getX() - (SIZE / 2), (int) p.getY() - (SIZE / 2), SIZE, SIZE);
         }
          
         for (Polygon o : mSelection.toPolygon().getTriangulate()) {
@@ -356,7 +358,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             mSelectMode = SELECT_NOT_WALKABLE;
         }
         else if (e.getKeyCode() == KeyEvent.VK_3) {
-            mResource.setPlayerSpawn(new Point2D(mMousePos.getX() - 20, mMousePos.getY() - 20));
+            mResource.setPlayerSpawn(new Point2D(mMousePos));
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
