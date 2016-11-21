@@ -367,7 +367,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
-            if ( ! Arrays.asList(SELECT_LIGHTLESS, SELECT_NOT_WALKABLE).contains(mSelectMode)) {
+            if ( ! Arrays.asList(SELECT_LIGHTLESS, SELECT_NOT_WALKABLE, SELECT_PORTAL).contains(mSelectMode)) {
                 return;
             }
             
@@ -376,7 +376,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                     mResource.addLightless(o.getPoints());
                 }
             }
-            else if (mSelectMode == SELECT_PORTAL) {
+            else if (mSelectMode == SELECT_NOT_WALKABLE) {
                 for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
                     mResource.addNotWalkable(o.getPoints());
                 }
