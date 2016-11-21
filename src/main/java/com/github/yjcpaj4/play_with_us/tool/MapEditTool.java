@@ -390,6 +390,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     }
     
     public static void main(String args[]) {
-        new MapEditTool().start();
+        new MapEditTool();
     }
 }
