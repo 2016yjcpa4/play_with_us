@@ -9,7 +9,9 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lightless extends PhysicsObject {
+public class Lightless extends GameObject {
+    
+    private Polygon mCollider;
     
     public Lightless(List<Point2D> l) {
         mCollider = new Polygon(l);
