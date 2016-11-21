@@ -53,8 +53,8 @@ public class Vector2D {
         return (float) Math.sqrt(dotProduct(this));
     }
     
-    public Vector2D normalize() {
-        return divide(length());
+    public Vector2D normalize() { 
+        return divide(length()); 
     }
     
     public Vector2D negative() {

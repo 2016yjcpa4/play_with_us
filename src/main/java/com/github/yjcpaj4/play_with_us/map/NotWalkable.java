@@ -45,7 +45,7 @@ public class NotWalkable extends PhysicsObject {
             }
             
             Vector2D v;
-            if ((v = o.getCollisionWith(this)) != null) {
+            if ((v = getCollisionWith(o)) != null) {
                 o.mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
             }
         }
