@@ -1,8 +1,11 @@
 package com.github.yjcpaj4.play_with_us.map;
 
+import com.github.yjcpaj4.play_with_us.geom.Circle;
+import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.google.gson.annotations.SerializedName;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 /**
@@ -14,17 +17,15 @@ import java.awt.Graphics2D;
  */
 public class Portal extends PhysicsObject {
     
-    @SerializedName("dest_stage_id")
+    protected Point2D mSpawnPos;
     protected final String mDestStageID;
     
-    @SerializedName("spawn_pos")
-    protected final Point2D mSpawnPos;
-    
-    protected transient boolean mLocked = false;
+    protected boolean mLocked = false;
     
     public Portal(String s, Point2D p) {
         mDestStageID = s;
-        mSpawnPos = p;
+        //mSpawnPos = p;
+        mCollider = new Circle(p.getX(), p.getY(), 20);
     }
     
     public void setLock() {
@@ -37,10 +38,19 @@ public class Portal extends PhysicsObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        
+        for (PhysicsObject o : getStage().getAllPhysicsObject()) {
+            if (isCollide(o) && o instanceof Player) {
+                
+                Stage s = g.getResource().getStage(mDestStageID).toStage();
+                s.addObject(o);
+                break;
+            }
+        }
     }
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
+        g2d.setColor(Color.BLUE);
+        g2d.fillPolygon(mCollider.toAWTPolygon());
     }
 }

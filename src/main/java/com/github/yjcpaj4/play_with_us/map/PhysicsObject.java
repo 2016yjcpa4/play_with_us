@@ -15,6 +15,10 @@ public abstract class PhysicsObject extends GameObject {
         return mCollider;
     }
     
+    public boolean isCollide(PhysicsObject o) {
+        return getCollisionWith(o) != null;
+    }
+    
     public Vector2D getCollisionWith(PhysicsObject o) {
         return CollisionDetection.getCollision(mCollider, o.mCollider);
     }

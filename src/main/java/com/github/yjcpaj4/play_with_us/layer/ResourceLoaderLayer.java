@@ -42,7 +42,9 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
-        r.load("res/img_map.png", "map");
+        r.load("res/map.debug.1.json", "map.debug.1");
+        r.load("res/map.debug.2.json", "map.debug.2");
+        
         r.load("res/player.walk.n.json");
         r.load("res/player.walk.ne.json");
         r.load("res/player.walk.e.json");

@@ -60,16 +60,20 @@ public class ResourceManager {
                 try {
                     mResource.put(k, SpriteResource.loadFromJSON(f)); 
                 }
-                catch(JsonSyntaxException e1) {
+                catch(Exception e1) {
                     try {
                         mResource.put(k, StageResource.loadFromJSON(f));    
                     }
-                    catch(JsonSyntaxException e2) {
+                    catch(Exception e2) {
                         throw new RuntimeException(e2);
                     }
                 }
                 break;
         }
+    }
+    
+    public StageResource getStage(String k) {
+        return (StageResource) mResource.get(k);
     }
     
     public BufferedImage getImage(String k) {

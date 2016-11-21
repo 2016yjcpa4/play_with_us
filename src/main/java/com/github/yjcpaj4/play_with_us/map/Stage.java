@@ -207,7 +207,10 @@ public class Stage {
         
         g2d.drawImage(b, 0, 0, null);
         
-        getPlayer().draw(g, delta, g2d);
+        Player p = getPlayer();
+        if (p != null) {
+            p.draw(g, delta, g2d);
+        }
     }
 
     public void update(GameLayer g, long delta) {
