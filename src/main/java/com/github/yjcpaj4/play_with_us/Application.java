@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import com.github.yjcpaj4.play_with_us.layer.ResourceLoaderLayer;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.lang.reflect.Constructor;
 import java.util.EmptyStackException;
@@ -70,6 +71,7 @@ public class Application extends GraphicLooper {
                 mCanvas.addMouseListener(mInput.getMouseListener());
                 mCanvas.addMouseMotionListener(mInput.getMouseMotionListener());
                 mCanvas.addKeyListener(mInput.getKeyListener());
+                mCanvas.setBackground(Color.BLACK);
                 mCanvas.setFocusable(true);
 
                 JFrame f = new JFrame();
