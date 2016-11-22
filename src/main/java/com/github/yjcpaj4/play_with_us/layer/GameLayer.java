@@ -12,9 +12,9 @@ import java.awt.Graphics2D;
 
 public class GameLayer extends Layer {
     
-    public static final float ZOOM = 1.75f;
-    
     private Player mPlayer;
+
+    private float mCameraZoom = 1.75f;
     private Point2D mCameraPos = new Point2D();
     
     public GameLayer(Application c) {
@@ -37,6 +37,10 @@ public class GameLayer extends Layer {
         return mCameraPos;
     }
     
+    public float getCameraZoom() {
+        return mCameraZoom;
+    }
+    
     public Player getPlayer() {
         return mPlayer;
     }
@@ -49,11 +53,11 @@ public class GameLayer extends Layer {
         Point2D p = mPlayer.getPosition();
         
         // 카메라가 이동
-        float x = (p.getX() * ZOOM - getContext().getWidth() / 2);
-        float y = (p.getY() * ZOOM - getContext().getHeight() / 2);
+        float x = (p.getX() * mCameraZoom - getContext().getWidth() / 2);
+        float y = (p.getY() * mCameraZoom - getContext().getHeight() / 2);
         mCameraPos.set(x, y);
         g2d.translate(-mCameraPos.getX(), -mCameraPos.getY());
-        g2d.scale(ZOOM, ZOOM);
+        g2d.scale(mCameraZoom, mCameraZoom);
 
         Map m = mPlayer.getMap();
         m.update(this, delta);
