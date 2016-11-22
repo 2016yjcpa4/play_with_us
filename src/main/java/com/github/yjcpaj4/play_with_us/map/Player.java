@@ -32,12 +32,12 @@ public class Player extends PhysicsObject {
      */
     private Light mLight = new Light() {
         
-        private static final int LIGHT_RELATIVE_Y = 15;
+        private static final int LIGHT_RELATIVE_Y = -15;
         
         @Override
         public Point2D getPosition() {
             Point2D p = new Point2D(Player.this.getPosition());
-            p.setY(p.getY() - LIGHT_RELATIVE_Y);
+            p.setY(p.getY() + LIGHT_RELATIVE_Y);
             return p;
         }
 
