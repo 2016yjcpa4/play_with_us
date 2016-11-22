@@ -15,7 +15,7 @@ public class GameLayer extends Layer {
     public static final float ZOOM = 1.75f;
     
     private Player mPlayer;
-    private Vector2D mCameraPos = new Vector2D();
+    private Point2D mCameraPos = new Point2D();
     
     public GameLayer(Application c) {
         super(c);
@@ -33,7 +33,7 @@ public class GameLayer extends Layer {
         }
     }
     
-    public Vector2D getCamera() {
+    public Point2D getCameraPosition() {
         return mCameraPos;
     }
     

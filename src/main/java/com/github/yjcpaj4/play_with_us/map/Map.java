@@ -195,7 +195,7 @@ public class Map {
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         g2d.drawImage(mBackground, 0, 0, null);
         
-        drawDebugTiles(g2d);
+        debugTiles(g2d);
 
         for (GameObject o : getAllObjectWithoutLightAndPlayer()) {
             o.draw(g, delta, g2d);
@@ -221,7 +221,7 @@ public class Map {
         }
     }
     
-    private void drawDebugTiles(Graphics2D g2d) {
+    private void debugTiles(Graphics2D g2d) {
         
         if ( ! (DEBUG && Application.DEBUG)) {
             return;
