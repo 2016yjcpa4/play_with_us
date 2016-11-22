@@ -6,7 +6,7 @@ import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
-import com.github.yjcpaj4.play_with_us.resource.StageResource;
+import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import com.github.yjcpaj4.play_with_us.util.AWTUtil;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
@@ -62,7 +62,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     private Selection mSelection = new Selection();
     private Point2D mMousePos = new Point2D();
 
-    private StageResource mResource;
+    private MapResource mResource;
     
     public MapEditTool() {
         mCanvas.addMouseMotionListener(this);
@@ -113,7 +113,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                                 JFileChooser fc = new JFileChooser();
                                 if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                                     try {
-                                        mResource = StageResource.loadFromJSON(fc.getSelectedFile());
+                                        mResource = MapResource.loadFromJSON(fc.getSelectedFile());
                                     }
                                     catch(Exception e) {
                                         e.printStackTrace();
@@ -138,10 +138,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         start();
     }
     
-    private StageResource newStageResource() {
+    private MapResource newStageResource() {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            return new StageResource(fc.getSelectedFile());
+            return new MapResource(fc.getSelectedFile());
         }
         
         return null;

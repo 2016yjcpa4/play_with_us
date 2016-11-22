@@ -14,7 +14,7 @@ import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
-import com.github.yjcpaj4.play_with_us.resource.VideoResource;
+import com.github.yjcpaj4.play_with_us.resource.MovieResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;

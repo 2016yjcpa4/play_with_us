@@ -18,13 +18,13 @@ import java.awt.Graphics2D;
 public class Portal extends PhysicsObject {
     
     protected Point2D mSpawnPos;
-    protected final String mDestStageID;
+    protected final String mDestMapID;
     
     protected boolean mLocked = false;
     
     public Portal(String s, Point2D p) {
-        mDestStageID = s;
-        //mSpawnPos = p;
+        mDestMapID = s;
+        mSpawnPos = p;
         mCollider = new Circle(p.getX(), p.getY(), 20);
     }
     
@@ -38,10 +38,10 @@ public class Portal extends PhysicsObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        for (PhysicsObject o : getStage().getAllPhysicsObject()) {
+        for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (isCollide(o) && o instanceof Player) {
                 
-                Stage s = g.getResource().getStage(mDestStageID).toStage();
+                Map s = g.getResource().getMap(mDestMapID).toMap();
                 s.addObject(o);
                 break;
             }

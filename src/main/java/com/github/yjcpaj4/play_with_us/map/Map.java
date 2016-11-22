@@ -17,7 +17,7 @@ import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 
-public class Stage {
+public class Map {
 
     public static final boolean DEBUG = false;
     
@@ -32,7 +32,7 @@ public class Stage {
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Stage(BufferedImage b, List<GameObject> l) {
+    public Map(BufferedImage b, List<GameObject> l) {
         mBackground = b;
         
         for (GameObject o : l) {
@@ -70,7 +70,7 @@ public class Stage {
     }
     
     public void addObject(GameObject o) {
-        o.setStage(this);
+        o.setMap(this);
         
         mObject.add(o);
         
@@ -92,7 +92,7 @@ public class Stage {
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return Stage.this.getTileIndex((int)p.getX(), (int)p.getY());
+        return Map.this.getTileIndex((int)p.getX(), (int)p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {
@@ -193,10 +193,10 @@ public class Stage {
             o.draw(g, delta, g2d);
         }
         
-        BufferedImage b = new BufferedImage(MAP_WIDTH, MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage b = new BufferedImage(g.getContext().getWidth(), g.getContext().getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D t = b.createGraphics();
         t.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
-        t.fillRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        t.fillRect(0, 0, g.getContext().getWidth(), g.getContext().getHeight());
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
         for (GameObject o : getAllLight()) {

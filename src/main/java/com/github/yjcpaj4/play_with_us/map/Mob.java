@@ -30,7 +30,7 @@ public class Mob extends PhysicsObject {
     }
     
     public double getDistanceToPlayer() {
-        return new Vector2D(mPos).subtract(getStage().getPlayer().getPosition()).length();
+        return new Vector2D(mPos).subtract(getMap().getPlayer().getPosition()).length();
     }
     
     /**

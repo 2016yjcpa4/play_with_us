@@ -33,8 +33,8 @@ public class Lightless extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-        g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.5)));
-        g2d.fillPolygon(mCollider.toAWTPolygon());
+        //g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.5)));
+        //g2d.fillPolygon(mCollider.toAWTPolygon());
     }
 
     @Override

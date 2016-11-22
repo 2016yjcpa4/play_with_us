@@ -4,7 +4,7 @@ import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.DropboxClient;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
-import com.github.yjcpaj4.play_with_us.resource.VideoResource;
+import com.github.yjcpaj4.play_with_us.resource.MovieResource;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
 import java.awt.Color;
@@ -42,17 +42,21 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
-        r.load("res/map.debug.1.json", "map.debug.1");
-        r.load("res/map.debug.2.json", "map.debug.2");
+        // 맵정보를 불러옵니다.
+        r.load("res/map.kitchen.json",              "kitchen");
+        r.load("res/map.library.json",              "library");
+        r.load("res/map.clothes_room.json",         "clothes_room");
+        r.load("res/map.bathroom.json",             "bathroom");
         
-        r.load("res/player.walk.n.json");
-        r.load("res/player.walk.ne.json");
-        r.load("res/player.walk.e.json");
-        r.load("res/player.walk.se.json");
-        r.load("res/player.walk.s.json");
-        r.load("res/player.walk.sw.json");
-        r.load("res/player.walk.w.json");
-        r.load("res/player.walk.nw.json");
+        // 플레이어 이미지를 불러옵니다.
+        r.load("res/sprite.player.walk.n.json",     "player.walk.n");
+        r.load("res/sprite.player.walk.ne.json",    "player.walk.ne");
+        r.load("res/sprite.player.walk.e.json",     "player.walk.e");
+        r.load("res/sprite.player.walk.se.json",    "player.walk.se");
+        r.load("res/sprite.player.walk.s.json",     "player.walk.s");
+        r.load("res/sprite.player.walk.sw.json",    "player.walk.sw");
+        r.load("res/sprite.player.walk.w.json",     "player.walk.w");
+        r.load("res/sprite.player.walk.nw.json",    "player.walk.nw");
     }
 
     @Override
@@ -125,7 +129,7 @@ public class ResourceLoaderLayer extends Layer {
                 }
                 
                 VideoLayer l = getContext().getLayer(VideoLayer.class);
-                l.load(VideoResource.MOV_INTRO);
+                l.load(MovieResource.MOV_INTRO);
                 showLayer(l); 
 
                 finishLayer();  

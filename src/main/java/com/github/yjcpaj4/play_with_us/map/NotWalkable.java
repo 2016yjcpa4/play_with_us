@@ -33,13 +33,13 @@ public class NotWalkable extends PhysicsObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-        g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.5)));
-        g2d.fillPolygon(mCollider.toAWTPolygon());
+        //g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.5)));
+        //g2d.fillPolygon(mCollider.toAWTPolygon());
     }
 
     @Override
     public void update(GameLayer g, long delta) {
-        for (PhysicsObject o : getStage().getAllPhysicsObject()) {
+        for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (o instanceof NotWalkable) {
                 continue;
             }

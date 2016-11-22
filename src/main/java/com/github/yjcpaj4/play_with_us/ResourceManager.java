@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us;
 
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
-import com.github.yjcpaj4.play_with_us.resource.StageResource;
+import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -62,7 +62,7 @@ public class ResourceManager {
                 }
                 catch(Exception e1) {
                     try {
-                        mResource.put(k, StageResource.loadFromJSON(f));    
+                        mResource.put(k, MapResource.loadFromJSON(f));    
                     }
                     catch(Exception e2) {
                         throw new RuntimeException(e2);
@@ -72,8 +72,8 @@ public class ResourceManager {
         }
     }
     
-    public StageResource getStage(String k) {
-        return (StageResource) mResource.get(k);
+    public MapResource getMap(String k) {
+        return (MapResource) mResource.get(k);
     }
     
     public BufferedImage getImage(String k) {

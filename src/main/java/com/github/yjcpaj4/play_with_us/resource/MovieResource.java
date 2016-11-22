@@ -11,12 +11,12 @@ import java.io.File;
  * 
  * @author 차명도.
  */
-public class VideoResource {
+public class MovieResource {
     
-    private VideoResource() {
+    private MovieResource() {
         // 외부에서 생성자 호출 방지
     }
 
-    public static final File MOV_INTRO = new File("./res/mov_intro.mp4");
-    public static final File MOV_0001 = new File("./res/mov_00001.mp4");
+    public static final File MOV_INTRO = new File("res/mov.intro.mp4");
+    public static final File MOV_100 = new File("res/mov.100.mp4");
 }

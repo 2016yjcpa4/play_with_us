@@ -5,7 +5,7 @@ import com.github.yjcpaj4.play_with_us.map.GameObject;
 import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.map.Player;
-import com.github.yjcpaj4.play_with_us.map.Stage;
+import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-public class StageResource {
+public class MapResource {
     
-    public static StageResource loadFromJSON(String s) {
+    public static MapResource loadFromJSON(String s) {
         return loadFromJSON(new File(s));
     }
 
-    public static StageResource loadFromJSON(File f) {
-        StageResource r;
+    public static MapResource loadFromJSON(File f) {
+        MapResource r;
         BufferedImage b;
         
         try {
-            r = new Gson().fromJson(FileUtil.getContents(f), StageResource.class);
+            r = new Gson().fromJson(FileUtil.getContents(f), MapResource.class);
             b = ImageIO.read(new File(f.getParentFile(), r.mImagePath));
         }
         catch (Exception e) {
@@ -54,7 +54,7 @@ public class StageResource {
 
     protected transient BufferedImage mImage;
     
-    public StageResource(File f) {
+    public MapResource(File f) {
         mImagePath = f.getName();
             
         try {
@@ -117,10 +117,10 @@ public class StageResource {
         return l;
     }
     
-    public Stage toStage() {
+    public Map toMap() {
         List<GameObject> l = new ArrayList();
         l.addAll(getNotWalkable());
         l.addAll(getLightless());
-        return new Stage(mImage, l);
+        return new Map(mImage, l);
     }
 }

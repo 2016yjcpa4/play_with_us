@@ -2,11 +2,11 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.yjcpaj4.play_with_us.map.Stage;
+import com.github.yjcpaj4.play_with_us.map.Map;
 import com.github.yjcpaj4.play_with_us.map.Player;
 import com.github.yjcpaj4.play_with_us.map.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
-import com.github.yjcpaj4.play_with_us.resource.StageResource;
+import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.awt.Graphics2D;
 
 public class GameLayer extends Layer {
@@ -21,14 +21,12 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        StageResource r = getResource().getStage("map.debug.1");
-        Stage m = r.toStage();
+        MapResource r = getResource().getMap("kitchen");
+        Map m = r.toMap();
         if (r.hasPlayerSpawn()) {
             mPlayer = new Player(r.getPlayerSpwan());
             m.addObject(mPlayer);
         }
-        
-        m.addObject(new Portal("map.debug.2", new Point2D(266, 407)));
     }
     
     public Player getPlayer() {
@@ -39,7 +37,7 @@ public class GameLayer extends Layer {
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
         
-        Stage m = mPlayer.getStage();
+        Map m = mPlayer.getMap();
         m.update(this, delta);
         m.draw(this, delta, g2d);
     }

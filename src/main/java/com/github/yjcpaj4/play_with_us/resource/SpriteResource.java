@@ -46,7 +46,7 @@ public class SpriteResource implements Serializable {
         
         try {
             r = new Gson().fromJson(FileUtil.getContents(f), SpriteResource.class);
-            b = ImageIO.read(new File(r.mImage));
+            b = ImageIO.read(new File(f.getParentFile(), r.mImage));
         }
         catch(Exception e) {
             throw new RuntimeException(e);
