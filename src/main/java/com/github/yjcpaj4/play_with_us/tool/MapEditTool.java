@@ -15,6 +15,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -134,6 +138,35 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         mFrame.setLocationRelativeTo(null);       
         mFrame.getContentPane().add(mCanvas);
         mFrame.setVisible(true);
+        
+        mFrame.setDropTarget(new DropTarget() {
+            
+            @Override
+            public synchronized void drop(DropTargetDropEvent evt) {
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    List<File> l = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    
+                    switch (FileUtil.getExtension(l.get(0))) {
+                        case "jpg":
+                        case "jpeg":
+                        case "bmp": 
+                        case "gif":
+                        case "png": 
+                        case "tiff":
+                        case "tif":
+                            mResource = newStageResource();
+                            break;
+                        case "json":
+                            mResource = MapResource.loadFromJSON(l.get(0));
+                            break;
+                    }
+                } 
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         
         start();
     }
