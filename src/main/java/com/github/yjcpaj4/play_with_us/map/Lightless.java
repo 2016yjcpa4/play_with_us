@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.map;
 
+import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -33,8 +34,13 @@ public class Lightless extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-        //g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.5)));
-        //g2d.fillPolygon(mCollider.toAWTPolygon());
+        if (Application.DEBUG) {
+            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.4)));
+            g2d.fillPolygon(mCollider.toAWTPolygon());
+            
+            g2d.setColor(new Color(255, 255, 0));
+            g2d.drawPolygon(mCollider.toAWTPolygon());
+        }
     }
 
     @Override

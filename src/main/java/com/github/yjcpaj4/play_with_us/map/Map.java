@@ -21,8 +21,8 @@ public class Map {
 
     public static final boolean DEBUG = false;
     
-    private static final int TILE_WIDTH = 11;
-    private static final int TILE_HEIGHT = 11;
+    private static final int TILE_WIDTH = 8;
+    private static final int TILE_HEIGHT = 8;
     
     private TileMap mTiles;
     private final BufferedImage mBackground;
@@ -78,7 +78,12 @@ public class Map {
     }
     
     public float getDarkness() {
-        return 0.96f;
+        if (DEBUG && Application.DEBUG) {
+            return 0.5f;
+        }
+        else {
+            return  0.96f;
+        }
     }
     
     public int getWidth() {
@@ -97,21 +102,13 @@ public class Map {
         return (int) (getHeight() / (float) TILE_HEIGHT);
     }
     
-    public int getTileWidth() {
-        return getWidth() / getTileColumns();
-    }
-    
-    public int getTileHeight() {
-        return getHeight() / getTileRows();
-    }
-    
     public Point2D getTileIndex(Point2D p) {
         return Map.this.getTileIndex((int)p.getX(), (int)p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {
-        return new Point2D((int) (x / getTileWidth())
-                         , (int) (y / getTileHeight()));
+        return new Point2D((int) (x / TILE_WIDTH)
+                         , (int) (y / TILE_HEIGHT));
     }
 
     public List<Lightless> getAllLightless() {
@@ -181,8 +178,8 @@ public class Map {
         List<Point2D> l = new ArrayList<>();
         
         for (TileNode n : mTiles.getPath((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY())) { 
-            l.add(new  Point2D(n.getX() * getTileWidth()  + (getTileWidth() / 2),
-                               n.getY() * getTileHeight() + (getTileHeight() / 2)));
+            l.add(new  Point2D(n.getX() * TILE_WIDTH  + (TILE_WIDTH / 2),
+                               n.getY() * TILE_HEIGHT + (TILE_HEIGHT / 2)));
         }
         
         return l;
@@ -224,6 +221,31 @@ public class Map {
         Player p = getPlayer();
         if (p != null) {
             p.draw(g, delta, g2d);
+        }
+        
+        drawDebugTiles(g2d);
+    }
+    
+    private void drawDebugTiles(Graphics2D g2d) {
+        
+        if ( ! (DEBUG && Application.DEBUG)) {
+            return;
+        }
+        
+        g2d.setColor(Color.RED);
+
+        int w = TILE_WIDTH;
+        int h = TILE_HEIGHT;
+        
+        TileNode[][] n = mTiles.getNodes();
+        for (int x = 0; x < n.length; ++x) {
+            for (int y = 0; y < n[0].length; ++y) {    
+                g2d.drawRect(x * w, y * h, w, h);
+                
+                if ( ! n[x][y].canWalk()) {
+                    g2d.fillRect(x * w, y * h, w, h);
+                }
+            }
         }
     }
 

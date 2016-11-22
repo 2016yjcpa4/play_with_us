@@ -162,7 +162,9 @@ public class Player extends PhysicsObject {
                       null);
         
         
-        //g2d.setColor(Color.RED);
-        //g2d.drawPolygon(mCollider.toAWTPolygon());
+        if (Application.DEBUG) {
+            g2d.setColor(Color.RED);
+            g2d.drawPolygon(mCollider.toAWTPolygon());
+        }
     }
 }

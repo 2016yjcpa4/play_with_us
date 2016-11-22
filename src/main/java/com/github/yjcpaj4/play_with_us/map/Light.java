@@ -12,6 +12,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Raycast;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import java.awt.Shape;
 
 public class Light extends GameObject {
 
@@ -93,6 +94,7 @@ public class Light extends GameObject {
             return;
         }
         
+        Shape s = g2d.getClip();
         Area a = getArea();
         Point2D p = getPosition();
         
@@ -106,5 +108,11 @@ public class Light extends GameObject {
                                                  new Color(0, 0, 0, (int) (255 * 0))
                                              })); // 그라데이션 삽입 
         g2d.fill(a);
+        
+        g2d.setClip(s);
+        if (Application.DEBUG) {
+            g2d.setColor(Color.YELLOW);
+            g2d.draw(a);
+        }
     }
 }
