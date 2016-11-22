@@ -78,7 +78,7 @@ public class Player extends PhysicsObject {
     }
     
     private void setDirectionByInput(GameLayer g, InputManager m) {
-        mDir.set(g.getCamera().add(m.getMousePosition()));
+        mDir.set(g.getCamera().divide(GameLayer.ZOOM).add(m.getMousePosition().divide(GameLayer.ZOOM)));
     }
     
     private void setLightByInput(InputManager m) {

@@ -12,6 +12,8 @@ import java.awt.Graphics2D;
 
 public class GameLayer extends Layer {
     
+    public static final float ZOOM = 2f;//1.25f;
+    
     private Player mPlayer;
     private Vector2D mCameraPos = new Vector2D();
     
@@ -23,7 +25,7 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        MapResource r = getResource().getMap("bathroom");
+        MapResource r = getResource().getMap("library");
         Map m = r.toMap();
         if (r.hasPlayerSpawn()) {
             mPlayer = new Player(r.getPlayerSpwan());
@@ -47,10 +49,11 @@ public class GameLayer extends Layer {
         Point2D p = mPlayer.getPosition();
         
         // 카메라가 이동
-        float x = p.getX() - getContext().getWidth() / 2;
-        float y = p.getY() - getContext().getHeight() / 2;
+        float x = (p.getX() * ZOOM - getContext().getWidth() / 2);
+        float y = (p.getY() * ZOOM - getContext().getHeight() / 2);
         mCameraPos.set(x, y);
         g2d.translate(-mCameraPos.getX(), -mCameraPos.getY());
+        g2d.scale(ZOOM, ZOOM);
 
         Map m = mPlayer.getMap();
         m.update(this, delta);
