@@ -25,6 +25,4 @@
 
 ## Demo
 
-![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.2.gif?raw=true)
-
-![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/demo/v0.3.gif?raw=true)
+![alt 데모](https://github.com/2016-yeung-jin-cpa/kr.ac.yeungjin.2cpa.java4/blob/master/docs/9.gif?raw=true)
