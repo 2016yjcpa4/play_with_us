@@ -23,7 +23,7 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        MapResource r = getResource().getMap("library");
+        MapResource r = getResource().getMap("bathroom");
         Map m = r.toMap();
         if (r.hasPlayerSpawn()) {
             mPlayer = new Player(r.getPlayerSpwan());

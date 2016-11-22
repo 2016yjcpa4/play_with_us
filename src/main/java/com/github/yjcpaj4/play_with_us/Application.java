@@ -81,7 +81,8 @@ public class Application extends GraphicLooper {
                 //f.setResizable(false);
                 //f.setUndecorated(true);
                 f.setMinimumSize(new Dimension(700, 400));
-                f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                f.setSize(new Dimension(700, 400));
+                //f.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 f.setLocationRelativeTo(null);        
                 f.add(mCanvas, BorderLayout.CENTER);
                 f.setVisible(true);
