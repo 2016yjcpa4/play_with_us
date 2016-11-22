@@ -48,15 +48,17 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/map.clothes_room.json",         "clothes_room");
         r.load("res/map.bathroom.json",             "bathroom");
         
-        // 플레이어 이미지를 불러옵니다.
+        // 플레이어가 걸어다닐때 (동,서,남,북)
         r.load("res/sprite.player.walk.n.json",     "player.walk.n");
-        r.load("res/sprite.player.walk.ne.json",    "player.walk.ne");
         r.load("res/sprite.player.walk.e.json",     "player.walk.e");
-        r.load("res/sprite.player.walk.se.json",    "player.walk.se");
         r.load("res/sprite.player.walk.s.json",     "player.walk.s");
-        r.load("res/sprite.player.walk.sw.json",    "player.walk.sw");
         r.load("res/sprite.player.walk.w.json",     "player.walk.w");
-        r.load("res/sprite.player.walk.nw.json",    "player.walk.nw");
+        
+        // 플레이어가 가만히 있을때 (동,서,남,북)
+        r.load("res/sprite.player.idle.n.json",     "player.idle.n");
+        r.load("res/sprite.player.idle.e.json",     "player.idle.e");
+        r.load("res/sprite.player.idle.s.json",     "player.idle.s");
+        r.load("res/sprite.player.idle.w.json",     "player.idle.w");
     }
 
     @Override

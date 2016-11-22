@@ -332,9 +332,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         if (e.isShiftDown() && mSelection.getOriginPoints().size() > 0) {
             List<Point2D> l = mSelection.getOriginPoints();
             Vector2D v = new Vector2D(l.get(l.size() - 1));
-            char s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
+            String s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
-            if (s == 'n' || s == 's') { // 북쪽 혹은 남쪽 방향이면
+            if (Arrays.asList("n", "s").contains(s)) { // 북쪽 혹은 남쪽 방향이면
                 mMousePos.set(v.getX(), e.getY()); // 수직으로 
             } 
             else { // 그외 동쪽 혹은 서쪽방향이면

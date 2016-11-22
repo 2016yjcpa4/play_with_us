@@ -6,24 +6,24 @@ public class MathUtil {
         return (d %= 360) >= 0 ? d : (d + 360);
     }
     
-    public static char getSimpleDirectionByRadian(double d) {
+    public static String getSimpleDirectionByRadian(double d) {
         return getSimpleDirectionByDegree(Math.toDegrees(d));
     }
 
-    public static char getSimpleDirectionByDegree(double d) {
+    public static String getSimpleDirectionByDegree(double d) {
         d = getNormalDegrees(d);
         
         if (45 <= d && d < 135) {
-            return 's';
+            return "s";
         }
         else if (135 <= d && d < 225) {
-            return 'w';
+            return "w";
         }
         else if (225 <= d && d < 315) {
-            return 'n';
+            return "n";
         }
         else {
-            return 'e';
+            return "e";
         }
     }
     

@@ -19,6 +19,8 @@ import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
  
 public class Player extends PhysicsObject {
     
@@ -143,15 +145,15 @@ public class Player extends PhysicsObject {
      * 
      * @return 프레임을 반환합니다.
      */
-    @Deprecated
     private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
-        String k = String.join(".", "player", "walk", Character.toString(MathUtil.getSimpleDirectionByRadian(getAngle())));
+        boolean isIdle = mVel.getX() == 0 && mVel.getY() == 0;
         
-        SpriteResource.Frame f = r.getSprite(k).getFrame(0); // 기본 상태
+        List<String> l = new ArrayList<>(3);
+        l.add("player");
+        l.add(isIdle ? "idle" : "walk");
+        l.add(MathUtil.getSimpleDirectionByRadian(getAngle()));
         
-        if (mVel.getX() != 0 || mVel.getY() != 0) { // 움직임이 발생하면
-            f = r.getSprite(k).getCurrentFrame(d); // 델타값을 넣어 현재 프레임을 뽑아옴
-        }
+        SpriteResource.Frame f = r.getSprite(String.join(".", l)).getCurrentFrame(d);
         
         // TODO ... 걷고, 서있는것 이외에 무언가 처리해야할게 있는가???
         
