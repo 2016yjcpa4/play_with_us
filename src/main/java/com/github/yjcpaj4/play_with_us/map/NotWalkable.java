@@ -45,16 +45,6 @@ public class NotWalkable extends PhysicsObject {
 
     @Override
     public void update(GameLayer g, long delta) {
-        for (PhysicsObject o : getMap().getAllPhysicsObject()) {
-            if (o instanceof NotWalkable) {
-                continue;
-            }
-            
-            Vector2D v;
-            if ((v = o.getCollisionWith(this)) != null) {
-                o.mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
-            }
-        }
     }
 
     public java.awt.Polygon toAWTPolygon() {

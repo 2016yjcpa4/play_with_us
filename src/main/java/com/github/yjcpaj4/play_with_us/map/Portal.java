@@ -39,11 +39,9 @@ public class Portal extends PhysicsObject {
     @Override
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
-            if (isCollide(o) && o instanceof Player) {
-                
+            if (isCollide(o)) {
                 Map s = g.getResource().getMap(mDestMapID).toMap();
                 s.addObject(o);
-                break;
             }
         }
     }
