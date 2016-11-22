@@ -78,12 +78,7 @@ public class Map {
     }
     
     public float getDarkness() {
-        if (DEBUG && Application.DEBUG) {
-            return 0.5f;
-        }
-        else {
-            return  0.96f;
-        }
+        return  0.96f;
     }
     
     public int getWidth() {
@@ -199,6 +194,8 @@ public class Map {
     
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         g2d.drawImage(mBackground, 0, 0, null);
+        
+        drawDebugTiles(g2d);
 
         for (GameObject o : getAllObjectWithoutLightAndPlayer()) {
             o.draw(g, delta, g2d);
@@ -222,8 +219,6 @@ public class Map {
         if (p != null) {
             p.draw(g, delta, g2d);
         }
-        
-        drawDebugTiles(g2d);
     }
     
     private void drawDebugTiles(Graphics2D g2d) {
@@ -232,7 +227,7 @@ public class Map {
             return;
         }
         
-        g2d.setColor(Color.RED);
+        g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.3)));
 
         int w = TILE_WIDTH;
         int h = TILE_HEIGHT;
