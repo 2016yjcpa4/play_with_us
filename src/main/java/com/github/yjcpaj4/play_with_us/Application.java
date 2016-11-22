@@ -80,8 +80,8 @@ public class Application extends GraphicLooper {
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 //f.setResizable(false);
                 //f.setUndecorated(true);
-                f.setMinimumSize(new Dimension(700, 400));
-                f.setSize(new Dimension(700, 400));
+                f.setMinimumSize(new Dimension(800, 600));
+                f.setSize(new Dimension(800, 600));
                 //f.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 f.setLocationRelativeTo(null);        
                 f.add(mCanvas, BorderLayout.CENTER);
