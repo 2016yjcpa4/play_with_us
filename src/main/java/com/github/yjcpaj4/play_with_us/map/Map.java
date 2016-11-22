@@ -19,10 +19,10 @@ import com.github.yjcpaj4.play_with_us.ResourceManager;
 
 public class Map {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     
-    private static final int TILE_WIDTH = 8;
-    private static final int TILE_HEIGHT = 8;
+    private static final int TILE_WIDTH = 7;
+    private static final int TILE_HEIGHT = 7;
     
     private TileMap mTiles;
     private final BufferedImage mBackground;

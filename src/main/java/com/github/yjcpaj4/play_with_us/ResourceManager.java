@@ -38,7 +38,6 @@ public class ResourceManager {
     
     public void load(File f, String k) throws IOException {
         switch (FileUtil.getExtension(f)) {
-            
             case "jpg":
             case "jpeg":
             case "bmp": 

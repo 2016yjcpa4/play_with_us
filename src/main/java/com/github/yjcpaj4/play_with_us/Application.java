@@ -25,7 +25,7 @@ import java.util.Stack;
  */
 public class Application extends GraphicLooper {
     
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     
     private Stack<Layer> mLayerStack = new Stack<>();
     private ResourceManager mRes = new ResourceManager(); // 싱글톤으로 만들필요는 없을거같음...

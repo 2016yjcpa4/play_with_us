@@ -48,17 +48,29 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/map.clothes_room.json",         "clothes_room");
         r.load("res/map.bathroom.json",             "bathroom");
         
-        // 플레이어가 걸어다닐때 (동,서,남,북)
+        // 걸어다닐때 (동,서,남,북)
         r.load("res/sprite.player.walk.n.json",     "player.walk.n");
         r.load("res/sprite.player.walk.e.json",     "player.walk.e");
         r.load("res/sprite.player.walk.s.json",     "player.walk.s");
         r.load("res/sprite.player.walk.w.json",     "player.walk.w");
         
-        // 플레이어가 가만히 있을때 (동,서,남,북)
+        // 가만히 있을때 (동,서,남,북)
         r.load("res/sprite.player.idle.n.json",     "player.idle.n");
         r.load("res/sprite.player.idle.e.json",     "player.idle.e");
         r.load("res/sprite.player.idle.s.json",     "player.idle.s");
         r.load("res/sprite.player.idle.w.json",     "player.idle.w");
+        
+        // 걸어다닐때 (동,서,남,북)
+        r.load("res/sprite.ghost.walk.n.json",     "ghost.walk.n");
+        r.load("res/sprite.ghost.walk.e.json",     "ghost.walk.e");
+        r.load("res/sprite.ghost.walk.s.json",     "ghost.walk.s");
+        r.load("res/sprite.ghost.walk.w.json",     "ghost.walk.w");
+        
+        // 가만히 있을때 (동,서,남,북)
+        r.load("res/sprite.ghost.idle.n.json",     "ghost.idle.n");
+        r.load("res/sprite.ghost.idle.e.json",     "ghost.idle.e");
+        r.load("res/sprite.ghost.idle.s.json",     "ghost.idle.s");
+        r.load("res/sprite.ghost.idle.w.json",     "ghost.idle.w");
     }
 
     @Override
