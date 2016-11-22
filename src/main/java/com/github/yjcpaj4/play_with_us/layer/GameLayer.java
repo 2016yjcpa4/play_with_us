@@ -12,7 +12,7 @@ import java.awt.Graphics2D;
 
 public class GameLayer extends Layer {
     
-    public static final float ZOOM = 2f;//1.25f;
+    public static final float ZOOM = 1.75f;
     
     private Player mPlayer;
     private Vector2D mCameraPos = new Vector2D();
@@ -25,7 +25,7 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        MapResource r = getResource().getMap("library");
+        MapResource r = getResource().getMap("kitchen");
         Map m = r.toMap();
         if (r.hasPlayerSpawn()) {
             mPlayer = new Player(r.getPlayerSpwan());
