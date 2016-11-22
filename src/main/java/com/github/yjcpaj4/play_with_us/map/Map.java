@@ -21,14 +21,10 @@ public class Map {
 
     public static final boolean DEBUG = false;
     
-    public static final int MAP_WIDTH = 1280;
-    public static final int MAP_HEIGHT = 800;
+    private static final int TILE_WIDTH = 11;
+    private static final int TILE_HEIGHT = 11;
     
-    public static final int TILE_COLUMNS = (int) (MAP_WIDTH / 11.0);
-    public static final int TILE_ROWS = (int) (MAP_HEIGHT / 11.0);
-    
-    private TileMap mTiles = new TileMap(TILE_COLUMNS, TILE_ROWS);
-    
+    private TileMap mTiles;
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
@@ -43,6 +39,8 @@ public class Map {
     }
     
     private void setTiles() {
+        mTiles = new TileMap(getTileColumns(), getTileRows());
+        
         for (Line2D l : getAllSideByNotWalkable()) {
             Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
             Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
@@ -83,12 +81,28 @@ public class Map {
         return 0.96f;
     }
     
+    public int getWidth() {
+        return mBackground.getWidth();
+    }
+    
+    public int getHeight() {
+        return mBackground.getHeight();
+    }
+    
+    public int getTileColumns() {
+        return (int) (getWidth() / (float) TILE_WIDTH);
+    }
+    
+    public int getTileRows() {
+        return (int) (getHeight() / (float) TILE_HEIGHT);
+    }
+    
     public int getTileWidth() {
-        return MAP_WIDTH / TILE_COLUMNS;
+        return getWidth() / getTileColumns();
     }
     
     public int getTileHeight() {
-        return MAP_HEIGHT / TILE_ROWS;
+        return getHeight() / getTileRows();
     }
     
     public Point2D getTileIndex(Point2D p) {
@@ -193,10 +207,10 @@ public class Map {
             o.draw(g, delta, g2d);
         }
         
-        BufferedImage b = new BufferedImage(g.getContext().getWidth(), g.getContext().getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage b = new BufferedImage(mBackground.getWidth(), mBackground.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D t = b.createGraphics();
         t.setPaint(new Color(0, 0, 0, (int) (255 * getDarkness())));
-        t.fillRect(0, 0, g.getContext().getWidth(), g.getContext().getHeight());
+        t.fillRect(0, 0, mBackground.getWidth(), mBackground.getHeight());
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
         for (GameObject o : getAllLight()) {

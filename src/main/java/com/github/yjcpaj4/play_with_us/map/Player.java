@@ -32,9 +32,13 @@ public class Player extends PhysicsObject {
      */
     private Light mLight = new Light() {
         
+        private static final int LIGHT_RELATIVE_Y = 15;
+        
         @Override
         public Point2D getPosition() {
-            return Player.this.getPosition();
+            Point2D p = new Point2D(Player.this.getPosition());
+            p.setY(p.getY() - LIGHT_RELATIVE_Y);
+            return p;
         }
 
         @Override
@@ -48,7 +52,7 @@ public class Player extends PhysicsObject {
     }
     
     public Player(float x, float y) {
-        mCollider = new Circle(x, y, 20);
+        mCollider = new Circle(x, y, 10);
     }
     
     /**
@@ -73,8 +77,8 @@ public class Player extends PhysicsObject {
         return mLight.isTurnOn();
     }
     
-    private void setDirectionByInput(InputManager m) {
-        mDir.set(m.getMousePosition());
+    private void setDirectionByInput(GameLayer g, InputManager m) {
+        mDir.set(g.getCamera().add(m.getMousePosition()));
     }
     
     private void setLightByInput(InputManager m) {
@@ -120,7 +124,7 @@ public class Player extends PhysicsObject {
         // 인풋 들어온걸 토대로 캐릭터의 속성 변화를 줍니다.
         setLightByInput(m); // 손전등의 상태
         setVelocityByInput(m); // 플레이어의 속도
-        setDirectionByInput(m); // 플레이어가 바라보는 방향
+        setDirectionByInput(g, m); // 플레이어가 바라보는 방향
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
     }
@@ -134,9 +138,9 @@ public class Player extends PhysicsObject {
      */
     @Deprecated
     private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
-        String k = String.join(".", "player", "walk", MathUtil.getDirectionByRadian(getAngle()));
+        String k = String.join(".", "player", "walk", Character.toString(MathUtil.getSimpleDirectionByRadian(getAngle())));
         
-        SpriteResource.Frame f = r.getSprite(k).getFrame(2); // 기본 상태
+        SpriteResource.Frame f = r.getSprite(k).getFrame(0); // 기본 상태
         
         if (mVel.getX() != 0 || mVel.getY() != 0) { // 움직임이 발생하면
             f = r.getSprite(k).getCurrentFrame(d); // 델타값을 넣어 현재 프레임을 뽑아옴
@@ -153,12 +157,12 @@ public class Player extends PhysicsObject {
         Point2D p = getPosition();
         
         g2d.drawImage(f.getImage(), 
-                      (int)p.getX() - f.getWidth() / 2, 
-                      (int)p.getY() - f.getHeight() / 2, 
+                      (int) (p.getX() - f.getWidth() / 2), 
+                      (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius()), 
                       null);
         
         
-        g2d.setColor(Color.RED);
-        g2d.drawPolygon(mCollider.toAWTPolygon());
+        //g2d.setColor(Color.RED);
+        //g2d.drawPolygon(mCollider.toAWTPolygon());
     }
 }

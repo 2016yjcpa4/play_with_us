@@ -3,6 +3,7 @@ package com.github.yjcpaj4.play_with_us;
 import java.util.HashMap; 
 import java.util.Map;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class InputManager {
     
-    private Point2D mMousePos = new Point2D();
+    private Vector2D mMousePos = new Vector2D();
     private InputQueue mMouseQueue = new InputQueue(4);
     private InputQueue mKeyboardQueue = new InputQueue(512);
     
@@ -98,7 +99,7 @@ public class InputManager {
         return mMouseQueue.isReleased(k);
     }
     
-    public Point2D getMousePosition() {
+    public Vector2D getMousePosition() {
         return mMousePos;
     }
     

@@ -72,8 +72,7 @@ public class SpriteResource implements Serializable {
     }
 
     public Frame getCurrentFrame(long delta) {
-        int n[] = { 2, 3, 4, 3, 2, 1, 0, 1 };
-        return getFrame(n[(int) (delta / mFPS % n.length)]);
+        return getFrame((int) (delta / mFPS % mFrames.size()));
     }
 
     public static class Frame implements Serializable {
