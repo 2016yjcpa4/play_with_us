@@ -259,6 +259,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
         
+        g2d.translate(mTrans.getX(), mTrans.getY());
+        
         if (mResource == null) {
             Font f = new Font("돋움", Font.BOLD, 40);
             g2d.setColor(Color.RED);
@@ -316,8 +318,12 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     public void mouseClicked(MouseEvent e) {
     }
 
+    private Point2D mPressed;
+    private Point2D mTrans = new Point2D();
+    
     @Override
     public void mousePressed(MouseEvent e) {
+        mPressed = new Point2D(e.getX(), e.getY());
     }
     
     @Override
@@ -327,6 +333,10 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if (mPressed != null) {
+            mTrans.set(e.getX() - mTrans.getX(), e.getY() - mTrans.getY());
+        }
+        
         if (e.isShiftDown() && mSelection.getOriginPoints().size() > 0) {
             List<Point2D> l = mSelection.getOriginPoints();
             Vector2D v = new Vector2D(l.get(l.size() - 1));
@@ -346,6 +356,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        mPressed = null;
+        
         if (e.getButton() == MouseEvent.BUTTON1) {
             
             if (mResource == null) {
