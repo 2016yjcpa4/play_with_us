@@ -307,8 +307,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
 
         g2d.setColor(new Color(34, 181, 0)); 
         g2d.drawPolygon(p.toAWTPolygon());
-
-        g2d.setColor(new Color(34, 181, 0));
         for (Point2D o : p.getPoints()) {
             g2d.fillOval((int) o.getX() - (10 / 2), (int) o.getY() - (10 / 2), 10, 10);
         }
