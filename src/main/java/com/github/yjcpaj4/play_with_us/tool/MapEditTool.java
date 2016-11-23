@@ -26,6 +26,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -42,7 +44,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-public class MapEditTool extends GraphicLooper implements MouseListener, MouseMotionListener, KeyListener {
+public class MapEditTool extends GraphicLooper implements MouseListener, MouseWheelListener, MouseMotionListener, KeyListener {
     
     static {
         try {
@@ -64,7 +66,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     private JFrame mFrame = new JFrame();
     private int mSelectMode = -1;
     private Selection mSelection = new Selection();
-    private Point2D mMousePos = new Point2D();
+    private Vector2D mMousePos = new Vector2D();
 
     private MapResource mResource;
     
@@ -171,6 +173,13 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         start();
     }
     
+    private float ZOOM = 1.5f;
+    
+    public Point2D getMousePosition() {
+         
+        return new Vector2D(mTrans.divide(ZOOM)).subtract(mMousePos.divide(ZOOM)).toPoint2D();
+    }
+    
     private MapResource newStageResource() {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -178,6 +187,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         }
         
         return null;
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        //ZOOM = e.getScrollAmount();
     }
     
     private class Selection {
@@ -215,7 +229,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         public List<Point2D> getPoints(boolean withCurrentMousePosition) {
             final List<Point2D> l = new ArrayList(mPoints);
             if (withCurrentMousePosition) {
-                l.add(mMousePos);
+                l.add(getMousePosition());
             }
             
             /**
@@ -260,6 +274,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
         super.draw(delta, g2d);
         
         g2d.translate(mTrans.getX(), mTrans.getY());
+        g2d.scale(ZOOM, ZOOM);
         
         if (mResource == null) {
             Font f = new Font("돋움", Font.BOLD, 40);
@@ -319,11 +334,11 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     }
 
     private Point2D mPressed;
-    private Point2D mTrans = new Point2D();
+    private Vector2D mTrans = new Vector2D();
     
     @Override
     public void mousePressed(MouseEvent e) {
-        mPressed = new Point2D(e.getX(), e.getY());
+        mPressed = new Point2D(e.getX() - mTrans.getX(), e.getY() - mTrans.getY());
     }
     
     @Override
@@ -334,7 +349,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
     @Override
     public void mouseMoved(MouseEvent e) {
         if (mPressed != null) {
-            mTrans.set(e.getX() - mTrans.getX(), e.getY() - mTrans.getY());
+            mTrans.set(e.getX() - mPressed.getX(), e.getY() - mPressed.getY());
         }
         
         if (e.isShiftDown() && mSelection.getOriginPoints().size() > 0) {
@@ -365,7 +380,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                 return;
             }
             
-            mSelection.addPoint(new Point2D(mMousePos));
+            mSelection.addPoint(new Point2D(getMousePosition()));
         }
         else if (e.getButton() == MouseEvent.BUTTON3) {
             mSelection.setReverse();
@@ -406,7 +421,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             mSelectMode = SELECT_PORTAL;
         }
         else if (e.getKeyCode() == KeyEvent.VK_4) {
-            mResource.setPlayerSpawn(new Point2D(mMousePos));
+            mResource.setPlayerSpawn(new Point2D(getMousePosition()));
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
