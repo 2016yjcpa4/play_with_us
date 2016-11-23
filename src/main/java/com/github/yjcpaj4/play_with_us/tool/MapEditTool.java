@@ -299,17 +299,17 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
             g2d.setColor(new Color(0, 0, 255)); 
             g2d.drawOval((int) p.getX() - (SIZE / 2), (int) p.getY() - (SIZE / 2), SIZE, SIZE);
         }
-         
-        for (Polygon o : mSelection.toPolygon().getTriangulate()) {
-            g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
-            g2d.fillPolygon(o.toAWTPolygon()); 
-            
-            g2d.setColor(new Color(34, 181, 0)); 
-            g2d.drawPolygon(o.toAWTPolygon()); 
-        }
+        
+        Polygon p = mSelection.toPolygon();
+        
+        g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
+        g2d.fillPolygon(p.toAWTPolygon()); 
+
+        g2d.setColor(new Color(34, 181, 0)); 
+        g2d.drawPolygon(p.toAWTPolygon());
 
         g2d.setColor(new Color(34, 181, 0));
-        for (Point2D o : mSelection.getPoints()) {
+        for (Point2D o : p.getPoints()) {
             g2d.fillOval((int) o.getX() - (10 / 2), (int) o.getY() - (10 / 2), 10, 10);
         }
     }
@@ -414,7 +414,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseMo
                     mResource.addNotWalkable(o.getPoints());
                 }
             }
-            else if (mSelectMode == SELECT_PORTAL) {
+            else if (mSelectMode == SELECT_PORTAL) { 
                 
             }
             
