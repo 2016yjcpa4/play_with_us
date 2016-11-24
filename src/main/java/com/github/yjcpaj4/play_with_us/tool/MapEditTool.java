@@ -141,35 +141,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
         mFrame.getContentPane().add(mCanvas);
         mFrame.setVisible(true);
         
-        mFrame.setDropTarget(new DropTarget() {
-            
-            @Override
-            public synchronized void drop(DropTargetDropEvent evt) {
-                try {
-                    evt.acceptDrop(DnDConstants.ACTION_COPY);
-                    List<File> l = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    
-                    switch (FileUtil.getExtension(l.get(0))) {
-                        case "jpg":
-                        case "jpeg":
-                        case "bmp": 
-                        case "gif":
-                        case "png": 
-                        case "tiff":
-                        case "tif":
-                            mResource = newStageResource();
-                            break;
-                        case "json":
-                            mResource = MapResource.loadFromJSON(l.get(0));
-                            break;
-                    }
-                } 
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        
         start();
     }
     
@@ -438,6 +409,74 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
             }
             else if (mSelectMode == SELECT_PORTAL) { 
                 
+                MapResource r = MapResource.loadFromJSON("res/map.bathroom.json");
+                
+                Point2D p = new Point2D();
+                JFrame f = new JFrame();
+                
+                GraphicLooper l = new GraphicLooper() { 
+                    
+                    @Override
+                    protected void draw(long delta, Graphics2D g2d) {
+                        super.draw(delta, g2d);
+
+                        g2d.drawImage(r.getImage(), 0, 0, null);
+
+                        for (Lightless o : r.getLightless()) {
+                            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.5))); 
+                            g2d.fillPolygon(o.toAWTPolygon());
+
+                            g2d.setColor(new Color(255, 255, 0)); 
+                            g2d.drawPolygon(o.toAWTPolygon());
+                        }
+
+                        for (NotWalkable o : r.getNotWalkable()) {
+                            g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.5))); 
+                            g2d.fillPolygon(o.toAWTPolygon());
+
+                            g2d.setColor(new Color(255, 0, 0)); 
+                            g2d.drawPolygon(o.toAWTPolygon());
+                        }
+                    }
+                };
+                
+                l.getCanvas().addMouseListener(new MouseListener() {
+                    
+                    @Override
+                    public void mouseClicked(MouseEvent e) { 
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        l.stop();
+                        f.setVisible(false);
+                        
+                        p.set(e.getX(), e.getY());
+                        
+                        
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) { 
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) { 
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) { 
+                    }
+                });
+                
+                f.setTitle(WINDOW_TITLE);
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+                f.setLocationRelativeTo(null);       
+                f.getContentPane().add(l.getCanvas());
+                f.setVisible(true);
+                
+                l.start();
             }
             
             mSelection.reset();

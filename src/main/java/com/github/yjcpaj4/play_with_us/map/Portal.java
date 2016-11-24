@@ -7,6 +7,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.google.gson.annotations.SerializedName;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.List;
 
 /**
  * Portal.class.
@@ -18,14 +19,14 @@ import java.awt.Graphics2D;
 public class Portal extends PhysicsObject {
     
     protected Point2D mSpawnPos;
-    protected final String mDestMapID;
+    protected final String mDestMap;
     
     protected boolean mLocked = false;
     
-    public Portal(String s, Point2D p) {
-        mDestMapID = s;
+    public Portal(String s, Point2D p, List<Point2D> l) {
+        mDestMap = s;
         mSpawnPos = p;
-        mCollider = new Circle(p.getX(), p.getY(), 20);
+        mCollider = new Polygon(l);
     }
     
     public void setLock() {
@@ -36,12 +37,15 @@ public class Portal extends PhysicsObject {
         mLocked = false;
     }
     
+    private void enterMap(PhysicsObject o) {
+        
+    }
+    
     @Override
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (isCollide(o)) {
-                Map s = g.getResource().getMap(mDestMapID).toMap();
-                s.addObject(o);
+                enterMap(o);
             }
         }
     }
