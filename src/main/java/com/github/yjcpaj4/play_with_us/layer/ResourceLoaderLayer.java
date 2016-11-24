@@ -45,8 +45,9 @@ public class ResourceLoaderLayer extends Layer {
         // 맵정보를 불러옵니다.
         r.load("res/map.kitchen.json",              "kitchen");
         r.load("res/map.library.json",              "library");
-        r.load("res/map.clothes_room.json",         "clothes_room");
+        r.load("res/map.clothesroom.json",          "clothesroom");
         r.load("res/map.bathroom.json",             "bathroom");
+        r.load("res/map.livingroom.json",           "livingroom");
         
         // 걸어다닐때 (동,서,남,북)
         r.load("res/sprite.player.walk.n.json",     "player.walk.n");

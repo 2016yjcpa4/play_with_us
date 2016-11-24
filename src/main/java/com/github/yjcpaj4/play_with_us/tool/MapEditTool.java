@@ -173,11 +173,8 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
         start();
     }
     
-    private float ZOOM = 1.5f;
-    
     public Point2D getMousePosition() {
-         
-        return new Vector2D(mTrans.divide(ZOOM)).subtract(mMousePos.divide(ZOOM)).toPoint2D();
+        return new Vector2D(mMousePos).subtract(mTrans).toPoint2D();
     }
     
     private MapResource newStageResource() {
@@ -191,7 +188,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        //ZOOM = e.getScrollAmount();
     }
     
     private class Selection {
@@ -274,7 +270,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
         super.draw(delta, g2d);
         
         g2d.translate(mTrans.getX(), mTrans.getY());
-        g2d.scale(ZOOM, ZOOM);
         
         if (mResource == null) {
             Font f = new Font("돋움", Font.BOLD, 40);
@@ -317,16 +312,18 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
             g2d.drawOval((int) p.getX() - (SIZE / 2), (int) p.getY() - (SIZE / 2), SIZE, SIZE);
         }
         
-        Polygon p = mSelection.toPolygon();
+        Polygon o = mSelection.toPolygon();
         
         g2d.setColor(new Color(34, 181, 0, (int) (255 * 0.5))); 
-        g2d.fillPolygon(p.toAWTPolygon()); 
+        g2d.fillPolygon(o.toAWTPolygon()); 
 
         g2d.setColor(new Color(34, 181, 0)); 
-        g2d.drawPolygon(p.toAWTPolygon());
-        for (Point2D o : p.getPoints()) {
-            g2d.fillOval((int) o.getX() - (10 / 2), (int) o.getY() - (10 / 2), 10, 10);
-        }
+        g2d.drawPolygon(o.toAWTPolygon());
+        
+        Point2D p = getMousePosition();
+        
+        g2d.drawLine((int) p.getX() - 10, (int) p.getY(), (int) p.getX() + 10, (int) p.getY());
+        g2d.drawLine((int) p.getX(), (int) p.getY() - 10, (int) p.getX(), (int) p.getY() + 10);
     }
 
     @Override
@@ -354,7 +351,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
         
         if (e.isShiftDown() && mSelection.getOriginPoints().size() > 0) {
             List<Point2D> l = mSelection.getOriginPoints();
-            Vector2D v = new Vector2D(l.get(l.size() - 1));
+            Vector2D v = new Vector2D(l.get(l.size() - 1)).add(mTrans);
             String s = MathUtil.getSimpleDirectionByRadian(v.subtract(e.getX(), e.getY()).toAngle());
             
             if (Arrays.asList("n", "s").contains(s)) { // 북쪽 혹은 남쪽 방향이면
