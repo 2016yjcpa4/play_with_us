@@ -1,6 +1,7 @@
 package com.github.yjcpaj4.play_with_us.map;
 
 import com.github.yjcpaj4.play_with_us.geom.Circle;
+import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
@@ -16,11 +17,11 @@ import java.util.List;
  * 
  * @author 차명도.
  */
-public class Portal extends PhysicsObject {
+public class Portal extends GameObject {
     
+    protected Polygon mCollider;
     protected Point2D mSpawnPos;
     protected final String mDestMap;
-    
     protected boolean mLocked = false;
     
     public Portal(String s, Point2D p, List<Point2D> l) {
@@ -44,7 +45,7 @@ public class Portal extends PhysicsObject {
     @Override
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
-            if (isCollide(o)) {
+            if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
                 enterMap(o);
             }
         }

@@ -6,6 +6,7 @@ import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
 import com.github.yjcpaj4.play_with_us.map.Player;
 import com.github.yjcpaj4.play_with_us.map.Map;
+import com.github.yjcpaj4.play_with_us.map.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
@@ -49,6 +50,9 @@ public class MapResource {
     @SerializedName("lightless")
     protected List<List<Point2D>> mLightless = new ArrayList();
     
+    @SerializedName("portal")
+    protected List<PortalResource> mPortal = new ArrayList();
+    
     @SerializedName("player_spawn")
     protected Point2D mPlayerSpawn;
 
@@ -63,10 +67,6 @@ public class MapResource {
         catch(IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    public File getImageFile() {
-        return new File(mImagePath);
     }
     
     public BufferedImage getImage() {
@@ -86,6 +86,10 @@ public class MapResource {
     }
     
     public void addLightless(List<Point2D> l) {
+        mLightless.add(l);
+    }
+    
+    public void addPortal(String s, Point2D p, List<Point2D> l) {
         mLightless.add(l);
     }
     
@@ -121,6 +125,29 @@ public class MapResource {
         List<GameObject> l = new ArrayList();
         l.addAll(getNotWalkable());
         l.addAll(getLightless());
+        for(PortalResource o : mPortal) {
+            l.addAll(o.toPortal());
+        }
         return new Map(mImage, l);
+    }
+}
+
+class PortalResource {
+    
+    @SerializedName("dest_map")
+    protected String mDestMap;  
+    
+    @SerializedName("spawn_pos")
+    protected Point2D mSpawnPos;
+    
+    @SerializedName("portal_area")
+    protected List<List<Point2D>> mPortalArea = new ArrayList<>();
+    
+    public List<Portal> toPortal() {
+        List<Portal> l = new ArrayList<>();
+        for(List<Point2D> o : mPortalArea) {
+            l.add(new Portal(mDestMap, mSpawnPos, o));
+        }
+        return l;
     }
 }

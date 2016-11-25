@@ -102,7 +102,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
                                 
                                 // 리소스 폴더로 옮겨집니다.
                                 File f = new File("res");
-                                mResource.getImageFile().renameTo(new File(f, mResource.getImageFile().getName()));
                                 FileUtil.setContents(new File(f, "map.debug.json"), s);
                             }
                         });
@@ -401,15 +400,24 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
                 for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) {
                     mResource.addLightless(o.getPoints());
                 }
+            
+                mSelection.reset();
             }
             else if (mSelectMode == SELECT_NOT_WALKABLE) {
                 for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) { 
                     mResource.addNotWalkable(o.getPoints());
                 }
+            
+                mSelection.reset();
             }
-            else if (mSelectMode == SELECT_PORTAL) { 
+            else if (mSelectMode == SELECT_PORTAL) {
                 
-                MapResource r = MapResource.loadFromJSON("res/map.bathroom.json");
+                JFileChooser fc = new JFileChooser();
+                if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+                
+                MapResource r = MapResource.loadFromJSON(fc.getSelectedFile());
                 
                 Point2D p = new Point2D();
                 JFrame f = new JFrame();
@@ -453,7 +461,9 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
                         
                         p.set(e.getX(), e.getY());
                         
-                        
+                        mResource.addPortal(fc.getName(), p, mSelection.getPoints());
+            
+                        mSelection.reset();
                     }
 
                     @Override
@@ -478,8 +488,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
                 
                 l.start();
             }
-            
-            mSelection.reset();
         }
     }
     
