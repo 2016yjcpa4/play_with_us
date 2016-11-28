@@ -38,15 +38,15 @@ public class Portal extends GameObject {
         mLocked = false;
     }
     
-    private void enterMap(PhysicsObject o) {
-        
-    }
-    
     @Override
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
-                enterMap(o);
+                Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
+                m.addObject(o);
+                
+                o.setPosition(mSpawnPos);
+                break;
             }
         }
     }

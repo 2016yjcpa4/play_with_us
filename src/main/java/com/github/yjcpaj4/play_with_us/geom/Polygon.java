@@ -80,6 +80,12 @@ public class Polygon {
         int y = (int) (v.getY() / n);
         return new Point2D(x, y);
     }
+    
+    public void setPosition(float x, float y) {
+        Vector2D v = new Vector2D(x, y).subtract(getPosition());
+        
+        transform(Matrix2D.translate(v.getX(), v.getY()));
+    }
 
     public final Point2D getPoint(int n) {
         return new Point2D(mPoints.get(ArrayUtil.getFixedArrayIndex(n, mPoints.size())));

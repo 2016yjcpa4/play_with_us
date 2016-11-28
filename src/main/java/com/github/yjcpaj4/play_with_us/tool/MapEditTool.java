@@ -4,6 +4,7 @@ import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.map.Lightless;
 import com.github.yjcpaj4.play_with_us.map.NotWalkable;
+import com.github.yjcpaj4.play_with_us.map.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
@@ -279,6 +280,14 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
             g2d.drawPolygon(o.toAWTPolygon());
         }
         
+        for (MapResource.PortalResource o : mResource.getPortal()) {
+            g2d.setColor(new Color(255, 0, 255, (int) (255 * 0.5))); 
+            g2d.fillPolygon(o.toAWTPolygon());
+            
+            g2d.setColor(new Color(255, 0, 255)); 
+            g2d.drawPolygon(o.toAWTPolygon());
+        }
+        
         if (mResource.hasPlayerSpawn()) {
             final int SIZE = 40;
             
@@ -469,7 +478,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
                         
                         p.set(e.getX(), e.getY());
                         
-                        mResource.addPortal(fc.getName(), p, mSelection.getPoints());
+                        mResource.addPortal(fc.getName(), p, mSelection.getPoints(false));
             
                         mSelection.reset();
                     }

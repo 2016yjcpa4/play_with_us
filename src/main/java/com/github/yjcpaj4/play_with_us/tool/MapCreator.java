@@ -400,10 +400,6 @@ public class MapCreator extends GraphicLooper implements MouseListener, MouseWhe
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             
-            if ( ! Arrays.asList(SELECT_LIGHTLESS, SELECT_NOT_WALKABLE, SELECT_PORTAL).contains(mSelectMode)) {
-                return;
-            }
-            
             if (mSelectMode == SELECT_LIGHTLESS) {
                 for(Polygon o : new Polygon(mSelection.getPoints(false)).getTriangulate()) {
                     mResource.addLightless(o.getPoints());
