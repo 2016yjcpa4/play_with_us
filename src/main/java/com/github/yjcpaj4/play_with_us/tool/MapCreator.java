@@ -44,7 +44,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-public class MapEditTool extends GraphicLooper implements MouseListener, MouseWheelListener, MouseMotionListener, KeyListener {
+public class MapCreator extends GraphicLooper implements MouseListener, MouseWheelListener, MouseMotionListener, KeyListener {
     
     static {
         try {
@@ -70,7 +70,7 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
 
     private MapResource mResource;
     
-    public MapEditTool() {
+    public MapCreator() {
         mCanvas.addMouseMotionListener(this);
         mCanvas.addMouseListener(this);
         mCanvas.addKeyListener(this);
@@ -500,6 +500,6 @@ public class MapEditTool extends GraphicLooper implements MouseListener, MouseWh
     }
     
     public static void main(String args[]) {
-        new MapEditTool();
+        new MapCreator();
     }
 }

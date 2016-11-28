@@ -12,9 +12,7 @@ import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotWalkable extends GameObject {
-    
-    private Polygon mCollider;
+public class NotWalkable extends PhysicsObject {
     
     public NotWalkable(List<Point2D> l) {
         mCollider = new Polygon(l);
