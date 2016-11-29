@@ -20,14 +20,16 @@ import java.util.List;
  */
 public class Portal extends GameObject {
     
-    protected Polygon mCollider;
-    protected Point2D mSpawnPos;
-    protected final String mDest;
-    protected boolean mLocked = false;
+    private Polygon mCollider;
+    
+    private String mDestMap;
+    private Point2D mDestPos;
+    
+    private boolean mLocked = false;
     
     public Portal(String s, Point2D p, List<Point2D> l) {
-        mDest = s;
-        mSpawnPos = p;
+        mDestMap = s;
+        mDestPos = p;
         mCollider = new Polygon(l);
     }
     
@@ -43,10 +45,10 @@ public class Portal extends GameObject {
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
-                Map m = g.getResource().getMap(mDest).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
+                Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
                 m.addObject(o);
                 
-                o.setPosition(mSpawnPos);
+                o.setPosition(mDestPos);
                 break;
             }
         }
