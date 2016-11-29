@@ -3,6 +3,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.axet.play.VLC;
 import com.github.yjcpaj4.play_with_us.Application;
+import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent; 
 import java.io.File;
@@ -51,12 +52,28 @@ public class VideoLayer extends Layer {
     protected void pause() {
         super.pause();
         
-        if (mVLC != null) {
-            mVLC.close();
-            mVLC = null;
-        }
+        /*
+         * VLC.Listener 에서 stop 후 pause 로 넘어올경우 
+         * mVLC.close(); 호출이 되어야하는데 호출이 되지않습니다.
+         * 아래처럼 별도의 Thread 를 생성하여 함수호출할시 해결은 되었습니다.
+         * 원인은 파악하지 못하여 차후 원인을 밝혀야합니다.
+         */
         
-        getApplicationCanvas().removeKeyListener(mKeyListener);
+        final Runnable r = new Runnable() {
+            
+            @Override
+            public void run() {
+                 
+                if (mVLC != null) {
+                    mVLC.close();
+                    mVLC = null;
+                }
+        
+                getApplicationCanvas().removeKeyListener(mKeyListener);
+            }
+        };
+        
+        new Thread(r).start();
     }
     
     private class KeyListener implements java.awt.event.KeyListener {

@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.map;
 
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -21,11 +22,11 @@ public class Portal extends GameObject {
     
     protected Polygon mCollider;
     protected Point2D mSpawnPos;
-    protected final String mDestMap;
+    protected final String mDest;
     protected boolean mLocked = false;
     
     public Portal(String s, Point2D p, List<Point2D> l) {
-        mDestMap = s;
+        mDest = s;
         mSpawnPos = p;
         mCollider = new Polygon(l);
     }
@@ -42,7 +43,7 @@ public class Portal extends GameObject {
     public void update(GameLayer g, long delta) {
         for (PhysicsObject o : getMap().getAllPhysicsObject()) {
             if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
-                Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
+                Map m = g.getResource().getMap(mDest).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
                 m.addObject(o);
                 
                 o.setPosition(mSpawnPos);
@@ -53,7 +54,9 @@ public class Portal extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
-        g2d.setColor(Color.BLUE);
-        g2d.fillPolygon(mCollider.toAWTPolygon());
+        if (Application.DEBUG) {
+            g2d.setColor(Color.BLUE);
+            g2d.fillPolygon(mCollider.toAWTPolygon());
+        }
     }
 }
