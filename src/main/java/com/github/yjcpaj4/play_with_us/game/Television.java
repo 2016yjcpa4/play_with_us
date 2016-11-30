@@ -50,22 +50,22 @@ public class Television extends LightWithGameObject {
         }
     }
     
-    private boolean mStartNoise = false;
-    private int mFPS = 0;
+    private boolean mSurprise = false;
+    private int mFPS = 1;
     
     @Override
     public void update(GameLayer g, long delta) {
         
-        if ( ! mStartNoise) {
+        if ( ! mSurprise) {
             Vector2D v = new Vector2D(g.getPlayer().getPosition()).subtract(getPosition());
 
             if (v.length() <= 150) {
-                mStartNoise = true;
+                mSurprise = true;
                 g.getPlayer().showMessage("헉 니미 씨발;;", 1000);
             }
         }
         
-        if (mStartNoise) {
+        if (mSurprise) {
             if (delta / mFPS % 2 == 0) {
                 mLight.setTurnOn();
             } else {

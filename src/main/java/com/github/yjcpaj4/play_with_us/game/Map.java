@@ -72,12 +72,8 @@ public class Map {
         
         mObject.add(o);
         
-        if (o instanceof Player) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
-            addObject(((Player) o).getOwnedLight());
-        }
-        
-        if (o instanceof Television) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
-            addObject(((Television) o).getOwnedLight());
+        if (o instanceof LightWithGameObject) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
+            addObject(((LightWithGameObject) o).getOwnedLight());
         }
     }
     
@@ -120,16 +116,6 @@ public class Map {
         return l;
     }
     
-    public List<PhysicsObject> getAllPhysicsObject() {
-        List<PhysicsObject> l = new ArrayList<>();
-        for(GameObject o : getAllObject()) {
-            if (o instanceof PhysicsObject) {
-                l.add((PhysicsObject) o);
-            }
-        }
-        return l;
-    }
-    
     public List<NotWalkable> getAllNotWalkable() {
         List<NotWalkable> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
@@ -166,6 +152,16 @@ public class Map {
         return l;
     }
     
+    public List<LightWithGameObject> getAllLightObject() {
+        List<LightWithGameObject> l = new ArrayList<>();
+        for(GameObject o : getAllObject()) {
+            if (o instanceof LightWithGameObject) {
+                l.add((LightWithGameObject) o);
+            }
+        }
+        return l;
+    }
+    
     public List<Point2D> getPath(Point2D p1, Point2D p2) {
         return getPath((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
     }
@@ -184,10 +180,10 @@ public class Map {
         return l;
     }
 
-    private List<GameObject> getAllObjectWithoutLightAndPlayer() {
+    private List<GameObject> getAllObjectWithoutLightObject() {
         List<GameObject> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
-            if (o instanceof Light || o instanceof Player || o instanceof Television) {
+            if (o instanceof Light || o instanceof LightWithGameObject) {
                 continue;
             }
             
@@ -201,7 +197,7 @@ public class Map {
         
         debugTiles(g2d);
 
-        for (GameObject o : getAllObjectWithoutLightAndPlayer()) {
+        for (GameObject o : getAllObjectWithoutLightObject()) {
             o.draw(g, delta, g2d);
         }
         
@@ -219,15 +215,8 @@ public class Map {
         
         g2d.drawImage(b, 0, 0, null);
         
-        Player p = getPlayer();
-        if (p != null) {
-            p.draw(g, delta, g2d);
-        }
-        
-        for (GameObject o : getAllObject()) {
-            if (o instanceof Television) {
-                o.draw(g, delta, g2d);
-            }
+        for (GameObject o : getAllLightObject()) {
+            o.draw(g, delta, g2d); 
         }
     }
     

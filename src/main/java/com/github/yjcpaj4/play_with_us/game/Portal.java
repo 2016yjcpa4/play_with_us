@@ -47,18 +47,15 @@ public class Portal extends GameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        for (PhysicsObject o : getMap().getAllPhysicsObject()) {
-            if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
-                Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
-                m.addObject(o);
-                
-                if (mDestMap.equalsIgnoreCase("kitchen")) {
-                    m.addObject(new Television(new Point2D(365, 320)));
-                }
-                
-                o.setPosition(mDestPos);
-                break;
+        if (CollisionDetection.getCollision(mCollider, g.getPlayer().getCollider()) != null) {
+            Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
+            m.addObject(g.getPlayer());
+
+            if (mDestMap.equalsIgnoreCase("kitchen")) {
+                m.addObject(new Television(new Point2D(365, 320)));
             }
+
+            g.getPlayer().setPosition(mDestPos);
         }
     }
 

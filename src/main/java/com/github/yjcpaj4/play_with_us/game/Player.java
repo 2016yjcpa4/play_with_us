@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
  
-public class Player extends PhysicsObject  {
+public class Player extends LightWithGameObject  {
+    
+    protected transient Polygon mCollider;
     
     private static final int SPEED = 3;
     
@@ -63,6 +65,22 @@ public class Player extends PhysicsObject  {
     
     public Player(float x, float y) {
         mCollider = new Circle(x, y, 10);
+    }
+    
+    public Polygon getCollider() {
+        return mCollider;
+    }
+    
+    public void setPosition(float x, float y) {
+        mCollider.setPosition(x, y);
+    }
+    
+    public void setPosition(Point2D p) {
+        mCollider.setPosition(p.getX(), p.getY());
+    }
+    
+    public Point2D getPosition() {
+        return mCollider.getPosition();
     }
     
     /**
