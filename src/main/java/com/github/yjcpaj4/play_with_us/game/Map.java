@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us.map;
+package com.github.yjcpaj4.play_with_us.game;
  
 import java.awt.AlphaComposite;
 import java.awt.Color;

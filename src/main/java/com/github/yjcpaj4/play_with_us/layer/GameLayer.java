@@ -2,9 +2,9 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.yjcpaj4.play_with_us.map.Map;
-import com.github.yjcpaj4.play_with_us.map.Player;
-import com.github.yjcpaj4.play_with_us.map.Portal;
+import com.github.yjcpaj4.play_with_us.game.Map;
+import com.github.yjcpaj4.play_with_us.game.Player;
+import com.github.yjcpaj4.play_with_us.game.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
