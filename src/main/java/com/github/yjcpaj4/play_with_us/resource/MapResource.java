@@ -62,7 +62,8 @@ public class MapResource {
 
         try {
             mImage = ImageIO.read(f);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

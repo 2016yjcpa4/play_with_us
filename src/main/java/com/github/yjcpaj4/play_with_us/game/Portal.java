@@ -33,6 +33,10 @@ public class Portal extends GameObject {
         mCollider = new Polygon(l);
     }
     
+    public Point2D getPosition() {
+        return mCollider.getPosition();
+    }
+    
     public void setLock() {
         mLocked = true;
     }
@@ -47,6 +51,10 @@ public class Portal extends GameObject {
             if (CollisionDetection.getCollision(mCollider, o.mCollider) != null) {
                 Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
                 m.addObject(o);
+                
+                if (mDestMap.equalsIgnoreCase("kitchen")) {
+                    m.addObject(new Television(new Point2D(365, 320)));
+                }
                 
                 o.setPosition(mDestPos);
                 break;

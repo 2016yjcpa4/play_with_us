@@ -75,10 +75,14 @@ public class Map {
         if (o instanceof Player) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
             addObject(((Player) o).getOwnedLight());
         }
+        
+        if (o instanceof Television) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
+            addObject(((Television) o).getOwnedLight());
+        }
     }
     
     public float getDarkness() {
-        return  0.98f;
+        return  0.58f;
     }
     
     public int getWidth() {
@@ -183,7 +187,7 @@ public class Map {
     private List<GameObject> getAllObjectWithoutLightAndPlayer() {
         List<GameObject> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
-            if (o instanceof Light || o instanceof Player) {
+            if (o instanceof Light || o instanceof Player || o instanceof Television) {
                 continue;
             }
             
@@ -218,6 +222,12 @@ public class Map {
         Player p = getPlayer();
         if (p != null) {
             p.draw(g, delta, g2d);
+        }
+        
+        for (GameObject o : getAllObject()) {
+            if (o instanceof Television) {
+                o.draw(g, delta, g2d);
+            }
         }
     }
     

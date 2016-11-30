@@ -19,15 +19,23 @@ import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
  
-public class Player extends PhysicsObject {
+public class Player extends PhysicsObject  {
     
     private static final int SPEED = 3;
     
     private Vector2D mVel = new Vector2D();
     private Vector2D mDir = new Vector2D(); 
+    
+    
+    private Timer mTimer;
+    
+    private String mMessage;
     
     /**
      * 플레이어의 손전등을 커스터마이징. 
@@ -160,24 +168,51 @@ public class Player extends PhysicsObject {
         return f;
     }
     
+    public void showMessage(String s, int n) {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
+        
+        final TimerTask t = new TimerTask() {
+            
+            @Override
+            public void run() {
+                mMessage = null;
+            }
+        };
+        
+        mMessage = s;
+        
+        mTimer = new Timer();
+        mTimer.schedule(t, n);
+    }
+    
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) { 
         SpriteResource.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
         Point2D p = getPosition();
         
-        String s[] = {
-            "앙!",
-            "꼬치!",
-        };
+        for(GameObject o : getMap().getAllObject()) {
+            if (o instanceof Portal) {
+                Vector2D v = new Vector2D(((Portal) o).getPosition()).subtract(p);
+                if (v.length() <= 100) {
+                    showMessage("문 발견", 1000);
+                }
+            }
+        }
         
         int x = (int) (p.getX() - f.getWidth() / 2);
         int y = (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
         
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(s[(int) (delta / 1000 % s.length)], x, y - 10);
+        if (mMessage != null) {
+            g2d.setFont(new Font("굴림", Font.PLAIN, 13));
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(mMessage, x, y - 10);
+        }
         
         g2d.drawImage(f.getImage(), x, y, null);
-        
         
         if (Application.DEBUG) {
             g2d.setColor(Color.RED);

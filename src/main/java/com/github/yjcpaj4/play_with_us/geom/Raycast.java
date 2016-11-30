@@ -124,11 +124,11 @@ public class Raycast {
         return r;
     }
 
-    public static List<Point2D> getRaycast(Point2D p, double n, List<Line2D> l) {
+    public static List<Point2D> getRaycast(Point2D p, double n, double e, List<Line2D> l) {
 
         List<IntersectionResult> v = new ArrayList();
 
-        for (Double n2 : getUniqueAngles(p, n, Math.toRadians(25), l)) {
+        for (Double n2 : getUniqueAngles(p, n, Math.toRadians(e / 2), l)) {
             
             Line2D l2 = new Line2D(p.getX(),
                                     p.getY(),

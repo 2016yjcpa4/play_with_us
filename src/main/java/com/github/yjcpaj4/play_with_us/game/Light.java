@@ -23,6 +23,14 @@ public class Light extends GameObject {
     
     private boolean mTurnOff = false;
     
+    public Light() {
+    }
+    
+    public Light(Point2D p, double d) {
+        mPos = p;
+        mAngle = d;
+    }
+    
     public void setTurnOff() {
         mTurnOff = true;
     }
@@ -59,7 +67,7 @@ public class Light extends GameObject {
         List<Point2D> l = new ArrayList<>();
         l.add(getPosition());
         
-        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getMap().getAllSideByLightless())) {  
+        for (Point2D p : Raycast.getRaycast(getPosition(), getAngle(), getExtent(), getMap().getAllSideByLightless())) {  
             l.add(p);    
         }
         
