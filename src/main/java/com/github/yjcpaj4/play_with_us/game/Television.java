@@ -60,7 +60,7 @@ public class Television extends LightWithGameObject {
         if ( ! mStartNoise) {
             Vector2D v = new Vector2D(g.getPlayer().getPosition()).subtract(getPosition());
 
-            if (v.length() <= 100) {
+            if (v.length() <= 150) {
                 mStartNoise = true;
             }
         }
