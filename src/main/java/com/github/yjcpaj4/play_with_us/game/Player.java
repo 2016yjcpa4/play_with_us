@@ -166,10 +166,8 @@ public class Player extends PhysicsObject {
         Point2D p = getPosition();
         
         String s[] = {
-            "첼중딱 ♬ 첼중딱 ♩♪",
-            "신나는노래 ♪",
-            "나도 한번 불러본다 ♬",
-            "첼중딱딱!!  ♬",
+            "앙!",
+            "꼬치!",
         };
         
         int x = (int) (p.getX() - f.getWidth() / 2);

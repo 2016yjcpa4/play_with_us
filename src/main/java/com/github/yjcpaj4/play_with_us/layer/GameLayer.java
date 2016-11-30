@@ -17,7 +17,7 @@ public class GameLayer extends Layer {
     
     private Player mPlayer;
 
-    private float mCameraZoom = 1.7f;
+    private float mCameraZoom = 1.6f;
     private Point2D mCameraPos = new Point2D();
     
     private java.util.Map<String, Map> mCachedMap = new LinkedHashMap<>();
