@@ -194,15 +194,6 @@ public class Player extends PhysicsObject  {
         SpriteResource.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
         Point2D p = getPosition();
         
-        for(GameObject o : getMap().getAllObject()) {
-            if (o instanceof Portal) {
-                Vector2D v = new Vector2D(((Portal) o).getPosition()).subtract(p);
-                if (v.length() <= 100) {
-                    showMessage("문 발견", 1000);
-                }
-            }
-        }
-        
         int x = (int) (p.getX() - f.getWidth() / 2);
         int y = (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
         

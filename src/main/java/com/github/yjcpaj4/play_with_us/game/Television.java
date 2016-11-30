@@ -13,8 +13,7 @@ public class Television extends LightWithGameObject {
     private static final int WIDTH = 40;
     private static final int HEIGHT = 25;
     
-    private BufferedImage mNoiseImage;
-    private BufferedImage mImage;
+    private BufferedImage mNoiseImage;  
     
     private Point2D mPos = new Point2D();
     
@@ -45,7 +44,6 @@ public class Television extends LightWithGameObject {
         try {
             mPos = p;
             mNoiseImage = ImageIO.read(new File("res/img.tv.noise.png"));
-            mImage = ImageIO.read(new File("res/img.tv.png"));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -53,7 +51,8 @@ public class Television extends LightWithGameObject {
     }
     
     private boolean mStartNoise = false;
-
+    private int mFPS = 0;
+    
     @Override
     public void update(GameLayer g, long delta) {
         
@@ -62,15 +61,16 @@ public class Television extends LightWithGameObject {
 
             if (v.length() <= 150) {
                 mStartNoise = true;
+                g.getPlayer().showMessage("헉 니미 씨발;;", 1000);
             }
         }
         
         if (mStartNoise) {
-            int n = (int) (Math.random() * 1000 + 500);
-            if (delta / n % 2 == 0) {
+            if (delta / mFPS % 2 == 0) {
                 mLight.setTurnOn();
             } else {
                 mLight.setTurnOff();
+                mFPS = (int) (Math.random() * 1000 + 1000);
             }
         }
     }
