@@ -17,7 +17,7 @@ public class GameLayer extends Layer {
     
     private Player mPlayer;
 
-    private float mCameraZoom = 1.75f;
+    private float mCameraZoom = 1.7f;
     private Point2D mCameraPos = new Point2D();
     
     private java.util.Map<String, Map> mCachedMap = new LinkedHashMap<>();
@@ -62,7 +62,7 @@ public class GameLayer extends Layer {
         float y = (p.getY() * mCameraZoom - getContext().getHeight() / 2);
         mCameraPos.set(x, y);
         g2d.translate(-mCameraPos.getX(), -mCameraPos.getY());
-        g2d.scale(mCameraZoom, mCameraZoom);
+        g2d.scale(mCameraZoom, mCameraZoom); 
 
         Map m = mPlayer.getMap();
         m.update(this, delta);

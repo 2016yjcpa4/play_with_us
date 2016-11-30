@@ -165,10 +165,20 @@ public class Player extends PhysicsObject {
         SpriteResource.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
         Point2D p = getPosition();
         
-        g2d.drawImage(f.getImage(), 
-                      (int) (p.getX() - f.getWidth() / 2), 
-                      (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius()), 
-                      null);
+        String s[] = {
+            "첼중딱 ♬ 첼중딱 ♩♪",
+            "신나는노래 ♪",
+            "나도 한번 불러본다 ♬",
+            "첼중딱딱!!  ♬",
+        };
+        
+        int x = (int) (p.getX() - f.getWidth() / 2);
+        int y = (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
+        
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(s[(int) (delta / 1000 % s.length)], x, y - 10);
+        
+        g2d.drawImage(f.getImage(), x, y, null);
         
         
         if (Application.DEBUG) {
