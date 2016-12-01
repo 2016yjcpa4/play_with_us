@@ -42,6 +42,10 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
+        r.load("res/snd.tv.noise.mp3",              "snd.tv.noise");
+        
+        r.load("res/img.tv.noise.png",              "img.tv.noise");
+        
         // 맵정보를 불러옵니다.
         r.load("res/map.kitchen.json",              "kitchen");
         r.load("res/map.library.json",              "library");

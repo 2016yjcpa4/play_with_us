@@ -1,61 +1,38 @@
 package com.github.yjcpaj4.play_with_us.resource;
 
 import java.io.File;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 public class SoundResource {
 
-    public static final int PLAY_ONCE = 1;
-    public static final int PLAY_INFINITY = -1;
+    static {
+        new JFXPanel();
+    }
     
-    private AudioInputStream mStream;
-    private SourceDataLine mDataLine;
+    private MediaPlayer mMediaPlayer;
     
     public SoundResource(File f) {
-        try {
-            mStream = AudioSystem.getAudioInputStream(f);
-            mDataLine = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, mStream.getFormat()));
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        mMediaPlayer = new MediaPlayer(new Media(f.toURI().toString()));
     }
     
     public void play() {
-        play(PLAY_ONCE);
-    }
-    
-    public void play(int count) {
         new Thread() {
             
             @Override
             public void run() {
-                try {
-                    mDataLine.open(mStream.getFormat());
-                    mDataLine.start();
-
-                    int n = 0;
-                    byte[] b = new byte[1024 * 4];
-                    while ((n = mStream.read(b, 0, b.length)) != -1) {
-                        mDataLine.write(b, 0, n);
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    if (count > 0 || count == PLAY_INFINITY) {
-                        play(count - 1);
-                    }
-                }
+                mMediaPlayer.play();
             }
         }.start();
     }
     
     public void stop() {
-        mDataLine.stop();
+        mMediaPlayer.stop();
     }
 }

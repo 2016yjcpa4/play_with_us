@@ -25,7 +25,19 @@ import java.util.Stack;
  */
 public class Application extends GraphicLooper {
     
+    private static Application INSTANCE;
     public static final boolean DEBUG = false;
+    
+    public static Application getInstance() {
+        if (INSTANCE == null) {
+            synchronized(Application.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new Application();
+                }
+            }
+        }
+        return INSTANCE;
+    }
     
     private Stack<Layer> mLayerStack = new Stack<>();
     private ResourceManager mRes = new ResourceManager(); // 싱글톤으로 만들필요는 없을거같음...
@@ -283,6 +295,6 @@ public class Application extends GraphicLooper {
     }
     
     public static void main(String[] args) throws Exception {
-        new Application().start(); // 생성하고 시작!
+        Application.getInstance().start();
     }
 }
