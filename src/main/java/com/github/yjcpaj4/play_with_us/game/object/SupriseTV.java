@@ -18,14 +18,10 @@ public class SupriseTV extends LightWithGameObject {
     private int mFPS = 0;
     private BufferedImage mTurnOnImage; 
     private SoundResource mTurnOnSound;
-    private Point2D mPos = new Point2D();
+    private Point2D mPos;
     private boolean mSurprise = false;
     
     private Light mLight = new Light() {
-        
-        {
-            mLight.setTurnOff();
-        }
         
         @Override
         public Point2D getPosition() {
@@ -45,8 +41,8 @@ public class SupriseTV extends LightWithGameObject {
         }
     };
     
-    public SupriseTV(Point2D p) {
-        mPos = p;
+    public SupriseTV(float x, float y) {
+        mPos = new Point2D(x, y);
         mTurnOnImage = Application.getInstance().getResource().getImage("img.tv.noise");
         mTurnOnSound = Application.getInstance().getResource().getSound("snd.tv.noise");
     }

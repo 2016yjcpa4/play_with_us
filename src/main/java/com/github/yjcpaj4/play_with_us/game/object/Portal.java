@@ -54,7 +54,8 @@ public class Portal extends GameObject {
             m.addObject(g.getPlayer());
 
             if (mDestMap.equalsIgnoreCase("map.kitchen")) {
-                m.addObject(new SupriseTV(new Point2D(345, 320)));
+                m.addObject(new SupriseTV(345, 320));
+                m.addObject(new Refrigerator(40, 90));
             }
 
             g.getPlayer().setPosition(mDestPos);
@@ -64,7 +65,7 @@ public class Portal extends GameObject {
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         if (Application.DEBUG) {
-            g2d.setColor(Color.BLUE);
+            g2d.setColor(new Color(0, 0, 255, (int) (255 * 0.5)));
             g2d.fillPolygon(mCollider.toAWTPolygon());
         }
     }

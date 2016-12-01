@@ -1,7 +1,7 @@
 package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Layer;
-//import com.github.axet.play.VLC;
+import com.github.axet.play.VLC;
 import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
@@ -11,10 +11,10 @@ import java.io.File;
 public class VideoLayer extends Layer {
     
     private File mFile;
-    //private VLC mVLC;
+    private VLC mVLC;
     
     private final KeyListener mKeyListener = new KeyListener();
-    //private final VideoListener mVideoListener = new VideoListener();
+    private final VideoListener mVideoListener = new VideoListener();
     
     public VideoLayer(Application c) {
         super(c);
@@ -27,7 +27,7 @@ public class VideoLayer extends Layer {
     @Override
     protected void resume() {
         super.resume();
-        /*
+        
         if (mVLC != null) {
             mVLC.close();
             mVLC = null;
@@ -40,12 +40,10 @@ public class VideoLayer extends Layer {
         mVLC.play();
         
         getApplicationCanvas().addKeyListener(mKeyListener);
-        */
     }
 
     @Override
     protected void draw(long delta, Graphics2D g2d) {
-        super.draw(delta, g2d);
         // 여기는 구현하면 안됨.
     }
 
@@ -59,7 +57,7 @@ public class VideoLayer extends Layer {
          * 아래처럼 별도의 Thread 를 생성하여 함수호출할시 해결은 되었습니다.
          * 원인은 파악하지 못하여 차후 원인을 밝혀야합니다.
          */
-        /*
+        
         final Runnable r = new Runnable() {
             
             @Override
@@ -75,7 +73,6 @@ public class VideoLayer extends Layer {
         };
         
         new Thread(r).start();
-        */
     }
     
     private class KeyListener implements java.awt.event.KeyListener {
@@ -98,7 +95,6 @@ public class VideoLayer extends Layer {
         } 
     }
     
-    /*
     private class VideoListener implements VLC.Listener {
 
         @Override
@@ -117,5 +113,4 @@ public class VideoLayer extends Layer {
             
         }
     }
-    */
 }

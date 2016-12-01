@@ -46,6 +46,7 @@ public class ResourceLoaderLayer extends Layer {
         
         r.load("res/img.tv.noise.png",              "img.tv.noise");
         r.load("res/img.shoecloset.door.png",       "img.shoecloset.door");
+        r.load("res/img.0.png");
         
         // 맵정보를 불러옵니다.
         r.load("res/map.kitchen.json",              "map.kitchen");
@@ -91,7 +92,7 @@ public class ResourceLoaderLayer extends Layer {
             @Override
             public void run() {
 
-                /*File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
+                File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
 
                 if (f.exists()) {
                     f.delete();
@@ -134,7 +135,7 @@ public class ResourceLoaderLayer extends Layer {
 
                     mProgress = ++n / m.size();
                     mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
-                }*/
+                }
 
                 mProgress = 1.0f;
                 mMessage = "게임에 필요한 리소스를 불러오는중 입니다.";
@@ -148,12 +149,10 @@ public class ResourceLoaderLayer extends Layer {
                     throw new RuntimeException(e);
                 }
                 
-                //VideoLayer l = getContext().getLayer(VideoLayer.class);
-                //l.load(MovieResource.MOV_INTRO);
-                //showLayer(l); 
+                VideoLayer l = getContext().getLayer(VideoLayer.class);
+                l.load(MovieResource.MOV_INTRO);
+                showLayer(l); 
 
-                showLayer(GameLayer.class);
-                
                 finishLayer();  
             }
         }.start();

@@ -34,9 +34,9 @@ public class Player extends LightWithGameObject  {
     private Vector2D mVel = new Vector2D();
     private Vector2D mDir = new Vector2D(); 
     
+    private boolean mOwnedLight = false;
     
-    private Timer mTimer;
-    
+    private Timer mMessageTimer;
     private String mMessage;
     
     /**
@@ -88,6 +88,7 @@ public class Player extends LightWithGameObject  {
      * 
      * @return 
      */
+    @Override
     public Light getOwnedLight() {
         return mLight;
     }
@@ -98,7 +99,15 @@ public class Player extends LightWithGameObject  {
      * @return 
      */
     public double getAngle() {
-        return mDir.subtract(getPosition()).toAngle();
+        return mDir.subtract(mLight.getPosition()).toAngle();
+    }
+    
+    public boolean isOwnedLight() {
+        return mOwnedLight;
+    }
+    
+    public void setOwnedLight() {
+        mOwnedLight = true;
     }
     
     public boolean isTurnOnLight() {
@@ -106,10 +115,17 @@ public class Player extends LightWithGameObject  {
     }
     
     private void setDirectionByInput(GameLayer g, InputManager m) {
-        mDir.set(new Vector2D(g.getCameraPosition()).divide(g.getCameraZoom()).add(m.getMousePosition().divide(g.getCameraZoom())));
+        Vector2D v = m.getMousePosition().divide(g.getCamera().getZoom());
+        Point2D p = g.getCamera().getPosition();
+        
+        mDir.set(v.add(p));
     }
     
     private void setLightByInput(InputManager m) {
+        if ( ! mOwnedLight) {
+            return;
+        }
+        
         if (m.isMousePressed(MouseEvent.BUTTON3)) { 
             mLight.setTurnOn(); 
         }
@@ -143,6 +159,10 @@ public class Player extends LightWithGameObject  {
         }
         
         mVel.set(x, y);
+    }
+    
+    public Vector2D getVelocity() {
+        return mVel;
     }
     
     @Override
@@ -188,10 +208,10 @@ public class Player extends LightWithGameObject  {
     }
     
     public void showMessage(String s, int n) {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-            mTimer = null;
+        if (mMessageTimer != null) {
+            mMessageTimer.cancel();
+            mMessageTimer.purge();
+            mMessageTimer = null;
         }
         
         final TimerTask t = new TimerTask() {
@@ -204,17 +224,18 @@ public class Player extends LightWithGameObject  {
         
         mMessage = s;
         
-        mTimer = new Timer();
-        mTimer.schedule(t, n);
+        mMessageTimer = new Timer();
+        mMessageTimer.schedule(t, n);
     }
     
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) { 
         SpriteResource.Frame f = getCurrentSpriteFrame(g.getResource(), delta);
-        Point2D p = getPosition();
+        Point2D p1 = getPosition();
+        Point2D p2 = mLight.getPosition();
         
-        int x = (int) (p.getX() - f.getWidth() / 2);
-        int y = (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
+        int x = (int) (p1.getX() - f.getWidth() / 2);
+        int y = (int) (p1.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
         
         if (mMessage != null) {
             g2d.setFont(new Font("굴림", Font.PLAIN, 13));
@@ -227,6 +248,8 @@ public class Player extends LightWithGameObject  {
         if (Application.DEBUG) {
             g2d.setColor(Color.RED);
             g2d.drawPolygon(mCollider.toAWTPolygon());
+            
+            g2d.drawLine((int) p1.getX(), (int) p2.getY(), (int) mDir.getX(), (int) mDir.getY());
         }
     }
 }

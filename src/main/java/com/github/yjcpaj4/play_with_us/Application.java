@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us;
  
+import com.github.axet.play.VLC;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
@@ -27,6 +28,10 @@ public class Application extends GraphicLooper {
     
     private static Application INSTANCE;
     public static final boolean DEBUG = false;
+    
+    static {
+        new VLC();
+    }
     
     public static Application getInstance() {
         if (INSTANCE == null) {

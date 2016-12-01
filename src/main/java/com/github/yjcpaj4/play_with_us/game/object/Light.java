@@ -21,7 +21,7 @@ public class Light extends GameObject {
     private float mLength = 300f; // 빛의 길이
     private double mExtent = 50; // 빛의 범위
     
-    private boolean mTurnOff = false;
+    private boolean mTurnOff = true;
     
     public Light() {
     }
