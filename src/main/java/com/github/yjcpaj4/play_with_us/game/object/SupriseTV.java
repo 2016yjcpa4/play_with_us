@@ -12,9 +12,9 @@ import javax.imageio.ImageIO;
 
 public class SupriseTV extends LightWithGameObject {
     
-    private static final int WIDTH = 40;
-    private static final int HEIGHT = 25;
-    
+    private static final double LIGHT_ANGLE = Math.toRadians(90);
+    private static final double LIGHT_EXTENT = 70;
+
     private int mFPS = 0;
     private BufferedImage mTurnOnImage; 
     private SoundResource mTurnOnSound;
@@ -23,27 +23,29 @@ public class SupriseTV extends LightWithGameObject {
     
     private Light mLight = new Light() {
         
-        private final double ANGLE = Math.toRadians(90);
+        {
+            mLight.setTurnOff();
+        }
         
         @Override
         public Point2D getPosition() {
-            return SupriseTV.this.getPosition();
+            Point2D p = new Point2D(SupriseTV.this.getPosition());
+            p.setX(p.getX() + mTurnOnImage.getWidth() / 2);
+            return p;
         }
         
         @Override
         public double getExtent() {
-            return 70;
+            return LIGHT_EXTENT;
         }
 
         @Override
         public double getAngle() {
-            return ANGLE;
+            return LIGHT_ANGLE;
         }
     };
     
     public SupriseTV(Point2D p) {
-        mLight.setTurnOff();
-        
         mPos = p;
         mTurnOnImage = Application.getInstance().getResource().getImage("img.tv.noise");
         mTurnOnSound = Application.getInstance().getResource().getSound("snd.tv.noise");
@@ -55,7 +57,6 @@ public class SupriseTV extends LightWithGameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        
         if (mLight.isTurnOff()) {
             mFPS = (int) (Math.random() * 1000 + 1000);
         }
@@ -87,13 +88,15 @@ public class SupriseTV extends LightWithGameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
+        if (mLight.isTurnOff()) {
+            return;
+        }
+        
         Point2D p = getPosition();
         int x = (int) p.getX();
         int y = (int) p.getY();
         
-        if (mLight.isTurnOn()) {
-            g2d.drawImage(mTurnOnImage, x - WIDTH / 2, y, null);
-        }
+        g2d.drawImage(mTurnOnImage, x, y, null);
     }
 
     @Override

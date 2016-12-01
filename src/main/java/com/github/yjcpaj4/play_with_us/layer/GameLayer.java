@@ -3,6 +3,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.game.Map;
+import com.github.yjcpaj4.play_with_us.game.object.LightLeakingShoeCloset;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
@@ -17,7 +18,7 @@ public class GameLayer extends Layer {
     
     private Player mPlayer;
 
-    private float mCameraZoom = 1.6f;
+    private float mCameraZoom = 2.1f;
     private Point2D mCameraPos = new Point2D();
     
     private java.util.Map<String, Map> mCachedMap = new LinkedHashMap<>();
@@ -32,6 +33,11 @@ public class GameLayer extends Layer {
         
         MapResource r = getResource().getMap(MAIN_MAP);
         Map m = r.toMap();
+        
+        if (MAIN_MAP.equals("map.livingroom")) {
+            m.addObject(new LightLeakingShoeCloset(new Point2D(699, 973)));
+        }
+        
         if (r.hasPlayerSpawn()) {
             mPlayer = new Player(r.getPlayerSpwan());
             m.addObject(mPlayer);

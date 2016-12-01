@@ -48,12 +48,13 @@ public class Portal extends GameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
+        // TODO 리팩토링
         if (CollisionDetection.getCollision(mCollider, g.getPlayer().getCollider()) != null) {
             Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
             m.addObject(g.getPlayer());
 
             if (mDestMap.equalsIgnoreCase("map.kitchen")) {
-                m.addObject(new SupriseTV(new Point2D(365, 320)));
+                m.addObject(new SupriseTV(new Point2D(345, 320)));
             }
 
             g.getPlayer().setPosition(mDestPos);
