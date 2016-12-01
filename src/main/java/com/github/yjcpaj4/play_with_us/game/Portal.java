@@ -51,7 +51,7 @@ public class Portal extends GameObject {
             Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
             m.addObject(g.getPlayer());
 
-            if (mDestMap.equalsIgnoreCase("kitchen")) {
+            if (mDestMap.equalsIgnoreCase("map.kitchen")) {
                 m.addObject(new Television(new Point2D(365, 320)));
             }
 

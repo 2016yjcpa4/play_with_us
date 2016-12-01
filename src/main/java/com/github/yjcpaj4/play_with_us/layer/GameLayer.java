@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 
 public class GameLayer extends Layer {
     
-    private static final String MAIN_MAP = "livingroom";
+    private static final String MAIN_MAP = "map.livingroom";
     
     private Player mPlayer;
 

@@ -175,6 +175,7 @@ public class Player extends LightWithGameObject  {
         boolean isIdle = mVel.getX() == 0 && mVel.getY() == 0;
         
         List<String> l = new ArrayList<>(3);
+        l.add("sprt");
         l.add("player");
         l.add(isIdle ? "idle" : "walk");
         l.add(MathUtil.getSimpleDirectionByRadian(getAngle()));
