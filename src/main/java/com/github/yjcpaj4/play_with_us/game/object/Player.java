@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us.game;
+package com.github.yjcpaj4.play_with_us.game.object;
  
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;

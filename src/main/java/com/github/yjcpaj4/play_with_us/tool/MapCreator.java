@@ -2,8 +2,8 @@ package com.github.yjcpaj4.play_with_us.tool;
 
 import com.github.yjcpaj4.play_with_us.GraphicLooper;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
-import com.github.yjcpaj4.play_with_us.game.Lightless;
-import com.github.yjcpaj4.play_with_us.game.NotWalkable;
+import com.github.yjcpaj4.play_with_us.game.object.Lightless;
+import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;

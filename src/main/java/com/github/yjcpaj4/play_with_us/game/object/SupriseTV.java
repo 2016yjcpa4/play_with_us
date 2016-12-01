@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us.game;
+package com.github.yjcpaj4.play_with_us.game.object;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
-public class Television extends LightWithGameObject {
+public class SupriseTV extends LightWithGameObject {
     
     private static final int WIDTH = 40;
     private static final int HEIGHT = 25;
@@ -27,7 +27,7 @@ public class Television extends LightWithGameObject {
         
         @Override
         public Point2D getPosition() {
-            return Television.this.getPosition();
+            return SupriseTV.this.getPosition();
         }
         
         @Override
@@ -41,7 +41,7 @@ public class Television extends LightWithGameObject {
         }
     };
     
-    public Television(Point2D p) {
+    public SupriseTV(Point2D p) {
         mLight.setTurnOff();
         
         mPos = p;

@@ -1,6 +1,7 @@
-package com.github.yjcpaj4.play_with_us.game;
+package com.github.yjcpaj4.play_with_us.game.object;
 
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -52,7 +53,7 @@ public class Portal extends GameObject {
             m.addObject(g.getPlayer());
 
             if (mDestMap.equalsIgnoreCase("map.kitchen")) {
-                m.addObject(new Television(new Point2D(365, 320)));
+                m.addObject(new SupriseTV(new Point2D(365, 320)));
             }
 
             g.getPlayer().setPosition(mDestPos);

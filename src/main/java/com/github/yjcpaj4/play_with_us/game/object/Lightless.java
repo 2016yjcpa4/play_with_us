@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us.game;
+package com.github.yjcpaj4.play_with_us.game.object;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.Color;
@@ -6,17 +6,15 @@ import java.awt.Graphics2D;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
-import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
-import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotWalkable extends GameObject {
+public class Lightless extends GameObject {
     
     private Polygon mCollider;
     
-    public NotWalkable(List<Point2D> l) {
+    public Lightless(List<Point2D> l) {
         mCollider = new Polygon(l);
     }
     
@@ -33,24 +31,20 @@ public class NotWalkable extends GameObject {
         
         return l;
     }
-    
-    public Polygon getCollider() {
-        return mCollider;
-    }
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         if (Application.DEBUG) {
-            g2d.setColor(new Color(255, 0, 0, (int) (255 * 0.4)));
+            g2d.setColor(new Color(255, 255, 0, (int) (255 * 0.4)));
             g2d.fillPolygon(mCollider.toAWTPolygon());
             
-            g2d.setColor(new Color(255, 0, 0));
+            g2d.setColor(new Color(255, 255, 0));
             g2d.drawPolygon(mCollider.toAWTPolygon());
         }
     }
 
     @Override
-    public void update(GameLayer g, long delta) {
+    public void update(GameLayer g, long delta) { 
     }
 
     public java.awt.Polygon toAWTPolygon() {
