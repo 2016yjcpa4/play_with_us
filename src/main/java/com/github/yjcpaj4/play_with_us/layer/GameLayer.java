@@ -2,20 +2,19 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
+import com.github.yjcpaj4.play_with_us.game.Camera;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.object.LightLeakingShoeCloset;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
-import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
-import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayDeque;
-import java.util.LinkedHashMap;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,8 +82,6 @@ public class GameLayer extends Layer {
         return mPlayer.getMap();
     }
     
-    private int i ;
-
     @Override
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
@@ -96,67 +93,56 @@ public class GameLayer extends Layer {
         m.update(this, delta);
         m.draw(this, delta, g2d);
         
+        if (getInput().isKeyOnce(KeyEvent.VK_F1)) {
+            showLayer(new HelperLayer(getContext()));
+            return;
+        }
+        
+        g2d.setFont(new Font("굴림", Font.BOLD, 13));
+        g2d.setColor(Color.WHITE);
+
+        Point2D p = mCamera.getPosition();
+        int w = mCamera.getWidth();
+        int h = mCamera.getHeight();
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+
+        FontMetrics fm = g2d.getFontMetrics();
+
+        g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
+        
         if ( ! mMessages.isEmpty()) {
-
-            g2d.setFont(new Font("굴림", Font.BOLD, 13));
-            g2d.setColor(Color.WHITE);
             
-            Point2D p = mCamera.getPosition();
-            int w = mCamera.getWidth();
-            int h = mCamera.getHeight();
-            int x = (int) p.getX() + w - 10;
-            int y = (int) p.getY() + 10;
-
-            FontMetrics fm = g2d.getFontMetrics();
-
             for (String s : mMessages) {
                 g2d.drawString(s, 
-                               x - fm.stringWidth(s), 
-                               y += (fm.getHeight() + 3));
+                               x - fm.stringWidth(s) + w - 10, 
+                               y + fm.getHeight() + 10);
+                
+                y += (fm.getHeight() + 3);
             }
         }
-        
     }
+}
+
+class HelperLayer extends Layer {
     
-    public static class Camera {
+    private BufferedImage mImage;
+    
+    public HelperLayer(Application c) {
+        super(c);
+        
+        //mImage = getResource().getImage("img.help");
+    }
 
-        private Point2D mPos;
-        private Application mContext;
-        private float mZoom = 1.65f;
-
-        public Camera(Application c) {
-            mContext = c;
+    @Override
+    protected void draw(long delta, Graphics2D g2d) {
+        super.draw(delta, g2d);
+        
+        if (getInput().isKeyOnce(KeyEvent.VK_ESCAPE)) {
+            finishLayer();
+            return;
         }
         
-        public int getWidth() {
-            return (int) (mContext.getWidth() / mZoom);
-        }
-        
-        public int getHeight() {
-            return (int) (mContext.getHeight() / mZoom);
-        }
-        
-        public float getZoom() {
-            return mZoom;
-        }
-        
-        public void update(Point2D p) {
-            mPos = p;
-        }
-        
-        public void draw(Graphics2D g2d) {
-            float x = mPos.getX() * mZoom - mContext.getWidth() / 2;
-            float y = mPos.getY() * mZoom - mContext.getHeight() / 2;
-            
-            g2d.translate(-x, -y);
-            g2d.scale(mZoom, mZoom); 
-        }
-        
-        public Point2D getPosition() {
-            float x = mPos.getX() - getWidth() / 2;
-            float y = mPos.getY() - getHeight() / 2;
-            
-            return new Point2D(x, y);
-        }
+        //g2d.drawImage(mImage, 0, 0, mImage.getWidth(), mImage.getHeight(), null);
     }
 }

@@ -21,7 +21,7 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
     private static final int RADIUS = 60;
             
     private static final double LIGHT_ANGLE = Math.toRadians(55);
-    private static final double LIGHT_EXTENT = 30;
+    private static final double LIGHT_EXTENT = 40;
     private static final float LIGHT_LENGTH = 50;
     
     private BufferedImage mImage;
@@ -63,6 +63,10 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
+        if (g.getPlayer().isOwnedLight()) {
+            return;
+        }
+        
         Polygon p1 = g.getPlayer().getCollider();
         Polygon p2 = mCollider;
         

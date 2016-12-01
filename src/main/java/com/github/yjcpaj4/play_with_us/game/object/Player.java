@@ -27,6 +27,8 @@ import java.util.TimerTask;
  
 public class Player extends LightWithGameObject  {
     
+    private static final float LIGHT_LENGTH = 180f;
+    
     protected transient Polygon mCollider;
     
     private static final int SPEED = 3;
@@ -51,6 +53,11 @@ public class Player extends LightWithGameObject  {
             Point2D p = new Point2D(Player.this.getPosition());
             p.setY(p.getY() + LIGHT_RELATIVE_Y);
             return p;
+        }
+
+        @Override
+        public float getLength() {
+            return LIGHT_LENGTH;
         }
 
         @Override

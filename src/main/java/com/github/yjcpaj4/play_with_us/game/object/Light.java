@@ -16,19 +16,24 @@ import java.awt.Shape;
 
 public class Light extends GameObject {
 
+    private static final float DEFAULT_LENGTH = 300f;
+    private static final double DEFAULT_EXTENT = 50;
+    
     private Point2D mPos = new Point2D();
     private double mAngle; // 각도
-    private float mLength = 300f; // 빛의 길이
-    private double mExtent = 50; // 빛의 범위
+    private float mLength = DEFAULT_LENGTH; // 빛의 길이
+    private double mExtent = DEFAULT_EXTENT; // 빛의 범위
     
     private boolean mTurnOff = true;
     
     public Light() {
     }
     
-    public Light(Point2D p, double d) {
+    public Light(Point2D p, double a, float l, double e) {
         mPos = p;
-        mAngle = d;
+        mAngle = a;
+        mLength = l;
+        mExtent = e;
     }
     
     public void setTurnOff() {
