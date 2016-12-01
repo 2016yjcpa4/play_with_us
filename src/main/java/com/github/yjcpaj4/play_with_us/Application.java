@@ -30,6 +30,11 @@ public class Application extends GraphicLooper {
     public static final boolean DEBUG = false;
     
     static {
+        /*
+         * new VLC() 생성자를 호출하게되면 내부적으로 처리하는 로직중
+         * dll 파일을 메모리에 적재시키는 행위를 합니다.
+         * 이때 나중에 동영상을 재생시킬때 더 빨리 재생이 되도록 유도할수 있습니다.
+         */
         new VLC();
     }
     

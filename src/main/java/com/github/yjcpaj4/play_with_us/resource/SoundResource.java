@@ -4,15 +4,20 @@ import java.io.File;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
 
+/**
+ * 사운드 리소스를 관리하는 클래스입니다.
+ * 
+ * @author 차명도.
+ */
 public class SoundResource {
 
     static {
+        /*
+         * new JFXPanel() 생성자를 호출하게되면 내부적으로 처리하는 로직중
+         * JavaFX 를 초기화작업이 진행됩니다.
+         * 이는 사운드 처리에 필요한 MediaPlayer 를 사용할때 전처리로 필요합니다.
+         */
         new JFXPanel();
     }
     
