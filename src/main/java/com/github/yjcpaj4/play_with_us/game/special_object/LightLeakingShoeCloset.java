@@ -93,9 +93,11 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
         int x = (int) p.getX() - mImage.getWidth() / 2;
         int y = (int) p.getY() - mImage.getHeight() / 2;
         
+        /*
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("굴림", Font.PLAIN, 12));
         GraphicsUtil.drawStringMultiLine(g2d, "상호작용(F)키 를 눌러 서랍안에 있는 손전등을 습득할 수 있습니다.", 150, x, y - 50);
+        */
         
         g2d.drawImage(mImage, x, y, null);
         

@@ -30,6 +30,8 @@ public class GameLayer extends Layer {
 
     private Camera mCamera;
     
+    private boolean mShowHelper = false;
+    
     public GameLayer(Application c) {
         super(c);
 
@@ -94,8 +96,10 @@ public class GameLayer extends Layer {
         m.draw(this, delta, g2d);
         
         if (getInput().isKeyOnce(KeyEvent.VK_F1)) {
-            showLayer(new HelperLayer(getContext()));
-            return;
+            mShowHelper = !mShowHelper;
+        }
+        else if(mShowHelper && getInput().isKeyOnce(KeyEvent.VK_ESCAPE)) {
+            mShowHelper = false;
         }
         
         g2d.setFont(new Font("굴림", Font.BOLD, 13));
@@ -108,9 +112,19 @@ public class GameLayer extends Layer {
         int y = (int) p.getY();
 
         FontMetrics fm = g2d.getFontMetrics();
-
-        g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
         
+        if (mShowHelper) {
+            BufferedImage b = getResource().getImage("img.bg.help");
+            g2d.drawImage(b, 
+                          x, 
+                          y, 
+                          (int) (b.getWidth() / mCamera.getZoom()), 
+                          (int) (b.getHeight() / mCamera.getZoom()), 
+                          null);
+        } else {
+            g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
+        }
+
         if ( ! mMessages.isEmpty()) {
             
             for (String s : mMessages) {
@@ -121,28 +135,5 @@ public class GameLayer extends Layer {
                 y += (fm.getHeight() + 3);
             }
         }
-    }
-}
-
-class HelperLayer extends Layer {
-    
-    private BufferedImage mImage;
-    
-    public HelperLayer(Application c) {
-        super(c);
-        
-        //mImage = getResource().getImage("img.help");
-    }
-
-    @Override
-    protected void draw(long delta, Graphics2D g2d) {
-        super.draw(delta, g2d);
-        
-        if (getInput().isKeyOnce(KeyEvent.VK_ESCAPE)) {
-            finishLayer();
-            return;
-        }
-        
-        //g2d.drawImage(mImage, 0, 0, mImage.getWidth(), mImage.getHeight(), null);
     }
 }
