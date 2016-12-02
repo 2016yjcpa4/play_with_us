@@ -9,6 +9,7 @@ import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
+import com.github.yjcpaj4.play_with_us.game.special_object.Player;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -41,8 +42,18 @@ public class Portal extends GameObject {
         mCollider = new Polygon(l);
     }
     
+    public String getDestMap() {
+        return mDestMap;
+    }
+    
     public Point2D getPosition() {
         return mCollider.getPosition();
+    }
+    
+    public void enterMap(Player p) {
+        Map m = Application.getInstance().getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
+        m.addObject(p);
+        p.setPosition(mDestPos);
     }
     
     public void setLock() {

@@ -49,6 +49,7 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.obj.livingroom.shoerack.png");
         r.load("res/sprt.bathroom.bloodstains.json");
         r.load("res/img.bg.help.png");
+        r.load("res/snd.obj.clothesroom.mannequin.mp3");
         
         // 맵정보를 불러옵니다.
         r.load("res/map.kitchen.json");
@@ -70,16 +71,16 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/sprt.player.idle.w.json");
         
         // 걸어다닐때 (동,서,남,북)
-        r.load("res/sprt.ghost.walk.n.json");
-        r.load("res/sprt.ghost.walk.e.json");
-        r.load("res/sprt.ghost.walk.s.json");
-        r.load("res/sprt.ghost.walk.w.json");
+        r.load("res/sprt.clothesroom.mannequin.walk.n.json");
+        r.load("res/sprt.clothesroom.mannequin.walk.e.json");
+        r.load("res/sprt.clothesroom.mannequin.walk.s.json");
+        r.load("res/sprt.clothesroom.mannequin.walk.w.json");
         
         // 가만히 있을때 (동,서,남,북)
-        r.load("res/sprt.ghost.idle.n.json");
-        r.load("res/sprt.ghost.idle.e.json");
-        r.load("res/sprt.ghost.idle.s.json");
-        r.load("res/sprt.ghost.idle.w.json");
+        r.load("res/sprt.clothesroom.mannequin.idle.n.json");
+        r.load("res/sprt.clothesroom.mannequin.idle.e.json");
+        r.load("res/sprt.clothesroom.mannequin.idle.s.json");
+        r.load("res/sprt.clothesroom.mannequin.idle.w.json");
     }
 
     @Override

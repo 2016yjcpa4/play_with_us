@@ -20,6 +20,7 @@ import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
+import com.github.yjcpaj4.play_with_us.game.object.Portal;
 
 public class Map {
 
@@ -55,6 +56,19 @@ public class Map {
                 }
             }
         }
+    }
+    
+    public Portal getPortalByDestMap(String s) {
+        for(GameObject o : getAllObject()) {
+            if (o instanceof Portal) {
+                Portal p = (Portal) o;
+                if (p.getDestMap().equalsIgnoreCase(s)) {
+                    return p;
+                }
+            }
+        }
+        
+        return null;
     }
     
     public Player getPlayer() {
@@ -97,12 +111,22 @@ public class Map {
         return (int) (getWidth() / (float) TILE_WIDTH);
     }
     
+    public <T extends GameObject> T getFirstObjectByClass(Class<T> c) {
+        for(GameObject o : getAllObject()) {
+            if (c == o.getClass()) {
+                return (T) o;
+            }
+        }
+        
+        return null;
+    }
+    
     public int getTileRows() {
         return (int) (getHeight() / (float) TILE_HEIGHT);
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return Map.this.getTileIndex((int)p.getX(), (int)p.getY());
+        return getTileIndex((int)p.getX(), (int)p.getY());
     }
     
     public Point2D getTileIndex(int x, int y) {

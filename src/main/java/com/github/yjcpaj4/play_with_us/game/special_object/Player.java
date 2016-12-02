@@ -44,6 +44,9 @@ public class Player extends LightWithGameObject  {
     private Timer mMessageTimer;
     private String mMessage;
     
+    private boolean mHasKitchenKey = false;
+    private boolean mHasBathroomKey = false;
+    
     private boolean mInputEnable = true;
     
     /**
@@ -79,12 +82,24 @@ public class Player extends LightWithGameObject  {
         mCollider = new Circle(x, y, 10);
     }
     
+    public void setHaveKithenKey() {
+        mHasKitchenKey = true;
+    }
+    
+    public boolean hasKitchenKey() {
+        return mHasKitchenKey;
+    }
+    
     public boolean isInputEnable() {
         return mInputEnable;
     }
     
     public void setInputEnable() {
         mInputEnable = true;
+    }
+    
+    public void setIdle() {
+        mVel.set(0, 0);
     }
     
     public void setInputDisable() {
@@ -199,6 +214,10 @@ public class Player extends LightWithGameObject  {
     
     public Vector2D getVelocity() {
         return mVel;
+    }
+    
+    public Vector2D getDirection() {
+        return mDir;
     }
     
     @Override

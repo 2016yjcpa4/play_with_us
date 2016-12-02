@@ -38,6 +38,7 @@ public class ClothesroomPicture extends GameObject {
                     
                     if (getCurrentAnswer().equals(YES)) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
+                        g.getPlayer().setHaveKithenKey();
                     }
                 }
             };
