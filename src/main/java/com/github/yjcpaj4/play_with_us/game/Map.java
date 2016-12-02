@@ -3,7 +3,7 @@ package com.github.yjcpaj4.play_with_us.game;
 import com.github.yjcpaj4.play_with_us.game.object.Lightless;
 import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
-import com.github.yjcpaj4.play_with_us.game.special_object.Player;
+import com.github.yjcpaj4.play_with_us.game.object.Player;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -25,6 +25,7 @@ public class KitchenTV extends LightWithGameObject {
     private SoundResource mTurnOnSound;
     private Point2D mPos = new Point2D(X, Y);
     private boolean mSurprise = false;
+    private long mDuration;
     
     private Light mLight = new Light() {
         
@@ -59,24 +60,34 @@ public class KitchenTV extends LightWithGameObject {
     public void update(GameLayer g, long delta) {
         if (mLight.isTurnOff()) {
             mFPS = (int) (Math.random() * 1000 + 1000);
+            mDuration = 0;
         }
         
-        if ( ! mSurprise) {
-            Point2D p1 = g.getPlayer().getPosition();
-            Point2D p2 = getPosition();
+        Point2D p1 = g.getPlayer().getPosition();
+        Point2D p2 = getPosition(); 
             
-            Vector2D v = new Vector2D(p1).subtract(p2);
-            if (v.length() <= 150) {
+        float l = new Vector2D(p1).subtract(p2).length();
+        
+        if ( ! mSurprise) {
+            if (l <= 150) {
                 mSurprise = true;
             }
         }
         else {
-            if (delta / mFPS % 2 == 0) {
+            if (mDuration / mFPS % 2 == 0) {
                 mLight.setTurnOn();
             } else {
                 mLight.setTurnOff();
             }
+            
+            mDuration += delta;
         }
+        
+        /*
+         * 3d 입체 사운드 효과 적용 하였습니다.
+         * 알고림즘은 간단합니다 플레이어와 현재 티비의 거리로 계산합니다.
+         */
+        mTurnOnSound.setVolume(Math.max(0, Math.min(1, 100 / l)));
         
         if (mLight.isTurnOn() && g.getPlayer().getMap() == getMap()) {
             mTurnOnSound.play();

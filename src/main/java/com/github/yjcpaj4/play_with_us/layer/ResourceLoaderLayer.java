@@ -95,7 +95,7 @@ public class ResourceLoaderLayer extends Layer {
             @Override
             public void run() {
 
-                /*File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
+                File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
 
                 if (f.exists()) {
                     f.delete();
@@ -138,7 +138,7 @@ public class ResourceLoaderLayer extends Layer {
 
                     mProgress = ++n / m.size();
                     mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
-                }*/
+                }
 
                 mProgress = 1.0f;
                 mMessage = "게임에 필요한 리소스를 불러오는중 입니다.";

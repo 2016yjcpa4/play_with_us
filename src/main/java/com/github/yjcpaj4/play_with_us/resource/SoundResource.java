@@ -27,6 +27,10 @@ public class SoundResource {
         mMediaPlayer = new MediaPlayer(new Media(f.toURI().toString()));
     }
     
+    public void setVolume(double v) {
+        mMediaPlayer.setVolume(v);
+    }
+    
     public void play() {
         new Thread() {
             

@@ -4,7 +4,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.game.object.Lightless;
 import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
-import com.github.yjcpaj4.play_with_us.game.special_object.Player;
+import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.math.Point2D;

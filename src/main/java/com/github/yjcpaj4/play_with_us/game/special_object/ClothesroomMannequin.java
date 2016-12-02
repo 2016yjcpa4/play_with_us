@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.game.special_object;
 
+import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.game.Map;
@@ -7,6 +8,7 @@ import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
+import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
@@ -26,7 +28,7 @@ public class ClothesroomMannequin extends GameObject {
     private static final int SPEED = 10;
     
     private boolean mSuprise = false;
-    private long mSupriseDelta = 0;
+    private long mDelta = 0;
     private Vector2D mVel = new Vector2D();
     private Polygon mCollider = new Circle(X, Y, 10);
     
@@ -81,39 +83,42 @@ public class ClothesroomMannequin extends GameObject {
         if ( ! mSuprise) {
             return;
         }
+
+        final Player o = g.getPlayer();
         
-        if ( ! mLookingAtMe && mSupriseDelta >= 500) {
-            g.getPlayer().getDirection().set(getPosition());
-            mLookingAtMe = true;
+        // 0.5초후 마네킨방향으로 돌리게함.
+        if (mDelta >= 500) {
+            if ( ! mLookingAtMe) {
+                o.getDirection().set(getPosition());
+                mLookingAtMe = true;
+            }
         }
         
-        if (mSupriseDelta >= 1500) {
+        // 1.3초후 마네킨이 따라옴.
+        if (mDelta >= 1300) {
             mVel.set(SPEED, SPEED);
-
+            
             Point2D p1 = mCollider.getPosition();
-            Point2D p2 = g.getPlayer().getPosition();
+            Point2D p2 = o.getPosition();
 
             List<Point2D> l = g.getMap().getPath(p1, p2);
-
             if ( ! l.isEmpty()) {
                 double n = new Vector2D(l.get(0)).subtract(p1).toAngle();
-                int x = (int) (p1.getX() + SPEED * Math.cos(n));
-                int y = (int) (p1.getY() + SPEED * Math.sin(n));
+                double tx = SPEED * Math.cos(n);
+                double ty = SPEED * Math.sin(n);
 
-                mCollider.setPosition(x, y);
+                mCollider.transform(Matrix2D.translate(tx, ty));
             }
 
             if (new Vector2D(p1).subtract(p2).length() <= 70) {
                 Portal p = getMap().getPortalByDestMap("map.livingroom");
-                p.enterMap(g.getPlayer());
+                p.enterMap(o);
 
-                g.getPlayer().setInputEnable();
-                
-                g.getPlayer().showMessage("오 씨발;;", 1000);
+                o.setInputEnable();
             }
         }
         
-        mSupriseDelta += delta;
+        mDelta += delta;
     }
 
     @Override

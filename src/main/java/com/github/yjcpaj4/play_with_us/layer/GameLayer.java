@@ -5,7 +5,7 @@ import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.game.Camera;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
-import com.github.yjcpaj4.play_with_us.game.special_object.Player;
+import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.awt.Color;
