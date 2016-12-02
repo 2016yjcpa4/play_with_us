@@ -30,7 +30,7 @@ import java.util.TimerTask;
  
 public class Player extends LightWithGameObject  {
     
-    private static final float LIGHT_LENGTH = 180f;
+    private static final float LIGHT_LENGTH = 210f;
     
     protected transient Polygon mCollider;
     
@@ -194,6 +194,8 @@ public class Player extends LightWithGameObject  {
         }
     }
     
+    private long mDuration = 0;
+    
     /**
      * 현재 플레이어의 이미지를 가져옵니다.
      * 
@@ -201,20 +203,21 @@ public class Player extends LightWithGameObject  {
      * 
      * @return 프레임을 반환합니다.
      */
-    private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager r, long d) {
+    private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager m, long d) {
         boolean isIdle = mVel.getX() == 0 && mVel.getY() == 0;
         
-        List<String> l = new ArrayList<>(3);
+        List<String> l = new ArrayList<>(4);
         l.add("sprt");
         l.add("player");
         l.add(isIdle ? "idle" : "walk");
         l.add(MathUtil.getSimpleDirectionByRadian(getAngle()));
         
-        SpriteResource.Frame f = r.getSprite(String.join(".", l)).getCurrentFrame(d);
+        SpriteResource r = m.getSprite(String.join(".", l));
+        int n = (int) (mDuration / r.getFPS() % r.getLength());
         
-        // TODO ... 걷고, 서있는것 이외에 무언가 처리해야할게 있는가???
+        mDuration += d;
         
-        return f;
+        return r.getFrame(n);
     }
     
     public void showMessage(String s, int n) {

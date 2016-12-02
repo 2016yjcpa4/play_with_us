@@ -97,10 +97,12 @@ public class GraphicLooper implements Runnable {
 
             mClock += FRAME_DELAY;
             
-            update(mClock, bs);
+            long delta = mClock - System.currentTimeMillis();
+            
+            update(Math.abs(delta), bs);
             
             try {
-                Thread.sleep(Math.max(0, mClock - System.currentTimeMillis()));
+                Thread.sleep(Math.max(0, delta));
             } 
             catch (InterruptedException e) {
                 break;

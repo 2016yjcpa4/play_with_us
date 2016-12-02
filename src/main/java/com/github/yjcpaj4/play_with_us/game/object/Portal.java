@@ -63,7 +63,7 @@ public class Portal extends GameObject {
             }
 
             if (mDestMap.equalsIgnoreCase("map.bathroom")) {
-                m.addObject(new BathroomBloodstains(196, 73));
+                m.addObject(new BathroomBloodstains());
             }
 
             g.getPlayer().setPosition(mDestPos);

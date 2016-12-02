@@ -66,13 +66,21 @@ public class SpriteResource implements Serializable {
     public int getHeight() {
         return mHeight;
     }
+    
+    public int getFPS() {
+        return mFPS;
+    }
        
     public Frame getFrame(int n) {
         return mFrames.get(n);
     }
-
-    public Frame getCurrentFrame(long delta) {
-        return getFrame((int) (delta / mFPS % mFrames.size()));
+    
+    public List<Frame> getFrames() {
+        return mFrames;
+    }
+    
+    public int getLength() {
+        return mFrames.size();
     }
 
     public static class Frame implements Serializable {
