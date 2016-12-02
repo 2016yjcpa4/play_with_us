@@ -1,5 +1,6 @@
-package com.github.yjcpaj4.play_with_us.game.object;
+package com.github.yjcpaj4.play_with_us.game.special_object;
 
+import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
@@ -35,7 +36,7 @@ public class Refrigerator extends GameObject {
             };
             l.setQuestion("살펴 보시겠습니까?");
             l.setAnswers(new String[] { "살펴본다.", "그만둔다." });
-            l.setBackground(g.getResource().getImage("img.0"));
+            l.setBackground(g.getResource().getImage("img.bg.refrigerator"));
             g.showLayer(l);
         }
     }

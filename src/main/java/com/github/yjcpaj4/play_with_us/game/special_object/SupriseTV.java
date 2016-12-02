@@ -1,6 +1,8 @@
-package com.github.yjcpaj4.play_with_us.game.object;
+package com.github.yjcpaj4.play_with_us.game.special_object;
 
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.game.object.Light;
+import com.github.yjcpaj4.play_with_us.game.LightWithGameObject;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
@@ -43,8 +45,8 @@ public class SupriseTV extends LightWithGameObject {
     
     public SupriseTV(float x, float y) {
         mPos = new Point2D(x, y);
-        mTurnOnImage = Application.getInstance().getResource().getImage("img.tv.noise");
-        mTurnOnSound = Application.getInstance().getResource().getSound("snd.tv.noise");
+        mTurnOnImage = Application.getInstance().getResource().getImage("img.obj.tv.turnon");
+        mTurnOnSound = Application.getInstance().getResource().getSound("snd.obj.tv.noise");
     }
     
     public Point2D getPosition() {

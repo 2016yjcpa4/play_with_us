@@ -2,7 +2,7 @@ package com.github.yjcpaj4.play_with_us.layer;
 
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
-import com.github.yjcpaj4.play_with_us.game.object.Player;
+import com.github.yjcpaj4.play_with_us.game.special_object.Player;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

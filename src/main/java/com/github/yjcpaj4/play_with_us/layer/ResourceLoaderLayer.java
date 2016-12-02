@@ -42,42 +42,45 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
-        r.load("res/snd.tv.noise.mp3",              "snd.tv.noise");
+        r.load("res/snd.obj.tv.noise.mp3");
         
-        r.load("res/img.tv.noise.png",              "img.tv.noise");
-        r.load("res/img.shoecloset.door.png",       "img.shoecloset.door");
-        r.load("res/img.0.png");
+        r.load("res/img.obj.tv.turnon.png");
+        r.load("res/img.obj.shoecloset.door.png");
+        
+        r.load("res/img.bg.refrigerator.png");
+        
+        r.load("res/sprt.bathroom.bloodstains.json");
         
         // 맵정보를 불러옵니다.
-        r.load("res/map.kitchen.json",              "map.kitchen");
-        r.load("res/map.library.json",              "map.library");
-        r.load("res/map.clothesroom.json",          "map.clothesroom");
-        r.load("res/map.bathroom.json",             "map.bathroom");
-        r.load("res/map.livingroom.json",           "map.livingroom");
+        r.load("res/map.kitchen.json");
+        r.load("res/map.library.json");
+        r.load("res/map.clothesroom.json");
+        r.load("res/map.bathroom.json");
+        r.load("res/map.livingroom.json");
         
         // 걸어다닐때 (동,서,남,북)
-        r.load("res/sprt.player.walk.n.json",       "sprt.player.walk.n");
-        r.load("res/sprt.player.walk.e.json",       "sprt.player.walk.e");
-        r.load("res/sprt.player.walk.s.json",       "sprt.player.walk.s");
-        r.load("res/sprt.player.walk.w.json",       "sprt.player.walk.w");
+        r.load("res/sprt.player.walk.n.json");
+        r.load("res/sprt.player.walk.e.json");
+        r.load("res/sprt.player.walk.s.json");
+        r.load("res/sprt.player.walk.w.json");
         
         // 가만히 있을때 (동,서,남,북)
-        r.load("res/sprt.player.idle.n.json",       "sprt.player.idle.n");
-        r.load("res/sprt.player.idle.e.json",       "sprt.player.idle.e");
-        r.load("res/sprt.player.idle.s.json",       "sprt.player.idle.s");
-        r.load("res/sprt.player.idle.w.json",       "sprt.player.idle.w");
+        r.load("res/sprt.player.idle.n.json");
+        r.load("res/sprt.player.idle.e.json");
+        r.load("res/sprt.player.idle.s.json");
+        r.load("res/sprt.player.idle.w.json");
         
         // 걸어다닐때 (동,서,남,북)
-        r.load("res/sprt.ghost.walk.n.json",        "sprt.ghost.walk.n");
-        r.load("res/sprt.ghost.walk.e.json",        "sprt.ghost.walk.e");
-        r.load("res/sprt.ghost.walk.s.json",        "sprt.ghost.walk.s");
-        r.load("res/sprt.ghost.walk.w.json",        "sprt.ghost.walk.w");
+        r.load("res/sprt.ghost.walk.n.json");
+        r.load("res/sprt.ghost.walk.e.json");
+        r.load("res/sprt.ghost.walk.s.json");
+        r.load("res/sprt.ghost.walk.w.json");
         
         // 가만히 있을때 (동,서,남,북)
-        r.load("res/sprt.ghost.idle.n.json",        "sprt.ghost.idle.n");
-        r.load("res/sprt.ghost.idle.e.json",        "sprt.ghost.idle.e");
-        r.load("res/sprt.ghost.idle.s.json",        "sprt.ghost.idle.s");
-        r.load("res/sprt.ghost.idle.w.json",        "sprt.ghost.idle.w");
+        r.load("res/sprt.ghost.idle.n.json");
+        r.load("res/sprt.ghost.idle.e.json");
+        r.load("res/sprt.ghost.idle.s.json");
+        r.load("res/sprt.ghost.idle.w.json");
     }
 
     @Override

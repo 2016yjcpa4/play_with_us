@@ -1,7 +1,11 @@
 package com.github.yjcpaj4.play_with_us.game.object;
 
+import com.github.yjcpaj4.play_with_us.game.special_object.Refrigerator;
+import com.github.yjcpaj4.play_with_us.game.special_object.SupriseTV;
+import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.game.Map;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -56,6 +60,10 @@ public class Portal extends GameObject {
             if (mDestMap.equalsIgnoreCase("map.kitchen")) {
                 m.addObject(new SupriseTV(345, 320));
                 m.addObject(new Refrigerator(40, 90));
+            }
+
+            if (mDestMap.equalsIgnoreCase("map.bathroom")) {
+                m.addObject(new BathroomBloodstains(196, 73));
             }
 
             g.getPlayer().setPosition(mDestPos);

@@ -1,5 +1,6 @@
 package com.github.yjcpaj4.play_with_us.game.object;
 
+import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import java.awt.Color;
 import java.awt.Graphics2D;

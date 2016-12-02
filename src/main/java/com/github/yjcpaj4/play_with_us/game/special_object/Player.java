@@ -1,5 +1,6 @@
-package com.github.yjcpaj4.play_with_us.game.object;
+package com.github.yjcpaj4.play_with_us.game.special_object;
  
+import com.github.yjcpaj4.play_with_us.game.LightWithGameObject;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -7,6 +8,8 @@ import java.awt.image.BufferedImage;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
+import com.github.yjcpaj4.play_with_us.game.object.Light;
+import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;

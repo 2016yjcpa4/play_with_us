@@ -1,4 +1,4 @@
-package com.github.yjcpaj4.play_with_us.game.object;
+package com.github.yjcpaj4.play_with_us.game;
 
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;

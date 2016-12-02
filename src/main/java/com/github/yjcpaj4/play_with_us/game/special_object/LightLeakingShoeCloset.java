@@ -1,6 +1,9 @@
-package com.github.yjcpaj4.play_with_us.game.object;
+package com.github.yjcpaj4.play_with_us.game.special_object;
 
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.game.object.Light;
+import com.github.yjcpaj4.play_with_us.game.object.Light;
+import com.github.yjcpaj4.play_with_us.game.LightWithGameObject;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -52,7 +55,7 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
     
     public LightLeakingShoeCloset(Point2D p) {
         mCollider = new Circle(p.getX(), p.getY(), RADIUS);
-        mImage = Application.getInstance().getResource().getImage("img.shoecloset.door");
+        mImage = Application.getInstance().getResource().getImage("img.obj.shoecloset.door");
         
         mLight.setTurnOn();
     }
