@@ -87,7 +87,7 @@ public class KitchenTV extends LightWithGameObject {
          * 3d 입체 사운드 효과 적용 하였습니다.
          * 알고림즘은 간단합니다 플레이어와 현재 티비의 거리로 계산합니다.
          */
-        mTurnOnSound.setVolume(Math.max(0, Math.min(1, 100 / l)));
+        mTurnOnSound.setVolume(1.0 - Math.max(0, Math.min(1, l / 300)));
         
         if (mLight.isTurnOn() && g.getPlayer().getMap() == getMap()) {
             mTurnOnSound.play();
