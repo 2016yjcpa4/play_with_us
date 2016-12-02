@@ -12,7 +12,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
-public class SupriseTV extends LightWithGameObject {
+public class KitchenTV extends LightWithGameObject {
+    
+    private static final int X = 345;
+    private static final int Y = 320;
     
     private static final double LIGHT_ANGLE = Math.toRadians(90);
     private static final double LIGHT_EXTENT = 70;
@@ -20,14 +23,14 @@ public class SupriseTV extends LightWithGameObject {
     private int mFPS = 0;
     private BufferedImage mTurnOnImage; 
     private SoundResource mTurnOnSound;
-    private Point2D mPos;
+    private Point2D mPos = new Point2D(X, Y);
     private boolean mSurprise = false;
     
     private Light mLight = new Light() {
         
         @Override
         public Point2D getPosition() {
-            Point2D p = new Point2D(SupriseTV.this.getPosition());
+            Point2D p = new Point2D(KitchenTV.this.getPosition());
             p.setX(p.getX() + mTurnOnImage.getWidth() / 2);
             return p;
         }
@@ -43,10 +46,9 @@ public class SupriseTV extends LightWithGameObject {
         }
     };
     
-    public SupriseTV(float x, float y) {
-        mPos = new Point2D(x, y);
-        mTurnOnImage = Application.getInstance().getResource().getImage("img.obj.tv.turnon");
-        mTurnOnSound = Application.getInstance().getResource().getSound("snd.obj.tv.noise");
+    public KitchenTV() {
+        mTurnOnImage = Application.getInstance().getResource().getImage("img.obj.kitchen.tv");
+        mTurnOnSound = Application.getInstance().getResource().getSound("snd.obj.kitchen.tv");
     }
     
     public Point2D getPosition() {

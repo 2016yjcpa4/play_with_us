@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 
-public class LightLeakingShoeCloset extends LightWithGameObject {
+public class LivingroomShoerack extends LightWithGameObject {
     
     private static final int RADIUS = 60;
             
@@ -34,7 +34,7 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
         
         @Override
         public Point2D getPosition() {
-            return LightLeakingShoeCloset.this.getPosition();
+            return LivingroomShoerack.this.getPosition();
         }
         
         @Override
@@ -53,9 +53,9 @@ public class LightLeakingShoeCloset extends LightWithGameObject {
         }
     };
     
-    public LightLeakingShoeCloset(Point2D p) {
+    public LivingroomShoerack(Point2D p) {
         mCollider = new Circle(p.getX(), p.getY(), RADIUS);
-        mImage = Application.getInstance().getResource().getImage("img.obj.shoecloset.door");
+        mImage = Application.getInstance().getResource().getImage("img.obj.livingroom.shoerack");
         
         mLight.setTurnOn();
     }

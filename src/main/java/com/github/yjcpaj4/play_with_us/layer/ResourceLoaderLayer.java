@@ -42,15 +42,13 @@ public class ResourceLoaderLayer extends Layer {
     private void loadResources() throws IOException {
         ResourceManager r = getResource();
         
-        r.load("res/snd.obj.tv.noise.mp3");
-        
-        r.load("res/img.obj.tv.turnon.png");
-        r.load("res/img.obj.shoecloset.door.png");
-        
-        r.load("res/img.bg.refrigerator.png");
-        r.load("res/img.bg.help.png");
-        
+        r.load("res/img.bg.clothesroom.picture.png");
+        r.load("res/snd.obj.kitchen.tv.mp3");
+        r.load("res/img.obj.kitchen.tv.png");
+        r.load("res/img.bg.kitchen.refrigerator.png");
+        r.load("res/img.obj.livingroom.shoerack.png");
         r.load("res/sprt.bathroom.bloodstains.json");
+        r.load("res/img.bg.help.png");
         
         // 맵정보를 불러옵니다.
         r.load("res/map.kitchen.json");

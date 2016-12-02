@@ -4,7 +4,7 @@ import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.game.Camera;
 import com.github.yjcpaj4.play_with_us.game.Map;
-import com.github.yjcpaj4.play_with_us.game.special_object.LightLeakingShoeCloset;
+import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.game.special_object.Player;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
@@ -44,7 +44,7 @@ public class GameLayer extends Layer {
         Map m = r.toMap();
         
         if (MAIN_MAP.equals("map.livingroom")) {
-            m.addObject(new LightLeakingShoeCloset(new Point2D(707, 990)));
+            m.addObject(new LivingroomShoerack(new Point2D(707, 990)));
         }
         
         if (r.hasPlayerSpawn()) {

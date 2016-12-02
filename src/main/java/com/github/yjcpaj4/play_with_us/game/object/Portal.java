@@ -1,11 +1,14 @@
 package com.github.yjcpaj4.play_with_us.game.object;
 
-import com.github.yjcpaj4.play_with_us.game.special_object.Refrigerator;
-import com.github.yjcpaj4.play_with_us.game.special_object.SupriseTV;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenTV;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -58,8 +61,14 @@ public class Portal extends GameObject {
             m.addObject(g.getPlayer());
 
             if (mDestMap.equalsIgnoreCase("map.kitchen")) {
-                m.addObject(new SupriseTV(345, 320));
-                m.addObject(new Refrigerator(40, 90));
+                m.addObject(new KitchenTV());
+                m.addObject(new KitchenRefrigerator());
+            }
+            
+            if (mDestMap.equalsIgnoreCase("map.clothesroom")) {
+                m.addObject(new ClothesroomMannequin());
+                m.addObject(new ClothesroomMannequinMine());
+                m.addObject(new ClothesroomPicture());
             }
 
             if (mDestMap.equalsIgnoreCase("map.bathroom")) {

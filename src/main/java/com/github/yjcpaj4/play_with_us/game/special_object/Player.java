@@ -44,6 +44,8 @@ public class Player extends LightWithGameObject  {
     private Timer mMessageTimer;
     private String mMessage;
     
+    private boolean mInputEnable = true;
+    
     /**
      * 플레이어의 손전등을 커스터마이징. 
      */
@@ -75,6 +77,18 @@ public class Player extends LightWithGameObject  {
     
     public Player(float x, float y) {
         mCollider = new Circle(x, y, 10);
+    }
+    
+    public boolean isInputEnable() {
+        return mInputEnable;
+    }
+    
+    public void setInputEnable() {
+        mInputEnable = true;
+    }
+    
+    public void setInputDisable() {
+        mInputEnable = false;
     }
     
     public Polygon getCollider() {
@@ -125,6 +139,10 @@ public class Player extends LightWithGameObject  {
     }
     
     private void setDirectionByInput(GameLayer g, InputManager m) {
+        if ( ! isInputEnable()) {
+            return;
+        }
+        
         Vector2D v = m.getMousePosition().divide(g.getCamera().getZoom());
         Point2D p = g.getCamera().getPosition();
         
@@ -132,6 +150,10 @@ public class Player extends LightWithGameObject  {
     }
     
     private void setLightByInput(InputManager m) {
+        if ( ! isInputEnable()) {
+            return;
+        }
+        
         if ( ! mOwnedLight) {
             return;
         }
@@ -145,6 +167,10 @@ public class Player extends LightWithGameObject  {
     }
     
     private void setVelocityByInput(InputManager m) {
+        if ( ! isInputEnable()) {
+            return;
+        }
+        
         int x = 0;
         int y = 0;
         

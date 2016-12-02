@@ -10,12 +10,18 @@ import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Refrigerator extends GameObject {
+public class KitchenRefrigerator extends GameObject {
 
-    private Circle mCollider;
+    private static final int X = 40;
+    private static final int Y = 90;
+    private static final int RADIUS = 50;
     
-    public Refrigerator(float x, float y) {
-        mCollider = new Circle(x, y, 50);
+    private static final String YES = "살펴본다.";
+    private static final String NO = "그만둔다.";
+    
+    private Circle mCollider = new Circle(X, Y, RADIUS);
+    
+    public KitchenRefrigerator() {
     }
     
     @Override
@@ -29,14 +35,14 @@ public class Refrigerator extends GameObject {
                 protected void pause() {
                     super.pause();
                     
-                    if (getCurrentAnswer().equals("살펴본다.")) {
+                    if (getCurrentAnswer().equals(YES)) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
                     }
                 }
             };
             l.setQuestion("살펴 보시겠습니까?");
-            l.setAnswers(new String[] { "살펴본다.", "그만둔다." });
-            l.setBackground(g.getResource().getImage("img.bg.refrigerator"));
+            l.setAnswers(new String[] { YES, NO });
+            l.setBackground(g.getResource().getImage("img.bg.kitchen.refrigerator"));
             g.showLayer(l);
         }
     }
