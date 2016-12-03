@@ -66,10 +66,6 @@ public class Player extends LightWithGameObject  {
         
         private static final int LIGHT_RELATIVE_Y = -15;
         
-        private void playSound() {
-            Application.getInstance().getResource().getSound("snd.player.light.switch").play();
-        }
-        
         @Override
         public Point2D getPosition() {
             Point2D p = new Point2D(Player.this.getPosition());
@@ -80,15 +76,11 @@ public class Player extends LightWithGameObject  {
         @Override
         public void setTurnOff() {
             super.setTurnOff();
-            
-            playSound();
         }
 
         @Override
         public void setTurnOn() {
             super.setTurnOn();
-            
-            playSound();
         }
 
         @Override
@@ -213,7 +205,9 @@ public class Player extends LightWithGameObject  {
         mLight.setTurnOff();
     }
     
-    private void setDirectionByInput(GameLayer g, InputManager m) {
+    private void setDirectionByInput(GameLayer g) {
+        InputManager m = g.getInput();
+        
         if ( ! isInputEnable()) {
             return;
         }
@@ -224,7 +218,10 @@ public class Player extends LightWithGameObject  {
         mDir.set(v.add(p));
     }
     
-    private void setLightByInput(InputManager m) {
+    private void setLightByInput() {
+        InputManager m1 = Application.getInstance().getInput();
+        ResourceManager m2 = Application.getInstance().getResource();
+        
         if ( ! isInputEnable() || ! isLightControllable()) {
             return;
         }
@@ -233,16 +230,20 @@ public class Player extends LightWithGameObject  {
             return;
         }
         
-        if (m.isMouseOnce(MouseEvent.BUTTON3)) { 
+        if (m1.isMouseOnce(MouseEvent.BUTTON3)) { 
             if (mLight.isTurnOn()) {
                 mLight.setTurnOff();
             } else {
                 mLight.setTurnOn();
             }
+            
+            m2.getSound("snd.player.light.switch").play();
         }
     }
     
-    private void setVelocityByInput(InputManager m) {
+    private void setVelocityByInput() {
+        InputManager m = Application.getInstance().getInput();
+        
         if ( ! isInputEnable()) {
             return;
         }
@@ -288,12 +289,10 @@ public class Player extends LightWithGameObject  {
             mRemainGhostTime = INTERVAL_GHOST;
         }
         
-        InputManager m = g.getInput();
-        
         // 인풋 들어온걸 토대로 캐릭터의 속성 변화를 줍니다.
-        setLightByInput(m); // 손전등의 상태
-        setVelocityByInput(m); // 플레이어의 속도
-        setDirectionByInput(g, m); // 플레이어가 바라보는 방향
+        setLightByInput(); // 손전등의 상태
+        setVelocityByInput(); // 플레이어의 속도
+        setDirectionByInput(g); // 플레이어가 바라보는 방향
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
