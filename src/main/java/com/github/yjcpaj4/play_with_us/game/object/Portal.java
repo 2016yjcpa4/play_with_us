@@ -52,10 +52,11 @@ public class Portal extends GameObject {
         return mCollider.getPosition();
     }
     
-    public void enterMap(Player p) {
-        Map m = Application.getInstance().getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
-        m.addObject(p);
-        p.setPosition(mDestPos);
+    public void enterPortal(Player o) {
+        GameLayer g = Application.getInstance().getLayer(GameLayer.class);
+        Map m = g.getMap(mDestMap);
+        m.addObject(o);
+        o.setPosition(mDestPos);
     }
     
     public void setLock() {
@@ -69,29 +70,9 @@ public class Portal extends GameObject {
     @Override
     public void update(GameLayer g, long delta) {
         // TODO 리팩토링
-        if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())) {
-            Map m = g.getResource().getMap(mDestMap).toMap(); // 여기서는 맵을 새로 만드는게 있는데... 캐시로 저장해야합니다
-            m.addObject(g.getPlayer());
-
-            if (mDestMap.equalsIgnoreCase("map.kitchen")) {
-                m.addObject(new KitchenTV());
-                m.addObject(new KitchenRefrigerator());
-            }
-            
-            if (mDestMap.equalsIgnoreCase("map.clothesroom")) {
-                m.addObject(new ClothesroomMannequin());
-                m.addObject(new ClothesroomMannequinMine());
-                m.addObject(new ClothesroomPicture());
-            }
-
-            if (mDestMap.equalsIgnoreCase("map.bathroom")) {
-                m.addObject(new BathroomBloodstains());
-                m.addObject(new BathroomGhost());
-                m.addObject(new BathroomTub());
-                m.addObject(new BathroomBrokenLight());
-            }
-
-            g.getPlayer().setPosition(mDestPos);
+        Player o = g.getPlayer();
+        if (o.isCollide(mCollider)) {
+            enterPortal(o);
         }
     }
 

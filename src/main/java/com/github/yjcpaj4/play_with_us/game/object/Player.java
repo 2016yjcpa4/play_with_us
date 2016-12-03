@@ -102,6 +102,10 @@ public class Player extends LightWithGameObject  {
         mCollider = new Circle(x, y, 10);
     }
     
+    public boolean isCollide(Polygon p) {
+        return CollisionDetection.isCollide(mCollider, p);
+    }
+    
     public void setHaveKithenKey() {
         mHasKitchenKey = true;
     }

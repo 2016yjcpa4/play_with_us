@@ -6,6 +6,7 @@ import com.github.yjcpaj4.play_with_us.game.Camera;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
+import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.awt.Color;
@@ -15,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +34,8 @@ public class GameLayer extends Layer {
     
     private boolean mShowHelper = false;
     
+    private java.util.Map<String, Map> mCachedMap = new HashMap<>();
+    
     public GameLayer(Application c) {
         super(c);
 
@@ -40,19 +44,27 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        MapResource r = getResource().getMap(MAIN_MAP);
-        Map m = r.toMap();
+        Map o = getMap(MAIN_MAP);
         
-        if (MAIN_MAP.equals("map.livingroom")) {
-            m.addObject(new LivingroomShoerack());
-        }
-        
-        if (r.hasSpawn()) {
-            mPlayer = new Player(r.getSpwan());
-            m.addObject(mPlayer);
+        if (o.hasSpawnPosition()) {
+            mPlayer = new Player(o.getSpwanPosition());
+            o.addObject(mPlayer);
         }
         
         mCamera = new Camera(c);
+    }
+    
+    public Map getMap(String s) {
+        if (mCachedMap.containsKey(s)) {
+            return mCachedMap.get(s);
+        }
+             
+        MapResource r = getResource().getMap(s);
+        Map o = r.newMap();
+        
+        mCachedMap.put(s, o);
+    
+        return o;
     }
     
     public void showMessage(String s) {

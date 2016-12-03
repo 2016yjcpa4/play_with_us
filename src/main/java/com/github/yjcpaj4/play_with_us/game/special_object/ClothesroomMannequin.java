@@ -110,10 +110,15 @@ public class ClothesroomMannequin extends GameObject {
                 }
 
                 if (new Vector2D(p1).subtract(p2).length() <= 70) {
-                    Portal p = getMap().getPortalByDestMap("map.livingroom");
-                    p.enterMap(o);
+                    Map m = getMap();
+                    Portal p = m.getPortalByDestMap("map.livingroom");
+                    p.enterPortal(o);
 
                     o.setInputEnable();
+                    
+                    m.removeObject(this);
+                    m.removeObject(m.getFirstObjectByClass(ClothesroomMannequinMine.class));
+                    return;
                 }
             }
         }

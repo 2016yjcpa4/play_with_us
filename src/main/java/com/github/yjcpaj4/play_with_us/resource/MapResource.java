@@ -7,6 +7,16 @@ import com.github.yjcpaj4.play_with_us.game.object.Wall;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBrokenLight;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTub;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
+import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenTV;
+import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
@@ -37,6 +47,7 @@ public class MapResource {
         }
 
         r.mImage = b;
+        r.mAlias = FileUtil.getNameWithoutExtension(f);
 
         return r;
     }
@@ -57,18 +68,9 @@ public class MapResource {
     protected Point2D mSpawnPos;
 
     protected transient BufferedImage mImage;
-
-    public MapResource(File f) {
-        mImagePath = f.getName();
-
-        try {
-            mImage = ImageIO.read(f);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    
+    protected transient String mAlias;
+ 
     public Point2D getSpwan() {
         return mSpawnPos;
     }
@@ -77,8 +79,8 @@ public class MapResource {
         return mSpawnPos != null;
     }
     
-    public Map toMap() {
-        Map o = new Map(mImage);
+    public Map newMap() {
+        Map o = new Map(mImage, mSpawnPos);
         
         // 벽을 만들고
         for (List<Point2D> l : mWall) {
@@ -92,6 +94,28 @@ public class MapResource {
         
         for (PortalResource p : mPortal) {
             o.addObject(p.toGameObject());
+        }
+        
+        if (mAlias.equalsIgnoreCase("map.livingroom")) {
+            o.addObject(new LivingroomShoerack());
+        }
+        
+        if (mAlias.equalsIgnoreCase("map.kitchen")) {
+            o.addObject(new KitchenTV());
+            o.addObject(new KitchenRefrigerator());
+        }
+
+        if (mAlias.equalsIgnoreCase("map.clothesroom")) {
+            o.addObject(new ClothesroomMannequin());
+            o.addObject(new ClothesroomMannequinMine());
+            o.addObject(new ClothesroomPicture());
+        }
+
+        if (mAlias.equalsIgnoreCase("map.bathroom")) {
+            o.addObject(new BathroomBloodstains());
+            o.addObject(new BathroomGhost());
+            o.addObject(new BathroomTub());
+            o.addObject(new BathroomBrokenLight());
         }
         
         return o;

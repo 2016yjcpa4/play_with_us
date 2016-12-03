@@ -34,11 +34,21 @@ public class Map {
     
     private TileMap mTiles;
     private final BufferedImage mBackground;
+    private final Point2D mSpawnPos;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Map(BufferedImage b) {
+    public Map(BufferedImage b, Point2D p) {
         mBackground = b;
+        mSpawnPos = p;
         mTiles = new TileMap(getTileColumns(), getTileRows());
+    }
+    
+    public boolean hasSpawnPosition() {
+        return mSpawnPos != null;
+    }
+    
+    public Point2D getSpwanPosition() {
+        return mSpawnPos;
     }
     
     public TileMap getTiles() {
