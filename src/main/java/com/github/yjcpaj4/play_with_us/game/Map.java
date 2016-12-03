@@ -88,16 +88,6 @@ public class Map {
         return null;
     }
     
-    public Player getPlayer() {
-        for(GameObject o : getAllObject()) {
-            if (o instanceof Player) {
-                return (Player) o;
-            }
-        }
-        
-        return null;
-    }
-    
     public List<GameObject> getAllObject() {
         return new ArrayList(mObject);
     }
