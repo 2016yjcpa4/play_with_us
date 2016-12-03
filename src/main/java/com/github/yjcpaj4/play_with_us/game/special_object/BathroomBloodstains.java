@@ -42,7 +42,7 @@ public class BathroomBloodstains extends GameObject {
     @Override
     public void update(GameLayer g, long delta) {
         if (g.getPlayer().hasLibraryKey()) {
-            if (CollisionDetection.getCollision(g.getPlayer().getCollider(), mCollider) != null) {
+            if (CollisionDetection.isCollide(g.getPlayer().getCollider(), mCollider)) {
                 mShowAnim = true;
             }
         }

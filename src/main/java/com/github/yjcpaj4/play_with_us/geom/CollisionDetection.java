@@ -44,6 +44,10 @@ public class CollisionDetection {
         l.addAll(p2.getEdges());
         return l;
     }
+    
+    public static boolean isCollide(Polygon p1, Polygon p2) {
+        return getCollision(p1, p2) != null;
+    }
 
     public static Vector2D getCollision(Polygon p1, Polygon p2) {
         float n1 = Float.POSITIVE_INFINITY;

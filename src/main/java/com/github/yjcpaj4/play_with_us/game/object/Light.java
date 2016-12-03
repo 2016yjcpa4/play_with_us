@@ -100,7 +100,7 @@ public class Light extends GameObject {
     }
     
     public boolean isCollide(Polygon p) {
-        if (CollisionDetection.getCollision(getRaycast(), p) == null) {
+        if ( ! CollisionDetection.isCollide(getRaycast(), p)) {
             return false;
         }
         

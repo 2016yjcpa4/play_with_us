@@ -31,7 +31,7 @@ public class ClothesroomMannequinMine extends GameObject {
         
         if ( ! mRunned) {
             if (p.hasKitchenKey()) {
-                if (CollisionDetection.getCollision(p.getCollider(), mCollider) != null) {
+                if (CollisionDetection.isCollide(p.getCollider(), mCollider)) {
                     ClothesroomMannequin o = g.getMap().getFirstObjectByClass(ClothesroomMannequin.class);
 
                     o.setSuprise();
