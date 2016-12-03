@@ -13,8 +13,8 @@ public class TileMap {
     public TileMap(int w, int h) {
         mNodes = new TileNode[w][h];
         
-        for (int y = 0; y < mNodes[0].length; y++) {
-            for (int x = 0; x < mNodes.length; x++) {
+        for (int x = 0; x < mNodes.length; x++) {
+            for (int y = 0; y < mNodes[0].length; y++) {
                 mNodes[x][y] = new TileNode(x, y);
             }
         }

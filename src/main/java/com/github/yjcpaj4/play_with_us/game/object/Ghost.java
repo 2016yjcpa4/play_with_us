@@ -10,7 +10,7 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
-import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
+import com.github.yjcpaj4.play_with_us.game.object.Wall;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;

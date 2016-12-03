@@ -5,7 +5,7 @@ import com.github.yjcpaj4.play_with_us.game.object.Light;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import java.awt.Graphics2D;
 
-public class BrokenLight extends GameObject {
+public class BathroomBrokenLight extends GameObject {
     
     private static final int MAX_DURATION = 4000;
     

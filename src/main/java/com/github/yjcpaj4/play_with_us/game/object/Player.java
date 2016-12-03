@@ -10,7 +10,7 @@ import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.TileNode;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
-import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
+import com.github.yjcpaj4.play_with_us.game.object.Wall;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
@@ -297,7 +297,7 @@ public class Player extends LightWithGameObject  {
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         
-        for (NotWalkable o : getMap().getAllNotWalkable()) {
+        for (Wall o : getMap().getAllWallObjects()) {
             Vector2D v;
             if ((v = CollisionDetection.getCollision(mCollider, o.getCollider())) != null) {
                 mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));

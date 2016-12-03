@@ -2,11 +2,12 @@ package com.github.yjcpaj4.play_with_us.resource;
 
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
-import com.github.yjcpaj4.play_with_us.game.object.Lightless;
-import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
+import com.github.yjcpaj4.play_with_us.game.object.Darkness;
+import com.github.yjcpaj4.play_with_us.game.object.Wall;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
+import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.util.FileUtil;
 import com.google.gson.Gson;
@@ -43,17 +44,17 @@ public class MapResource {
     @SerializedName("img")
     protected String mImagePath;
 
-    @SerializedName("not_walkable")
-    protected List<List<Point2D>> mNotWalkable = new ArrayList();
+    @SerializedName("wall")
+    protected List<List<Point2D>> mWall = new ArrayList();
 
-    @SerializedName("lightless")
-    protected List<List<Point2D>> mLightless = new ArrayList();
+    @SerializedName("darkness")
+    protected List<List<Point2D>> mDarkness = new ArrayList();
 
     @SerializedName("portal")
     protected List<PortalResource> mPortal = new ArrayList();
 
-    @SerializedName("player_spawn")
-    protected Point2D mPlayerSpawn;
+    @SerializedName("spawn_pos")
+    protected Point2D mSpawnPos;
 
     protected transient BufferedImage mImage;
 
@@ -68,70 +69,32 @@ public class MapResource {
         }
     }
 
-    public BufferedImage getImage() {
-        return mImage;
+    public Point2D getSpwan() {
+        return mSpawnPos;
     }
 
-    public int getWidth() {
-        return mImage.getWidth();
+    public boolean hasSpawn() {
+        return mSpawnPos != null;
     }
-
-    public int getHeight() {
-        return mImage.getHeight();
-    }
-
-    public void addNotWalkable(List<Point2D> l) {
-        mNotWalkable.add(l);
-    }
-
-    public void addLightless(List<Point2D> l) {
-        mLightless.add(l);
-    }
-
-    public void addPortal(String s, Point2D p, List<Point2D> l) {
-        mPortal.add(new PortalResource(s, p, l));
-    }
-
-    public List<PortalResource> getPortal() {
-        return mPortal;
-    }
-
-    public List<NotWalkable> getNotWalkable() {
-        List<NotWalkable> l = new ArrayList<>();
-        for (List<Point2D> o : mNotWalkable) {
-            l.add(new NotWalkable(o));
-        }
-        return l;
-    }
-
-    public void setPlayerSpawn(Point2D p) {
-        mPlayerSpawn = p;
-    }
-
-    public Point2D getPlayerSpwan() {
-        return mPlayerSpawn;
-    }
-
-    public boolean hasPlayerSpawn() {
-        return mPlayerSpawn != null;
-    }
-
-    public List<Lightless> getLightless() {
-        List<Lightless> l = new ArrayList<>();
-        for (List<Point2D> o : mLightless) {
-            l.add(new Lightless(o));
-        }
-        return l;
-    }
-
+    
     public Map toMap() {
-        List<GameObject> l = new ArrayList();
-        l.addAll(getNotWalkable());
-        l.addAll(getLightless());
-        for (PortalResource o : mPortal) {
-            l.add(o.toPortal());
+        Map o = new Map(mImage);
+        
+        // 벽을 만들고
+        for (List<Point2D> l : mWall) {
+            o.addObject(new Wall(l));
         }
-        return new Map(mImage, l);
+        
+        // 
+        for (List<Point2D> l : mDarkness) {
+            o.addObject(new Darkness(l));
+        }
+        
+        for (PortalResource p : mPortal) {
+            o.addObject(p.toGameObject());
+        }
+        
+        return o;
     }
 
     public static class PortalResource {
@@ -139,24 +102,23 @@ public class MapResource {
         @SerializedName("dest_map")
         protected String mDestMap;
 
-        @SerializedName("spawn_pos")
-        protected Point2D mSpawnPos;
+        @SerializedName("dest_pos")
+        protected Point2D mDestPos;
 
-        @SerializedName("portal_area")
-        protected List<Point2D> mPortalArea = new ArrayList<>();
-
-        public PortalResource(String s, Point2D p, List<Point2D> l) {
-            mDestMap = s;
-            mSpawnPos = p;
-            mPortalArea = l;
-        }
+        @SerializedName("x")
+        protected float mX;
         
-        public java.awt.Polygon toAWTPolygon() {
-            return new java.awt.Polygon(Point2D.getXPoints(mPortalArea), Point2D.getYPoints(mPortalArea), mPortalArea.size());
-        }
+        @SerializedName("y")
+        protected float mY;
+        
+        @SerializedName("width")
+        protected float mWidth;
+        
+        @SerializedName("height")
+        protected float mHeight;
 
-        public Portal toPortal() {
-            return new Portal(mDestMap, mSpawnPos, mPortalArea);
+        public GameObject toGameObject() {
+            return new Portal(mDestMap, mDestPos, new Box2D(mX, mY, mWidth, mHeight).toPolygon());
         }
     }
 

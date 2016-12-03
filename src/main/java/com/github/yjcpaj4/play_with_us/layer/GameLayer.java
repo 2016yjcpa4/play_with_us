@@ -44,11 +44,11 @@ public class GameLayer extends Layer {
         Map m = r.toMap();
         
         if (MAIN_MAP.equals("map.livingroom")) {
-            m.addObject(new LivingroomShoerack(new Point2D(707, 990)));
+            m.addObject(new LivingroomShoerack());
         }
         
-        if (r.hasPlayerSpawn()) {
-            mPlayer = new Player(r.getPlayerSpwan());
+        if (r.hasSpawn()) {
+            mPlayer = new Player(r.getSpwan());
             m.addObject(mPlayer);
         }
         

@@ -124,10 +124,10 @@ public class ClothesroomMannequin extends GameObject {
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         SpriteResource.Frame f = getCurrentSpriteFrame(g, delta);
-        Point2D p1 = mCollider.getPosition();
+        Point2D p = mCollider.getPosition();
         
-        int x = (int) (p1.getX() - f.getWidth() / 2);
-        int y = (int) (p1.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
+        int x = (int) (p.getX() - f.getWidth() / 2);
+        int y = (int) (p.getY() - f.getHeight() + ((Circle) mCollider).getRadius());
         
         g2d.drawImage(f.getImage(), x, y, null);
     }

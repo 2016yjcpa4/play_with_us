@@ -154,7 +154,7 @@ public class BathroomGhost extends GameObject {
                 mSpeed = SPEED;
 
                 if ( ! mBrokenLight) {
-                    g.getMap().getFirstObjectByClass(BrokenLight.class).reset();
+                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).reset();
                     mBrokenLight = true;
                 }
 
@@ -172,7 +172,7 @@ public class BathroomGhost extends GameObject {
                     o.setInputEnable();
                     o.setTurnOffLight();
                     
-                    g.getMap().getFirstObjectByClass(BrokenLight.class).finish();
+                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).finish();
                 }
             }
         }

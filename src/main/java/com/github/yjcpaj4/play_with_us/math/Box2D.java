@@ -11,14 +11,14 @@ public class Box2D {
     private float mWidth;
     private float mHeight;
     
-    public Box2D(int x, int y, int w, int h) {
+    public Box2D(float x, float y, float w, float h) {
         mX = x;
         mY = y;
         mWidth = w;
         mHeight = h;
     }
     
-    public void setMargins(int m) {
+    public void setMargins(float m) {
         mX -= m / 2;
         mY -= m / 2;
         mWidth += m;

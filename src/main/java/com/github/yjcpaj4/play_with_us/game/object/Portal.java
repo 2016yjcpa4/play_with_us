@@ -6,7 +6,7 @@ import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
-import com.github.yjcpaj4.play_with_us.game.special_object.BrokenLight;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBrokenLight;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTub;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
@@ -38,10 +38,10 @@ public class Portal extends GameObject {
     
     private boolean mLocked = false;
     
-    public Portal(String s, Point2D p, List<Point2D> l) {
+    public Portal(String s, Point2D p, Polygon o) {
         mDestMap = s;
         mDestPos = p;
-        mCollider = new Polygon(l);
+        mCollider = o;
     }
     
     public String getDestMap() {
@@ -88,7 +88,7 @@ public class Portal extends GameObject {
                 m.addObject(new BathroomBloodstains());
                 m.addObject(new BathroomGhost());
                 m.addObject(new BathroomTub());
-                m.addObject(new BrokenLight());
+                m.addObject(new BathroomBrokenLight());
             }
 
             g.getPlayer().setPosition(mDestPos);

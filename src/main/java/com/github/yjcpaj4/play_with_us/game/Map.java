@@ -1,7 +1,7 @@
 package com.github.yjcpaj4.play_with_us.game;
  
-import com.github.yjcpaj4.play_with_us.game.object.Lightless;
-import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
+import com.github.yjcpaj4.play_with_us.game.object.Darkness;
+import com.github.yjcpaj4.play_with_us.game.object.Wall;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
 import com.github.yjcpaj4.play_with_us.game.object.Player;
 import java.awt.AlphaComposite;
@@ -21,6 +21,7 @@ import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
+import com.github.yjcpaj4.play_with_us.resource.MapResource;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -35,14 +36,9 @@ public class Map {
     private final BufferedImage mBackground;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Map(BufferedImage b, List<GameObject> l) {
+    public Map(BufferedImage b) {
         mBackground = b;
-        
-        for (GameObject o : l) {
-            addObject(o);
-        }
-        
-        setTiles();
+        mTiles = new TileMap(getTileColumns(), getTileRows());
     }
     
     public TileMap getTiles() {
@@ -50,15 +46,20 @@ public class Map {
     }
     
     private void setTiles() {
-        mTiles = new TileMap(getTileColumns(), getTileRows());
+        // reset
+        for (int x = 0; x < mTiles.getColumns(); x++) {
+            for (int y = 0; y < mTiles.getRows(); y++) {
+                mTiles.getNode(x, y).setWalkable();
+            }
+        }
         
-        for (Line2D l : getAllSideByNotWalkable()) {
-            Point2D p1 = getTileIndex((int) l.getX1(), (int) l.getY1());
-            Point2D p2 = getTileIndex((int) l.getX2(), (int) l.getY2());
+        for (Line2D l : getAllSideByWallObjects()) {
+            Point2D p1 = getTileIndex(l.getX1(), l.getY1());
+            Point2D p2 = getTileIndex(l.getX2(), l.getY2());
 
-            for (Point2D p : BresenhamLine.getBresenhamLine((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY())) {
-                if (mTiles.isWithin((int)p.getX(), (int)p.getY())) {
-                    mTiles.getNode((int)p.getX(), (int)p.getY()).setNotWalkable();
+            for (Point2D p : BresenhamLine.getBresenhamLine((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY())) {
+                if (mTiles.isWithin((int) p.getX(), (int) p.getY())) {
+                    mTiles.getNode((int) p.getX(), (int) p.getY()).setNotWalkable();
                 }
             }
         }
@@ -95,6 +96,10 @@ public class Map {
         o.setMap(null);
 
         mObject.remove(o);
+        
+        if (o instanceof Wall) {
+            setTiles();
+        }
 
         if (o instanceof LightWithGameObject) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
             removeObject(((LightWithGameObject) o).getOwnedLight());
@@ -105,6 +110,10 @@ public class Map {
         o.setMap(this);
 
         mObject.add(o);
+        
+        if (o instanceof Wall) {
+            setTiles();
+        }
 
         if (o instanceof LightWithGameObject) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
             addObject(((LightWithGameObject) o).getOwnedLight());
@@ -150,43 +159,43 @@ public class Map {
                          , y / TILE_HEIGHT);
     }
 
-    public List<Lightless> getAllLightless() {
-        List<Lightless> l = new ArrayList<>();
+    public List<Darkness> getAllDarknessObjects() {
+        List<Darkness> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
-            if (o instanceof Lightless) {
-                l.add((Lightless) o);
+            if (o instanceof Darkness) {
+                l.add((Darkness) o);
             }
         }
         return l;
     }
     
-    public List<NotWalkable> getAllNotWalkable() {
-        List<NotWalkable> l = new ArrayList<>();
+    public List<Wall> getAllWallObjects() {
+        List<Wall> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
-            if (o instanceof NotWalkable) {
-                l.add((NotWalkable) o);
+            if (o instanceof Wall) {
+                l.add((Wall) o);
             }
         }
         return l;
     }
     
-    public List<Line2D> getAllSideByNotWalkable() {
+    public List<Line2D> getAllSideByWallObjects() {
         List<Line2D> l = new ArrayList<>();
-        for (NotWalkable o : getAllNotWalkable()) {
+        for (Wall o : getAllWallObjects()) {
             l.addAll(o.getAllSide());
         }
         return l;
     }
     
-    public List<Line2D> getAllSideByLightless() {
+    public List<Line2D> getAllSideByDarknessObjects() {
         List<Line2D> l = new ArrayList<>();
-        for (Lightless o : getAllLightless()) {
+        for (Darkness o : getAllDarknessObjects()) {
             l.addAll(o.getAllSide());
         }
         return l;
     }
     
-    public List<Light> getAllLight() {
+    public List<Light> getAllLightObjects() {
         List<Light> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
             if (o instanceof Light) {
@@ -196,7 +205,7 @@ public class Map {
         return l;
     }
     
-    public List<LightWithGameObject> getAllLightObject() {
+    public List<LightWithGameObject> getAllLightWithGameObjects() {
         List<LightWithGameObject> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
             if (o instanceof LightWithGameObject) {
@@ -228,7 +237,7 @@ public class Map {
         return l;
     }
 
-    private List<GameObject> getAllObjectWithoutLightObject() {
+    private List<GameObject> getAllObjectsWithoutLight() {
         List<GameObject> l = new ArrayList<>();
         for(GameObject o : getAllObject()) {
             if (o instanceof Light || o instanceof LightWithGameObject) {
@@ -243,9 +252,9 @@ public class Map {
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
         g2d.drawImage(mBackground, 0, 0, null);
         
-        debugTiles(g2d);
+        drawDebugTiles(g2d);
 
-        for (GameObject o : getAllObjectWithoutLightObject()) {
+        for (GameObject o : getAllObjectsWithoutLight()) {
             o.draw(g, delta, g2d);
         }
         
@@ -255,7 +264,7 @@ public class Map {
         t.fillRect(0, 0, mBackground.getWidth(), mBackground.getHeight());
         t.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT));
 
-        for (GameObject o : getAllLight()) {
+        for (GameObject o : getAllLightObjects()) {
             o.draw(g, delta, t);
         }
 
@@ -263,12 +272,12 @@ public class Map {
         
         g2d.drawImage(b, 0, 0, null);
         
-        for (GameObject o : getAllLightObject()) {
+        for (GameObject o : getAllLightWithGameObjects()) {
             o.draw(g, delta, g2d); 
         }
     }
     
-    private void debugTiles(Graphics2D g2d) {
+    private void drawDebugTiles(Graphics2D g2d) {
         
         if ( ! (DEBUG && Application.DEBUG)) {
             return;
