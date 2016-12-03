@@ -7,6 +7,7 @@ import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
+import com.github.yjcpaj4.play_with_us.util.SoundUtil;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -63,13 +64,11 @@ public class KitchenTV extends LightWithGameObject {
             mDuration = 0;
         }
         
-        Point2D p1 = g.getPlayer().getPosition();
-        Point2D p2 = getPosition(); 
-            
-        float l = new Vector2D(p1).subtract(p2).length();
-        
         if ( ! mSurprise) {
-            if (l <= 150) {
+            Point2D p1 = g.getPlayer().getPosition();
+            Point2D p2 = getPosition(); 
+ 
+            if (new Vector2D(p1).subtract(p2).length() <= 150) {
                 mSurprise = true;
             }
         }
@@ -83,13 +82,12 @@ public class KitchenTV extends LightWithGameObject {
             mDuration += delta;
         }
         
-        /*
-         * 3d 입체 사운드 효과 적용 하였습니다.
-         * 알고림즘은 간단합니다 플레이어와 현재 티비의 거리로 계산합니다.
-         */
-        mTurnOnSound.setVolume(1.0 - Math.max(0, Math.min(1, l / 300)));
-        
-        if (mLight.isTurnOn() && g.getPlayer().getMap() == getMap()) {
+        if (mLight.isTurnOn() && g.getPlayer().getMap() == getMap()) { 
+            /*
+             * 3d 입체 사운드 효과 적용 하였습니다.
+             * 알고림즘은 간단합니다 플레이어와 현재 티비의 거리로 계산합니다.
+             */
+            mTurnOnSound.setVolume(SoundUtil.getVolumeByDistance(g.getPlayer().getPosition(), getPosition(), 200));
             mTurnOnSound.play();
         }
         else {

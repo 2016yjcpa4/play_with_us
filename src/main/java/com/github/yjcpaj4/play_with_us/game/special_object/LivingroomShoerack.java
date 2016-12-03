@@ -11,7 +11,7 @@ import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import com.github.yjcpaj4.play_with_us.resource.SoundResource;
-import com.github.yjcpaj4.play_with_us.util.GraphicsUtil;
+import com.github.yjcpaj4.play_with_us.util.SoundUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
