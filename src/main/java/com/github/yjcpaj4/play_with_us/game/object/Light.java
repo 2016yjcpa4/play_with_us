@@ -9,10 +9,12 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.geom.Raycast;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.math.Vector2D;
 import java.awt.Shape;
 
 public class Light extends GameObject {
@@ -95,6 +97,22 @@ public class Light extends GameObject {
         a.intersect(new Area(getRaycast().toAWTPolygon()));
         
         return a;
+    }
+    
+    public boolean isCollide(Polygon p) {
+        if (CollisionDetection.getCollision(getRaycast(), p) == null) {
+            return false;
+        }
+        
+        Point2D p1 = p.getPosition();
+        Point2D p2 = getPosition();
+        
+        Vector2D v = new Vector2D(p1).subtract(p2);
+        if (v.length() > getLength()) {
+            return false;
+        }
+        
+        return true;
     }
 
     @Override

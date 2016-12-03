@@ -81,6 +81,19 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/sprt.clothesroom.mannequin.idle.e.json");
         r.load("res/sprt.clothesroom.mannequin.idle.s.json");
         r.load("res/sprt.clothesroom.mannequin.idle.w.json");
+        
+        
+        // 걸어다닐때 (동,서,남,북)
+        r.load("res/sprt.bathroom.ghost.walk.n.json");
+        r.load("res/sprt.bathroom.ghost.walk.e.json");
+        r.load("res/sprt.bathroom.ghost.walk.s.json");
+        r.load("res/sprt.bathroom.ghost.walk.w.json");
+        
+        // 가만히 있을때 (동,서,남,북)
+        r.load("res/sprt.bathroom.ghost.idle.n.json");
+        r.load("res/sprt.bathroom.ghost.idle.e.json");
+        r.load("res/sprt.bathroom.ghost.idle.s.json");
+        r.load("res/sprt.bathroom.ghost.idle.w.json");
     }
 
     @Override

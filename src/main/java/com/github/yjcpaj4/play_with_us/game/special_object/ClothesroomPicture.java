@@ -51,7 +51,9 @@ public class ClothesroomPicture extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) { 
+        if (Application.DEBUG) {
             g2d.setColor(Color.RED);
             g2d.drawPolygon(mCollider.toAWTPolygon()); 
+        }
     }
 }
