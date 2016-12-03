@@ -1,12 +1,15 @@
 package com.github.yjcpaj4.play_with_us.game.special_object;
 
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
+import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -22,18 +25,23 @@ public class BathroomBloodstains extends GameObject {
     private static final int WIDTH = 64;
     private static final int HEIGHT = 173;
     
+    private static final int MARGINS = 100;
+    
     private Polygon mCollider;
     private long mDuration;
     
     private boolean mShowAnim;
     
     public BathroomBloodstains() {
-        mCollider = new Box2D(X, Y, WIDTH, HEIGHT).toPolygon();
+        Box2D b = new Box2D(X, Y, WIDTH, HEIGHT);
+        b.setMargins(MARGINS);
+        
+        mCollider = b.toPolygon();
     }
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (g.getInput().isKeyOnce(KeyEvent.VK_F)) {
+        if (g.getPlayer().hasLibraryKey()) {
             if (CollisionDetection.getCollision(g.getPlayer().getCollider(), mCollider) != null) {
                 mShowAnim = true;
             }
@@ -42,6 +50,12 @@ public class BathroomBloodstains extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
+        if (Application.DEBUG) {
+            g2d.setColor(Color.red);
+            g2d.drawPolygon(mCollider.toAWTPolygon());
+            g2d.drawRect(X, Y, WIDTH, HEIGHT);
+        }
+        
         if ( ! mShowAnim) {
             return;
         }

@@ -91,6 +91,10 @@ public class InputManager {
         return mKeyboardQueue.isReleased(k);
     }
     
+    public boolean isMouseOnce(int k) {
+        return mMouseQueue.isOnce(k);
+    }
+    
     public boolean isMousePressed(int k) {
         return mMouseQueue.isPressed(k);
     }

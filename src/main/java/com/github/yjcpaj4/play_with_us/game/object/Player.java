@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.InputManager;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
+import com.github.yjcpaj4.play_with_us.game.TileNode;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
 import com.github.yjcpaj4.play_with_us.game.object.NotWalkable;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
@@ -30,6 +31,8 @@ import java.util.TimerTask;
  
 public class Player extends LightWithGameObject  {
     
+    private static final int INTERVAL_GHOST = 1000 * 60 * 3;
+    
     private static final float LIGHT_LENGTH = 210f;
     
     protected transient Polygon mCollider;
@@ -46,8 +49,15 @@ public class Player extends LightWithGameObject  {
     
     private boolean mHasKitchenKey = false;
     private boolean mHasBathroomKey = false;
+    private boolean mHasLibraryKey = false;
     
     private boolean mInputEnable = true;
+    
+    private boolean mLightControllable = true;
+    
+    private long mSpriteDuration = 0;
+    
+    private long mRemainGhostTime = INTERVAL_GHOST;
     
     /**
      * 플레이어의 손전등을 커스터마이징. 
@@ -56,11 +66,29 @@ public class Player extends LightWithGameObject  {
         
         private static final int LIGHT_RELATIVE_Y = -15;
         
+        private void playSound() {
+            Application.getInstance().getResource().getSound("snd.player.light.switch").play();
+        }
+        
         @Override
         public Point2D getPosition() {
             Point2D p = new Point2D(Player.this.getPosition());
             p.setY(p.getY() + LIGHT_RELATIVE_Y);
             return p;
+        }
+
+        @Override
+        public void setTurnOff() {
+            super.setTurnOff();
+            
+            playSound();
+        }
+
+        @Override
+        public void setTurnOn() {
+            super.setTurnOn();
+            
+            playSound();
         }
 
         @Override
@@ -90,12 +118,36 @@ public class Player extends LightWithGameObject  {
         return mHasKitchenKey;
     }
     
+    public void setHaveBathroomKey() {
+        mHasBathroomKey = true;
+    }
+    
+    public boolean hasBathroomKey() {
+        return mHasBathroomKey;
+    }
+    
+    public void setHaveLibraryKey() {
+        mHasLibraryKey = true;
+    }
+    
+    public boolean hasLibraryKey() {
+        return mHasLibraryKey;
+    }
+    
     public boolean isInputEnable() {
         return mInputEnable;
     }
     
     public void setInputEnable() {
         mInputEnable = true;
+    }
+    
+    public boolean isLightControllable() {
+        return mLightControllable;
+    }
+    
+    public void setLightControllable(boolean b) {
+        mLightControllable = b;
     }
     
     public void setIdle() {
@@ -153,6 +205,14 @@ public class Player extends LightWithGameObject  {
         return mLight.isTurnOn();
     }
     
+    public void setTurnOnLight() {
+        mLight.setTurnOn();
+    }
+    
+    public void setTurnOffLight() {
+        mLight.setTurnOff();
+    }
+    
     private void setDirectionByInput(GameLayer g, InputManager m) {
         if ( ! isInputEnable()) {
             return;
@@ -165,7 +225,7 @@ public class Player extends LightWithGameObject  {
     }
     
     private void setLightByInput(InputManager m) {
-        if ( ! isInputEnable()) {
+        if ( ! isInputEnable() || ! isLightControllable()) {
             return;
         }
         
@@ -173,11 +233,12 @@ public class Player extends LightWithGameObject  {
             return;
         }
         
-        if (m.isMousePressed(MouseEvent.BUTTON3)) { 
-            mLight.setTurnOn(); 
-        }
-        else {
-            mLight.setTurnOff();
+        if (m.isMouseOnce(MouseEvent.BUTTON3)) { 
+            if (mLight.isTurnOn()) {
+                mLight.setTurnOff();
+            } else {
+                mLight.setTurnOn();
+            }
         }
     }
     
@@ -222,6 +283,11 @@ public class Player extends LightWithGameObject  {
     
     @Override
     public void update(GameLayer g, long delta) {
+        if (mRemainGhostTime <= 0) {
+            showGhost();
+            mRemainGhostTime = INTERVAL_GHOST;
+        }
+        
         InputManager m = g.getInput();
         
         // 인풋 들어온걸 토대로 캐릭터의 속성 변화를 줍니다.
@@ -237,32 +303,10 @@ public class Player extends LightWithGameObject  {
                 mCollider.transform(Matrix2D.translate(v.getX(), v.getY()));
             }
         }
-    }
-    
-    private long mDuration = 0;
-    
-    /**
-     * 현재 플레이어의 이미지를 가져옵니다.
-     * 
-     * 걷고, 서있고... 등등?
-     * 
-     * @return 프레임을 반환합니다.
-     */
-    private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager m, long d) {
-        boolean isIdle = mVel.getX() == 0 && mVel.getY() == 0;
         
-        List<String> l = new ArrayList<>(4);
-        l.add("sprt");
-        l.add("player");
-        l.add(isIdle ? "idle" : "walk");
-        l.add(MathUtil.getSimpleDirectionByRadian(getAngle()));
-        
-        SpriteResource r = m.getSprite(String.join(".", l));
-        int n = (int) (mDuration / r.getFPS() % r.getLength());
-        
-        mDuration += d;
-        
-        return r.getFrame(n);
+        if (isInputEnable()) {
+            mRemainGhostTime -= delta;
+        }
     }
     
     public void showMessage(String s, int n) {
@@ -284,6 +328,57 @@ public class Player extends LightWithGameObject  {
         
         mMessageTimer = new Timer();
         mMessageTimer.schedule(t, n);
+    }
+    
+    /**
+     * 현재 플레이어의 이미지를 가져옵니다.
+     * 
+     * 걷고, 서있고... 등등?
+     * 
+     * @return 프레임을 반환합니다.
+     */
+    private SpriteResource.Frame getCurrentSpriteFrame(ResourceManager m, long d) {
+        boolean isIdle = mVel.getX() == 0 && mVel.getY() == 0;
+        
+        List<String> l = new ArrayList<>(4);
+        l.add("sprt");
+        l.add("player");
+        l.add(isIdle ? "idle" : "walk");
+        l.add(MathUtil.getSimpleDirectionByRadian(getAngle()));
+        
+        SpriteResource r = m.getSprite(String.join(".", l));
+        int n = (int) (mSpriteDuration / r.getFPS() % r.getLength());
+        
+        mSpriteDuration += d;
+        
+        return r.getFrame(n);
+    }
+    
+    private void showGhost() {
+        
+        Point2D p = getPosition();
+        
+        float x;
+        float y;
+        
+        while (true) { // 적절한 위치를 찾을때까지 좌표값을 찾습니다. (플레이어에게 가로막는 장애물없이 걸어올수 있는 좌표인가)
+            double n1 = Math.random() * 100 + 100;
+            double n2 = Math.toRadians(Math.random() * 360);
+            
+            x = (float) (p.getX() + n1 * Math.cos(n2));
+            y = (float) (p.getY() + n1 * Math.sin(n2));
+            
+            try {
+                if ( ! getMap().getPath(p.getX(), p.getY(), x, y).isEmpty()) {
+                    break;
+                }
+            } 
+            catch(ArrayIndexOutOfBoundsException e) {
+                // 그냥 맵밖으로 튀어나간경우... 따로 예외처리는 없음.
+            }
+        }
+        
+        getMap().addObject(new Ghost(x, y));
     }
     
     @Override

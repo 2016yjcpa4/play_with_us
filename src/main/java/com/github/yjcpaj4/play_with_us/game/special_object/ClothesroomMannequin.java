@@ -28,11 +28,11 @@ public class ClothesroomMannequin extends GameObject {
     private static final int SPEED = 10;
     
     private boolean mSuprise = false;
-    private long mDelta = 0;
     private Vector2D mVel = new Vector2D();
     private Polygon mCollider = new Circle(X, Y, 10);
     
-    private long mDuration = 0;
+    private long mAnimDuration = 0;
+    private long mSpriteDuration = 0;
     
     private boolean mLookingAtMe = false;
     
@@ -71,9 +71,9 @@ public class ClothesroomMannequin extends GameObject {
         }
         
         SpriteResource r = g.getResource().getSprite(String.join(".", l));
-        int n = (int) (mDuration / r.getFPS() % r.getLength());
+        int n = (int) (mSpriteDuration / r.getFPS() % r.getLength());
         
-        mDuration += d;
+        mSpriteDuration += d;
         
         return r.getFrame(n);
     }
@@ -87,38 +87,38 @@ public class ClothesroomMannequin extends GameObject {
         final Player o = g.getPlayer();
         
         // 0.5초후 마네킨방향으로 돌리게함.
-        if (mDelta >= 500) {
+        if (mAnimDuration > 500) {
             if ( ! mLookingAtMe) {
                 o.getDirection().set(getPosition());
                 mLookingAtMe = true;
+            } 
+        
+            // 1.3초후 마네킨이 따라옴.
+            if (mAnimDuration > 1300) {
+                mVel.set(SPEED, SPEED);
+
+                Point2D p1 = mCollider.getPosition();
+                Point2D p2 = o.getPosition();
+
+                List<Point2D> l = g.getMap().getPath(p1, p2);
+                if ( ! l.isEmpty()) {
+                    double n = new Vector2D(l.get(0)).subtract(p1).toAngle();
+                    double tx = SPEED * Math.cos(n);
+                    double ty = SPEED * Math.sin(n);
+
+                    mCollider.transform(Matrix2D.translate(tx, ty));
+                }
+
+                if (new Vector2D(p1).subtract(p2).length() <= 70) {
+                    Portal p = getMap().getPortalByDestMap("map.livingroom");
+                    p.enterMap(o);
+
+                    o.setInputEnable();
+                }
             }
         }
         
-        // 1.3초후 마네킨이 따라옴.
-        if (mDelta >= 1300) {
-            mVel.set(SPEED, SPEED);
-            
-            Point2D p1 = mCollider.getPosition();
-            Point2D p2 = o.getPosition();
-
-            List<Point2D> l = g.getMap().getPath(p1, p2);
-            if ( ! l.isEmpty()) {
-                double n = new Vector2D(l.get(0)).subtract(p1).toAngle();
-                double tx = SPEED * Math.cos(n);
-                double ty = SPEED * Math.sin(n);
-
-                mCollider.transform(Matrix2D.translate(tx, ty));
-            }
-
-            if (new Vector2D(p1).subtract(p2).length() <= 70) {
-                Portal p = getMap().getPortalByDestMap("map.livingroom");
-                p.enterMap(o);
-
-                o.setInputEnable();
-            }
-        }
-        
-        mDelta += delta;
+        mAnimDuration += delta;
     }
 
     @Override

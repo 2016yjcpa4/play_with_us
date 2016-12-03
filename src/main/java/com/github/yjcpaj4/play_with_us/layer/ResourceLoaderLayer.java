@@ -50,50 +50,51 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/sprt.bathroom.bloodstains.json");
         r.load("res/img.bg.help.png");
         r.load("res/snd.obj.clothesroom.mannequin.mp3");
+        r.load("res/img.bg.bathroom.ghost.jpg");
+        r.load("res/img.bg.bathroom.tub.png");
+        r.load("res/snd.player.light.switch.mp3");
         
-        // 맵정보를 불러옵니다.
-        r.load("res/map.kitchen.json");
-        r.load("res/map.library.json");
-        r.load("res/map.clothesroom.json");
-        r.load("res/map.bathroom.json");
-        r.load("res/map.livingroom.json");
-        
-        // 걸어다닐때 (동,서,남,북)
         r.load("res/sprt.player.walk.n.json");
         r.load("res/sprt.player.walk.e.json");
         r.load("res/sprt.player.walk.s.json");
         r.load("res/sprt.player.walk.w.json");
-        
-        // 가만히 있을때 (동,서,남,북)
         r.load("res/sprt.player.idle.n.json");
         r.load("res/sprt.player.idle.e.json");
         r.load("res/sprt.player.idle.s.json");
         r.load("res/sprt.player.idle.w.json");
         
-        // 걸어다닐때 (동,서,남,북)
+        r.load("res/sprt.ghost.walk.n.json");
+        r.load("res/sprt.ghost.walk.e.json");
+        r.load("res/sprt.ghost.walk.s.json");
+        r.load("res/sprt.ghost.walk.w.json");
+        r.load("res/sprt.ghost.idle.n.json");
+        r.load("res/sprt.ghost.idle.e.json");
+        r.load("res/sprt.ghost.idle.s.json");
+        r.load("res/sprt.ghost.idle.w.json");
+        
         r.load("res/sprt.clothesroom.mannequin.walk.n.json");
         r.load("res/sprt.clothesroom.mannequin.walk.e.json");
         r.load("res/sprt.clothesroom.mannequin.walk.s.json");
         r.load("res/sprt.clothesroom.mannequin.walk.w.json");
-        
-        // 가만히 있을때 (동,서,남,북)
         r.load("res/sprt.clothesroom.mannequin.idle.n.json");
         r.load("res/sprt.clothesroom.mannequin.idle.e.json");
         r.load("res/sprt.clothesroom.mannequin.idle.s.json");
         r.load("res/sprt.clothesroom.mannequin.idle.w.json");
         
-        
-        // 걸어다닐때 (동,서,남,북)
         r.load("res/sprt.bathroom.ghost.walk.n.json");
         r.load("res/sprt.bathroom.ghost.walk.e.json");
         r.load("res/sprt.bathroom.ghost.walk.s.json");
         r.load("res/sprt.bathroom.ghost.walk.w.json");
-        
-        // 가만히 있을때 (동,서,남,북)
         r.load("res/sprt.bathroom.ghost.idle.n.json");
         r.load("res/sprt.bathroom.ghost.idle.e.json");
         r.load("res/sprt.bathroom.ghost.idle.s.json");
         r.load("res/sprt.bathroom.ghost.idle.w.json");
+        
+        r.load("res/map.kitchen.json");
+        r.load("res/map.library.json");
+        r.load("res/map.clothesroom.json");
+        r.load("res/map.bathroom.json");
+        r.load("res/map.livingroom.json");
     }
 
     @Override

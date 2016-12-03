@@ -1,27 +1,48 @@
 package com.github.yjcpaj4.play_with_us.game.special_object;
 
-import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.Layer;
+import com.github.yjcpaj4.play_with_us.game.object.Player;
+import com.github.yjcpaj4.play_with_us.ResourceManager;
+import com.github.yjcpaj4.play_with_us.game.GameObject;
+import com.github.yjcpaj4.play_with_us.game.Map;
+import com.github.yjcpaj4.play_with_us.game.object.Light;
+import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
+import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.layer.InterativeLayer;
+import com.github.yjcpaj4.play_with_us.math.Matrix2D;
+import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.math.Vector2D;
+import com.github.yjcpaj4.play_with_us.resource.SoundResource;
+import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
+import com.github.yjcpaj4.play_with_us.util.AWTUtil;
+import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class KitchenRefrigerator extends GameObject {
-
-    private static final int X = 40;
-    private static final int Y = 90;
-    private static final int RADIUS = 50;
+public class BathroomTub extends GameObject {
+    
+    private static final int X = 463;
+    private static final int Y = 150;
+    private static final int RADIUS = 35;
     
     private static final String YES = "살펴본다.";
     private static final String NO = "그만둔다.";
     
-    private Circle mCollider = new Circle(X, Y, RADIUS);
+    private Polygon mCollider = new Circle(X, Y, RADIUS);
     
-    public KitchenRefrigerator() {
+    public Point2D getPosition() {
+        return mCollider.getPosition();
     }
     
     @Override
@@ -37,13 +58,13 @@ public class KitchenRefrigerator extends GameObject {
                     
                     if (getCurrentAnswer().equals(YES)) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
-                        g.getPlayer().setHaveBathroomKey();
+                        g.getPlayer().setHaveLibraryKey();
                     }
                 }
             };
             l.setQuestion("살펴 보시겠습니까?");
             l.setAnswers(new String[] { YES, NO });
-            l.setBackground(g.getResource().getImage("img.bg.kitchen.refrigerator"));
+            l.setBackground(g.getResource().getImage("img.bg.bathroom.tub"));
             g.showLayer(l);
         }
     }
@@ -55,5 +76,4 @@ public class KitchenRefrigerator extends GameObject {
             g2d.drawPolygon(mCollider.toAWTPolygon());
         }
     }
-    
 }

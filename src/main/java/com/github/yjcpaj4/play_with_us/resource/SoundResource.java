@@ -21,14 +21,16 @@ public class SoundResource {
         new JFXPanel();
     }
     
+    private double mVolume = 1.0;
+    private Media mMedia;
     private MediaPlayer mMediaPlayer;
     
     public SoundResource(File f) {
-        mMediaPlayer = new MediaPlayer(new Media(f.toURI().toString()));
+        mMedia = new Media(f.toURI().toString());
     }
     
     public void setVolume(double v) {
-        mMediaPlayer.setVolume(v);
+        mVolume = v;
     }
     
     public void play() {
@@ -36,12 +38,16 @@ public class SoundResource {
             
             @Override
             public void run() {
+                mMediaPlayer = new MediaPlayer(mMedia);
+                mMediaPlayer.setVolume(mVolume);
                 mMediaPlayer.play();
             }
         }.start();
     }
     
     public void stop() {
-        mMediaPlayer.stop();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+        }
     }
 }

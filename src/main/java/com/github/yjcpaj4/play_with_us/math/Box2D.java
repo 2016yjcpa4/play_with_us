@@ -18,6 +18,13 @@ public class Box2D {
         mHeight = h;
     }
     
+    public void setMargins(int m) {
+        mX -= m / 2;
+        mY -= m / 2;
+        mWidth += m;
+        mHeight += m;
+    }
+    
     public Polygon toPolygon() {
         List<Point2D> l = new ArrayList<>();
         l.add(new Point2D(mX, mY));

@@ -6,7 +6,9 @@ import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
+import com.github.yjcpaj4.play_with_us.game.special_object.BrokenLight;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTub;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
@@ -85,6 +87,8 @@ public class Portal extends GameObject {
             if (mDestMap.equalsIgnoreCase("map.bathroom")) {
                 m.addObject(new BathroomBloodstains());
                 m.addObject(new BathroomGhost());
+                m.addObject(new BathroomTub());
+                m.addObject(new BrokenLight());
             }
 
             g.getPlayer().setPosition(mDestPos);

@@ -21,6 +21,8 @@ import com.github.yjcpaj4.play_with_us.math.Line2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.github.yjcpaj4.play_with_us.ResourceManager;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Map {
 
@@ -41,6 +43,10 @@ public class Map {
         }
         
         setTiles();
+    }
+    
+    public TileMap getTiles() {
+        return mTiles;
     }
     
     private void setTiles() {
@@ -82,21 +88,31 @@ public class Map {
     }
     
     public List<GameObject> getAllObject() {
-        return mObject;
+        return new ArrayList(mObject);
+    }
+    
+    public void removeObject(GameObject o) {
+        o.setMap(null);
+
+        mObject.remove(o);
+
+        if (o instanceof LightWithGameObject) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
+            removeObject(((LightWithGameObject) o).getOwnedLight());
+        }
     }
     
     public void addObject(GameObject o) {
         o.setMap(this);
-        
+
         mObject.add(o);
-        
+
         if (o instanceof LightWithGameObject) { // 플레이어는 손전등의 빛오브젝트까지 추가함.
             addObject(((LightWithGameObject) o).getOwnedLight());
         }
     }
     
     public float getDarkness() {
-        return  0.98f;
+        return  1.00f;
     }
     
     public int getWidth() {
@@ -126,12 +142,12 @@ public class Map {
     }
     
     public Point2D getTileIndex(Point2D p) {
-        return getTileIndex((int)p.getX(), (int)p.getY());
+        return getTileIndex(p.getX(), p.getY());
     }
     
-    public Point2D getTileIndex(int x, int y) {
-        return new Point2D((int) (x / TILE_WIDTH)
-                         , (int) (y / TILE_HEIGHT));
+    public Point2D getTileIndex(float x, float y) {
+        return new Point2D(x / TILE_WIDTH
+                         , y / TILE_HEIGHT);
     }
 
     public List<Lightless> getAllLightless() {
@@ -191,18 +207,22 @@ public class Map {
     }
     
     public List<Point2D> getPath(Point2D p1, Point2D p2) {
-        return getPath((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
+        return getPath(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
     
-    public List<Point2D> getPath(int x1, int y1, int x2, int y2) {
+    public Point2D getPositionByTileIndex(float x, float y) {
+        return new Point2D(x * TILE_WIDTH  + (TILE_WIDTH / 2),
+                           y * TILE_HEIGHT + (TILE_HEIGHT / 2));
+    }
+    
+    public List<Point2D> getPath(float x1, float y1, float x2, float y2) {
         Point2D p1 = getTileIndex(x1, y1); // 출발지
         Point2D p2 = getTileIndex(x2, y2); // 목적지
         
         List<Point2D> l = new ArrayList<>();
         
         for (TileNode n : mTiles.getPath((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY())) { 
-            l.add(new  Point2D(n.getX() * TILE_WIDTH  + (TILE_WIDTH / 2),
-                               n.getY() * TILE_HEIGHT + (TILE_HEIGHT / 2)));
+            l.add(getPositionByTileIndex(n.getX(), n.getY()));
         }
         
         return l;
