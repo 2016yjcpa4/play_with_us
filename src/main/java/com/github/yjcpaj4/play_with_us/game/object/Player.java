@@ -205,7 +205,8 @@ public class Player extends LightWithGameObject  {
         mLight.setTurnOff();
     }
     
-    private void setDirectionByInput(GameLayer g) {
+    private void setDirectionByInput() {
+        GameLayer g = Application.getInstance().getLayer(GameLayer.class);
         InputManager m = g.getInput();
         
         if ( ! isInputEnable()) {
@@ -292,7 +293,7 @@ public class Player extends LightWithGameObject  {
         // 인풋 들어온걸 토대로 캐릭터의 속성 변화를 줍니다.
         setLightByInput(); // 손전등의 상태
         setVelocityByInput(); // 플레이어의 속도
-        setDirectionByInput(g); // 플레이어가 바라보는 방향
+        setDirectionByInput(); // 플레이어가 바라보는 방향
         
         mCollider.transform(Matrix2D.translate(mVel.getX(), mVel.getY()));
         

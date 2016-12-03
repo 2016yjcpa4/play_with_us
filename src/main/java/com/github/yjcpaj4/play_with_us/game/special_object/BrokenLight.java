@@ -44,7 +44,7 @@ public class BrokenLight extends GameObject {
         }
         
         if (b != l.isTurnOn()) {
-            mFPS = (int) (Math.random() * 100 + 100);
+            mFPS = (int) (Math.random() * 200 + 100);
             mDuration = 0;
         }
         
