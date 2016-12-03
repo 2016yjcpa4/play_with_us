@@ -25,7 +25,7 @@ public class BathroomBrokenLight extends GameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (mTotalDuration > MAX_DURATION) {
+        if (mTotalDuration > MAX_DURATION || g.getMap() != getMap()) {
             g.getPlayer().setLightControllable(true);
             return;
         }

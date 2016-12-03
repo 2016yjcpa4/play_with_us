@@ -117,6 +117,10 @@ public class Map {
     }
     
     public void addObject(GameObject o) {
+        if (o.getMap() != null) {
+            o.getMap().removeObject(o);
+        }
+        
         o.setMap(this);
 
         mObject.add(o);

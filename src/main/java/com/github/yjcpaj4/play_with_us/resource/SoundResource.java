@@ -21,7 +21,6 @@ public class SoundResource {
         new JFXPanel();
     }
     
-    private double mVolume = 1.0;
     private Media mMedia;
     private MediaPlayer mMediaPlayer;
     
@@ -30,7 +29,9 @@ public class SoundResource {
     }
     
     public void setVolume(double v) {
-        mVolume = v;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.setVolume(v);
+        }
     }
     
     public void play() {
@@ -39,7 +40,6 @@ public class SoundResource {
             @Override
             public void run() {
                 mMediaPlayer = new MediaPlayer(mMedia);
-                mMediaPlayer.setVolume(mVolume);
                 mMediaPlayer.play();
             }
         }.start();

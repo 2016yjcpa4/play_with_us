@@ -54,8 +54,7 @@ public class Portal extends GameObject {
     
     public void enterPortal(Player o) {
         GameLayer g = Application.getInstance().getLayer(GameLayer.class);
-        Map m = g.getMap(mDestMap);
-        m.addObject(o);
+        g.getMap(mDestMap).addObject(o);
         o.setPosition(mDestPos);
     }
     

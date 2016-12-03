@@ -38,6 +38,7 @@ public class ClothesroomMannequinMine extends GameObject {
 
                     p.setInputDisable();
                     p.setIdle();
+                    p.setTurnOnLight();
 
                     g.getResource().getSound("snd.obj.clothesroom.mannequin").play();
 
