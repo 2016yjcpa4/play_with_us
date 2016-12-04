@@ -24,6 +24,7 @@ import com.github.yjcpaj4.play_with_us.math.Matrix2D;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -33,11 +34,9 @@ public class Ghost extends GameObject  {
     
     protected transient Polygon mCollider;
     
-    private static final int SPEED = 2;
+    private static final int SPEED = Player.SPEED + 1;
     
     private long mSpriteDuration = 0;
-    
-    private long mDuration = 0;
     
     private Vector2D mVel = new Vector2D(SPEED, SPEED);
     private Vector2D mDir = new Vector2D(); 
@@ -60,24 +59,41 @@ public class Ghost extends GameObject  {
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (mDuration > 4000) {
-            getMap().removeObject(this);
-            return;
-        }
-        
         Point2D p1 = mCollider.getPosition();
         Point2D p2 = g.getPlayer().getPosition();
+         
+        try {
+            List<Point2D> l = g.getMap().getPath(p1, p2);
+            if ( ! l.isEmpty()) {
+                double n = new Vector2D(l.get(0)).subtract(p1).toAngle();
+                double tx = mVel.getX() * Math.cos(n);
+                double ty = mVel.getY() * Math.sin(n);
 
-        List<Point2D> l = g.getMap().getPath(p1, p2);
-        if ( ! l.isEmpty()) {
-            double n = new Vector2D(l.get(0)).subtract(p1).toAngle();
-            double tx = mVel.getX() * Math.cos(n);
-            double ty = mVel.getY() * Math.sin(n);
+                mCollider.transform(Matrix2D.translate(tx, ty));
+            }
+            
+            if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())) {
+                g.getResource().getSound("snd.bgm.ghost.scream").stop();
+                getMap().removeObject(this);
 
-            mCollider.transform(Matrix2D.translate(tx, ty));
+                VideoLayer v = new VideoLayer(g.getContext()) {
+
+                    @Override
+                    protected void pause() {
+                        super.pause();
+
+                        g.restart();
+                    }
+                };
+                v.setSkipable(false);
+                v.load(MovieResource.MOV_GHOST);
+                g.showLayer(v);
+                return;
+            }
+        }
+        catch(Exception e) {
         }
         
-        mDuration += delta;
     }
     
     /**

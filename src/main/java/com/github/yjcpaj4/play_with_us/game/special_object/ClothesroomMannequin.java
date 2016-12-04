@@ -42,6 +42,8 @@ public class ClothesroomMannequin extends GameObject {
     
     private boolean mLookingAtMe = false;
     
+    private boolean mPlayFeetSound = false;
+    
     public void setSuprise() {
         mSuprise = true;
     }
@@ -58,6 +60,13 @@ public class ClothesroomMannequin extends GameObject {
      */
     private double getAngleWithPlayer(Player p) {
         return new Vector2D(p.getPosition()).subtract(mCollider.getPosition()).toAngle();
+    }
+    
+    private void playFeetSound() {
+        if ( ! mPlayFeetSound) {
+            Application.getInstance().getResource().getSound("snd.obj.clothesroom.mannequin.feet").play(-1);
+            mPlayFeetSound = true;
+        }
     }
     
     private SpriteResource.Frame getCurrentSpriteFrame(GameLayer g, long d) {
@@ -121,6 +130,8 @@ public class ClothesroomMannequin extends GameObject {
         
             // 1.3초후 마네킨이 따라옴.
             if (mAnimDuration > 1300) {
+                playFeetSound();
+                
                 mVel.set(SPEED, SPEED);
 
                 Point2D p1 = mCollider.getPosition();
@@ -141,9 +152,9 @@ public class ClothesroomMannequin extends GameObject {
                     Portal p = getMap().getPortalByDestMap("map.livingroom");
                     List<Point2D> pl = getMap().getPath(p.getPosition(), o.getPosition());
                     
-                    double n = new Vector2D(o.getPosition()).subtract(pl.get(0)).toAngle();
-                    float tx = -(float) (5 * Math.cos(n));
-                    float ty = -(float) (5 * Math.sin(n));
+                    double n = new Vector2D(pl.get(0)).subtract(o.getPosition()).toAngle();
+                    float tx = (float) (5 * Math.cos(n));
+                    float ty = (float) (5 * Math.sin(n));
                     
                     o.getVelocity().set(tx, ty);
                 }
@@ -159,6 +170,7 @@ public class ClothesroomMannequin extends GameObject {
                     m.removeObject(m.getFirstObjectByClass(ClothesroomMannequinMine.class));
                     
                     g.getResource().getSound("snd.player.breath").play();
+                    g.getResource().getSound("snd.obj.clothesroom.mannequin.feet").stop();
                     return;
                 }
             }

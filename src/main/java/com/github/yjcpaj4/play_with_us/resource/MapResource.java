@@ -21,6 +21,13 @@ import com.github.yjcpaj4.play_with_us.game.special_object.KitchenFirstCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenSecondCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenTV;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookBlue;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookGreen;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookRed;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookYellow;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryClock;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryPaino;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryPicture;
 import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
@@ -116,6 +123,16 @@ public class MapResource {
             o.addObject(new ClothesroomMannequin());
             o.addObject(new ClothesroomMannequinMine());
             o.addObject(new ClothesroomPicture());
+        }
+        
+        if (mAlias.equalsIgnoreCase("map.library")) {
+            o.addObject(new LibraryPaino());
+            o.addObject(new LibraryPicture());
+            o.addObject(new LibraryClock());
+            o.addObject(new LibraryBookGreen());
+            o.addObject(new LibraryBookYellow());
+            o.addObject(new LibraryBookRed());
+            o.addObject(new LibraryBookBlue());
         }
 
         if (mAlias.equalsIgnoreCase("map.bathroom")) {

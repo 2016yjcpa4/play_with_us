@@ -58,6 +58,7 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.bg.bathroom.mirror.png");
         r.load("res/img.bg.clothesroom.mannequin.png");
         r.load("res/snd.player.breath.wav");
+        r.load("res/snd.bgm.bathroom.ghost.wav");
         r.load("res/img.bg.kitchen.cabinet.0.png");
         r.load("res/img.bg.kitchen.cabinet.1.png");
         r.load("res/img.bg.kitchen.tv.png");
@@ -65,7 +66,17 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/snd.bgm.bathroom.water_drop.mp3");
         r.load("res/snd.bgm.bathroom.ghost.scream.wav");
         r.load("res/snd.obj.bathroom.bloodstains.foot.mp3");
-        
+        r.load("res/snd.obj.bathroom.bloodstains.glass.mp3");
+        r.load("res/snd.bgm.ghost.begin.mp3");
+        r.load("res/snd.obj.clothesroom.mannequin.feet.wav");
+        r.load("res/snd.bgm.ghost.scream.mp3");
+        r.load("res/img.bg.library.piano.png");
+        r.load("res/img.bg.library.picture.png");
+        r.load("res/img.bg.library.clock.jpg");
+        r.load("res/img.bg.library.book.red.png");
+        r.load("res/img.bg.library.book.green.png");
+        r.load("res/img.bg.library.book.blue.png");
+        r.load("res/img.bg.library.book.yellow.png");
         r.load("res/sprt.player.walk.n.json");
         r.load("res/sprt.player.walk.e.json");
         r.load("res/sprt.player.walk.s.json");
@@ -92,7 +103,6 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/sprt.clothesroom.mannequin.idle.e.json");
         r.load("res/sprt.clothesroom.mannequin.idle.s.json");
         r.load("res/sprt.clothesroom.mannequin.idle.w.json");
-        
         r.load("res/sprt.bathroom.ghost.walk.n.json");
         r.load("res/sprt.bathroom.ghost.walk.e.json");
         r.load("res/sprt.bathroom.ghost.walk.s.json");
@@ -121,7 +131,7 @@ public class ResourceLoaderLayer extends Layer {
             @Override
             public void run() {
 
-                File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
+                /*File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
 
                 if (f.exists()) {
                     f.delete();
@@ -164,7 +174,7 @@ public class ResourceLoaderLayer extends Layer {
 
                     mProgress = ++n / m.size();
                     mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
-                }
+                }*/
 
                 mProgress = 1.0f;
                 mMessage = "게임에 필요한 리소스를 불러오는중 입니다.";

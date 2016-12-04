@@ -78,7 +78,11 @@ public class BathroomBloodstains extends GameObject {
         g2d.drawImage(b, X, Y, null);
         
         if ( ! mSoundFinish && mSoundDuration >= r.getFPS()) {
-            g.getResource().getSound("snd.obj.bathroom.bloodstains.foot").play();
+            if (n == (r.getLength() - 1)) {
+                g.getResource().getSound("snd.obj.bathroom.bloodstains.glass").play();
+            } else {
+                g.getResource().getSound("snd.obj.bathroom.bloodstains.foot").play();
+            }
             mSoundDuration = 0;
             
             if (n == (r.getLength() - 1)) {

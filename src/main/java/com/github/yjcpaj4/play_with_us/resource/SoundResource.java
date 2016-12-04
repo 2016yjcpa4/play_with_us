@@ -25,6 +25,8 @@ public class SoundResource {
     private Media mMedia;
     private MediaPlayer mMediaPlayer;
     
+    private Runnable mOnEndOfMedia;
+    
     public SoundResource(File f) {
         mMedia = new Media(f.toURI().toString());
     }
@@ -37,6 +39,10 @@ public class SoundResource {
     
     public void play() {
         play(1);
+    }
+    
+    public void setOnEndOfMedia(Runnable r) {
+        mOnEndOfMedia = r;
     }
     
     public void play(int n) {
@@ -52,6 +58,10 @@ public class SoundResource {
                     @Override
                     public void run() {
                         mCount--;
+                        
+                        if (mOnEndOfMedia != null) {
+                            mOnEndOfMedia.run();
+                        }
                         
                         if (mCount > 0 || n == -1) {
                             mMediaPlayer.seek(Duration.ZERO);

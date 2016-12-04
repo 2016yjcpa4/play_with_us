@@ -21,6 +21,7 @@ import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import com.github.yjcpaj4.play_with_us.resource.MovieResource;
 import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
+import com.github.yjcpaj4.play_with_us.resource.SoundResource;
 import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
 import java.awt.Font;
@@ -39,7 +40,7 @@ public class Player extends LightWithGameObject  {
     
     protected transient Polygon mCollider;
     
-    private static final int SPEED = 3;
+    public static final int SPEED = 4;
     
     private Vector2D mVel = new Vector2D();
     private Vector2D mDir = new Vector2D(); 
@@ -273,8 +274,17 @@ public class Player extends LightWithGameObject  {
     
     @Override
     public void update(GameLayer g, long delta) {
+        
         if (mRemainGhostTime <= 0) {
-            showGhost();
+            SoundResource r = g.getResource().getSound("snd.bgm.ghost.begin");
+            r.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    showGhost();
+                }
+            });
+            r.play();
+            
             mRemainGhostTime = INTERVAL_GHOST;
         }
         
@@ -350,11 +360,10 @@ public class Player extends LightWithGameObject  {
         float y;
         
         while (true) { // 적절한 위치를 찾을때까지 좌표값을 찾습니다. (플레이어에게 가로막는 장애물없이 걸어올수 있는 좌표인가)
-            double n1 = Math.random() * 100 + 100;
             double n2 = Math.toRadians(Math.random() * 360);
             
-            x = (float) (p.getX() + n1 * Math.cos(n2));
-            y = (float) (p.getY() + n1 * Math.sin(n2));
+            x = (float) (p.getX() + 200 * Math.cos(n2));
+            y = (float) (p.getY() + 200 * Math.sin(n2));
             
             try {
                 if ( ! getMap().getPath(p.getX(), p.getY(), x, y).isEmpty()) {
@@ -366,7 +375,21 @@ public class Player extends LightWithGameObject  {
             }
         }
         
-        getMap().addObject(new Ghost(x, y));
+        SoundResource r = Application.getInstance().getResource().getSound("snd.bgm.ghost.scream");
+        r.play(-1);
+
+        Ghost o = new Ghost(x, y);
+        
+        getMap().addObject(o);
+        
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                r.stop();
+                
+                o.getMap().removeObject(o);
+            }
+        }, 8000);
     }
     
     @Override
@@ -386,9 +409,11 @@ public class Player extends LightWithGameObject  {
         
         g2d.drawImage(f.getImage(), x, y, null);
         
+        
         if (Application.DEBUG) {
             g2d.setColor(Color.RED);
             g2d.drawPolygon(mCollider.toAWTPolygon());
+            g2d.drawString((mRemainGhostTime / 1000) + "초 후 귀신등장", x, y);
             
             g2d.drawLine((int) p1.getX(), (int) p2.getY(), (int) mDir.getX(), (int) mDir.getY());
         }

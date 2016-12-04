@@ -13,11 +13,17 @@ public class VideoLayer extends Layer {
     private File mFile;
     private VLC mVLC;
     
+    private boolean mSkipable = true;
+    
     private final KeyListener mKeyListener = new KeyListener();
     private final VideoListener mVideoListener = new VideoListener();
     
     public VideoLayer(Application c) {
         super(c);
+    }
+    
+    public void setSkipable(boolean b) {
+        mSkipable = b;
     }
     
     public void load(File f) {
@@ -67,7 +73,7 @@ public class VideoLayer extends Layer {
                     mVLC.close();
                     mVLC = null;
                 }
-        
+                 
                 getApplicationCanvas().removeKeyListener(mKeyListener);
             }
         };
@@ -83,7 +89,7 @@ public class VideoLayer extends Layer {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (mSkipable && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 showLayer(GameLayer.class);
                 
                 finishLayer();

@@ -18,5 +18,5 @@ public class MovieResource {
     }
 
     public static final File MOV_INTRO = new File("res/mov.intro.mp4");
-    public static final File MOV_100 = new File("res/mov.100.mp4");
+    public static final File MOV_GHOST = new File("res/mov.ghost.mp4");
 }

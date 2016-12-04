@@ -33,7 +33,7 @@ public class BathroomGhost extends GameObject {
     private static final int X = 398;
     private static final int Y = 155;
     
-    private static final int SPEED = 3;
+    private static final int SPEED = 2;
     
     private Polygon mCollider = new Circle(X, Y, 10);
     
@@ -155,6 +155,7 @@ public class BathroomGhost extends GameObject {
                 mSpeed = SPEED;
 
                 if ( ! mBrokenLight) {
+                    g.getResource().getSound("snd.bgm.bathroom.ghost").play(-1);
                     g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).reset();
                     mBrokenLight = true;
                 }
@@ -175,6 +176,8 @@ public class BathroomGhost extends GameObject {
                     
                     o.setInputEnable();
                     o.setTurnOffLight();
+                    
+                    g.getResource().getSound("snd.bgm.bathroom.ghost").stop();
                 }
             }
         }

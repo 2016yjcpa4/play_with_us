@@ -54,6 +54,17 @@ public class GameLayer extends Layer {
         mCamera = new Camera(c);
     }
     
+    public void restart() {
+        mCachedMap.clear();
+        
+        Map o = getMap(MAIN_MAP);
+        
+        if (o.hasSpawnPosition()) {
+            mPlayer = new Player(o.getSpwanPosition());
+            o.addObject(mPlayer);
+        }
+    }
+    
     public Map getMap(String s) {
         if (mCachedMap.containsKey(s)) {
             return mCachedMap.get(s);
@@ -97,6 +108,10 @@ public class GameLayer extends Layer {
     }
     
     private void drawFPS(Graphics2D g2d, long delta) {
+        if ( ! Application.DEBUG) {
+            return;
+        }
+        
         Point2D p = mCamera.getPosition();
         int w = mCamera.getWidth();
         int h = mCamera.getHeight();
