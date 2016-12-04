@@ -98,6 +98,8 @@ public class BathroomGhost extends GameObject {
                         @Override
                         protected void resume() {
                             super.resume();
+                            
+                            getResource().getSound("snd.bgm.bathroom.ghost.scream").play();
 
                             new Timer().schedule(new TimerTask() {
 
@@ -105,7 +107,7 @@ public class BathroomGhost extends GameObject {
                                 public void run() {
                                     finishLayer();
                                 }
-                            }, 1500);
+                            }, 2000);
                         }
 
                         @Override

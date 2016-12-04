@@ -13,9 +13,9 @@ import java.awt.Graphics2D;
 public class ClothesroomMannequinMine extends GameObject {
     
     private static final int X = 185;
-    private static final int Y = 445;
+    private static final int Y = 445 - 60;
     private static final int WIDTH = 100;
-    private static final int HEIGHT = 70;
+    private static final int HEIGHT = 70 + 60;
     
     private Polygon mCollider = new Box2D(X, Y, WIDTH, HEIGHT).toPolygon();
     

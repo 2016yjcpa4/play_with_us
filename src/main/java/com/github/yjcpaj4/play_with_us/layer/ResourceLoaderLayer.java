@@ -57,10 +57,14 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.bg.bathroom.towel.png");
         r.load("res/img.bg.bathroom.mirror.png");
         r.load("res/img.bg.clothesroom.mannequin.png");
+        r.load("res/snd.player.breath.wav");
         r.load("res/img.bg.kitchen.cabinet.0.png");
         r.load("res/img.bg.kitchen.cabinet.1.png");
         r.load("res/img.bg.kitchen.tv.png");
         r.load("res/snd.player.light.switch.mp3");
+        r.load("res/snd.bgm.bathroom.water_drop.mp3");
+        r.load("res/snd.bgm.bathroom.ghost.scream.wav");
+        r.load("res/snd.obj.bathroom.bloodstains.foot.mp3");
         
         r.load("res/sprt.player.walk.n.json");
         r.load("res/sprt.player.walk.e.json");

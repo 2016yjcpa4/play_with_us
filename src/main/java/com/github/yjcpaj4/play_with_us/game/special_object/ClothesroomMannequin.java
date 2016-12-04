@@ -134,8 +134,21 @@ public class ClothesroomMannequin extends GameObject {
 
                     mCollider.transform(Matrix2D.translate(tx, ty));
                 }
+                
+                Vector2D v = new Vector2D(p1).subtract(p2);
 
-                if (new Vector2D(p1).subtract(p2).length() <= 70) {
+                if (v.length() <= 170) {
+                    Portal p = getMap().getPortalByDestMap("map.livingroom");
+                    List<Point2D> pl = getMap().getPath(p.getPosition(), o.getPosition());
+                    
+                    double n = new Vector2D(o.getPosition()).subtract(pl.get(0)).toAngle();
+                    float tx = -(float) (5 * Math.cos(n));
+                    float ty = -(float) (5 * Math.sin(n));
+                    
+                    o.getVelocity().set(tx, ty);
+                }
+                
+                if (v.length() <= 70) {
                     Map m = getMap();
                     Portal p = m.getPortalByDestMap("map.livingroom");
                     p.enterPortal(o);
@@ -144,6 +157,8 @@ public class ClothesroomMannequin extends GameObject {
                     
                     m.removeObject(this);
                     m.removeObject(m.getFirstObjectByClass(ClothesroomMannequinMine.class));
+                    
+                    g.getResource().getSound("snd.player.breath").play();
                     return;
                 }
             }

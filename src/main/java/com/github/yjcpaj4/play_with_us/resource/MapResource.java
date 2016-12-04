@@ -13,6 +13,7 @@ import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomMirror;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTowel;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTub;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomWaterDrop;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
@@ -124,6 +125,7 @@ public class MapResource {
             o.addObject(new BathroomBrokenLight());
             o.addObject(new BathroomTowel());
             o.addObject(new BathroomMirror());
+            o.addObject(new BathroomWaterDrop());
         }
         
         return o;

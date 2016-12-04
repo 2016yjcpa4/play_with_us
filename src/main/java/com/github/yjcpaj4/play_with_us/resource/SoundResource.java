@@ -4,6 +4,7 @@ import java.io.File;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  * 사운드 리소스를 관리하는 클래스입니다.
@@ -35,11 +36,28 @@ public class SoundResource {
     }
     
     public void play() {
+        play(1);
+    }
+    
+    public void play(int n) {
         new Thread() {
             
             @Override
             public void run() {
                 mMediaPlayer = new MediaPlayer(mMedia);
+                mMediaPlayer.setOnEndOfMedia(new Runnable() {
+            
+                    private int mCount = n;
+                    
+                    @Override
+                    public void run() {
+                        mCount--;
+                        
+                        if (mCount > 0 || n == -1) {
+                            mMediaPlayer.seek(Duration.ZERO);
+                        }
+                    }
+                });
                 mMediaPlayer.play();
             }
         }.start();

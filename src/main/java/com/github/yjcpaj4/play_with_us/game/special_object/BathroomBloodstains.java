@@ -8,6 +8,7 @@ import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Matrix2D;
+import com.github.yjcpaj4.play_with_us.resource.SoundResource;
 import com.github.yjcpaj4.play_with_us.resource.SpriteResource;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -28,7 +29,10 @@ public class BathroomBloodstains extends GameObject {
     private static final int MARGINS = 100;
     
     private Polygon mCollider;
-    private long mDuration;
+    private long mAnimDuration;
+    
+    private long mSoundDuration;
+    private boolean mSoundFinish = false;
     
     private boolean mShowAnim;
     
@@ -43,6 +47,9 @@ public class BathroomBloodstains extends GameObject {
     public void update(GameLayer g, long delta) {
         if (g.getPlayer().hasRoomKey("library")) {
             if (CollisionDetection.isCollide(g.getPlayer().getCollider(), mCollider)) {
+                if ( ! mShowAnim) {
+                    g.getResource().getSound("snd.obj.bathroom.bloodstains.foot").play();
+                }
                 mShowAnim = true;
             }
         }
@@ -62,7 +69,7 @@ public class BathroomBloodstains extends GameObject {
         
         ResourceManager m = g.getResource();
         SpriteResource r = m.getSprite("sprt.bathroom.bloodstains");
-        int n = (int) (mDuration / r.getFPS());
+        int n = (int) (mAnimDuration / r.getFPS());
         if (n >= r.getLength()) {
             n = r.getLength() - 1;
         }
@@ -70,6 +77,16 @@ public class BathroomBloodstains extends GameObject {
         
         g2d.drawImage(b, X, Y, null);
         
-        mDuration += delta;
+        if ( ! mSoundFinish && mSoundDuration >= r.getFPS()) {
+            g.getResource().getSound("snd.obj.bathroom.bloodstains.foot").play();
+            mSoundDuration = 0;
+            
+            if (n == (r.getLength() - 1)) {
+                mSoundFinish = true;
+            }
+        }
+        
+        mAnimDuration += delta;
+        mSoundDuration += delta;
     }
 }
