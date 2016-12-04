@@ -100,7 +100,15 @@ public class Light extends GameObject {
     }
     
     public boolean isCollide(Polygon p) {
-        if ( ! CollisionDetection.isCollide(getRaycast(), p)) {
+        boolean b = false;
+        for (Polygon o : getRaycast().getTriangulate()) {
+            if (CollisionDetection.isCollide(o, p)) {
+                b = true;
+                break;
+            }
+        }
+        
+        if ( ! b) {
             return false;
         }
         
@@ -108,7 +116,7 @@ public class Light extends GameObject {
         Point2D p2 = getPosition();
         
         Vector2D v = new Vector2D(p1).subtract(p2);
-        if (v.length() > getLength()) {
+        if (v.length() > (getLength() * 0.70)) {
             return false;
         }
         
@@ -145,6 +153,9 @@ public class Light extends GameObject {
         if (Application.DEBUG) {
             g2d.setColor(Color.YELLOW);
             g2d.draw(a);
+            
+            g2d.setColor(Color.RED);
+            g2d.drawPolygon(getRaycast().toAWTPolygon());
         }
     }
 }

@@ -28,6 +28,8 @@ public class ResourceLoaderLayer extends Layer {
     private DropboxClient mDropbox;
     private float mProgress;
     private String mMessage;
+    
+    private long mDuration;
 
     public ResourceLoaderLayer(Application c) {
         super(c);
@@ -52,6 +54,12 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/snd.obj.clothesroom.mannequin.mp3");
         r.load("res/img.bg.bathroom.ghost.jpg");
         r.load("res/img.bg.bathroom.tub.png");
+        r.load("res/img.bg.bathroom.towel.png");
+        r.load("res/img.bg.bathroom.mirror.png");
+        r.load("res/img.bg.clothesroom.mannequin.png");
+        r.load("res/img.bg.kitchen.cabinet.0.png");
+        r.load("res/img.bg.kitchen.cabinet.1.png");
+        r.load("res/img.bg.kitchen.tv.png");
         r.load("res/snd.player.light.switch.mp3");
         
         r.load("res/sprt.player.walk.n.json");
@@ -109,7 +117,7 @@ public class ResourceLoaderLayer extends Layer {
             @Override
             public void run() {
 
-                /*File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
+                File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
 
                 if (f.exists()) {
                     f.delete();
@@ -152,7 +160,7 @@ public class ResourceLoaderLayer extends Layer {
 
                     mProgress = ++n / m.size();
                     mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
-                }*/
+                }
 
                 mProgress = 1.0f;
                 mMessage = "게임에 필요한 리소스를 불러오는중 입니다.";
@@ -200,14 +208,11 @@ public class ResourceLoaderLayer extends Layer {
         g2d.drawRect(x, y, getApplicationCanvas().getWidth() - PADDING * 2, 50);
         g2d.fillRect(x, y, (int) (getApplicationCanvas().getWidth() * mProgress) - PADDING * 2, 50);
     }
-
-    @Override
-    protected void draw(long delta, Graphics2D g2d) {
-        super.draw(delta, g2d);
-        
+    
+    private void drawLoading(Graphics2D g2d) {
         Font f = new Font(getApplicationCanvas().getFont().getName(), Font.PLAIN, 50);
         FontMetrics m = g2d.getFontMetrics(f);
-        int n = (int) (delta / 500 % 4);
+        int n = (int) (mDuration / 500 % 4);
         String s = "Loading";
 
         for (int l = 0; l < n; ++l) {
@@ -217,8 +222,16 @@ public class ResourceLoaderLayer extends Layer {
         g2d.setFont(f);
         g2d.setColor(Color.red);
         g2d.drawString(s, PADDING, PADDING + m.getHeight());
+    }
 
+    @Override
+    protected void draw(long delta, Graphics2D g2d) {
+        super.draw(delta, g2d);
+        
+        drawLoading(g2d);
         drawProgress(g2d);
         drawMessage(g2d);
+        
+        mDuration += delta;
     }
 }

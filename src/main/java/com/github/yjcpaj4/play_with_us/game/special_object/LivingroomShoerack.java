@@ -23,7 +23,7 @@ public class LivingroomShoerack extends LightWithGameObject {
     
     private static final int X = 707;
     private static final int Y = 990;
-    private static final int RADIUS = 60;
+    private static final int RADIUS = 40;
             
     private static final double LIGHT_ANGLE = Math.toRadians(55);
     private static final double LIGHT_EXTENT = 40;

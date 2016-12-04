@@ -125,7 +125,7 @@ public class Map {
     }
     
     public float getDarkness() {
-        return  1.00f;
+        return  Application.DEBUG ? 0.50f : 1.00f;
     }
     
     public int getWidth() {

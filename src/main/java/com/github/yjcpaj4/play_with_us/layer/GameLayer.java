@@ -96,6 +96,75 @@ public class GameLayer extends Layer {
         return mPlayer.getMap();
     }
     
+    private void drawFPS(Graphics2D g2d, long delta) {
+        Point2D p = mCamera.getPosition();
+        int w = mCamera.getWidth();
+        int h = mCamera.getHeight();
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+
+        Font f = new Font("굴림", Font.BOLD, 15);
+        FontMetrics fm = g2d.getFontMetrics(f);
+        
+        String s = "FPS : " + delta;
+        
+        g2d.setColor(Color.RED);
+        g2d.setFont(f);
+        g2d.drawString(s, 
+                       x + w - fm.stringWidth(s) - 10,
+                       y + fm.getHeight() + 10);
+    }
+    
+    private void drawHelp(Graphics2D g2d) {
+        Point2D p = mCamera.getPosition();
+        int w = mCamera.getWidth();
+        int h = mCamera.getHeight();
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+
+        Font f = new Font("굴림", Font.BOLD, 13);
+        FontMetrics fm = g2d.getFontMetrics(f);
+        
+        if (mShowHelper) {
+            BufferedImage b = getResource().getImage("img.bg.help");
+            g2d.drawImage(b, 
+                          x, 
+                          y, 
+                          (int) (b.getWidth() / mCamera.getZoom()), 
+                          (int) (b.getHeight() / mCamera.getZoom()), 
+                          null);
+        } else {
+            g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
+        }
+        
+    }
+    
+    private void drawMessages(Graphics2D g2d) {
+        if (mMessages.isEmpty()) {
+            return;
+        }
+        
+        Point2D p = mCamera.getPosition();
+        int w = mCamera.getWidth();
+        int h = mCamera.getHeight();
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+
+        Font f = new Font("굴림", Font.BOLD, 13);
+        FontMetrics fm = g2d.getFontMetrics(f);
+        
+        g2d.setFont(f);
+        g2d.setColor(Color.WHITE);
+ 
+        for (String s : mMessages) {
+            g2d.drawString(s, 
+                           x - fm.stringWidth(s) + w - 10, 
+                           y + fm.getHeight() + 10);
+
+            y += (fm.getHeight() + 3);
+        } 
+    }
+    
     @Override
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
@@ -114,38 +183,8 @@ public class GameLayer extends Layer {
             mShowHelper = false;
         }
         
-        g2d.setFont(new Font("굴림", Font.BOLD, 13));
-        g2d.setColor(Color.WHITE);
-
-        Point2D p = mCamera.getPosition();
-        int w = mCamera.getWidth();
-        int h = mCamera.getHeight();
-        int x = (int) p.getX();
-        int y = (int) p.getY();
-
-        FontMetrics fm = g2d.getFontMetrics();
-        
-        if (mShowHelper) {
-            BufferedImage b = getResource().getImage("img.bg.help");
-            g2d.drawImage(b, 
-                          x, 
-                          y, 
-                          (int) (b.getWidth() / mCamera.getZoom()), 
-                          (int) (b.getHeight() / mCamera.getZoom()), 
-                          null);
-        } else {
-            g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
-        }
-
-        if ( ! mMessages.isEmpty()) {
-            
-            for (String s : mMessages) {
-                g2d.drawString(s, 
-                               x - fm.stringWidth(s) + w - 10, 
-                               y + fm.getHeight() + 10);
-                
-                y += (fm.getHeight() + 3);
-            }
-        }
+        drawHelp(g2d);
+        drawMessages(g2d);
+        drawFPS(g2d, delta);
     }
 }

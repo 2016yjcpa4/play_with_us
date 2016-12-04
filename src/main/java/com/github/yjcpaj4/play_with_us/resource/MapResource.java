@@ -10,11 +10,15 @@ import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBrokenLight;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomMirror;
+import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTowel;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTub;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenFirstCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
+import com.github.yjcpaj4.play_with_us.game.special_object.KitchenSecondCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenTV;
 import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
@@ -103,6 +107,8 @@ public class MapResource {
         if (mAlias.equalsIgnoreCase("map.kitchen")) {
             o.addObject(new KitchenTV());
             o.addObject(new KitchenRefrigerator());
+            o.addObject(new KitchenFirstCabinet());
+            o.addObject(new KitchenSecondCabinet());
         }
 
         if (mAlias.equalsIgnoreCase("map.clothesroom")) {
@@ -116,6 +122,8 @@ public class MapResource {
             o.addObject(new BathroomGhost());
             o.addObject(new BathroomTub());
             o.addObject(new BathroomBrokenLight());
+            o.addObject(new BathroomTowel());
+            o.addObject(new BathroomMirror());
         }
         
         return o;

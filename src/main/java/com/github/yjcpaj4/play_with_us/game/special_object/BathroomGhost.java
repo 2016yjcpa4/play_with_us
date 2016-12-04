@@ -105,7 +105,7 @@ public class BathroomGhost extends GameObject {
                                 public void run() {
                                     finishLayer();
                                 }
-                            }, 1000);
+                            }, 1500);
                         }
 
                         @Override
@@ -141,7 +141,6 @@ public class BathroomGhost extends GameObject {
 
         Point2D p1 = mCollider.getPosition();
         Point2D p2 = o.getPosition();
-        Vector2D v = new Vector2D(p1).subtract(p2);
 
         o.getDirection().set(p1);
 
@@ -166,13 +165,14 @@ public class BathroomGhost extends GameObject {
 
                     mCollider.transform(Matrix2D.translate(tx, ty));
                 }
-
+                
+                Vector2D v = new Vector2D(p1).subtract(p2);
                 if (v.length() <= 50) {
                     mGhostHide = true;
+                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).finish();
+                    
                     o.setInputEnable();
                     o.setTurnOffLight();
-                    
-                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).finish();
                 }
             }
         }
@@ -182,6 +182,11 @@ public class BathroomGhost extends GameObject {
 
     @Override
     public void draw(GameLayer g, long delta, Graphics2D g2d) {
+        if (Application.DEBUG) {
+            g2d.setColor(Color.RED);
+            g2d.drawPolygon(mCollider.toAWTPolygon());
+        }
+        
         if (mGhostHide) {
             return;
         }
