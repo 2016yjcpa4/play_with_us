@@ -30,7 +30,7 @@ public class ClothesroomMannequinMine extends GameObject {
         Player p = g.getPlayer();
         
         if ( ! mRunned) {
-            if (p.hasKitchenKey()) {
+            if (p.hasRoomKey("kitchen")) {
                 if (CollisionDetection.isCollide(p.getCollider(), mCollider)) {
                     ClothesroomMannequin o = g.getMap().getFirstObjectByClass(ClothesroomMannequin.class);
 

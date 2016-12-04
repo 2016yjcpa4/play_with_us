@@ -25,7 +25,9 @@ import com.github.yjcpaj4.play_with_us.util.MathUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
  
@@ -47,9 +49,7 @@ public class Player extends LightWithGameObject  {
     private Timer mMessageTimer;
     private String mMessage;
     
-    private boolean mHasKitchenKey = false;
-    private boolean mHasBathroomKey = false;
-    private boolean mHasLibraryKey = false;
+    private Set<String> mRoomKey = new HashSet<>();
     
     private boolean mInputEnable = true;
     
@@ -106,28 +106,12 @@ public class Player extends LightWithGameObject  {
         return CollisionDetection.isCollide(mCollider, p);
     }
     
-    public void setHaveKithenKey() {
-        mHasKitchenKey = true;
+    public boolean hasRoomKey(String s) {
+        return mRoomKey.contains(s);
     }
     
-    public boolean hasKitchenKey() {
-        return mHasKitchenKey;
-    }
-    
-    public void setHaveBathroomKey() {
-        mHasBathroomKey = true;
-    }
-    
-    public boolean hasBathroomKey() {
-        return mHasBathroomKey;
-    }
-    
-    public void setHaveLibraryKey() {
-        mHasLibraryKey = true;
-    }
-    
-    public boolean hasLibraryKey() {
-        return mHasLibraryKey;
+    public void addRoomKey(String s) {
+        mRoomKey.add(s);
     }
     
     public boolean isInputEnable() {

@@ -56,9 +56,9 @@ public class BathroomTub extends GameObject {
                 protected void pause() {
                     super.pause();
                     
-                    if (getCurrentAnswer().equals(YES)) {
+                    if (getCurrentAnswer().equals(YES) && !g.getPlayer().hasRoomKey("library")) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
-                        g.getPlayer().setHaveLibraryKey();
+                        g.getPlayer().addRoomKey("library");
                     }
                 }
             };
