@@ -71,29 +71,34 @@ public class InterativeLayer extends Layer {
         
         g2d.drawImage(mBackground, 0, 0, w, h, null);
         
-        w -= PADDING * 2;
-        h -= PADDING * 2;
         
-        g2d.setFont(new Font("굴림", Font.BOLD, 25));
-        g2d.setColor(Color.WHITE);
-        
-        FontMetrics fm = g2d.getFontMetrics();
-        
-        for(int n = 0; n < mAnswers.length; ++n) {
-            String s = mAnswers[n];
-            
-            if (mCurrentAnswerIndex == n) {
-                s = "▶ " + s;
+        if (mAnswers != null && mAnswers.length > 0) {
+            w -= PADDING * 2;
+            h -= PADDING * 2;
+
+            g2d.setFont(new Font("굴림", Font.BOLD, 25));
+            g2d.setColor(Color.WHITE);
+
+            FontMetrics fm = g2d.getFontMetrics();
+
+            for(int n = 0; n < mAnswers.length; ++n) {
+                String s = mAnswers[n];
+
+                if (mCurrentAnswerIndex == n) {
+                    s = "▶ " + s;
+                }
+
+                y = h - (mAnswers.length - n) * ANSWERS_LINE_HEIGHT;
+
+                g2d.drawString(s, w - fm.stringWidth(s), y);
             }
-            
-            y = h - (mAnswers.length - n) * ANSWERS_LINE_HEIGHT;
-            
-            g2d.drawString(s, w - fm.stringWidth(s), y);
         }
         
-        g2d.setFont(new Font("굴림", Font.BOLD, 30));
-        fm = g2d.getFontMetrics();
-        
-        g2d.drawString(mQuestion, w - fm.stringWidth(mQuestion), y - fm.getHeight() - 50);
+        if (mQuestion != null && ! mQuestion.isEmpty()) {
+            g2d.setFont(new Font("굴림", Font.BOLD, 30));
+            FontMetrics fm = g2d.getFontMetrics();
+
+            g2d.drawString(mQuestion, w - fm.stringWidth(mQuestion), y - fm.getHeight() - 50);
+        }
     }
 }

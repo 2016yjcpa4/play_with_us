@@ -26,8 +26,10 @@ import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookGreen;
 import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookRed;
 import com.github.yjcpaj4.play_with_us.game.special_object.LibraryBookYellow;
 import com.github.yjcpaj4.play_with_us.game.special_object.LibraryClock;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibraryFirstPaper;
 import com.github.yjcpaj4.play_with_us.game.special_object.LibraryPaino;
 import com.github.yjcpaj4.play_with_us.game.special_object.LibraryPicture;
+import com.github.yjcpaj4.play_with_us.game.special_object.LibrarySecondPaper;
 import com.github.yjcpaj4.play_with_us.game.special_object.LivingroomShoerack;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
@@ -133,6 +135,8 @@ public class MapResource {
             o.addObject(new LibraryBookYellow());
             o.addObject(new LibraryBookRed());
             o.addObject(new LibraryBookBlue());
+            o.addObject(new LibraryFirstPaper());
+            o.addObject(new LibrarySecondPaper());
         }
 
         if (mAlias.equalsIgnoreCase("map.bathroom")) {
