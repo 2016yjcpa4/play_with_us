@@ -55,7 +55,7 @@ public class InterativeLayer extends Layer {
         super.draw(delta, g2d);
         
         if (getInput().isKeyOnce(KeyEvent.VK_UP)
-         || getInput().isKeyOnce(KeyEvent.VK_F)) {
+         || getInput().isKeyOnce(KeyEvent.VK_W)) {
             mCurrentAnswerIndex = Math.max(0, mCurrentAnswerIndex - 1);
         }
         else if (getInput().isKeyOnce(KeyEvent.VK_DOWN)

@@ -35,6 +35,8 @@ public class KitchenTV extends LightWithGameObject {
     private boolean mSurprise = false;
     private long mDuration = 0;
     
+    private boolean mPlaySound = false;
+    
     private Circle mCollider = new Circle(X, Y, 45);
     
     private Light mLight = new Light() {
@@ -91,6 +93,7 @@ public class KitchenTV extends LightWithGameObject {
         
         if (g.getPlayer().getMap() != getMap()) {
             mTurnOnSound.stop();
+            mPlaySound = false;
             return;
         }
         
@@ -104,14 +107,17 @@ public class KitchenTV extends LightWithGameObject {
         if (mSurprise) {
             mTurnOnSound.setVolume(SoundUtil.getVolumeByDistance(g.getPlayer().getPosition(), getPosition(), 400));
 
+            if ( ! mPlaySound) {
+                mTurnOnSound.play(-1);
+                mPlaySound = true;
+            }
+            
             boolean b = mLight.isTurnOn();
             if (mDuration >= mFPS) {
                 if (b) {
                     mLight.setTurnOff();
-                    mTurnOnSound.stop();
                 } else if(g.getPlayer().getMap() == getMap()) {
                     mLight.setTurnOn();
-                    mTurnOnSound.play();
                 }
             }
 
