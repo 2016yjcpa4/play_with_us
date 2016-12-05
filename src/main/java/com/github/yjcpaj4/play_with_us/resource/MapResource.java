@@ -86,6 +86,16 @@ public class MapResource {
     protected transient BufferedImage mImage;
     
     protected transient String mAlias;
+    
+    public MapResource(File f) {
+        try {
+            mImage = ImageIO.read(f);
+            mAlias = FileUtil.getNameWithoutExtension(f);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
  
     public Point2D getSpwan() {
         return mSpawnPos;
@@ -93,6 +103,46 @@ public class MapResource {
 
     public boolean hasSpawn() {
         return mSpawnPos != null;
+    }
+    
+    public void setSpawn(Point2D p) {
+        mSpawnPos = p;
+    }
+    
+    public int getWidth() {
+        return mImage.getWidth();
+    }
+    
+    public int getHeight() {
+        return mImage.getHeight();
+    }
+    
+    public BufferedImage getImage() {
+        return mImage;
+    }
+    
+    public void addWall(List<Point2D> l) {
+        mWall.add(l);
+    }
+    
+    public void addDarkness(List<Point2D> l) {
+        mDarkness.add(l);
+    }
+    
+    public List<Wall> getWall() {
+        List<Wall> l = new ArrayList<>();
+        for (List<Point2D> o : mWall) {
+            l.add(new Wall(o));
+        }
+        return l;
+    }
+    
+    public List<Darkness> getDarkness() {
+        List<Darkness> l = new ArrayList<>();
+        for (List<Point2D> o : mDarkness) {
+            l.add(new Darkness(o));
+        }
+        return l;
     }
     
     public Map newMap() {
