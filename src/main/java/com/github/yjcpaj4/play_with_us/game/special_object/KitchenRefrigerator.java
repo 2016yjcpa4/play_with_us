@@ -35,9 +35,10 @@ public class KitchenRefrigerator extends GameObject {
                 protected void pause() {
                     super.pause();
                     
-                    if (getCurrentAnswer().equals(YES) && !g.getPlayer().hasRoomKey("bathroom")) {
+                    if (getCurrentAnswer().equals(YES) && !g.getPlayer().hasItem("bathroom")) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
-                        g.getPlayer().addRoomKey("bathroom");
+                        g.getPlayer().addItem("bathroom");
+                        g.getResource().getSound("snd.player.item").play();
                     }
                 }
             };

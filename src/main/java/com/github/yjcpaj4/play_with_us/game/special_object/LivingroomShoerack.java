@@ -81,6 +81,7 @@ public class LivingroomShoerack extends LightWithGameObject {
             mLight.setTurnOff();
             
             g.showMessage("손전등을 획득하였습니다.", 1000);
+            g.getResource().getSound("snd.player.item").play();
         }
     }
 

@@ -34,7 +34,7 @@ import java.util.TimerTask;
  
 public class Player extends LightWithGameObject  {
     
-    private static final int INTERVAL_GHOST = 1000 * 60 * 3;
+    private static final int INTERVAL_GHOST = 1000 * 60 * 2;
     
     private static final float LIGHT_LENGTH = 210f;
     
@@ -50,7 +50,7 @@ public class Player extends LightWithGameObject  {
     private Timer mMessageTimer;
     private String mMessage;
     
-    private Set<String> mRoomKey = new HashSet<>();
+    private Set<String> mItems = new HashSet<>();
     
     private boolean mInputEnable = true;
     
@@ -107,12 +107,12 @@ public class Player extends LightWithGameObject  {
         return CollisionDetection.isCollide(mCollider, p);
     }
     
-    public boolean hasRoomKey(String s) {
-        return mRoomKey.contains(s);
+    public boolean hasItem(String s) {
+        return mItems.contains(s);
     }
     
-    public void addRoomKey(String s) {
-        mRoomKey.add(s);
+    public void addItem(String s) {
+        mItems.add(s);
     }
     
     public boolean isInputEnable() {

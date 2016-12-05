@@ -13,12 +13,12 @@ import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class LibraryPicture extends GameObject {
+public class LibraryBookWhite extends GameObject {
     
-    private static final int X = 297;
-    private static final int Y = 74;
-    private static final int WIDTH = 58;
-    private static final int HEIGHT = 73;
+    private static final int X = 295;
+    private static final int Y = 676;
+    private static final int WIDTH = 63;
+    private static final int HEIGHT = 64;
     
     private static final String YES = "살펴본다.";
     private static final String NO = "그만둔다.";
@@ -41,13 +41,13 @@ public class LibraryPicture extends GameObject {
                     super.pause();
                     
                     if (getCurrentAnswer().equals(YES)) {
-                        g.showMessage("아무것도 발견하지 못하였습니다.", 1000);
+                        g.showMessage("노란 책은 거짓이다.", 3000);
                     }
                 }
             };
             l.setQuestion("살펴 보시겠습니까?");
             l.setAnswers(new String[] { YES, NO });
-            l.setBackground(g.getResource().getImage("img.bg.library.picture"));
+            l.setBackground(g.getResource().getImage("img.bg.library.book.white"));
             g.showLayer(l);
         }
     }

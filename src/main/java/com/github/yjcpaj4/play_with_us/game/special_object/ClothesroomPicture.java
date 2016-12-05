@@ -36,9 +36,10 @@ public class ClothesroomPicture extends GameObject {
                 protected void pause() {
                     super.pause();
                     
-                    if (getCurrentAnswer().equals(YES) && !g.getPlayer().hasRoomKey("kitchen")) {
+                    if (getCurrentAnswer().equals(YES) && !g.getPlayer().hasItem("kitchen")) {
                         g.showMessage("열쇠를 획득하였습니다.", 1000);
-                        g.getPlayer().addRoomKey("kitchen");
+                        g.getPlayer().addItem("kitchen");
+                        g.getResource().getSound("snd.player.item").play();
                     }
                 }
             };

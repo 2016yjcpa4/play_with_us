@@ -41,7 +41,7 @@ public class LibraryBookGreen extends GameObject {
                     super.pause();
                     
                     if (getCurrentAnswer().equals(YES)) {
-                        g.showMessage("아무것도 발견하지 못하였습니다.", 1000);
+                        g.showMessage("파랑 책이 거짓이면 하얀 책은 참이다.", 3000);
                     }
                 }
             };

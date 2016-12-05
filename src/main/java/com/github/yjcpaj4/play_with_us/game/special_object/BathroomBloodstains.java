@@ -45,7 +45,7 @@ public class BathroomBloodstains extends GameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (g.getPlayer().hasRoomKey("library")) {
+        if (g.getPlayer().hasItem("library")) {
             if (CollisionDetection.isCollide(g.getPlayer().getCollider(), mCollider)) {
                 if ( ! mShowAnim) {
                     g.getResource().getSound("snd.obj.bathroom.bloodstains.foot").play();

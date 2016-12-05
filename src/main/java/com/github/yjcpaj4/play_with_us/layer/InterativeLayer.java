@@ -72,7 +72,12 @@ public class InterativeLayer extends Layer {
         int w = getContext().getWidth();
         int h = getContext().getHeight();
         
-        g2d.drawImage(mBackground, 0, 0, w, h, null);
+        g2d.drawImage(mBackground, 
+                      0, 
+                      0, 
+                      w, 
+                      h, 
+                      null);
         
         
         if (mAnswers != null && mAnswers.length > 0) {

@@ -41,7 +41,7 @@ public class LibraryBookBlue extends GameObject {
                     super.pause();
                     
                     if (getCurrentAnswer().equals(YES)) {
-                        g.showMessage("아무것도 발견하지 못하였습니다.", 1000);
+                        g.showMessage("하얀 책이 참이면 초록 책도 참이다.", 3000);
                     }
                 }
             };

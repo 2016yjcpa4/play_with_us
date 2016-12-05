@@ -72,13 +72,21 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/snd.bgm.ghost.begin.mp3");
         r.load("res/snd.obj.clothesroom.mannequin.feet.wav");
         r.load("res/snd.bgm.ghost.scream.mp3");
+        r.load("res/snd.player.item.wav");
+        r.load("res/snd.bgm.library.clock.mp3");
         r.load("res/img.bg.library.piano.png");
-        r.load("res/img.bg.library.picture.png");
-        r.load("res/img.bg.library.clock.jpg");
+        r.load("res/img.bg.library.picture.0.png");
+        r.load("res/img.bg.library.picture.1.png");
+        r.load("res/img.bg.library.picture.2.png");
+        r.load("res/img.obj.library.piano.hint.png");
+        r.load("res/snd.obj.library.piano.mp3");
+        r.load("res/img.bg.library.clock.png");
         r.load("res/img.bg.library.book.red.png");
         r.load("res/img.bg.library.book.green.png");
         r.load("res/img.bg.library.book.blue.png");
         r.load("res/img.bg.library.book.yellow.png");
+        r.load("res/img.bg.library.book.white.png");
+        r.load("res/img.bg.library.locker.png");
         r.load("res/sprt.player.walk.n.json");
         r.load("res/sprt.player.walk.e.json");
         r.load("res/sprt.player.walk.s.json");
@@ -133,7 +141,7 @@ public class ResourceLoaderLayer extends Layer {
             @Override
             public void run() {
 
-                File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
+                /*File f = new File(RESOURCE_DIR, RESOURCE_CHECKSUM_FILE);
 
                 if (f.exists()) {
                     f.delete();
@@ -176,7 +184,7 @@ public class ResourceLoaderLayer extends Layer {
 
                     mProgress = ++n / m.size();
                     mMessage = String.format("게임에 필요한 리소스를 내려받고 있습니다. (%d%%)", (int) (mProgress * 100));
-                }
+                }*/
 
                 mProgress = 1.0f;
                 mMessage = "게임에 필요한 리소스를 불러오는중 입니다.";
