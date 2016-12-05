@@ -36,7 +36,8 @@ public class LibraryPaino extends GameObject {
     @Override
     public void update(GameLayer g, long delta) {
         if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())
-        && g.getInput().isKeyOnce(KeyEvent.VK_F)) {
+        && g.getInput().isKeyOnce(KeyEvent.VK_F)
+        && g.getPlayer().isInputEnable()) {
             
             if (g.getPlayer().hasItem("beethoven")) {
                 InterativeLayer l = new InterativeLayer(Application.getInstance()) {

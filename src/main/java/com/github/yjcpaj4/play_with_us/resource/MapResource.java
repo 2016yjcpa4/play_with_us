@@ -17,6 +17,7 @@ import com.github.yjcpaj4.play_with_us.game.special_object.BathroomWaterDrop;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
+import com.github.yjcpaj4.play_with_us.game.special_object.GirlsroomNote;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenFirstCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenSecondCabinet;
@@ -146,7 +147,7 @@ public class MapResource {
     }
     
     public Map newMap() {
-        Map o = new Map(mImage, mSpawnPos);
+        Map o = new Map(mAlias, mImage, mSpawnPos);
         
         // 벽을 만들고
         for (List<Point2D> l : mWall) {
@@ -164,6 +165,10 @@ public class MapResource {
         
         if (mAlias.equalsIgnoreCase("map.livingroom")) {
             o.addObject(new LivingroomShoerack());
+        }
+        
+        if (mAlias.equalsIgnoreCase("map.girlsroom")) {
+            o.addObject(new GirlsroomNote());
         }
         
         if (mAlias.equalsIgnoreCase("map.kitchen")) {

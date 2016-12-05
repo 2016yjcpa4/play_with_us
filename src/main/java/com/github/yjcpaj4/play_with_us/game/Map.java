@@ -32,15 +32,21 @@ public class Map {
     private static final int TILE_WIDTH = 7;
     private static final int TILE_HEIGHT = 7;
     
+    private String mAlias;
     private TileMap mTiles;
     private final BufferedImage mBackground;
     private final Point2D mSpawnPos;
     private List<GameObject> mObject = new ArrayList<>();
     
-    public Map(BufferedImage b, Point2D p) {
+    public Map(String s, BufferedImage b, Point2D p) {
+        mAlias = s;
         mBackground = b;
         mSpawnPos = p;
         mTiles = new TileMap(getTileColumns(), getTileRows());
+    }
+    
+    public String getAlias() {
+        return mAlias;
     }
     
     public boolean hasSpawnPosition() {

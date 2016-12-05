@@ -275,7 +275,7 @@ public class Player extends LightWithGameObject  {
     @Override
     public void update(GameLayer g, long delta) {
         
-        if (mRemainGhostTime <= 0) {
+        if (mRemainGhostTime <= 0 && ! g.getMap().getAlias().equals("map.girlsroom")) {
             SoundResource r = g.getResource().getSound("snd.bgm.ghost.begin");
             r.setOnEndOfMedia(new Runnable() {
                 @Override

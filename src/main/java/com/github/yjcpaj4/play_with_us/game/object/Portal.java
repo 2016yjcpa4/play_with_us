@@ -63,6 +63,12 @@ public class Portal extends GameObject {
         Player o = g.getPlayer();
         if (g.getInput().isKeyOnce(KeyEvent.VK_F)) {
             if (o.isCollide(mCollider)) {
+                
+                if (getMap().getAlias().equals("map.girlsroom")) {
+                    g.showMessage("문이 잠겨있습니다.");
+                    g.getResource().getSound("snd.obj.portal.locked").play();
+                    return;
+                }
 
                 switch(mDestMap) {
                     case "map.livingroom":
