@@ -54,11 +54,11 @@ public class LibraryFirstPicture extends GameObject {
 
                                         if (getInputValue().equals(PASSWORD)) {
                                             
-                                            if (g.getPlayer().hasItem("girlsroom")) {
+                                            if (g.getPlayer().hasItem("map.girlsroom")) {
                                                 g.showMessage("아무것도 발견되지 않았습니다.");
                                             } else {
                                                 g.showMessage("열쇠를 획득하였습니다.", 1000);
-                                                g.getPlayer().addItem("girlsroom");
+                                                g.getPlayer().addItem("map.girlsroom");
                                                 g.getResource().getSound("snd.player.item").play();
                                             }
                                         } else {

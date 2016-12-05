@@ -20,6 +20,7 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.google.gson.annotations.SerializedName;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 /**
@@ -35,8 +36,6 @@ public class Portal extends GameObject {
     
     private String mDestMap;
     private Point2D mDestPos;
-    
-    private boolean mLocked = false;
     
     public Portal(String s, Point2D p, Polygon o) {
         mDestMap = s;
@@ -58,20 +57,33 @@ public class Portal extends GameObject {
         o.setPosition(mDestPos);
     }
     
-    public void setLock() {
-        mLocked = true;
-    }
-    
-    public void setUnLock() {
-        mLocked = false;
-    }
-    
     @Override
     public void update(GameLayer g, long delta) {
         // TODO 리팩토링
         Player o = g.getPlayer();
-        if (o.isCollide(mCollider)) {
-            enterPortal(o);
+        if (g.getInput().isKeyOnce(KeyEvent.VK_F)) {
+            if (o.isCollide(mCollider)) {
+
+                switch(mDestMap) {
+                    case "map.livingroom":
+                    case "map.clothesroom":
+                        break;
+                    case "map.library":
+                    case "map.bathroom":
+                    case "map.girlsroom":
+                    case "map.kitchen":
+                        if ( ! o.hasItem(mDestMap)) {
+                            g.showMessage("문이 잠겨있습니다.");
+                            g.getResource().getSound("snd.obj.portal.locked").play();
+                            return;
+                        }
+                        break;
+                }
+
+                g.getResource().getSound("snd.obj.portal.open").play();
+
+                enterPortal(o);
+            }
         }
     }
 

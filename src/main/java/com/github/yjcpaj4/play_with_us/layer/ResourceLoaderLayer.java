@@ -75,6 +75,8 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/snd.bgm.ghost.scream.mp3");
         r.load("res/snd.player.item.wav");
         r.load("res/snd.bgm.library.clock.mp3");
+        r.load("res/snd.obj.portal.locked.mp3");
+        r.load("res/snd.obj.portal.open.mp3");
         r.load("res/img.bg.library.piano.png");
         r.load("res/img.bg.library.picture.0.png");
         r.load("res/img.bg.library.picture.1.png");
