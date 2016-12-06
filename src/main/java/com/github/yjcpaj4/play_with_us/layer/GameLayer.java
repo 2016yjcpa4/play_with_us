@@ -49,8 +49,6 @@ public class GameLayer extends Layer {
         if (o.hasSpawnPosition()) {
             mPlayer = new Player(o.getSpwanPosition());
             o.addObject(mPlayer);
-            mPlayer.setOwnedLight();
-            mPlayer.addItem("map.girlsroom");
         }
         
         mCamera = new Camera(c);
