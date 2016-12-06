@@ -15,6 +15,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Queue;
@@ -160,6 +161,26 @@ public class GameLayer extends Layer {
         
     }
     
+    private void drawStatus(Graphics2D g2d) {
+        Point2D p = mCamera.getPosition();
+        int w = mCamera.getWidth();
+        int h = mCamera.getHeight();
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+        
+        Font f = new Font("굴림", Font.BOLD, 13);
+        FontMetrics fm = g2d.getFontMetrics(f);
+        
+        g2d.setFont(f);
+        g2d.setColor(Color.WHITE);
+        
+        String s = "죽은횟수 : " + mDieCound + "번";
+        
+        y = y + h - 10 - fm.getHeight();
+        
+        g2d.drawString(s, x + 10, y);
+    }
+    
     private void drawMessages(Graphics2D g2d) {
         if (mMessages.isEmpty()) {
             return;
@@ -207,5 +228,6 @@ public class GameLayer extends Layer {
         drawHelp(g2d);
         drawMessages(g2d);
         drawFPS(g2d, delta);
+        drawStatus(g2d);
     }
 }
