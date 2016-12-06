@@ -23,7 +23,7 @@ import java.util.TimerTask;
 
 public class GameLayer extends Layer {
     
-    private static final String MAIN_MAP = "map.girlsroom";
+    private static final String MAIN_MAP = "map.livingroom";
     
     private Timer mMessageTimer = new Timer();
     private Queue<String> mMessages = new ArrayDeque<>();
@@ -50,6 +50,7 @@ public class GameLayer extends Layer {
             mPlayer = new Player(o.getSpwanPosition());
             o.addObject(mPlayer);
             mPlayer.setOwnedLight();
+            mPlayer.addItem("map.girlsroom");
         }
         
         mCamera = new Camera(c);

@@ -34,7 +34,7 @@ import java.util.TimerTask;
  
 public class Player extends LightWithGameObject  {
     
-    private static final int INTERVAL_GHOST = 1000 * 60 * 2;
+    private static final int INTERVAL_GHOST = 1000 * 30;
     
     private static final float LIGHT_LENGTH = 210f;
     
@@ -353,6 +353,9 @@ public class Player extends LightWithGameObject  {
     }
     
     private void showGhost() {
+        if (getMap().getAlias().equals("map.girlsroom")) {
+            return;
+        }
         
         Point2D p = getPosition();
         

@@ -40,6 +40,8 @@ public class GirlsroomNote extends GameObject {
                     super.pause(); //To change body of generated methods, choose Tools | Templates.
                     
                     g.getResource().getSound("snd.bgm.girlsroom.knock").play(-1);
+                    
+                    g.getPlayer().addItem("girlsroom.note");
                 }
             };
             l.setBackground(g.getResource().getImage("img.bg.girlsroom.note"));

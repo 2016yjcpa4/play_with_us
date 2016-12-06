@@ -88,6 +88,10 @@ public class Portal extends GameObject {
 
                 g.getResource().getSound("snd.obj.portal.open").play();
 
+                if (mDestMap.equals("map.girlsroom")) {
+                    g.getResource().getSound("snd.bgm.ghost.begin").stop();
+                }
+                
                 enterPortal(o);
             }
         }
