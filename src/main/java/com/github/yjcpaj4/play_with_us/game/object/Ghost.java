@@ -82,7 +82,7 @@ public class Ghost extends GameObject  {
                     protected void pause() {
                         super.pause();
 
-                        g.restart();
+                        g.init();
                     }
                 };
                 v.setSkipable(false);

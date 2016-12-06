@@ -24,7 +24,7 @@ import java.util.TimerTask;
 
 public class GameLayer extends Layer {
 
-    private static final String MAIN_MAP = "map.girlsroom";
+    private static final String MAIN_MAP = "map.livingroom";
 
     private Timer mMessageTimer = new Timer();
     private Queue<String> mMessages = new ArrayDeque<>();
@@ -35,9 +35,6 @@ public class GameLayer extends Layer {
 
     private boolean mShowHelper = false;
 
-    private long mStartTime;
-    private int mDieCount;
-
     private java.util.Map<String, Map> mCachedMap = new HashMap<>();
 
     public GameLayer(Application c) {
@@ -47,22 +44,13 @@ public class GameLayer extends Layer {
          * 게임은 플레이어의 중심으로 돌아가기때문에
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
-        init();
+        init(); 
         
-        mPlayer.setOwnedLight();
-
         mCamera = new Camera(c);
-    }
-
-    public void restart() {
-        mDieCount++;
-        init();
     }
 
     public void init() {
         mCachedMap.clear();
-
-        mStartTime = System.currentTimeMillis();
 
         Map o = getMap(MAIN_MAP);
 
@@ -162,40 +150,6 @@ public class GameLayer extends Layer {
 
     }
 
-    private void drawStatus(Graphics2D g2d) {
-        Point2D p = mCamera.getPosition();
-        int w = mCamera.getWidth();
-        int h = mCamera.getHeight();
-        int x = (int) p.getX();
-        int y = (int) p.getY();
-
-        Font f = new Font("굴림", Font.BOLD, 13);
-        FontMetrics fm = g2d.getFontMetrics(f);
-
-        g2d.setFont(f);
-        g2d.setColor(Color.WHITE);
-
-        String s1 = "죽은횟수 : " + mDieCount + "번";
-
-        y = y + h - 10 - fm.getHeight();
-
-        g2d.drawString(s1, x + 10, y);
-
-        /*
-        long ms = System.currentTimeMillis() - mStartTime;
-        long secs = ms / 1000;
-        long minutes = secs / 60;
-        long hours = minutes / 60;
-        
-        secs = secs % 60;
-        minutes = minutes % 60;
-        
-        
-        String s2 = "플레이타임 : " + String.format("%02d:%02d:%02d", hours, minutes, secs);
-        
-        g2d.drawString(s2, x + 10, y - 10 - fm.getHeight());*/
-    }
-
     private void drawMessages(Graphics2D g2d) {
         if (mMessages.isEmpty()) {
             return;
@@ -242,6 +196,5 @@ public class GameLayer extends Layer {
         drawHelp(g2d);
         drawMessages(g2d);
         drawFPS(g2d, delta);
-        drawStatus(g2d);
     }
 }

@@ -27,7 +27,8 @@ public class ClothesroomPicture extends GameObject {
     
     @Override
     public void update(GameLayer g, long delta) {
-        if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider()) 
+        if (getMap().equals(g.getPlayer().getMap()) 
+         && CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider()) 
          && g.getInput().isKeyOnce(KeyEvent.VK_F)) {
             
             InterativeLayer l = new InterativeLayer(Application.getInstance()) {

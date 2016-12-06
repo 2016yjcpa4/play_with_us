@@ -36,7 +36,8 @@ public class GirlsroomNote extends GameObject {
             return;
         }
         
-        if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())
+        if (getMap().equals(g.getPlayer().getMap()) 
+        && CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())
         && g.getInput().isKeyOnce(KeyEvent.VK_F)) {
                     
             mShowNote = true;
@@ -84,7 +85,7 @@ public class GirlsroomNote extends GameObject {
                     }, 2000);
                 }
             };
-            l.setBackground(g.getResource().getImage("img.bg.girlsroom.note"));
+            l.setBackground(g.getResource().getImage("img.bg.note"));
             g.showLayer(l);
         }
     }

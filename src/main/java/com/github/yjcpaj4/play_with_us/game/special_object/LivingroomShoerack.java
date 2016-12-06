@@ -74,7 +74,8 @@ public class LivingroomShoerack extends LightWithGameObject {
         Polygon p1 = g.getPlayer().getCollider();
         Polygon p2 = mCollider;
         
-        if (CollisionDetection.isCollide(p1, p2)
+        if (getMap().equals(g.getPlayer().getMap()) 
+         && CollisionDetection.isCollide(p1, p2)
          && g.getInput().isKeyOnce(KeyEvent.VK_F)) {
             g.getPlayer().setOwnedLight();
             
