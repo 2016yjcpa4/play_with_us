@@ -156,7 +156,7 @@ public class BathroomGhost extends GameObject {
 
                 if ( ! mBrokenLight) {
                     g.getResource().getSound("snd.bgm.bathroom.ghost").play(-1);
-                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).reset();
+                    g.getMap().getFirstObjectByClass(BrokenLight.class).reset();
                     mBrokenLight = true;
                 }
 
@@ -172,7 +172,7 @@ public class BathroomGhost extends GameObject {
                 Vector2D v = new Vector2D(p1).subtract(p2);
                 if (v.length() <= 50) {
                     mGhostHide = true;
-                    g.getMap().getFirstObjectByClass(BathroomBrokenLight.class).finish();
+                    g.getMap().getFirstObjectByClass(BrokenLight.class).finish();
                     
                     o.setInputEnable();
                     o.setTurnOffLight();

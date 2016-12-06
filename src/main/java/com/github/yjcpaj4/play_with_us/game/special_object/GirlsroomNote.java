@@ -12,6 +12,8 @@ import com.github.yjcpaj4.play_with_us.math.Point2D;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GirlsroomNote extends GameObject {
     
@@ -22,14 +24,22 @@ public class GirlsroomNote extends GameObject {
     
     private Polygon mCollider = new Box2D(X, Y, WIDTH, HEIGHT).toPolygon();
     
+    private boolean mShowNote = false;
+    
     public Point2D getPosition() {
         return mCollider.getPosition();
     }
     
     @Override
     public void update(GameLayer g, long delta) {
+        if (mShowNote) {
+            return;
+        }
+        
         if (CollisionDetection.isCollide(mCollider, g.getPlayer().getCollider())
         && g.getInput().isKeyOnce(KeyEvent.VK_F)) {
+                    
+            mShowNote = true;
 
             g.getResource().getSound("snd.obj.paper").play();
             
@@ -42,6 +52,36 @@ public class GirlsroomNote extends GameObject {
                     g.getResource().getSound("snd.bgm.girlsroom.knock").play(-1);
                     
                     g.getPlayer().addItem("girlsroom.note");
+                    
+                    new Timer().schedule(new TimerTask() {
+                        
+                        @Override
+                        public void run() {
+                            
+                            BrokenLight o = new BrokenLight();
+                            o.setFinishEvent(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getMap().removeObject(o);
+                                    g.getPlayer().setInputDisable();
+                                    g.getPlayer().setTurnOffLight();
+                                    g.getPlayer().setIdle();
+                                    
+                                    g.showMessage("손전등이 방전 되었습니다.");
+                                    
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            
+                                            g.getResource().getSound("snd.bgm.girlsroom.knock").stop();
+                                            g.getResource().getSound("snd.obj.portal.open").play();
+                                        }
+                                    }, 1000);
+                                }
+                            });
+                            getMap().addObject(o);
+                        }
+                    }, 2000);
                 }
             };
             l.setBackground(g.getResource().getImage("img.bg.girlsroom.note"));

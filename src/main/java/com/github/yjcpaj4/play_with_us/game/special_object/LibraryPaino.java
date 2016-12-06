@@ -61,6 +61,7 @@ public class LibraryPaino extends GameObject {
                             r.play();
                             
                             g.getPlayer().setInputDisable();
+                            g.getPlayer().setIdle();
                         }
                     }
                 };

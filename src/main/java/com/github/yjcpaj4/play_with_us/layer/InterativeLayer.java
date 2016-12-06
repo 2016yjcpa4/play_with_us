@@ -54,15 +54,18 @@ public class InterativeLayer extends Layer {
     protected void draw(long delta, Graphics2D g2d) {
         super.draw(delta, g2d);
         
-        if (getInput().isKeyOnce(KeyEvent.VK_UP)
-         || getInput().isKeyOnce(KeyEvent.VK_W)) {
-            mCurrentAnswerIndex = Math.max(0, mCurrentAnswerIndex - 1);
+        if (mAnswers != null && mAnswers.length > 0) {
+            if (getInput().isKeyOnce(KeyEvent.VK_UP)
+             || getInput().isKeyOnce(KeyEvent.VK_W)) {
+                mCurrentAnswerIndex = Math.max(0, mCurrentAnswerIndex - 1);
+            }
+            else if (getInput().isKeyOnce(KeyEvent.VK_DOWN)
+                  || getInput().isKeyOnce(KeyEvent.VK_S)) {
+                mCurrentAnswerIndex = Math.min(mAnswers.length - 1, mCurrentAnswerIndex + 1);
+            }
         }
-        else if (getInput().isKeyOnce(KeyEvent.VK_DOWN)
-              || getInput().isKeyOnce(KeyEvent.VK_S)) {
-            mCurrentAnswerIndex = Math.min(mAnswers.length - 1, mCurrentAnswerIndex + 1);
-        }
-        else if (getInput().isKeyOnce(KeyEvent.VK_ENTER)
+        
+        if (getInput().isKeyOnce(KeyEvent.VK_ENTER)
               || getInput().isKeyOnce(KeyEvent.VK_F)) {
             finishLayer();
         }

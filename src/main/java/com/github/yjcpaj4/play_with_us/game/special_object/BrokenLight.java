@@ -1,22 +1,29 @@
 package com.github.yjcpaj4.play_with_us.game.special_object;
 
+import com.github.yjcpaj4.play_with_us.Application;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.game.object.Light;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import java.awt.Graphics2D;
 
-public class BathroomBrokenLight extends GameObject {
+public class BrokenLight extends GameObject {
     
-    private static final int MAX_DURATION = 4000;
+    public static final int MAX_DURATION = 4000;
     
     private int mFPS;
     
     private long mDuration = 0;
     private long mTotalDuration = 0;
     
+    private Runnable mFinishEvent;
+    
     public void reset() {
         mDuration = 0;
         mTotalDuration = 0;
+    }
+    
+    public void setFinishEvent(Runnable r) {
+        mFinishEvent = r;
     }
     
     public void finish() {
@@ -33,6 +40,9 @@ public class BathroomBrokenLight extends GameObject {
         
         if (mTotalDuration > MAX_DURATION) {
             g.getPlayer().setLightControllable(true);
+            if (mFinishEvent != null) {
+                mFinishEvent.run();
+            }
             return;
         }
         

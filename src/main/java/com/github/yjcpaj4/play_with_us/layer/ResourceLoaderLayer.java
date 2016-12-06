@@ -90,7 +90,6 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.bg.library.book.yellow.png");
         r.load("res/img.bg.library.book.white.png");
         r.load("res/img.bg.library.locker.png");
-        r.load("res/img.bg.girlsroom.bed.png");
         r.load("res/img.bg.girlsroom.note.png");
         r.load("res/snd.obj.paper.wav");
         r.load("res/snd.bgm.girlsroom.knock.wav");

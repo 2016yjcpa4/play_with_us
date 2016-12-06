@@ -24,7 +24,7 @@ import java.util.TimerTask;
 
 public class GameLayer extends Layer {
 
-    private static final String MAIN_MAP = "map.livingroom";
+    private static final String MAIN_MAP = "map.girlsroom";
 
     private Timer mMessageTimer = new Timer();
     private Queue<String> mMessages = new ArrayDeque<>();
@@ -48,6 +48,8 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         init();
+        
+        mPlayer.setOwnedLight();
 
         mCamera = new Camera(c);
     }

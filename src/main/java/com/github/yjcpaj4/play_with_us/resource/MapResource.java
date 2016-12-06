@@ -8,7 +8,7 @@ import com.github.yjcpaj4.play_with_us.game.object.Player;
 import com.github.yjcpaj4.play_with_us.game.Map;
 import com.github.yjcpaj4.play_with_us.game.object.Portal;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBloodstains;
-import com.github.yjcpaj4.play_with_us.game.special_object.BathroomBrokenLight;
+import com.github.yjcpaj4.play_with_us.game.special_object.BrokenLight;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomGhost;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomMirror;
 import com.github.yjcpaj4.play_with_us.game.special_object.BathroomTowel;
@@ -17,7 +17,6 @@ import com.github.yjcpaj4.play_with_us.game.special_object.BathroomWaterDrop;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequin;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomMannequinMine;
 import com.github.yjcpaj4.play_with_us.game.special_object.ClothesroomPicture;
-import com.github.yjcpaj4.play_with_us.game.special_object.GirlsroomBed;
 import com.github.yjcpaj4.play_with_us.game.special_object.GirlsroomNote;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenFirstCabinet;
 import com.github.yjcpaj4.play_with_us.game.special_object.KitchenRefrigerator;
@@ -170,7 +169,6 @@ public class MapResource {
         
         if (mAlias.equalsIgnoreCase("map.girlsroom")) {
             o.addObject(new GirlsroomNote());
-            o.addObject(new GirlsroomBed());
         }
         
         if (mAlias.equalsIgnoreCase("map.kitchen")) {
@@ -204,7 +202,7 @@ public class MapResource {
             o.addObject(new BathroomBloodstains());
             o.addObject(new BathroomGhost());
             o.addObject(new BathroomTub());
-            o.addObject(new BathroomBrokenLight());
+            o.addObject(new BrokenLight());
             o.addObject(new BathroomTowel());
             o.addObject(new BathroomMirror());
             o.addObject(new BathroomWaterDrop());
