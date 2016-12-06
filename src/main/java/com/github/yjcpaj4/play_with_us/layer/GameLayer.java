@@ -34,6 +34,9 @@ public class GameLayer extends Layer {
     
     private boolean mShowHelper = false;
     
+    private long mStartTime;
+    private int mDieCound;
+    
     private java.util.Map<String, Map> mCachedMap = new HashMap<>();
     
     public GameLayer(Application c) {
@@ -44,18 +47,20 @@ public class GameLayer extends Layer {
          * 맵이아닌 플레이어와 맵을 생성하고 draw 시 플레이어가 속한 맵을 draw 합니다.
          */
         
-        Map o = getMap(MAIN_MAP);
-        
-        if (o.hasSpawnPosition()) {
-            mPlayer = new Player(o.getSpwanPosition());
-            o.addObject(mPlayer);
-        }
+        init();
         
         mCamera = new Camera(c);
     }
     
     public void restart() {
+        mDieCound++;
+        init();
+    }
+    
+    public void init() {
         mCachedMap.clear();
+        
+        mStartTime = System.currentTimeMillis();
         
         Map o = getMap(MAIN_MAP);
         
@@ -149,6 +154,7 @@ public class GameLayer extends Layer {
                           (int) (b.getHeight() / mCamera.getZoom()), 
                           null);
         } else {
+            g2d.setColor(Color.WHITE);
             g2d.drawString("도움말 F1", x + 10, y + fm.getHeight() + 10);
         }
         
