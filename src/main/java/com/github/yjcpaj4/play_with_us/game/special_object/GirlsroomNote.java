@@ -1,14 +1,18 @@
 package com.github.yjcpaj4.play_with_us.game.special_object;
 
 import com.github.yjcpaj4.play_with_us.Application;
+import com.github.yjcpaj4.play_with_us.Layer;
 import com.github.yjcpaj4.play_with_us.game.GameObject;
 import com.github.yjcpaj4.play_with_us.geom.Circle;
 import com.github.yjcpaj4.play_with_us.geom.CollisionDetection;
 import com.github.yjcpaj4.play_with_us.geom.Polygon;
 import com.github.yjcpaj4.play_with_us.layer.GameLayer;
 import com.github.yjcpaj4.play_with_us.layer.InterativeLayer;
+import com.github.yjcpaj4.play_with_us.layer.VideoLayer;
 import com.github.yjcpaj4.play_with_us.math.Box2D;
 import com.github.yjcpaj4.play_with_us.math.Point2D;
+import com.github.yjcpaj4.play_with_us.resource.MovieResource;
+import com.github.yjcpaj4.play_with_us.resource.SoundResource;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -76,6 +80,61 @@ public class GirlsroomNote extends GameObject {
                                             
                                             g.getResource().getSound("snd.bgm.girlsroom.knock").stop();
                                             g.getResource().getSound("snd.obj.portal.open").play();
+                                            
+                                            new Timer().schedule(new TimerTask() {
+                                                @Override
+                                                public void run() {
+
+                                                    SoundResource r = g.getResource().getSound("snd.bgm.girlsroom.feet");
+                                                    r.setOnEndOfMedia(new Runnable() {
+                                                        
+                                                        @Override
+                                                        public void run() {
+                                                            
+                                                            Layer l = new Layer(Application.getInstance()) {
+
+                                                                @Override
+                                                                protected void resume() {
+                                                                    super.resume();
+                                                                    
+                                                                    SoundResource r = g.getResource().getSound("snd.bgm.girlsroom.scream");
+                                                                    r.setOnEndOfMedia(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            
+                                                                            finishLayer();
+                                                                            
+                                                                            new Thread() {
+
+                                                                                @Override
+                                                                                public void run() {
+
+                                                                                    VideoLayer l = new VideoLayer(Application.getInstance()) {
+
+                                                                                        @Override
+                                                                                        protected void pause() {
+                                                                                            super.pause();
+
+                                                                                            g.init();
+                                                                                        }
+                                                                                    };
+                                                                                    l.load(MovieResource.MOV_CREDIT);
+                                                                                    l.setSkipable(false);
+                                                                                    g.showLayer(l);
+                                                                                }
+
+                                                                            }.start();
+                                                                        }
+                                                                    });
+                                                                    r.play();
+                                                                }
+                                                            };
+                                                            g.showLayer(l);
+                                                        }
+                                                    });
+                                                    r.play();
+                                                }
+                                            }, 700);
                                         }
                                     }, 1000);
                                 }
@@ -85,7 +144,7 @@ public class GirlsroomNote extends GameObject {
                     }, 2000);
                 }
             };
-            l.setBackground(g.getResource().getImage("img.bg.note"));
+            l.setBackground(g.getResource().getImage("img.bg.girlsroom.note"));
             g.showLayer(l);
         }
     }

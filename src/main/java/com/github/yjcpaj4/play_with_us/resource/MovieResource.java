@@ -19,4 +19,5 @@ public class MovieResource {
 
     public static final File MOV_INTRO = new File("res/mov.intro.mp4");
     public static final File MOV_GHOST = new File("res/mov.ghost.mp4");
+    public static final File MOV_CREDIT = new File("res/mov.credit.mp4");
 }

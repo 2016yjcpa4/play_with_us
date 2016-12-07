@@ -53,12 +53,14 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.bg.library.paper.0.png");
         r.load("res/img.bg.library.paper.1.png");
         r.load("res/img.bg.help.png");
+        r.load("res/snd.bgm.girlsroom.scream.wav");
         r.load("res/snd.obj.clothesroom.mannequin.mp3");
         r.load("res/img.bg.bathroom.ghost.jpg");
         r.load("res/img.bg.bathroom.tub.png");
         r.load("res/img.bg.bathroom.towel.png");
         r.load("res/img.bg.bathroom.mirror.png");
         r.load("res/img.bg.clothesroom.mannequin.png");
+        r.load("res/snd.bgm.girlsroom.feet.mp3");
         r.load("res/snd.player.breath.wav");
         r.load("res/map.girlsroom.json");
         r.load("res/snd.bgm.bathroom.ghost.wav");
@@ -90,7 +92,7 @@ public class ResourceLoaderLayer extends Layer {
         r.load("res/img.bg.library.book.yellow.png");
         r.load("res/img.bg.library.book.white.png");
         r.load("res/img.bg.library.locker.png");
-        r.load("res/img.bg.note.png");
+        r.load("res/img.bg.girlsroom.note.png");
         r.load("res/snd.obj.paper.wav");
         r.load("res/snd.bgm.girlsroom.knock.wav");
         
